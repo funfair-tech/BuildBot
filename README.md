@@ -1,2 +1,2 @@
-# GitHubBot
-FunFair's GitHub Discord Bot
+# BuildBot
+FunFair's Build Discord Bot
