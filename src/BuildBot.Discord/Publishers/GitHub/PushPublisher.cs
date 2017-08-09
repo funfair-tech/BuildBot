@@ -19,28 +19,6 @@ namespace BuildBot.Discord.Publishers.GitHub
             this._bot = bot;
         }
 
-        private void FormatChanges(List<string> changes, string type, StringBuilder builder)
-        {
-            if (changes.Any())
-            {
-                builder.AppendLine();
-                builder.AppendLine($"{type}:");
-                builder.Append("```");
-
-                for (int i = 0; i < changes.Count; i++)
-                {
-                    builder.AppendLine(changes[i]);
-                    if (i == 6)
-                    {
-                        builder.AppendLine("**truncated**");
-                        break;
-                    }
-                }
-
-                builder.Append("```");
-            }
-        }
-
         public async Task Publish(Push push)
         {
             // only publish Push messages if there are commits, otherwise we'll be publishing
@@ -60,17 +38,8 @@ namespace BuildBot.Discord.Publishers.GitHub
             foreach (Commit commit in push.Commits)
             {
                 EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder();
-                commitFieldBuilder.Name = $"{commit.Url}";
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine($"**{commit.Author.Username ?? commit.Author.Name}**");
-                stringBuilder.AppendLine($"{commit.TimeStamp.ToString("yyyy-MM-dd HH:mm")} | {commit.Message}");
-
-                this.FormatChanges(commit.Added, "Added", stringBuilder);
-                this.FormatChanges(commit.Modified, "Modified", stringBuilder);
-                this.FormatChanges(commit.Removed, "Removed", stringBuilder);
-
-                commitFieldBuilder.Value = stringBuilder.ToString();
+                commitFieldBuilder.Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}";
+                commitFieldBuilder.Value = $"{commit.Url}";
                 builder.AddField(commitFieldBuilder);
             }
 
