@@ -63,7 +63,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 commitFieldBuilder.Name = $"{commit.Url}";
 
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine($"**{commit.Author.Username}**");
+                stringBuilder.AppendLine($"**{commit.Author.Username ?? commit.Author.Name}**");
                 stringBuilder.AppendLine($"{commit.TimeStamp.ToString("yyyy-MM-dd HH:mm")} | {commit.Message}");
 
                 this.FormatChanges(commit.Added, "Added", stringBuilder);
