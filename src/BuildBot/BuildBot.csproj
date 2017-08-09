@@ -33,7 +33,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BuildBot.Discord\BuildBot.Discord.csproj" />
+    <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
     <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
   </ItemGroup>
 

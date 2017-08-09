@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
+    <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
   </ItemGroup>
 
 </Project>
