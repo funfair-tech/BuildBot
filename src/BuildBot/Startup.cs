@@ -41,6 +41,7 @@ namespace BuildBot
         {
             // set up an ILogger
             Microsoft.Extensions.Logging.ILogger logger = this._loggerFactory.CreateLogger("BuildBot");
+            services.AddSingleton(logger);
 
             DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load("buildbot-config.json");
             DiscordBot bot = new DiscordBot(botConfiguration, logger);
