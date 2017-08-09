@@ -1,6 +1,8 @@
 ﻿using BuildBot.Discord.Publishers;
 using BuildBot.ServiceModel.GitHub;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace BuildBot.Controllers
@@ -9,18 +11,18 @@ namespace BuildBot.Controllers
     public class GitHubController : Controller
     {
         private IPublisher<Push> _pushPublisher;
+        private ILogger _logger;
 
-        public GitHubController(IPublisher<Push> pushPublisher)
+        public GitHubController(IPublisher<Push> pushPublisher, ILogger logger)
         {
             this._pushPublisher = pushPublisher;
+            this._logger = logger;
         }
 
         [HttpPost]
         [Route("ping")]
-        public async Task<IActionResult> Post([FromBody] Ping request)
+        public IActionResult Ping([FromBody] Ping request)
         {
-            await Task.CompletedTask;
-
             return NoContent();
         }
 
@@ -28,7 +30,14 @@ namespace BuildBot.Controllers
         [Route("push")]
         public async Task<IActionResult> Push([FromBody] Push request)
         {
-            await this._pushPublisher.Publish(request);
+            try
+            {
+                await this._pushPublisher.Publish(request);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(new EventId(ex.HResult), ex.Message, ex);
+            }
 
             return NoContent();
         }
