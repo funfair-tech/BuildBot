@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot", "BuildBot\BuildBot.csproj", "{907D4584-3241-467B-B818-75D64ABA3FB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Discord", "..\BuildBot.Discord\BuildBot.Discord.csproj", "{C6C81F45-EFF7-4313-8C01-4DB0564E7C31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Discord", "BuildBot.Discord\BuildBot.Discord.csproj", "{C6C81F45-EFF7-4313-8C01-4DB0564E7C31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.ServiceModel", "BuildBot.ServiceModel\BuildBot.ServiceModel.csproj", "{12386505-5524-4243-8125-2E6B9DF81EDD}"
 EndProject
