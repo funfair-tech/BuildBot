@@ -28,11 +28,10 @@ namespace BuildBot.Discord.Publishers.GitHub
             }
 
             string commitString = push.Commits.Count() > 1 ? $"{push.Commits.Count()} commits" : $"{push.Commits.Count()} commit";
-            string title = $"Pushed {commitString} to {push.Repository.Name} ({push.Ref.Substring("refs/heads/".Length)})";
+            string title = $"{push.Pusher.Name} pushed {commitString} to {push.Repository.Name} ({push.Ref.Substring("refs/heads/".Length)})";
 
             EmbedBuilder builder = new EmbedBuilder();
             builder.WithTitle(title);
-            builder.WithAuthor(push.Pusher.Name, $"https://github.com/{push.Pusher.Name}.png");
             builder.WithUrl(push.CompareUrl);
 
             foreach (Commit commit in push.Commits)
