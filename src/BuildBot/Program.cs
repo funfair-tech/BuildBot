@@ -12,7 +12,7 @@ namespace BuildBot
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:49781")
+                .UseUrls("http://*:49781")
                 .Build();
 
             host.Run();
