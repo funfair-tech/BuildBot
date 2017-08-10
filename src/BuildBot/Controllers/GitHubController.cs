@@ -11,12 +11,28 @@ namespace BuildBot.Controllers
     public class GitHubController : Controller
     {
         private IPublisher<Push> _pushPublisher;
+        private IPublisher<Status> _statusPublisher;
         private ILogger _logger;
 
-        public GitHubController(IPublisher<Push> pushPublisher, ILogger logger)
+        public GitHubController(IPublisher<Push> pushPublisher, IPublisher<Status> statusPublisher, ILogger logger)
         {
             this._pushPublisher = pushPublisher;
+            this._statusPublisher = statusPublisher;
             this._logger = logger;
+        }
+
+        private async Task<IActionResult> Process(Func<Task> action)
+        {
+            try
+            {
+                await action();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(new EventId(ex.HResult), ex.Message, ex);
+            }
+
+            return NoContent();
         }
 
         [HttpPost]
@@ -30,16 +46,14 @@ namespace BuildBot.Controllers
         [Route("push")]
         public async Task<IActionResult> Push([FromBody] Push request)
         {
-            try
-            {
-                await this._pushPublisher.Publish(request);
-            }
-            catch (Exception ex)
-            {
-                this._logger.LogError(new EventId(ex.HResult), ex.Message, ex);
-            }
+            return await this.Process(async () => await this._pushPublisher.Publish(request));
+        }
 
-            return NoContent();
+        [HttpPost]
+        [Route("status")]
+        public async Task<IActionResult> Status([FromBody] Status request)
+        {
+            return await this.Process(async () => await this._statusPublisher.Publish(request));
         }
     }
 }

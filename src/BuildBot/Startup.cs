@@ -54,6 +54,7 @@ namespace BuildBot
 
             // register publishers
             services.AddSingleton<IPublisher<Push>, PushPublisher>();
+            services.AddSingleton<IPublisher<Status>, StatusPublisher>();
 
             // Add framework services
             services.AddMvc();

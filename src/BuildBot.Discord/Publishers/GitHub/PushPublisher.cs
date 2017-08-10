@@ -33,7 +33,6 @@ namespace BuildBot.Discord.Publishers.GitHub
             EmbedBuilder builder = new EmbedBuilder();
             builder.WithTitle(title);
             builder.WithAuthor(push.Pusher.Name, $"https://github.com/{push.Pusher.Name}.png");
-            builder.WithThumbnailUrl("https://assets-cdn.github.com/images/modules/logos_page/Octocat.png");
             builder.WithUrl(push.CompareUrl);
 
             foreach (Commit commit in push.Commits)

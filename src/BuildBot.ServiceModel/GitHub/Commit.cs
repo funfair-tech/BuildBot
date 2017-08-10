@@ -10,6 +10,9 @@ namespace BuildBot.ServiceModel.GitHub
         [DataMember(Name = "id")]
         public string Id { get; set; }
 
+        [DataMember(Name = "sha")]
+        public string Sha { get; set; }
+
         [DataMember(Name = "tree_id")]
         public string TreeId { get; set; }
 
