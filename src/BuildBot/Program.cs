@@ -11,8 +11,8 @@ namespace BuildBot
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
                 .UseStartup<Startup>()
+                .UseUrls("http://localhost:49781")
                 .Build();
 
             host.Run();
