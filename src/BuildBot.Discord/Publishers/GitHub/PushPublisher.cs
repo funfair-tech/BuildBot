@@ -61,7 +61,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 builder.AddField(commitFieldBuilder);
             }
 
-            await this._bot.Publish(builder.Build());
+            await this._bot.Publish(builder);
         }
     }
 }

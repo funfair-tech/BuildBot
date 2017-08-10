@@ -41,7 +41,7 @@ namespace BuildBot.Discord.Publishers.GitHub
             commitFieldBuilder.Value = $"{status.StatusCommit.Author.Login} - {status.StatusCommit.Commit.Message}";
             builder.AddField(commitFieldBuilder);
 
-            await this._bot.Publish(builder.Build());
+            await this._bot.Publish(builder);
         }
     }
 }

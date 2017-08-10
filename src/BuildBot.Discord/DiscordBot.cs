@@ -32,16 +32,28 @@ namespace BuildBot.Discord
             SocketTextChannel socketTextChannel = this.GetChannel();
             if (socketTextChannel != null)
             {
-                await socketTextChannel.SendMessageAsync(message);
+                using (socketTextChannel.EnterTypingState())
+                {
+                    await socketTextChannel.SendMessageAsync(message);
+                }
             }
         }
 
-        public async Task Publish(Embed embed)
+        public async Task Publish(EmbedBuilder builder)
         {
+            EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder();
+            authorBuilder.Name = "FunFair BuildBot";
+            authorBuilder.Url = "https://funfair.io";
+            authorBuilder.IconUrl = "https://files.coinmarketcap.com/static/img/coins/32x32/funfair.png";
+            builder.WithAuthor(authorBuilder);
+
             SocketTextChannel socketTextChannel = this.GetChannel();
             if (socketTextChannel != null)
             {
-                await socketTextChannel.SendMessageAsync(string.Empty, embed: embed);
+                using (socketTextChannel.EnterTypingState())
+                {
+                    await socketTextChannel.SendMessageAsync(string.Empty, embed: builder);
+                }
             }
         }
 
