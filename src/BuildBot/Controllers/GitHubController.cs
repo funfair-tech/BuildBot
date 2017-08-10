@@ -46,14 +46,14 @@ namespace BuildBot.Controllers
         [Route("push")]
         public async Task<IActionResult> Push([FromBody] Push request)
         {
-            return await this.Process(async () => await this._pushPublisher.Publish(request));
+            return await this.Process(() => this._pushPublisher.Publish(request));
         }
 
         [HttpPost]
         [Route("status")]
         public async Task<IActionResult> Status([FromBody] Status request)
         {
-            return await this.Process(async () => await this._statusPublisher.Publish(request));
+            return await this.Process(() => this._statusPublisher.Publish(request));
         }
     }
 }
