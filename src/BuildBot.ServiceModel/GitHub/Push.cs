@@ -26,5 +26,8 @@ namespace BuildBot.ServiceModel.GitHub
 
         [DataMember(Name = "pusher")]
         public Pusher Pusher { get; set; }
+
+        [DataMember(Name = "compare")]
+        public string CompareUrl { get; set; }
     }
 }

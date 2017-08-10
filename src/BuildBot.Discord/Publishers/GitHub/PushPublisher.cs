@@ -1,6 +1,5 @@
 ﻿using BuildBot.ServiceModel.GitHub;
 using Discord;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,12 +33,32 @@ namespace BuildBot.Discord.Publishers.GitHub
             EmbedBuilder builder = new EmbedBuilder();
             builder.WithTitle(title);
             builder.WithAuthor(push.Pusher.Name, $"https://github.com/{push.Pusher.Name}.png");
-            
+            builder.WithThumbnailUrl("https://assets-cdn.github.com/images/modules/logos_page/Octocat.png");
+            builder.WithUrl(push.CompareUrl);
+
             foreach (Commit commit in push.Commits)
             {
                 EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder();
                 commitFieldBuilder.Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}";
-                commitFieldBuilder.Value = $"{commit.Url}";
+                commitFieldBuilder.Value = $"{commit.Added.Count()} added, {commit.Modified.Count()} modified, {commit.Removed.Count()} removed";
+
+                StringBuilder commitBuilder = new StringBuilder();
+                if (commit.Added.Count() > 0)
+                {
+                    commitBuilder.AppendLine($"{commit.Added.Count()} added");
+                }
+
+                if (commit.Modified.Count() > 0)
+                {
+                    commitBuilder.AppendLine($"{commit.Modified.Count()} modified");
+                }
+
+                if (commit.Removed.Count() > 0)
+                {
+                    commitBuilder.AppendLine($"{commit.Removed.Count()} removed");
+                }
+
+                //commitFieldBuilder.Value = commitBuilder.ToString();
                 builder.AddField(commitFieldBuilder);
             }
 

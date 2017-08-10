@@ -13,5 +13,8 @@ namespace BuildBot.ServiceModel.GitHub
 
         [DataMember(Name = "full_name")]
         public string FullName { get; set; }
+
+        [DataMember(Name = "owner")]
+        public Owner Owner { get; set; }
     }
 }
