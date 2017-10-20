@@ -27,6 +27,12 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
+            if (push.Repository.Name == "TeamCity")
+            {
+                // ignore commits to TeamCity, it's pretty annoying!
+                return;
+            }
+
             string commitString = push.Commits.Count() > 1 ? $"{push.Commits.Count()} commits" : $"{push.Commits.Count()} commit";
             string title = $"{push.Pusher.Name} pushed {commitString} to {push.Repository.Name} ({push.Ref.Substring("refs/heads/".Length)})";
 
