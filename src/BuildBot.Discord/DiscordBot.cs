@@ -44,7 +44,7 @@ namespace BuildBot.Discord
             EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder();
             authorBuilder.Name = "FunFair BuildBot";
             authorBuilder.Url = "https://funfair.io";
-            authorBuilder.IconUrl = "https://files.coinmarketcap.com/static/img/coins/32x32/funfair.png";
+            authorBuilder.IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png";
             builder.WithAuthor(authorBuilder);
 
             SocketTextChannel socketTextChannel = this.GetChannel();
