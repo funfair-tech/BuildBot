@@ -1,4 +1,4 @@
-﻿using BuildBot.ServiceModel.GitHub;
+using BuildBot.ServiceModel.GitHub;
 using Discord;
 using System.Linq;
 using System.Text;
@@ -33,6 +33,12 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
+            if (push.Commits.Count() == 1 && push.Commits.Any(c => c.Message.StartsWith("chore")))
+            {
+                // ignore commits which contain "chore"
+                return;
+            }
+
             string commitString = push.Commits.Count() > 1 ? $"{push.Commits.Count()} commits" : $"{push.Commits.Count()} commit";
             string title = $"{push.Pusher.Name} pushed {commitString} to {push.Repository.Name} ({push.Ref.Substring("refs/heads/".Length)})";
 
@@ -47,17 +53,17 @@ namespace BuildBot.Discord.Publishers.GitHub
                 commitFieldBuilder.Value = $"{commit.Added.Count()} added, {commit.Modified.Count()} modified, {commit.Removed.Count()} removed";
 
                 StringBuilder commitBuilder = new StringBuilder();
-                if (commit.Added.Count() > 0)
+                if (commit.Added.Any())
                 {
                     commitBuilder.AppendLine($"{commit.Added.Count()} added");
                 }
 
-                if (commit.Modified.Count() > 0)
+                if (commit.Modified.Any())
                 {
                     commitBuilder.AppendLine($"{commit.Modified.Count()} modified");
                 }
 
-                if (commit.Removed.Count() > 0)
+                if (commit.Removed.Any())
                 {
                     commitBuilder.AppendLine($"{commit.Removed.Count()} removed");
                 }
