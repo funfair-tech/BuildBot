@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
@@ -11,6 +11,9 @@ namespace BuildBot.ServiceModel.GitHub
 
         [DataMember(Name = "repository")]
         public Repository Repository { get; set; }
+
+        [DataMember(Name = "context")]
+        public string Context { get; set; }
 
         [DataMember(Name = "state")]
         public string State { get; set; }

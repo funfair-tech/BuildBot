@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace BuildBot.Discord.Publishers.GitHub
             }
 
             EmbedBuilder builder = new EmbedBuilder();
-            builder.WithTitle($"{status.Description} for {status.Repository.Name} ({status.Branches.Last().Name})");
+            builder.WithTitle($"{status.Description} for {status.Context} from {status.Repository.Name} ({status.Branches.Last().Name})");
             builder.WithUrl(status.TargetUrl);
             builder.Description = $"Built at {status.StatusCommit.Sha}";
 
