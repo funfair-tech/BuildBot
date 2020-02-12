@@ -1,13 +1,13 @@
-using BuildBot.ServiceModel.GitHub;
-using Discord;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BuildBot.ServiceModel.GitHub;
+using Discord;
 
 namespace BuildBot.Discord.Publishers.GitHub
 {
     /// <summary>
-    /// Publish the GitHub "push" event to Discord
+    ///     Publish the GitHub "push" event to Discord
     /// </summary>
     public class PushPublisher : IPublisher<Push>
     {
@@ -33,7 +33,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
-            if (push.Commits.Count() == 1 && push.Commits.Any(c => c.Message.StartsWith("chore")))
+            if (push.Commits.Count() == 1 && push.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore")))
             {
                 // ignore commits which contain "chore"
                 return;
@@ -48,11 +48,14 @@ namespace BuildBot.Discord.Publishers.GitHub
 
             foreach (Commit commit in push.Commits)
             {
-                EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder();
-                commitFieldBuilder.Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}";
-                commitFieldBuilder.Value = $"{commit.Added.Count()} added, {commit.Modified.Count()} modified, {commit.Removed.Count()} removed";
+                EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder
+                                                       {
+                                                           Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
+                                                           Value = $"{commit.Added.Count()} added, {commit.Modified.Count()} modified, {commit.Removed.Count()} removed"
+                                                       };
 
                 StringBuilder commitBuilder = new StringBuilder();
+
                 if (commit.Added.Any())
                 {
                     commitBuilder.AppendLine($"{commit.Added.Count()} added");
