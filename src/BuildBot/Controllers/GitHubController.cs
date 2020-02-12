@@ -1,18 +1,18 @@
-﻿using BuildBot.Discord.Publishers;
+﻿using System;
+using System.Threading.Tasks;
+using BuildBot.Discord.Publishers;
 using BuildBot.ServiceModel.GitHub;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace BuildBot.Controllers
 {
-    [Route("[controller]")]
+    [Route(template: "[controller]")]
     public class GitHubController : Controller
     {
-        private IPublisher<Push> _pushPublisher;
-        private IPublisher<Status> _statusPublisher;
-        private ILogger _logger;
+        private readonly ILogger _logger;
+        private readonly IPublisher<Push> _pushPublisher;
+        private readonly IPublisher<Status> _statusPublisher;
 
         public GitHubController(IPublisher<Push> pushPublisher, IPublisher<Status> statusPublisher, ILogger logger)
         {
@@ -21,7 +21,7 @@ namespace BuildBot.Controllers
             this._logger = logger;
         }
 
-        private async Task<IActionResult> Process(Func<Task> action)
+        private async Task<IActionResult> ProcessAsync(Func<Task> action)
         {
             try
             {
@@ -32,28 +32,29 @@ namespace BuildBot.Controllers
                 this._logger.LogError(new EventId(ex.HResult), ex.Message, ex);
             }
 
-            return NoContent();
+            return this.NoContent();
         }
 
         [HttpPost]
-        [Route("ping")]
+        [Route(template: "ping")]
         public IActionResult Ping([FromBody] Ping request)
         {
-            return NoContent();
+            this._logger.LogTrace($"Ping: {request.HookId}");
+            return this.NoContent();
         }
 
         [HttpPost]
-        [Route("push")]
-        public async Task<IActionResult> Push([FromBody] Push request)
+        [Route(template: "push")]
+        public Task<IActionResult> PushAsync([FromBody] Push request)
         {
-            return await this.Process(() => this._pushPublisher.Publish(request));
+            return this.ProcessAsync(action: () => this._pushPublisher.Publish(request));
         }
 
         [HttpPost]
-        [Route("status")]
-        public async Task<IActionResult> Status([FromBody] Status request)
+        [Route(template: "status")]
+        public Task<IActionResult> StatusAsync([FromBody] Status request)
         {
-            return await this.Process(() => this._statusPublisher.Publish(request));
+            return this.ProcessAsync(action: () => this._statusPublisher.Publish(request));
         }
     }
 }

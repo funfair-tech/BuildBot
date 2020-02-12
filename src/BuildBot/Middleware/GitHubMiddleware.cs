@@ -1,19 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace BuildBot.Middleware
 {
-    public class GitHubMiddleware
+    public sealed class GitHubMiddleware
     {
-        private readonly RequestDelegate _next;
         private const string GITHUB_EVENT_HEADER = "X-GitHub-Event";
+        private readonly RequestDelegate _next;
 
         public GitHubMiddleware(RequestDelegate next)
         {
             this._next = next;
         }
 
-        public Task Invoke(HttpContext context)
+        public Task InvokeAsync(HttpContext context)
         {
             if (!context.Request.Headers.ContainsKey(GITHUB_EVENT_HEADER))
             {
@@ -27,7 +27,7 @@ namespace BuildBot.Middleware
             // update the request path (this will fire corresponding methods on the github controller)
             context.Request.Path = $"/github/{eventHeader}";
 
-            return this._next.Invoke(context);
+            return this._next(context);
         }
     }
 }
