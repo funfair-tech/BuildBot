@@ -14,7 +14,7 @@ namespace BuildBot.Discord.Publishers.GitHub
             this._bot = bot;
         }
 
-        public async Task Publish(Status message)
+        public async Task PublishAsync(Status message)
         {
             if (message.State == "pending")
             {
@@ -42,7 +42,7 @@ namespace BuildBot.Discord.Publishers.GitHub
             commitFieldBuilder.Value = $"{message.StatusCommit.Author.Login} - {message.StatusCommit.Commit.Message}";
             builder.AddField(commitFieldBuilder);
 
-            await this._bot.Publish(builder);
+            await this._bot.PublishAsync(builder);
         }
     }
 }

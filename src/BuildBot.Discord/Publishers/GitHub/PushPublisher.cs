@@ -19,7 +19,7 @@ namespace BuildBot.Discord.Publishers.GitHub
             this._bot = bot;
         }
 
-        public async Task Publish(Push message)
+        public async Task PublishAsync(Push message)
         {
             // only publish Push messages if there are commits, otherwise we'll be publishing
             // all the tagging that goes on.
@@ -76,7 +76,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 builder.AddField(commitFieldBuilder);
             }
 
-            await this._bot.Publish(builder);
+            await this._bot.PublishAsync(builder);
         }
     }
 }

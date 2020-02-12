@@ -4,6 +4,6 @@ namespace BuildBot.Discord.Publishers
 {
     public interface IPublisher<in T>
     {
-        Task Publish(T message);
+        Task PublishAsync(T message);
     }
 }

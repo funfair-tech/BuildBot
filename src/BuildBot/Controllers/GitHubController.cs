@@ -40,6 +40,7 @@ namespace BuildBot.Controllers
         public IActionResult Ping([FromBody] Ping request)
         {
             this._logger.LogTrace($"Ping: {request.HookId}");
+
             return this.NoContent();
         }
 
@@ -47,14 +48,14 @@ namespace BuildBot.Controllers
         [Route(template: "push")]
         public Task<IActionResult> PushAsync([FromBody] Push request)
         {
-            return this.ProcessAsync(action: () => this._pushPublisher.Publish(request));
+            return this.ProcessAsync(action: () => this._pushPublisher.PublishAsync(request));
         }
 
         [HttpPost]
         [Route(template: "status")]
         public Task<IActionResult> StatusAsync([FromBody] Status request)
         {
-            return this.ProcessAsync(action: () => this._statusPublisher.Publish(request));
+            return this.ProcessAsync(action: () => this._statusPublisher.PublishAsync(request));
         }
     }
 }

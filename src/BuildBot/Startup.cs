@@ -63,7 +63,7 @@ namespace BuildBot
             DiscordBot bot = new DiscordBot(botConfiguration, logger);
 
             // waiting a Task is normally a big no no because of deadlocks, but we're in a start up task here so it should be ok
-            bot.Start()
+            bot.StartAsync()
                .Wait();
 
             return bot;

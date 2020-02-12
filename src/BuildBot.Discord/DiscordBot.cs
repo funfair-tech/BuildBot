@@ -18,10 +18,10 @@ namespace BuildBot.Discord
             this._client = new DiscordSocketClient();
             this._botConfiguration = botConfiguration;
 
-            this._client.Log += this.Log;
+            this._client.Log += this.LogAsync;
         }
 
-        public async Task Publish(string message)
+        public async Task PublishAsync(string message)
         {
             SocketTextChannel socketTextChannel = this.GetChannel();
 
@@ -34,12 +34,12 @@ namespace BuildBot.Discord
             }
         }
 
-        public async Task Publish(EmbedBuilder builder)
+        public async Task PublishAsync(EmbedBuilder builder)
         {
-            EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder();
-            authorBuilder.Name = "FunFair BuildBot";
-            authorBuilder.Url = "https://funfair.io";
-            authorBuilder.IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png";
+            EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder
+                                               {
+                                                   Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
+                                               };
             builder.WithAuthor(authorBuilder);
 
             SocketTextChannel socketTextChannel = this.GetChannel();
@@ -57,10 +57,10 @@ namespace BuildBot.Discord
         {
             SocketGuild guild = this._client.Guilds.FirstOrDefault(g => g.Name == this._botConfiguration.Server);
 
-            return guild != null ? guild.TextChannels.FirstOrDefault(c => c.Name == this._botConfiguration.Channel) : null;
+            return guild?.TextChannels.FirstOrDefault(c => c.Name == this._botConfiguration.Channel);
         }
 
-        private Task Log(LogMessage arg)
+        private Task LogAsync(LogMessage arg)
         {
             switch (arg.Severity)
             {
@@ -117,7 +117,7 @@ namespace BuildBot.Discord
             return Task.CompletedTask;
         }
 
-        public async Task Start()
+        public async Task StartAsync()
         {
             // login
             await this._client.LoginAsync(TokenType.Bot, this._botConfiguration.Token);
@@ -126,10 +126,10 @@ namespace BuildBot.Discord
             await this._client.StartAsync();
         }
 
-        public async Task Stop()
+        public Task StopAsync()
         {
             // and logout
-            await this._client.LogoutAsync();
+            return this._client.LogoutAsync();
         }
     }
 }
