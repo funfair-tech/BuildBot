@@ -84,7 +84,8 @@ namespace BuildBot
             loggerFactory.AddSerilog();
             applicationLifeTime.ApplicationStopping.Register(Log.CloseAndFlush);
 
-            app.UseMiddleware<GitHubMiddleware>()
+            app.UseRouting()
+               .UseMiddleware<GitHubMiddleware>()
                .UseEndpoints(configure: endpoints => { endpoints.MapControllers(); });
         }
     }
