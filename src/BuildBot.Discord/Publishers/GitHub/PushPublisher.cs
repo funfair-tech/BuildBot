@@ -72,7 +72,6 @@ namespace BuildBot.Discord.Publishers.GitHub
                     commitBuilder.AppendLine($"{commit.Removed.Count} removed");
                 }
 
-                //commitFieldBuilder.Value = commitBuilder.ToString();
                 builder.AddField(commitFieldBuilder);
             }
 
