@@ -1,16 +1,16 @@
-﻿using Discord;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BuildBot.Discord
 {
     public class DiscordBot : IDiscordBot
     {
+        private readonly DiscordBotConfiguration _botConfiguration;
         private readonly DiscordSocketClient _client;
         private readonly ILogger _logger;
-        private readonly DiscordBotConfiguration _botConfiguration;
 
         public DiscordBot(DiscordBotConfiguration botConfiguration, ILogger logger)
         {
@@ -21,15 +21,10 @@ namespace BuildBot.Discord
             this._client.Log += this.Log;
         }
 
-        private SocketTextChannel GetChannel()
-        {
-            SocketGuild guild = this._client.Guilds.FirstOrDefault(g => g.Name == this._botConfiguration.Server);
-            return guild != null ? guild.TextChannels.FirstOrDefault(c => c.Name == this._botConfiguration.Channel) : null;
-        }
-
         public async Task Publish(string message)
         {
             SocketTextChannel socketTextChannel = this.GetChannel();
+
             if (socketTextChannel != null)
             {
                 using (socketTextChannel.EnterTypingState())
@@ -48,6 +43,7 @@ namespace BuildBot.Discord
             builder.WithAuthor(authorBuilder);
 
             SocketTextChannel socketTextChannel = this.GetChannel();
+
             if (socketTextChannel != null)
             {
                 using (socketTextChannel.EnterTypingState())
@@ -57,55 +53,68 @@ namespace BuildBot.Discord
             }
         }
 
-        private async Task Log(LogMessage arg)
+        private SocketTextChannel GetChannel()
+        {
+            SocketGuild guild = this._client.Guilds.FirstOrDefault(g => g.Name == this._botConfiguration.Server);
+
+            return guild != null ? guild.TextChannels.FirstOrDefault(c => c.Name == this._botConfiguration.Channel) : null;
+        }
+
+        private Task Log(LogMessage arg)
         {
             switch (arg.Severity)
             {
                 case LogSeverity.Debug:
-                    {
-                        this._logger.LogDebug(arg.Message);
-                        break;
-                    }
+                {
+                    this._logger.LogDebug(arg.Message);
+
+                    break;
+                }
 
                 case LogSeverity.Verbose:
-                    {
-                        this._logger.LogInformation(arg.Message);
-                        break;
-                    }
+                {
+                    this._logger.LogInformation(arg.Message);
+
+                    break;
+                }
 
                 case LogSeverity.Info:
-                    {
-                        this._logger.LogInformation(arg.Message);
-                        break;
-                    }
+                {
+                    this._logger.LogInformation(arg.Message);
+
+                    break;
+                }
 
                 case LogSeverity.Warning:
-                    {
-                        this._logger.LogWarning(arg.Message);
-                        break;
-                    }
+                {
+                    this._logger.LogWarning(arg.Message);
+
+                    break;
+                }
 
                 case LogSeverity.Error:
+                {
+                    if (arg.Exception != null)
                     {
-                        if (arg.Exception != null)
-                        {
-                            this._logger.LogError(new EventId(arg.Exception.HResult), arg.Message, arg.Exception);
-                        }
-                        else
-                        {
-                            this._logger.LogError(arg.Message);
-                        }
-                        break;
+                        this._logger.LogError(new EventId(arg.Exception.HResult), arg.Message, arg.Exception);
                     }
+                    else
+                    {
+                        this._logger.LogError(arg.Message);
+                    }
+
+                    break;
+                }
 
                 case LogSeverity.Critical:
-                    {
-                        this._logger.LogCritical(arg.Message);
-                        break;
-                    }
+                {
+                    this._logger.LogCritical(arg.Message);
+
+                    break;
+                }
             }
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         public async Task Start()

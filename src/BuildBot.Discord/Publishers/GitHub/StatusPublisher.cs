@@ -1,7 +1,7 @@
 using System.Linq;
+using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
-using System.Threading.Tasks;
 
 namespace BuildBot.Discord.Publishers.GitHub
 {
@@ -14,32 +14,32 @@ namespace BuildBot.Discord.Publishers.GitHub
             this._bot = bot;
         }
 
-        public async Task Publish(Status status)
+        public async Task Publish(Status message)
         {
-            if (status.State == "pending")
+            if (message.State == "pending")
             {
                 // don't output messages for pending builds
                 return;
             }
 
             EmbedBuilder builder = new EmbedBuilder();
-            builder.WithTitle($"{status.Description} for {status.Context} from {status.Repository.Name} ({status.Branches.Last().Name})");
-            builder.WithUrl(status.TargetUrl);
-            builder.Description = $"Built at {status.StatusCommit.Sha}";
+            builder.WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({message.Branches.Last().Name})");
+            builder.WithUrl(message.TargetUrl);
+            builder.Description = $"Built at {message.StatusCommit.Sha}";
 
-            if (status.State == "success")
+            if (message.State == "success")
             {
                 builder.Color = Color.Green;
             }
 
-            if (status.State == "failure")
+            if (message.State == "failure")
             {
                 builder.Color = Color.Red;
             }
 
             EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder();
             commitFieldBuilder.Name = "Head commit";
-            commitFieldBuilder.Value = $"{status.StatusCommit.Author.Login} - {status.StatusCommit.Commit.Message}";
+            commitFieldBuilder.Value = $"{message.StatusCommit.Author.Login} - {message.StatusCommit.Commit.Message}";
             builder.AddField(commitFieldBuilder);
 
             await this._bot.Publish(builder);
