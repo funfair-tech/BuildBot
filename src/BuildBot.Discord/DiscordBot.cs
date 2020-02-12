@@ -23,7 +23,7 @@ namespace BuildBot.Discord
 
         public async Task PublishAsync(string message)
         {
-            SocketTextChannel socketTextChannel = this.GetChannel();
+            SocketTextChannel? socketTextChannel = this.GetChannel();
 
             if (socketTextChannel != null)
             {
@@ -42,7 +42,7 @@ namespace BuildBot.Discord
                                                };
             builder.WithAuthor(authorBuilder);
 
-            SocketTextChannel socketTextChannel = this.GetChannel();
+            SocketTextChannel? socketTextChannel = this.GetChannel();
 
             if (socketTextChannel != null)
             {
@@ -53,7 +53,7 @@ namespace BuildBot.Discord
             }
         }
 
-        private SocketTextChannel GetChannel()
+        private SocketTextChannel? GetChannel()
         {
             SocketGuild guild = this._client.Guilds.FirstOrDefault(g => g.Name == this._botConfiguration.Server);
 
