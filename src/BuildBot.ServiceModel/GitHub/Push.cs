@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
@@ -7,27 +8,44 @@ namespace BuildBot.ServiceModel.GitHub
     public class Push
     {
         [DataMember(Name = "ref")]
-        public string Ref { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Ref { get; set; } = default!;
 
         [DataMember(Name = "before")]
-        public string Before { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Before { get; set; } = default!;
 
         [DataMember(Name = "after")]
-        public string After { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string After { get; set; } = default!;
 
         [DataMember(Name = "head_commit")]
-        public Commit HeadCommit { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public Commit HeadCommit { get; set; } = default!;
 
         [DataMember(Name = "commits")]
-        public List<Commit> Commits { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public List<Commit> Commits { get; set; } = default!;
 
         [DataMember(Name = "repository")]
-        public Repository Repository { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public Repository Repository { get; set; } = default!;
 
         [DataMember(Name = "pusher")]
-        public Pusher Pusher { get; set; }
 
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public Pusher Pusher { get; set; } = default!;
+
+        [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
         [DataMember(Name = "compare")]
-        public string CompareUrl { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string CompareUrl { get; set; } = default!;
     }
 }

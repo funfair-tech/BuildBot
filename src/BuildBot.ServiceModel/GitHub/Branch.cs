@@ -3,9 +3,11 @@
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class Branch
+    public sealed class Branch
     {
         [DataMember(Name = "name")]
-        public string Name { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Name { get; set; } = default!;
     }
 }

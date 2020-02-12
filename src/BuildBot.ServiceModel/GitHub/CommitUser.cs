@@ -3,15 +3,21 @@
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class CommitUser
+    public sealed class CommitUser
     {
         [DataMember(Name = "name")]
-        public string Name { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Name { get; set; } = default!;
 
         [DataMember(Name = "email")]
-        public string Email { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Email { get; set; } = default!;
 
         [DataMember(Name = "username")]
-        public string Username { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Username { get; set; } = default!;
     }
 }

@@ -1,46 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class Commit
+    public sealed class Commit
     {
         [DataMember(Name = "id")]
-        public string Id { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Id { get; set; } = default!;
 
         [DataMember(Name = "sha")]
-        public string Sha { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Sha { get; set; } = default!;
 
         [DataMember(Name = "tree_id")]
-        public string TreeId { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string TreeId { get; set; } = default!;
 
         [DataMember(Name = "distinct")]
         public bool Distinct { get; set; }
 
         [DataMember(Name = "message")]
-        public string Message { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Message { get; set; } = default!;
 
         [DataMember(Name = "timestamp")]
         public DateTime TimeStamp { get; set; }
 
+        [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
         [DataMember(Name = "url")]
-        public string Url { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Url { get; set; } = default!;
 
         [DataMember(Name = "added")]
-        public List<string> Added { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public List<string> Added { get; set; } = default!;
 
         [DataMember(Name = "removed")]
-        public List<string> Removed { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public List<string> Removed { get; set; } = default!;
 
         [DataMember(Name = "modified")]
-        public List<string> Modified { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public List<string> Modified { get; set; } = default!;
 
         [DataMember(Name = "author")]
-        public CommitUser Author { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public CommitUser Author { get; set; } = default!;
 
         [DataMember(Name = "committer")]
-        public CommitUser Committer { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public CommitUser Committer { get; set; } = default!;
     }
 }

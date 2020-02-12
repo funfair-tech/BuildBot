@@ -1,11 +1,12 @@
-﻿using Discord;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Discord;
 
 namespace BuildBot.Discord
 {
     public interface IDiscordBot
     {
-        Task Publish(string message);
-        Task Publish(EmbedBuilder builder);
+        Task PublishAsync(string message);
+
+        Task PublishAsync(EmbedBuilder builder);
     }
 }

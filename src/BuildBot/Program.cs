@@ -1,19 +1,17 @@
 ﻿using System.IO;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
 namespace BuildBot
 {
-    public class Program
+    public static class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseStartup<Startup>()
-                .UseUrls("http://*:49781")
-                .Build();
+            IWebHost host = new WebHostBuilder().UseKestrel()
+                                                .UseContentRoot(Directory.GetCurrentDirectory())
+                                                .UseStartup<Startup>()
+                                                .UseUrls("http://*:49781")
+                                                .Build();
 
             host.Run();
         }

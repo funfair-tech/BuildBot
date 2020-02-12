@@ -3,12 +3,16 @@
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class Ping
+    public sealed class Ping
     {
         [DataMember(Name = "zen")]
-        public string Zen { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Zen { get; set; } = default!;
 
         [DataMember(Name = "hook_id")]
-        public string HookId { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string HookId { get; set; } = default!;
     }
 }

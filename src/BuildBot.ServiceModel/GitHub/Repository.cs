@@ -3,18 +3,24 @@
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class Repository
+    public sealed class Repository
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
         [DataMember(Name = "name")]
-        public string Name { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Name { get; set; } = default!;
 
         [DataMember(Name = "full_name")]
-        public string FullName { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string FullName { get; set; } = default!;
 
         [DataMember(Name = "owner")]
-        public Owner Owner { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public Owner Owner { get; set; } = default!;
     }
 }
