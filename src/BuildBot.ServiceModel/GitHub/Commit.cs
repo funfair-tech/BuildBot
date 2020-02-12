@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
@@ -25,6 +26,7 @@ namespace BuildBot.ServiceModel.GitHub
         [DataMember(Name = "timestamp")]
         public DateTime TimeStamp { get; set; }
 
+        [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
         [DataMember(Name = "url")]
         public string Url { get; set; }
 

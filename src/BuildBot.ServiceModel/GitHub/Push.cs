@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
@@ -27,6 +28,7 @@ namespace BuildBot.ServiceModel.GitHub
         [DataMember(Name = "pusher")]
         public Pusher Pusher { get; set; }
 
+        [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
         [DataMember(Name = "compare")]
         public string CompareUrl { get; set; }
     }
