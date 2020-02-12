@@ -3,12 +3,16 @@
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class Pusher
+    public sealed class Pusher
     {
         [DataMember(Name = "name")]
-        public string Name { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Name { get; set; } = default!;
 
         [DataMember(Name = "email")]
-        public string Email { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Email { get; set; } = default!;
     }
 }

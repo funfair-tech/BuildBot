@@ -5,28 +5,42 @@ using System.Runtime.Serialization;
 namespace BuildBot.ServiceModel.GitHub
 {
     [DataContract]
-    public class Status
+    public sealed class Status
     {
         [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
         [DataMember(Name = "target_url")]
-        public string TargetUrl { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string TargetUrl { get; set; } = default!;
 
         [DataMember(Name = "repository")]
-        public Repository Repository { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public Repository Repository { get; set; } = default!;
 
         [DataMember(Name = "context")]
-        public string Context { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Context { get; set; } = default!;
 
         [DataMember(Name = "state")]
-        public string State { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string State { get; set; } = default!;
 
         [DataMember(Name = "branches")]
-        public List<Branch> Branches { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public List<Branch> Branches { get; set; } = default!;
 
         [DataMember(Name = "description")]
-        public string Description { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public string Description { get; set; } = default!;
 
         [DataMember(Name = "commit")]
-        public StatusCommit StatusCommit { get; set; }
+
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        public StatusCommit StatusCommit { get; set; } = default!;
     }
 }
