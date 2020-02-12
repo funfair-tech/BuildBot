@@ -43,5 +43,7 @@
 - [ ] There are no Resharper\static code analysis errors anywhere in the solution.
 - [ ] I have run a code clean-up on any files I have modified to make sure they are in the correct format.
 - [ ] I have added tests to cover my changes.
+- [ ] All new/modified code has sufficient logging to be able to diagnose what is wrong.
 - [ ] All new and existing tests passed.
+- [ ] All new/modified public interfaces/classes have are documented with xmldoc comments.
 - [ ] Unreleased section of CHANGELOG.md has been updated with details of this PR
