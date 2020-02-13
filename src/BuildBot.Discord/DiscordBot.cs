@@ -48,7 +48,7 @@ namespace BuildBot.Discord
             {
                 using (socketTextChannel.EnterTypingState())
                 {
-                    await socketTextChannel.SendMessageAsync(string.Empty, embed: builder);
+                    await socketTextChannel.SendMessageAsync(string.Empty, embed: builder.Build());
                 }
             }
         }
