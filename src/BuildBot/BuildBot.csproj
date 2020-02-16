@@ -40,9 +40,9 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1"/>
-    </ItemGroup>
+    <!--    <ItemGroup>-->
+    <!--        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1"/>-->
+    <!--    </ItemGroup>-->
 
     <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.1.6" PrivateAssets="All"/>
@@ -62,4 +62,7 @@
         <Copy SourceFiles="buildbot-config.json.template" DestinationFiles="$(PublishDir)\buildbot-config.json" SkipUnchangedFiles="true"/>
     </Target>
 
+    <ItemGroup>
+        <TrimmerRootAssembly Include="System.Resources.Writer"/>
+    </ItemGroup>
 </Project>
