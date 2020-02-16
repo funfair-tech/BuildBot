@@ -40,10 +40,6 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1"/>
     </ItemGroup>
 
-    <!--    <ItemGroup>-->
-    <!--        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1"/>-->
-    <!--    </ItemGroup>-->
-
     <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.1.6" PrivateAssets="All"/>
         <PackageReference Include="FunFair.CodeAnalysis" Version="1.0.5.144" PrivateAssets="All"/>
@@ -64,5 +60,7 @@
 
     <ItemGroup>
         <TrimmerRootAssembly Include="System.Resources.Writer"/>
+        <TrimmerRootAssembly Include="System.IO.FileSystem"/>
+        <TrimmerRootAssembly Include="System.Private.Xml"/>
     </ItemGroup>
 </Project>
