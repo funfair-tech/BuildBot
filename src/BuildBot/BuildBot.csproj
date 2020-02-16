@@ -60,7 +60,7 @@
 
     <ItemGroup>
         <TrimmerRootAssembly Include="System.Resources.Writer"/>
-        <TrimmerRootAssembly Include="System.IO.FileSystem"/>
-        <TrimmerRootAssembly Include="System.Private.Xml"/>
+        <TrimmerRootAssembly Include="System.Transactions"/>
+        <TrimmerRootAssembly Include="System.Diagnostics"/>
     </ItemGroup>
 </Project>
