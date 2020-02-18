@@ -41,10 +41,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.1.6" PrivateAssets="All"/>
         <PackageReference Include="FunFair.CodeAnalysis" Version="1.0.5.144" PrivateAssets="All"/>
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="All"/>
@@ -62,4 +58,9 @@
         <Copy SourceFiles="buildbot-config.json.template" DestinationFiles="$(PublishDir)\buildbot-config.json" SkipUnchangedFiles="true"/>
     </Target>
 
+    <ItemGroup>
+        <TrimmerRootAssembly Include="System.Resources.Writer"/>
+        <TrimmerRootAssembly Include="System.Transactions"/>
+        <TrimmerRootAssembly Include="System.Diagnostics.FileVersionInfo"/>
+    </ItemGroup>
 </Project>
