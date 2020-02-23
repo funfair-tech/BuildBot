@@ -26,7 +26,7 @@ namespace BuildBot
 
             this._loggerFactory = loggerFactory;
 
-            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(env.ContentRootPath)
+            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
                                                                       .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                                                                       .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                                                                       .AddEnvironmentVariables();
@@ -56,7 +56,7 @@ namespace BuildBot
             services.AddMvc();
         }
 
-        [SuppressMessage("Threading", "VSTHRD002:Don't do synchronous waits", Justification = "This is a startup task")]
+        [SuppressMessage(category: "Threading", checkId: "VSTHRD002:Don't do synchronous waits", Justification = "This is a startup task")]
         private static DiscordBot ConfigureBot(ILogger logger)
         {
             DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(jsonFile: "buildbot-config.json");
