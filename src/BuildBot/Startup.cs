@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using BuildBot.Discord;
 using BuildBot.Discord.Publishers;
 using BuildBot.Discord.Publishers.GitHub;
@@ -59,7 +60,8 @@ namespace BuildBot
         [SuppressMessage(category: "Threading", checkId: "VSTHRD002:Don't do synchronous waits", Justification = "This is a startup task")]
         private static DiscordBot ConfigureBot(ILogger logger)
         {
-            DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(jsonFile: "buildbot-config.json");
+            string configFile = Path.Combine(ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
+            DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(configFile);
             DiscordBot bot = new DiscordBot(botConfiguration, logger);
 
             // waiting a Task is normally a big no no because of deadlocks, but we're in a start up task here so it should be ok
