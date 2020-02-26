@@ -1,21 +1,20 @@
-﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
 {
-    [DataContract]
     public sealed class CommitUser
     {
-        [DataMember(Name = "name")]
+        [JsonPropertyName("name")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Name { get; set; } = default!;
 
-        [DataMember(Name = "email")]
+        [JsonPropertyName("email")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Email { get; set; } = default!;
 
-        [DataMember(Name = "username")]
+        [JsonPropertyName("username")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Username { get; set; } = default!;

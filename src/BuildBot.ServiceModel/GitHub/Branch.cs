@@ -1,11 +1,10 @@
-﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
 {
-    [DataContract]
     public sealed class Branch
     {
-        [DataMember(Name = "name")]
+        [JsonPropertyName("name")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Name { get; set; } = default!;

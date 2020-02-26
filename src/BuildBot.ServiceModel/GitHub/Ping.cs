@@ -1,16 +1,15 @@
-﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
 {
-    [DataContract]
     public sealed class Ping
     {
-        [DataMember(Name = "zen")]
+        [JsonPropertyName("zen")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Zen { get; set; } = default!;
 
-        [DataMember(Name = "hook_id")]
+        [JsonPropertyName("hook_id")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string HookId { get; set; } = default!;
