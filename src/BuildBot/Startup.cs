@@ -3,8 +3,10 @@ using System.IO;
 using BuildBot.Discord;
 using BuildBot.Discord.Publishers;
 using BuildBot.Discord.Publishers.GitHub;
+using BuildBot.Discord.Publishers.Octopus;
 using BuildBot.Middleware;
 using BuildBot.ServiceModel.GitHub;
+using BuildBot.ServiceModel.Octopus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +54,8 @@ namespace BuildBot
             // register publishers
             services.AddSingleton<IPublisher<Push>, PushPublisher>();
             services.AddSingleton<IPublisher<Status>, StatusPublisher>();
+
+            services.AddSingleton<IPublisher<Deploy>, DeployPublisher>();
 
             // Add framework services
             services.AddMvc();
