@@ -81,6 +81,7 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 if (line.StartsWith(value: "### ", StringComparison.Ordinal))
                 {
+                    builder.AppendLine();
                     string replacement = Bold(Underline(line.Substring(startIndex: 4)
                                                             .Trim()));
 
@@ -93,7 +94,8 @@ namespace BuildBot.Discord.Publishers.Octopus
                                         .Trim());
             }
 
-            return builder.ToString();
+            return builder.ToString()
+                          .Trim();
         }
 
         private static bool HasSucceeded(Deploy message)
