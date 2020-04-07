@@ -75,14 +75,15 @@ namespace BuildBot.Discord.Publishers.Octopus
         private static string ReformatReleaseNotes(string releaseNotes)
         {
             StringBuilder builder = new StringBuilder();
-            string[] text = releaseNotes.Split(Environment.NewLine);
+            string[] text = releaseNotes.Split(separator: '\n');
 
             foreach (string line in text)
             {
                 if (line.StartsWith(value: "### ", StringComparison.Ordinal))
                 {
-                    string replacement = "**__" + line.Substring(startIndex: 4)
-                                                      .Trim() + "__**";
+                    string replacement = BoldUnderline(line.Substring(startIndex: 4)
+                                                           .Trim());
+
                     builder.AppendLine(replacement);
 
                     continue;
@@ -114,6 +115,11 @@ namespace BuildBot.Discord.Publishers.Octopus
             }
 
             return name;
+        }
+
+        private static string BoldUnderline(string value)
+        {
+            return "**__" + value + "__**";
         }
     }
 }
