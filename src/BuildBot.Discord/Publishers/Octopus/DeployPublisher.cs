@@ -95,12 +95,24 @@ namespace BuildBot.Discord.Publishers.Octopus
                     continue;
                 }
 
-                builder.AppendLine(Regex.Replace(line, pattern: "(ff\\-\\d+)", MakeUpperCase, RegexOptions.IgnoreCase)
-                                        .Trim());
+                builder.AppendLine(EnsurePrefixed(Regex.Replace(line, pattern: "(ff\\-\\d+)", MakeUpperCase, RegexOptions.IgnoreCase)
+                                                       .Trim()));
             }
 
             return builder.ToString()
                           .Trim();
+        }
+
+        private static string? EnsurePrefixed(string trim)
+        {
+            const string prefix = "- ";
+
+            if (trim.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                return trim;
+            }
+
+            return prefix + trim;
         }
 
         private static bool HasSucceeded(Deploy message)
@@ -124,19 +136,24 @@ namespace BuildBot.Discord.Publishers.Octopus
             return name;
         }
 
+        private static string Wrap(string value, string wrapWith)
+        {
+            return string.Concat(wrapWith, value, wrapWith);
+        }
+
         private static string Bold(string value)
         {
-            return "**" + value + "**";
+            return Wrap(value, wrapWith: @"**");
         }
 
         private static string Italic(string value)
         {
-            return "*" + value + "*";
+            return Wrap(value, wrapWith: @"*");
         }
 
         private static string Underline(string value)
         {
-            return "__" + value + "__";
+            return Wrap(value, wrapWith: @"__");
         }
     }
 }

@@ -19,6 +19,7 @@ namespace BuildBot.Discord.Publishers.GitHub
             this._bot = bot;
         }
 
+        /// <inheritdoc />
         public async Task PublishAsync(Push message)
         {
             // only publish Push messages if there are commits, otherwise we'll be publishing
@@ -34,7 +35,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
-            if (message.Commits.Count == 1 && message.Commits.Any(predicate: c => c.Message.StartsWith("chore", StringComparison.Ordinal)))
+            if (message.Commits.Count == 1 && message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", StringComparison.Ordinal)))
             {
                 // ignore commits which contain "chore"
                 return;
