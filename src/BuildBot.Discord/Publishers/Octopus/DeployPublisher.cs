@@ -31,10 +31,18 @@ namespace BuildBot.Discord.Publishers.Octopus
             string releaseId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Releases-", StringComparison.OrdinalIgnoreCase));
             string environmentId =
                 message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Environments-", StringComparison.OrdinalIgnoreCase));
+            string? tenantId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", StringComparison.OrdinalIgnoreCase));
 
             ProjectResource? project = await client.Repository.Projects.Get(projectId);
             ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
             EnvironmentResource? environment = await client.Repository.Environments.Get(environmentId);
+
+            TenantResource? tenant = null;
+
+            if (!string.IsNullOrWhiteSpace(tenantId))
+            {
+                tenant = await client.Repository.Tenants.Get(tenantId);
+            }
 
             string projectName = project != null ? project.Name : projectId;
             string environmentName = NormaliseEnvironmentName(environment, environmentId, out bool releaseNoteWorthy);
@@ -48,6 +56,11 @@ namespace BuildBot.Discord.Publishers.Octopus
                 builder.Color = Color.Green;
                 builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
 
+                if (tenant != null)
+                {
+                    builder.Title += string.Concat(str0: " (", tenant.Name, str2: ")");
+                }
+
                 string releaseNotes = release?.ReleaseNotes ?? string.Empty;
 
                 if (!string.IsNullOrWhiteSpace(releaseNotes))
@@ -59,6 +72,11 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 builder.Color = Color.Red;
                 builder.Title = $"{projectName} {releaseVersion} failed to deploy to {environmentName.ToLowerInvariant()}";
+
+                if (tenant != null)
+                {
+                    builder.Title += string.Concat(str0: " (", tenant.Name, str2: ")");
+                }
             }
 
             builder.WithUrl(message.Payload.ServerAuditUri);
