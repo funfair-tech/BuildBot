@@ -82,7 +82,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             if (!string.IsNullOrWhiteSpace(deploymentId))
             {
-                string url = $"{message.Payload.ServerAuditUri}/app#/{message.Payload.Event.SpaceId}/deployments/{deploymentId}";
+                string url = $"{message.Payload.ServerUri}/app#/{message.Payload.Event.SpaceId}/deployments/{deploymentId}";
 
                 builder.WithUrl(url);
             }
