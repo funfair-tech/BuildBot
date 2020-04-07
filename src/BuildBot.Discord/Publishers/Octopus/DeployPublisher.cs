@@ -95,8 +95,15 @@ namespace BuildBot.Discord.Publishers.Octopus
                     continue;
                 }
 
-                builder.AppendLine(EnsurePrefixed(Regex.Replace(line, pattern: "(ff\\-\\d+)", MakeUpperCase, RegexOptions.IgnoreCase)
-                                                       .Trim()));
+                string detail = Regex.Replace(line, pattern: "(ff\\-\\d+)", MakeUpperCase, RegexOptions.IgnoreCase)
+                                     .Trim();
+
+                if (string.IsNullOrWhiteSpace(detail))
+                {
+                    continue;
+                }
+
+                builder.AppendLine(EnsurePrefixed(detail));
             }
 
             return builder.ToString()
