@@ -80,7 +80,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(deploymentId))
+            if (message.Payload.ServerUri != null && !string.IsNullOrWhiteSpace(deploymentId))
             {
                 string url = $"{message.Payload.ServerUri}/app#/{message.Payload.Event.SpaceId}/deployments/{deploymentId}";
 
