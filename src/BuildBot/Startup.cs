@@ -60,8 +60,8 @@ namespace BuildBot
 
             services.AddSingleton<IOctopusClientFactory, OctopusClientFactory>();
 
-            string uri = this.Configuration.GetValue<string>(key: @"Octopus:Url");
-            string apiKey = this.Configuration.GetValue<string>(key: @"Octopus:ApiKey");
+            string uri = this.Configuration.GetValue<string>(key: @"OctopusServer:Url");
+            string apiKey = this.Configuration.GetValue<string>(key: @"OctopusServer:ApiKey");
 
             OctopusServerEndpoint ose = new OctopusServerEndpoint(uri, apiKey);
 
