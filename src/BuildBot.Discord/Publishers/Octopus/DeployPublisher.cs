@@ -88,7 +88,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                     continue;
                 }
 
-                builder.AppendLine(Regex.Replace(line, pattern: "(ff\\-\\d+)", replacement: "_$1:_", RegexOptions.IgnoreCase)
+                builder.AppendLine(Regex.Replace(line, pattern: "(ff\\-\\d+)", replacement: "_$:_", RegexOptions.IgnoreCase)
                                         .Trim());
             }
 
