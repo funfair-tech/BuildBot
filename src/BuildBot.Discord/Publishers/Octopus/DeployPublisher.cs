@@ -81,8 +81,8 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 if (line.StartsWith(value: "### ", StringComparison.Ordinal))
                 {
-                    string replacement = BoldUnderline(line.Substring(startIndex: 4)
-                                                           .Trim());
+                    string replacement = Bold(Underline(line.Substring(startIndex: 4)
+                                                            .Trim()));
 
                     builder.AppendLine(replacement);
 
@@ -117,9 +117,14 @@ namespace BuildBot.Discord.Publishers.Octopus
             return name;
         }
 
-        private static string BoldUnderline(string value)
+        private static string Bold(string value)
         {
-            return "**__" + value + "__**";
+            return "**" + value + "**";
+        }
+
+        private static string Underline(string value)
+        {
+            return "__" + value + "__";
         }
     }
 }
