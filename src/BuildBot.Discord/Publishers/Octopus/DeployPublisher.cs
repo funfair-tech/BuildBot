@@ -74,6 +74,11 @@ namespace BuildBot.Discord.Publishers.Octopus
 
         private static string ReformatReleaseNotes(string releaseNotes)
         {
+            static string MakeUpperCase(Match match)
+            {
+                return Italic(match.ToString());
+            }
+
             StringBuilder builder = new StringBuilder();
             string[] text = releaseNotes.Split(separator: '\n');
 
@@ -90,7 +95,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                     continue;
                 }
 
-                builder.AppendLine(Regex.Replace(line, pattern: "(ff\\-\\d+)", replacement: "_$:_", RegexOptions.IgnoreCase)
+                builder.AppendLine(Regex.Replace(line, pattern: "(ff\\-\\d+)", MakeUpperCase, RegexOptions.IgnoreCase)
                                         .Trim());
             }
 
@@ -122,6 +127,11 @@ namespace BuildBot.Discord.Publishers.Octopus
         private static string Bold(string value)
         {
             return "**" + value + "**";
+        }
+
+        private static string Italic(string value)
+        {
+            return "*" + value + "*";
         }
 
         private static string Underline(string value)
