@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.Octopus;
 using Discord;
@@ -50,7 +52,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
                 if (!string.IsNullOrWhiteSpace(releaseNotes))
                 {
-                    builder.Description = "```" + releaseNotes + "```";
+                    builder.Description = ReformatReleaseNotes(releaseNotes);
                 }
             }
             else
@@ -68,6 +70,29 @@ namespace BuildBot.Discord.Publishers.Octopus
             builder.AddField(name: "Should be in release channel", succeeded && releaseNoteWorthy);
 
             await this._bot.PublishAsync(builder);
+        }
+
+        private static string ReformatReleaseNotes(string releaseNotes)
+        {
+            StringBuilder builder = new StringBuilder();
+            string[] text = releaseNotes.Split(Environment.NewLine);
+
+            foreach (string line in text)
+            {
+                if (line.StartsWith(value: "### ", StringComparison.Ordinal))
+                {
+                    string replacement = "**__" + line.Substring(startIndex: 4)
+                                                      .Trim() + "__**";
+                    builder.AppendLine(replacement);
+
+                    continue;
+                }
+
+                builder.AppendLine(Regex.Replace(line, pattern: "(ff\\-\\d+)", replacement: "_$1:_", RegexOptions.IgnoreCase)
+                                        .Trim());
+            }
+
+            return builder.ToString();
         }
 
         private static bool HasSucceeded(Deploy message)
