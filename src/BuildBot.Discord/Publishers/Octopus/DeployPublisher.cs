@@ -31,6 +31,7 @@ namespace BuildBot.Discord.Publishers.Octopus
             string releaseId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Releases-", StringComparison.OrdinalIgnoreCase));
             string environmentId =
                 message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Environments-", StringComparison.OrdinalIgnoreCase));
+            string deploymentId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Deployments-", StringComparison.OrdinalIgnoreCase));
             string? tenantId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", StringComparison.OrdinalIgnoreCase));
 
             ProjectResource? project = await client.Repository.Projects.Get(projectId);
@@ -79,7 +80,12 @@ namespace BuildBot.Discord.Publishers.Octopus
                 }
             }
 
-            builder.WithUrl(message.Payload.ServerAuditUri);
+            if (!string.IsNullOrWhiteSpace(deploymentId))
+            {
+                string url = $"{message.Payload.ServerAuditUri}/app#/{message.Payload.Event.SpaceId}/deployments/{deploymentId}";
+
+                builder.WithUrl(url);
+            }
 
             builder.AddField(name: "Product", projectName);
             builder.AddField(name: "Release", releaseVersion);
