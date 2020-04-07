@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Octopus.Client;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -56,6 +57,15 @@ namespace BuildBot
             services.AddSingleton<IPublisher<Status>, StatusPublisher>();
 
             services.AddSingleton<IPublisher<Deploy>, DeployPublisher>();
+
+            services.AddSingleton<IOctopusClientFactory, OctopusClientFactory>();
+
+            string uri = this.Configuration.GetValue<string>(key: @"Octopus:Url");
+            string apiKey = this.Configuration.GetValue<string>(key: @"Octopus:ApiKey");
+
+            OctopusServerEndpoint ose = new OctopusServerEndpoint(uri, apiKey);
+
+            services.AddSingleton(ose);
 
             // Add framework services
             services.AddMvc();

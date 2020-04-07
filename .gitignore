@@ -288,4 +288,5 @@ __pycache__/
 *.xsd.cs
 src/BuildBot/token.json
 src/BuildBot/buildbot-config.json
+src/BuildBot/appsettings.Production.json
 /.gtm/

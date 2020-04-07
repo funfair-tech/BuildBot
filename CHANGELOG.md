@@ -6,6 +6,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 -->
 ## [Unreleased]
 ### Added
+- Octopus Notifications including basic release notes formatting
 ### Fixed
 ### Changed
 - Updated to build with .NET Core SDK 3.1.101
