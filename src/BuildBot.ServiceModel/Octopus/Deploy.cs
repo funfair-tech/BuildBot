@@ -70,6 +70,8 @@ namespace BuildBot.ServiceModel.Octopus
         public string Details { get; set; }
 
         public string SpaceId { get; set; }
+
+        public string[] RelatedDocumentIds { get; set; }
     }
 
     public class DeployMessageReference
