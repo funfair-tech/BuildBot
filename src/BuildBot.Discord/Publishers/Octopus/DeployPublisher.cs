@@ -123,8 +123,9 @@ namespace BuildBot.Discord.Publishers.Octopus
                     }
 
                     builder.AppendLine();
-                    string replacement = Bold(Underline(line.Substring(startIndex: 4)
-                                                            .Trim()));
+                    string replacement = Bold(line.Substring(startIndex: 4)
+                                                  .Trim())
+                        .ToUpperInvariant();
 
                     builder.AppendLine(replacement);
 
@@ -146,7 +147,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                           .Trim();
         }
 
-        private static bool IsLastLine(string[] text, int lineIndex)
+        private static bool IsLastLine(in string[] text, int lineIndex)
         {
             for (int subsequentLine = lineIndex + 1; lineIndex < text.Length; ++subsequentLine)
             {
