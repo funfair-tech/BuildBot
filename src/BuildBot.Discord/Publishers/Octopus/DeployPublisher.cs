@@ -149,7 +149,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
         private static bool IsLastLine(in string[] text, int lineIndex)
         {
-            for (int subsequentLine = lineIndex + 1; lineIndex < text.Length; ++subsequentLine)
+            for (int subsequentLine = lineIndex + 1; subsequentLine < text.Length; ++subsequentLine)
             {
                 if (!string.IsNullOrWhiteSpace(text[subsequentLine]))
                 {
