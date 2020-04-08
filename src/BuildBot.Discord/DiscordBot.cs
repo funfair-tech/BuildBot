@@ -36,7 +36,7 @@ namespace BuildBot.Discord
 
         public async Task PublishToReleaseChannelAsync(EmbedBuilder builder)
         {
-            SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.ReleaseChannel ?? this._botConfiguration.Channel);
+            SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.ReleaseChannel);
 
             if (socketTextChannel == null)
             {
