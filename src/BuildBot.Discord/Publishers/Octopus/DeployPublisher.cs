@@ -102,7 +102,10 @@ namespace BuildBot.Discord.Publishers.Octopus
             builder.AddField(name: "Release", releaseVersion);
             builder.AddField(name: "Environment", environmentName);
 
-            builder.AddField(name: "Should be in release channel", succeeded && releaseNoteWorthy);
+            if (tenant != null)
+            {
+                builder.AddField(name: "Tenant", tenant.Name);
+            }
 
             await this._bot.PublishAsync(builder);
 
