@@ -111,11 +111,16 @@ namespace BuildBot.Discord.Publishers.Octopus
             StringBuilder builder = new StringBuilder();
             string[] text = releaseNotes.Split(separator: '\n');
 
-            foreach (string line in text)
+            for (int lineIndex = 0; lineIndex < text.Length; ++lineIndex)
             {
+                string line = text[lineIndex];
+
                 if (line.StartsWith(value: "### ", StringComparison.Ordinal))
                 {
-                    // todo: if is last line of real content do nothing
+                    if (IsLastLine(text, lineIndex))
+                    {
+                        continue;
+                    }
 
                     builder.AppendLine();
                     string replacement = Bold(Underline(line.Substring(startIndex: 4)
@@ -139,6 +144,19 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             return builder.ToString()
                           .Trim();
+        }
+
+        private static bool IsLastLine(string[] text, int lineIndex)
+        {
+            for (int subsequentLine = lineIndex + 1; lineIndex < text.Length; ++subsequentLine)
+            {
+                if (!string.IsNullOrWhiteSpace(text[subsequentLine]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static string? EnsurePrefixed(string trim)
