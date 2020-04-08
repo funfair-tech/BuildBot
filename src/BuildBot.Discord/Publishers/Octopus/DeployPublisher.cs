@@ -100,7 +100,7 @@ namespace BuildBot.Discord.Publishers.Octopus
         {
             static string MakeUpperCase(Match match)
             {
-                return Italic(match.ToString());
+                return Bold(match.ToString());
             }
 
             StringBuilder builder = new StringBuilder();
