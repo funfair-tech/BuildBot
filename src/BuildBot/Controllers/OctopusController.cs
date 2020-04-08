@@ -30,7 +30,7 @@ namespace BuildBot.Controllers
                 this._logger.LogError(new EventId(ex.HResult), ex.Message, ex);
             }
 
-            return this.NoContent();
+            return this.Ok();
         }
 
         [HttpPost]
