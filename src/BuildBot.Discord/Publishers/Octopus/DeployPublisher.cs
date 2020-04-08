@@ -66,7 +66,18 @@ namespace BuildBot.Discord.Publishers.Octopus
 
                 if (!string.IsNullOrWhiteSpace(releaseNotes))
                 {
-                    builder.Description = ReformatReleaseNotes(releaseNotes);
+                    string reformatted = ReformatReleaseNotes(releaseNotes);
+
+                    if (reformatted.Length > 2048)
+                    {
+                        reformatted = reformatted.Substring(startIndex: 0, length: 2048)
+                                                 .Trim();
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(reformatted))
+                    {
+                        builder.Description = reformatted;
+                    }
                 }
             }
             else
