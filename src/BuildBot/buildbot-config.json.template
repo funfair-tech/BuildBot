@@ -1,5 +1,6 @@
 ﻿{
   "Token": "",
   "Server": "",
-  "Channel": ""
+  "Channel": "",
+  "ReleaseChannel": ""
 }

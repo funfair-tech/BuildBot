@@ -93,6 +93,11 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             builder.AddField(name: "Should be in release channel", succeeded && releaseNoteWorthy);
 
+            if (succeeded && releaseNoteWorthy)
+            {
+                await this._bot.PublishToReleaseChannelAsync(builder);
+            }
+
             await this._bot.PublishAsync(builder);
         }
 
@@ -177,11 +182,6 @@ namespace BuildBot.Discord.Publishers.Octopus
         private static string Bold(string value)
         {
             return Wrap(value, wrapWith: @"**");
-        }
-
-        private static string Italic(string value)
-        {
-            return Wrap(value, wrapWith: @"*");
         }
 
         private static string Underline(string value)

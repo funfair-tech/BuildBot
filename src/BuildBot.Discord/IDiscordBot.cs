@@ -5,8 +5,8 @@ namespace BuildBot.Discord
 {
     public interface IDiscordBot
     {
-        Task PublishAsync(string message);
-
         Task PublishAsync(EmbedBuilder builder);
+
+        Task PublishToReleaseChannelAsync(EmbedBuilder builder);
     }
 }

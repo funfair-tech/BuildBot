@@ -11,6 +11,8 @@ namespace BuildBot.Discord
 
         public string Channel { get; set; } = default!;
 
+        public string ReleaseChannel { get; set; } = default!;
+
         public static DiscordBotConfiguration Load(string jsonFile)
         {
             return JsonConvert.DeserializeObject<DiscordBotConfiguration>(File.ReadAllText(jsonFile));
