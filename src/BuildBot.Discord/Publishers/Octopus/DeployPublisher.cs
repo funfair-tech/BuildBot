@@ -129,7 +129,8 @@ namespace BuildBot.Discord.Publishers.Octopus
         {
             static string MakeUpperCase(Match match)
             {
-                return Bold(match.ToString());
+                return Bold(match.ToString()
+                                 .ToUpperInvariant());
             }
 
             StringBuilder builder = new StringBuilder();
