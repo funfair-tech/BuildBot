@@ -59,7 +59,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
                 if (tenant != null)
                 {
-                    builder.Title += string.Concat(str0: " (", tenant.Name, str2: ")");
+                    builder.Title += string.Concat(str0: " (", NormaliseTenantName(tenant), str2: ")");
                 }
 
                 string releaseNotes = release?.ReleaseNotes ?? string.Empty;
@@ -113,6 +113,16 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 await this._bot.PublishToReleaseChannelAsync(builder);
             }
+        }
+
+        private static string NormaliseTenantName(TenantResource tenant)
+        {
+            if (StringComparer.InvariantCultureIgnoreCase.Equals(tenant.Name, y: "CasinoFair"))
+            {
+                return "TTM";
+            }
+
+            return tenant.Name;
         }
 
         private static string ReformatReleaseNotes(string releaseNotes)
