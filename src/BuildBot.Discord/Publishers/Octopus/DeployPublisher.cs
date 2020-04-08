@@ -104,12 +104,12 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             builder.AddField(name: "Should be in release channel", succeeded && releaseNoteWorthy);
 
+            await this._bot.PublishAsync(builder);
+
             if (succeeded && releaseNoteWorthy)
             {
                 await this._bot.PublishToReleaseChannelAsync(builder);
             }
-
-            await this._bot.PublishAsync(builder);
         }
 
         private static string ReformatReleaseNotes(string releaseNotes)
