@@ -110,6 +110,8 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 if (line.StartsWith(value: "### ", StringComparison.Ordinal))
                 {
+                    // todo: if is last line of real content do nothing
+
                     builder.AppendLine();
                     string replacement = Bold(Underline(line.Substring(startIndex: 4)
                                                             .Trim()));
