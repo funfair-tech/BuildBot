@@ -77,6 +77,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                     {
                         reformatted = reformatted.Substring(startIndex: 0, length: 2048)
                                                  .Trim();
+                        builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
                     }
 
                     if (!string.IsNullOrWhiteSpace(reformatted))
