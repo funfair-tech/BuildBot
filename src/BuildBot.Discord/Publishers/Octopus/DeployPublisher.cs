@@ -45,9 +45,14 @@ namespace BuildBot.Discord.Publishers.Octopus
                 tenant = await client.Repository.Tenants.Get(tenantId);
             }
 
-            string projectName = project != null ? project.Name : projectId;
-            string environmentName = NormaliseEnvironmentName(environment, environmentId, out bool releaseNoteWorthy);
+            string projectName = NormalizeProjectName(project, projectId);
+            string environmentName = NormaliseEnvironmentName(environment, environmentId, out bool releaseNoteWorthy, out string? tenantName);
             string releaseVersion = release != null ? release.Version : releaseId;
+
+            if (tenant != null)
+            {
+                tenantName = NormaliseTenantName(tenant);
+            }
 
             EmbedBuilder builder = new EmbedBuilder();
             bool succeeded = HasSucceeded(message);
@@ -57,9 +62,9 @@ namespace BuildBot.Discord.Publishers.Octopus
                 builder.Color = Color.Green;
                 builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
 
-                if (tenant != null)
+                if (!string.IsNullOrWhiteSpace(tenantName))
                 {
-                    builder.Title += string.Concat(str0: " (", NormaliseTenantName(tenant), str2: ")");
+                    builder.Title += string.Concat(str0: " (", tenantName, str2: ")");
                 }
 
                 string releaseNotes = release?.ReleaseNotes ?? string.Empty;
@@ -85,9 +90,9 @@ namespace BuildBot.Discord.Publishers.Octopus
                 builder.Color = Color.Red;
                 builder.Title = $"{projectName} {releaseVersion} failed to deploy to {environmentName.ToLowerInvariant()}";
 
-                if (tenant != null)
+                if (!string.IsNullOrWhiteSpace(tenantName))
                 {
-                    builder.Title += string.Concat(str0: " (", tenant.Name, str2: ")");
+                    builder.Title += string.Concat(str0: " (", tenantName, str2: ")");
                 }
             }
 
@@ -102,9 +107,9 @@ namespace BuildBot.Discord.Publishers.Octopus
             builder.AddField(name: "Release", releaseVersion);
             builder.AddField(name: "Environment", environmentName);
 
-            if (tenant != null)
+            if (!string.IsNullOrWhiteSpace(tenantName))
             {
-                builder.AddField(name: "Tenant", tenant.Name);
+                builder.AddField(name: "Tenant", tenantName);
             }
 
             await this._bot.PublishAsync(builder);
@@ -115,8 +120,28 @@ namespace BuildBot.Discord.Publishers.Octopus
             }
         }
 
+        private static string NormalizeProjectName(ProjectResource project, string projectId)
+        {
+            if (project == null)
+            {
+                return projectId;
+            }
+
+            if (!string.IsNullOrWhiteSpace(project.Description))
+            {
+                return project.Description;
+            }
+
+            return project.Name;
+        }
+
         private static string NormaliseTenantName(TenantResource tenant)
         {
+            if (!string.IsNullOrWhiteSpace(tenant.Description))
+            {
+                return tenant.Description;
+            }
+
             if (StringComparer.InvariantCultureIgnoreCase.Equals(tenant.Name, y: "CasinoFair"))
             {
                 return "TTM";
@@ -202,8 +227,9 @@ namespace BuildBot.Discord.Publishers.Octopus
             return StringComparer.InvariantCultureIgnoreCase.Equals(message.Payload.Event.Category, y: "DeploymentSucceeded");
         }
 
-        private static string NormaliseEnvironmentName(EnvironmentResource environment, string environmentId, out bool isReleaseNoteWorthy)
+        private static string NormaliseEnvironmentName(EnvironmentResource environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
         {
+            tenantName = null;
             string name = environment != null ? environment.Name : environmentId;
 
             string[] releaseChannels = {"Beta", "Showcase", "Live"};
@@ -213,6 +239,13 @@ namespace BuildBot.Discord.Publishers.Octopus
             if (StringComparer.InvariantCultureIgnoreCase.Equals(name, y: "Beta"))
             {
                 return "Staging";
+            }
+
+            if (StringComparer.InvariantCultureIgnoreCase.Equals(name, y: "Showcase"))
+            {
+                tenantName = "Showcase";
+
+                return "Live";
             }
 
             return name;
