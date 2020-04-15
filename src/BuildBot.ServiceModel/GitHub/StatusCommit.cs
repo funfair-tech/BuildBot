@@ -4,17 +4,17 @@ namespace BuildBot.ServiceModel.GitHub
 {
     public sealed class StatusCommit
     {
-        [JsonPropertyName("commit")]
+        [JsonPropertyName(name: "commit")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public Commit Commit { get; set; } = default!;
 
-        [JsonPropertyName("sha")]
+        [JsonPropertyName(name: "sha")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Sha { get; set; } = default!;
 
-        [JsonPropertyName("author")]
+        [JsonPropertyName(name: "author")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public Author Author { get; set; } = default!;
