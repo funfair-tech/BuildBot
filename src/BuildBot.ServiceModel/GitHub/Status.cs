@@ -7,37 +7,37 @@ namespace BuildBot.ServiceModel.GitHub
     public sealed class Status
     {
         [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
-        [JsonPropertyName("target_url")]
+        [JsonPropertyName(name: "target_url")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string TargetUrl { get; set; } = default!;
 
-        [JsonPropertyName("repository")]
+        [JsonPropertyName(name: "repository")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public Repository Repository { get; set; } = default!;
 
-        [JsonPropertyName("context")]
+        [JsonPropertyName(name: "context")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Context { get; set; } = default!;
 
-        [JsonPropertyName("state")]
+        [JsonPropertyName(name: "state")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string State { get; set; } = default!;
 
-        [JsonPropertyName("branches")]
+        [JsonPropertyName(name: "branches")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public List<Branch> Branches { get; set; } = default!;
 
-        [JsonPropertyName("description")]
+        [JsonPropertyName(name: "description")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Description { get; set; } = default!;
 
-        [JsonPropertyName("commit")]
+        [JsonPropertyName(name: "commit")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public StatusCommit StatusCommit { get; set; } = default!;

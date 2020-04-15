@@ -4,7 +4,7 @@ namespace BuildBot.ServiceModel.GitHub
 {
     public sealed class Branch
     {
-        [JsonPropertyName("name")]
+        [JsonPropertyName(name: "name")]
 
         // ReSharper disable once RedundantDefaultMemberInitializer
         public string Name { get; set; } = default!;
