@@ -10,7 +10,7 @@ namespace BuildBot.Discord.Publishers.GitHub
     /// <summary>
     ///     Publish the GitHub "push" event to Discord
     /// </summary>
-    public class PushPublisher : IPublisher<Push>
+    public sealed class PushPublisher : IPublisher<Push>
     {
         private readonly IDiscordBot _bot;
 

@@ -5,7 +5,7 @@ using Discord;
 
 namespace BuildBot.Discord.Publishers.GitHub
 {
-    public class StatusPublisher : IPublisher<Status>
+    public sealed class StatusPublisher : IPublisher<Status>
     {
         private readonly IDiscordBot _bot;
 
