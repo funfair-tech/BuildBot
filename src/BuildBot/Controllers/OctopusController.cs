@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace BuildBot.Controllers
 {
     [Route(template: "[controller]")]
-    public class OctopusController : Controller
+    public sealed class OctopusController : Controller
     {
         private readonly IPublisher<Deploy> _deployPublisher;
         private readonly ILogger _logger;

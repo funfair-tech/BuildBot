@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Discord
 {
-    public class DiscordBot : IDiscordBot
+    public sealed class DiscordBot : IDiscordBot
     {
         private readonly DiscordBotConfiguration _botConfiguration;
         private readonly DiscordSocketClient _client;

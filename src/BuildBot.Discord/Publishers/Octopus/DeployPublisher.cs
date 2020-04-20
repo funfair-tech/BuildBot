@@ -10,7 +10,7 @@ using Octopus.Client.Model;
 
 namespace BuildBot.Discord.Publishers.Octopus
 {
-    public class DeployPublisher : IPublisher<Deploy>
+    public sealed class DeployPublisher : IPublisher<Deploy>
     {
         private readonly IDiscordBot _bot;
         private readonly IOctopusClientFactory _octopusClientFactory;

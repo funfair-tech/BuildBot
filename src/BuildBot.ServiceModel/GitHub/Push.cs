@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
 {
-    public class Push
+    public sealed class Push
     {
         [JsonPropertyName(name: "ref")]
 
