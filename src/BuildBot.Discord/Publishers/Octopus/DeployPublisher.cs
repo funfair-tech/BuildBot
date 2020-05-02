@@ -27,12 +27,16 @@ namespace BuildBot.Discord.Publishers.Octopus
         {
             IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
-            string projectId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Projects-", StringComparison.OrdinalIgnoreCase));
-            string releaseId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Releases-", StringComparison.OrdinalIgnoreCase));
+            string projectId =
+                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Projects-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string releaseId =
+                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Releases-", comparisonType: StringComparison.OrdinalIgnoreCase));
             string environmentId =
-                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Environments-", StringComparison.OrdinalIgnoreCase));
-            string deploymentId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Deployments-", StringComparison.OrdinalIgnoreCase));
-            string? tenantId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", StringComparison.OrdinalIgnoreCase));
+                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Environments-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string deploymentId =
+                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Deployments-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string? tenantId =
+                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", comparisonType: StringComparison.OrdinalIgnoreCase));
 
             ProjectResource? project = await client.Repository.Projects.Get(projectId);
             ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
@@ -45,8 +49,8 @@ namespace BuildBot.Discord.Publishers.Octopus
                 tenant = await client.Repository.Tenants.Get(tenantId);
             }
 
-            string projectName = NormalizeProjectName(project, projectId);
-            string environmentName = NormaliseEnvironmentName(environment, environmentId, out bool releaseNoteWorthy, out string? tenantName);
+            string projectName = NormalizeProjectName(project: project, projectId: projectId);
+            string environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
             string releaseVersion = release != null ? release.Version : releaseId;
 
             if (tenant != null)
@@ -64,7 +68,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
                 if (!string.IsNullOrWhiteSpace(tenantName))
                 {
-                    builder.Title += string.Concat(str0: " (", tenantName, str2: ")");
+                    builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
                 }
 
                 string releaseNotes = release?.ReleaseNotes ?? string.Empty;
@@ -93,7 +97,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
                 if (!string.IsNullOrWhiteSpace(tenantName))
                 {
-                    builder.Title += string.Concat(str0: " (", tenantName, str2: ")");
+                    builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
                 }
             }
 
@@ -104,13 +108,13 @@ namespace BuildBot.Discord.Publishers.Octopus
                 builder.WithUrl(url);
             }
 
-            builder.AddField(name: "Product", projectName);
-            builder.AddField(name: "Release", releaseVersion);
-            builder.AddField(name: "Environment", environmentName);
+            builder.AddField(name: "Product", value: projectName);
+            builder.AddField(name: "Release", value: releaseVersion);
+            builder.AddField(name: "Environment", value: environmentName);
 
             if (!string.IsNullOrWhiteSpace(tenantName))
             {
-                builder.AddField(name: "Tenant", tenantName);
+                builder.AddField(name: "Tenant", value: tenantName);
             }
 
             await this._bot.PublishAsync(builder);
@@ -143,7 +147,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                 return tenant.Description;
             }
 
-            if (StringComparer.InvariantCultureIgnoreCase.Equals(tenant.Name, y: "CasinoFair"))
+            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: tenant.Name, y: "CasinoFair"))
             {
                 return "TTM";
             }
@@ -166,9 +170,9 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 string line = text[lineIndex];
 
-                if (line.StartsWith(value: "### ", StringComparison.Ordinal))
+                if (line.StartsWith(value: "### ", comparisonType: StringComparison.Ordinal))
                 {
-                    if (IsLastLine(text, lineIndex))
+                    if (IsLastLine(text: text, lineIndex: lineIndex))
                     {
                         continue;
                     }
@@ -183,7 +187,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                     continue;
                 }
 
-                string detail = Regex.Replace(line, pattern: "(ff\\-\\d+)", MakeUpperCase, RegexOptions.IgnoreCase)
+                string detail = Regex.Replace(input: line, pattern: "(ff\\-\\d+)", evaluator: MakeUpperCase, options: RegexOptions.IgnoreCase)
                                      .Trim();
 
                 if (string.IsNullOrWhiteSpace(detail))
@@ -215,7 +219,7 @@ namespace BuildBot.Discord.Publishers.Octopus
         {
             const string prefix = "- ";
 
-            if (trim.StartsWith(prefix, StringComparison.Ordinal))
+            if (trim.StartsWith(value: prefix, comparisonType: StringComparison.Ordinal))
             {
                 return trim;
             }
@@ -225,7 +229,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
         private static bool HasSucceeded(Deploy message)
         {
-            return StringComparer.InvariantCultureIgnoreCase.Equals(message.Payload.Event.Category, y: "DeploymentSucceeded");
+            return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Payload.Event.Category, y: "DeploymentSucceeded");
         }
 
         private static string NormaliseEnvironmentName(EnvironmentResource environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
@@ -235,14 +239,14 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             string[] releaseChannels = {"Beta", "Showcase", "Live"};
 
-            isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(name, x));
+            isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
 
-            if (StringComparer.InvariantCultureIgnoreCase.Equals(name, y: "Beta"))
+            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Beta"))
             {
                 return "Staging";
             }
 
-            if (StringComparer.InvariantCultureIgnoreCase.Equals(name, y: "Showcase"))
+            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Showcase"))
             {
                 tenantName = "Showcase";
 
@@ -254,17 +258,17 @@ namespace BuildBot.Discord.Publishers.Octopus
 
         private static string Wrap(string value, string wrapWith)
         {
-            return string.Concat(wrapWith, value, wrapWith);
+            return string.Concat(str0: wrapWith, str1: value, str2: wrapWith);
         }
 
         private static string Bold(string value)
         {
-            return Wrap(value, wrapWith: @"**");
+            return Wrap(value: value, wrapWith: @"**");
         }
 
         private static string Underline(string value)
         {
-            return Wrap(value, wrapWith: @"__");
+            return Wrap(value: value, wrapWith: @"__");
         }
     }
 }

@@ -35,7 +35,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
-            if (message.Commits.Count == 1 && message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", StringComparison.Ordinal)))
+            if (message.Commits.Count == 1 && message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
             {
                 // ignore commits which contain "chore"
                 return;

@@ -31,7 +31,7 @@ namespace BuildBot.Discord
                 return;
             }
 
-            await PublishCommonAsync(builder, socketTextChannel);
+            await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel);
         }
 
         public async Task PublishToReleaseChannelAsync(EmbedBuilder builder)
@@ -43,7 +43,7 @@ namespace BuildBot.Discord
                 return;
             }
 
-            await PublishCommonAsync(builder, socketTextChannel);
+            await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel);
         }
 
         private static async Task PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel)
@@ -58,7 +58,7 @@ namespace BuildBot.Discord
                                                    };
                 builder.WithAuthor(authorBuilder);
 
-                await socketTextChannel.SendMessageAsync(string.Empty, embed: builder.Build());
+                await socketTextChannel.SendMessageAsync(text: string.Empty, embed: builder.Build());
             }
         }
 
@@ -66,7 +66,7 @@ namespace BuildBot.Discord
         {
             SocketGuild guild = this._client.Guilds.FirstOrDefault(predicate: g => g.Name == this._botConfiguration.Server);
 
-            return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.InvariantCultureIgnoreCase.Equals(c.Name, channelName));
+            return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Name, y: channelName));
         }
 
         private Task LogAsync(LogMessage arg)
@@ -105,7 +105,7 @@ namespace BuildBot.Discord
                 {
                     if (arg.Exception != null)
                     {
-                        this._logger.LogError(new EventId(arg.Exception.HResult), arg.Message, arg.Exception);
+                        this._logger.LogError(new EventId(arg.Exception.HResult), message: arg.Message, arg.Exception);
                     }
                     else
                     {
@@ -129,7 +129,7 @@ namespace BuildBot.Discord
         public async Task StartAsync()
         {
             // login
-            await this._client.LoginAsync(TokenType.Bot, this._botConfiguration.Token);
+            await this._client.LoginAsync(tokenType: TokenType.Bot, token: this._botConfiguration.Token);
 
             // and start
             await this._client.StartAsync();
