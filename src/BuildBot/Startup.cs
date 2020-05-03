@@ -63,7 +63,7 @@ namespace BuildBot
             string uri = this.Configuration.GetValue<string>(key: @"ServerOctopus:Url");
             string apiKey = this.Configuration.GetValue<string>(key: @"ServerOctopus:ApiKey");
 
-            OctopusServerEndpoint ose = new OctopusServerEndpoint(uri, apiKey);
+            OctopusServerEndpoint ose = new OctopusServerEndpoint(octopusServerAddress: uri, apiKey: apiKey);
 
             services.AddSingleton(ose);
 
@@ -74,9 +74,9 @@ namespace BuildBot
         [SuppressMessage(category: "Threading", checkId: "VSTHRD002:Don't do synchronous waits", Justification = "This is a startup task")]
         private static DiscordBot ConfigureBot(ILogger logger)
         {
-            string configFile = Path.Combine(ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
+            string configFile = Path.Combine(path1: ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
             DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(configFile);
-            DiscordBot bot = new DiscordBot(botConfiguration, logger);
+            DiscordBot bot = new DiscordBot(botConfiguration: botConfiguration, logger: logger);
 
             // waiting a Task is normally a big no no because of deadlocks, but we're in a start up task here so it should be ok
             bot.StartAsync()
