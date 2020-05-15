@@ -11,9 +11,9 @@ namespace BuildBot.Controllers
     public sealed class OctopusController : Controller
     {
         private readonly IPublisher<Deploy> _deployPublisher;
-        private readonly ILogger _logger;
+        private readonly ILogger<OctopusController> _logger;
 
-        public OctopusController(IPublisher<Deploy> deployPublisher, ILogger logger)
+        public OctopusController(IPublisher<Deploy> deployPublisher, ILogger<OctopusController> logger)
         {
             this._deployPublisher = deployPublisher;
             this._logger = logger;

@@ -10,11 +10,11 @@ namespace BuildBot.Controllers
     [Route(template: "[controller]")]
     public sealed class GitHubController : Controller
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<GitHubController> _logger;
         private readonly IPublisher<Push> _pushPublisher;
         private readonly IPublisher<Status> _statusPublisher;
 
-        public GitHubController(IPublisher<Push> pushPublisher, IPublisher<Status> statusPublisher, ILogger logger)
+        public GitHubController(IPublisher<Push> pushPublisher, IPublisher<Status> statusPublisher, ILogger<GitHubController> logger)
         {
             this._pushPublisher = pushPublisher;
             this._statusPublisher = statusPublisher;

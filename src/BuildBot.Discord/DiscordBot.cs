@@ -11,9 +11,9 @@ namespace BuildBot.Discord
     {
         private readonly DiscordBotConfiguration _botConfiguration;
         private readonly DiscordSocketClient _client;
-        private readonly ILogger _logger;
+        private readonly ILogger<DiscordBot> _logger;
 
-        public DiscordBot(DiscordBotConfiguration botConfiguration, ILogger logger)
+        public DiscordBot(DiscordBotConfiguration botConfiguration, ILogger<DiscordBot> logger)
         {
             this._logger = logger;
             this._client = new DiscordSocketClient();
@@ -52,9 +52,7 @@ namespace BuildBot.Discord
             {
                 EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder
                                                    {
-                                                       Name = "FunFair BuildBot",
-                                                       Url = "https://funfair.io",
-                                                       IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
+                                                       Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
                                                    };
                 builder.WithAuthor(authorBuilder);
 
