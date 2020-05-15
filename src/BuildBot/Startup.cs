@@ -14,21 +14,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octopus.Client;
 using Serilog;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace BuildBot
 {
     public sealed class Startup
     {
-        private readonly ILoggerFactory _loggerFactory;
-
-        public Startup(IHostEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IHostEnvironment env)
         {
             Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
                                                   .WriteTo.Console()
                                                   .CreateLogger();
-
-            this._loggerFactory = loggerFactory;
 
             IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
                                                                       .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
@@ -43,14 +38,16 @@ namespace BuildBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // set up an ILogger
-            ILogger logger = this._loggerFactory.CreateLogger(categoryName: "BuildBot");
-            services.AddSingleton(logger);
+            services.AddLogging();
 
-            DiscordBot bot = ConfigureBot(logger);
+            string configFile = Path.Combine(path1: ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
+            DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(configFile);
+
+            services.AddSingleton(botConfiguration);
 
             // register the bot for DI
-            services.AddSingleton<IDiscordBot>(bot);
+            services.AddSingleton<IDiscordBot, DiscordBot>();
+            services.AddSingleton(x => (DiscordBot) x.GetService<IDiscordBot>());
 
             // register publishers
             services.AddSingleton<IPublisher<Push>, PushPublisher>();
@@ -69,20 +66,6 @@ namespace BuildBot
 
             // Add framework services
             services.AddMvc();
-        }
-
-        [SuppressMessage(category: "Threading", checkId: "VSTHRD002:Don't do synchronous waits", Justification = "This is a startup task")]
-        private static DiscordBot ConfigureBot(ILogger logger)
-        {
-            string configFile = Path.Combine(path1: ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
-            DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(configFile);
-            DiscordBot bot = new DiscordBot(botConfiguration: botConfiguration, logger: logger);
-
-            // waiting a Task is normally a big no no because of deadlocks, but we're in a start up task here so it should be ok
-            bot.StartAsync()
-               .Wait();
-
-            return bot;
         }
 
         /// <summary>

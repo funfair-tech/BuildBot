@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using BuildBot.Discord;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace BuildBot
@@ -11,7 +13,14 @@ namespace BuildBot
         {
             using (var host = CreateHostBuilder(args))
             {
+                DiscordBot bot = host.Services.GetService<DiscordBot>();
+
+                // waiting a Task is normally a big no no because of deadlocks, but we're in a start up task here so it should be ok
+                await bot.StartAsync();
+
                 await host.RunAsync();
+
+                await bot.StopAsync();
             }
         }
 
