@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - Octopus Notifications including basic release notes formatting
 ### Fixed
 ### Changed
+- FF-1429 - Updated AsyncFixer to 1.3.0
 - FF-1429 - Updated AsyncFixer to 1.1.8
 - Updated to build with .NET Core SDK 3.1.101
 
@@ -17,4 +18,5 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 -->
 ## [1.0.0] 2018-04-12
 - Initial Version
+
 
