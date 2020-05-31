@@ -52,7 +52,9 @@ namespace BuildBot.Discord
             {
                 EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder
                                                    {
-                                                       Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
+                                                       Name = "FunFair BuildBot",
+                                                       Url = "https://funfair.io",
+                                                       IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
                                                    };
                 builder.WithAuthor(authorBuilder);
 
