@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - Octopus Notifications including basic release notes formatting
 ### Fixed
 ### Changed
+- FF-1429 - Updated FunFair.CodeAnalysis to 1.8.0.375
 - FF-1429 - Updated FunFair.CodeAnalysis to 1.7.2.364
 - FF-1429 - Updated FunFair.CodeAnalysis to 1.7.1.352
 - FF-1429 - Updated FunFair.CodeAnalysis to 1.7.0.347
@@ -27,6 +28,7 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 -->
 ## [1.0.0] 2018-04-12
 - Initial Version
+
 
 
 
