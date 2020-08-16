@@ -4,9 +4,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.Octopus;
-using Discord;
-using Octopus.Client;
-using Octopus.Client.Model;
 
 namespace BuildBot.Discord.Publishers.Octopus
 {

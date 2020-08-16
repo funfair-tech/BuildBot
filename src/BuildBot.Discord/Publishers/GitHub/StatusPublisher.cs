@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
-using Discord;
 
 namespace BuildBot.Discord.Publishers.GitHub
 {

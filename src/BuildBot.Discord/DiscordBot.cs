@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Discord
 {
