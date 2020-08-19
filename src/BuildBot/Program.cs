@@ -11,7 +11,7 @@ namespace BuildBot
     {
         public static async Task Main(string[] args)
         {
-            using (var host = CreateHostBuilder(args))
+            using (IHost? host = CreateHostBuilder(args))
             {
                 DiscordBot bot = host.Services.GetService<DiscordBot>();
 
