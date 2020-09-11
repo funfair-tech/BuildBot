@@ -6,8 +6,16 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 -->
 ## [Unreleased]
 ### Added
-- Octopus Notifications including basic release notes formatting
 ### Fixed
+### Changed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [1.1.0] 2019-09-10
+### Added
+- Octopus Notifications including basic release notes formatting
 ### Changed
 - FF-2830 - Update all the .NET components to .NET Core 3.1.402
 - FF-1429 - Updated FunFair.CodeAnalysis to 1.11.0.424
@@ -35,8 +43,5 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - Updated to build with .NET Core SDK 3.1.101
 - FF-2652 - Update all the .NET components to .NET Core 3.1.302
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [1.0.0] 2018-04-12
 - Initial Version
