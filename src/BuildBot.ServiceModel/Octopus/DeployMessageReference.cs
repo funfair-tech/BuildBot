@@ -1,9 +1,8 @@
 ﻿namespace BuildBot.ServiceModel.Octopus
 {
-#nullable disable
     public sealed class DeployMessageReference
     {
-        public string ReferencedDocumentId { get; set; }
+        public string ReferencedDocumentId { get; set; } = default!;
 
         public int StartIndex { get; set; }
 

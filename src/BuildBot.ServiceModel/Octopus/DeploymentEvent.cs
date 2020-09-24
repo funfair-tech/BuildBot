@@ -2,37 +2,39 @@
 
 namespace BuildBot.ServiceModel.Octopus
 {
-#nullable disable
     public sealed class DeploymentEvent
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = default!;
 
-        public string Category { get; set; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        public string Category { get; set; } = default!;
 
-        public string UserId { get; set; }
+        public string UserId { get; set; } = default!;
 
-        public string Username { get; set; }
+        public string Username { get; set; } = default!;
 
         public bool IsService { get; set; }
 
-        public string IdentityEstablishedWith { get; set; }
+        public string IdentityEstablishedWith { get; set; } = default!;
 
-        public string UserAgent { get; set; }
+        public string UserAgent { get; set; } = default!;
 
         public DateTime Occurred { get; set; }
 
-        public string Message { get; set; }
+        public string Message { get; set; } = default!;
 
-        public string MessageHtml { get; set; }
+        public string MessageHtml { get; set; } = default!;
 
-        public DeployMessageReference[] MessageReferences { get; set; }
+        public DeployMessageReference[] MessageReferences { get; set; } = default!;
 
-        public string Comments { get; set; }
+        public string Comments { get; set; } = default!;
 
-        public string Details { get; set; }
+        public string Details { get; set; } = default!;
 
-        public string SpaceId { get; set; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        public string SpaceId { get; set; } = default!;
 
-        public string[] RelatedDocumentIds { get; set; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        public string[] RelatedDocumentIds { get; set; } = default!;
     }
 }
