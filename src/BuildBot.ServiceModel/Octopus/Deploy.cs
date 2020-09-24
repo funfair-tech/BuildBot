@@ -2,15 +2,14 @@
 
 namespace BuildBot.ServiceModel.Octopus
 {
-#nullable disable
-
     //https://octopus.com/blog/notifications-with-subscriptions-and-webhooks
     public sealed class Deploy
     {
         public DateTime Timestamp { get; set; }
 
-        public string EventType { get; set; }
+        public string EventType { get; set; } = default!;
 
-        public DeployPayload Payload { get; set; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        public DeployPayload Payload { get; set; } = default!;
     }
 }
