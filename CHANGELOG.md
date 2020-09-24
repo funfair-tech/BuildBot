@@ -9,6 +9,8 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated FunFair.CodeAnalysis to 1.12.0.445
+- FF-1429 - Updated Octopus.Client to 8.8.8
+- FF-1429 - Updated Octopus.Client to 8.8.7
 - FF-1429 - Updated Octopus.Client to 8.8.6
 - FF-1429 - Updated Octopus.Client to 8.8.5
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.13.1.21947
