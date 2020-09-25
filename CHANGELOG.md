@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- FF-1429 - Updated FunFair.CodeAnalysis to 1.13.0.452
 - FF-1429 - Updated FunFair.CodeAnalysis to 1.12.0.445
 - FF-1429 - Updated Octopus.Client to 8.8.8
 - FF-1429 - Updated Octopus.Client to 8.8.7
