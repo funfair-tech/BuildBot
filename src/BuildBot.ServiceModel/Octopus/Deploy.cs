@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BuildBot.ServiceModel.Octopus
 {
@@ -9,7 +10,7 @@ namespace BuildBot.ServiceModel.Octopus
 
         public string EventType { get; set; } = default!;
 
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
         public DeployPayload Payload { get; set; } = default!;
     }
 }
