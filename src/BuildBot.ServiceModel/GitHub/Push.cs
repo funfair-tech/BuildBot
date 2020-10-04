@@ -7,44 +7,36 @@ namespace BuildBot.ServiceModel.GitHub
     public sealed class Push
     {
         [JsonPropertyName(name: "ref")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public string Ref { get; set; } = default!;
 
         [JsonPropertyName(name: "before")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public string Before { get; set; } = default!;
 
         [JsonPropertyName(name: "after")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public string After { get; set; } = default!;
 
         [JsonPropertyName(name: "head_commit")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public Commit HeadCommit { get; set; } = default!;
 
         [JsonPropertyName(name: "commits")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public List<Commit> Commits { get; set; } = default!;
 
         [JsonPropertyName(name: "repository")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public Repository Repository { get; set; } = default!;
 
         [JsonPropertyName(name: "pusher")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public Pusher Pusher { get; set; } = default!;
 
         [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
         [JsonPropertyName(name: "compare")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public string CompareUrl { get; set; } = default!;
     }
 }

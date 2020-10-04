@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BuildBot.ServiceModel.Octopus
 {
@@ -6,7 +7,7 @@ namespace BuildBot.ServiceModel.Octopus
     {
         public string Id { get; set; } = default!;
 
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
         public string Category { get; set; } = default!;
 
         public string UserId { get; set; } = default!;
@@ -31,10 +32,10 @@ namespace BuildBot.ServiceModel.Octopus
 
         public string Details { get; set; } = default!;
 
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
         public string SpaceId { get; set; } = default!;
 
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
         public string[] RelatedDocumentIds { get; set; } = default!;
     }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub
@@ -8,18 +9,15 @@ namespace BuildBot.ServiceModel.GitHub
         public int Id { get; set; }
 
         [JsonPropertyName(name: "name")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public string Name { get; set; } = default!;
 
         [JsonPropertyName(name: "full_name")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public string FullName { get; set; } = default!;
 
         [JsonPropertyName(name: "owner")]
-
-        // ReSharper disable once RedundantDefaultMemberInitializer
+        [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
         public Owner Owner { get; set; } = default!;
     }
 }

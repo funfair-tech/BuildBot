@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace BuildBot.ServiceModel.Octopus
@@ -6,8 +6,7 @@ namespace BuildBot.ServiceModel.Octopus
     public sealed class DeployPayload
     {
         [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
-
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
         public string ServerUri { get; set; } = default!;
 
         [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
@@ -17,7 +16,7 @@ namespace BuildBot.ServiceModel.Octopus
 
         public DeploymentPayloadSubscription Subscription { get; set; } = default!;
 
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+        [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
         public DeploymentEvent Event { get; set; } = default!;
     }
 }
