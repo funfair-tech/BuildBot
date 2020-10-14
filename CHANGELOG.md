@@ -8,6 +8,13 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [1.2.0] 2019-10-14
+### Changed
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.14.0.22654
 - FF-1429 - Updated Octopus.Client to 8.9.2
 - FF-1429 - Updated Octopus.Client to 8.9.1
@@ -21,11 +28,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.13.1.21947
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.13.0.21683
 - FF-2930 - Updated to .net core 3.1.403
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [1.1.0] 2019-09-10
 ### Added
 - Octopus Notifications including basic release notes formatting
