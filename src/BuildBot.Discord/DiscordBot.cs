@@ -52,9 +52,7 @@ namespace BuildBot.Discord
             {
                 EmbedAuthorBuilder authorBuilder = new EmbedAuthorBuilder
                                                    {
-                                                       Name = "FunFair BuildBot",
-                                                       Url = "https://funfair.io",
-                                                       IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
+                                                       Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
                                                    };
                 builder.WithAuthor(authorBuilder);
 
@@ -64,7 +62,7 @@ namespace BuildBot.Discord
 
         private SocketTextChannel? GetChannel(string channelName)
         {
-            SocketGuild guild = this._client.Guilds.FirstOrDefault(predicate: g => g.Name == this._botConfiguration.Server);
+            SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g => g.Name == this._botConfiguration.Server);
 
             return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Name, y: channelName));
         }

@@ -27,16 +27,11 @@ namespace BuildBot.Discord.Publishers.Octopus
         {
             IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
-            string projectId =
-                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Projects-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string releaseId =
-                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Releases-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string environmentId =
-                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Environments-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string deploymentId =
-                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Deployments-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string? tenantId =
-                message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string projectId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Projects-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string releaseId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Releases-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string environmentId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Environments-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string? deploymentId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Deployments-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string? tenantId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", comparisonType: StringComparison.OrdinalIgnoreCase));
 
             ProjectResource? project = await client.Repository.Projects.Get(projectId);
             ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
@@ -71,7 +66,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                     builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
                 }
 
-                string releaseNotes = release?.ReleaseNotes ?? string.Empty;
+                string? releaseNotes = release?.ReleaseNotes;
 
                 if (!string.IsNullOrWhiteSpace(releaseNotes))
                 {
@@ -101,7 +96,7 @@ namespace BuildBot.Discord.Publishers.Octopus
                 }
             }
 
-            if (message.Payload.ServerUri != null && !string.IsNullOrWhiteSpace(deploymentId))
+            if (!string.IsNullOrWhiteSpace(deploymentId))
             {
                 string url = $"{message.Payload.ServerUri}/app#/{message.Payload.Event.SpaceId}/deployments/{deploymentId}";
 
@@ -125,7 +120,7 @@ namespace BuildBot.Discord.Publishers.Octopus
             }
         }
 
-        private static string NormalizeProjectName(ProjectResource project, string projectId)
+        private static string NormalizeProjectName(ProjectResource? project, string projectId)
         {
             if (project == null)
             {
@@ -232,7 +227,7 @@ namespace BuildBot.Discord.Publishers.Octopus
             return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Payload.Event.Category, y: "DeploymentSucceeded");
         }
 
-        private static string NormaliseEnvironmentName(EnvironmentResource environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
+        private static string NormaliseEnvironmentName(EnvironmentResource? environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
         {
             tenantName = null;
             string name = environment != null ? environment.Name : environmentId;
@@ -266,6 +261,7 @@ namespace BuildBot.Discord.Publishers.Octopus
             return Wrap(value: value, wrapWith: @"**");
         }
 
+        // ReSharper disable once UnusedMember.Local
         private static string Underline(string value)
         {
             return Wrap(value: value, wrapWith: @"__");
