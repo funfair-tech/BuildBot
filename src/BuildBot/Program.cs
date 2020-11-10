@@ -11,9 +11,9 @@ namespace BuildBot
     {
         public static async Task Main(string[] args)
         {
-            using (IHost? host = CreateHostBuilder(args))
+            using (IHost host = CreateHostBuilder(args))
             {
-                DiscordBot bot = host.Services.GetService<DiscordBot>();
+                DiscordBot bot = host.Services.GetRequiredService<DiscordBot>();
 
                 // waiting a Task is normally a big no no because of deadlocks, but we're in a start up task here so it should be ok
                 await bot.StartAsync();

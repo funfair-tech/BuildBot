@@ -25,7 +25,7 @@ namespace BuildBot.ServiceModel.GitHub
 
         [JsonPropertyName(name: "branches")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-        public List<Branch> Branches { get; set; } = default!;
+        public IReadOnlyList<Branch> Branches { get; set; } = default!;
 
         [JsonPropertyName(name: "description")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
