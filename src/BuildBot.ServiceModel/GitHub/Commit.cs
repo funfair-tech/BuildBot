@@ -36,15 +36,15 @@ namespace BuildBot.ServiceModel.GitHub
 
         [JsonPropertyName(name: "added")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-        public List<string> Added { get; set; } = default!;
+        public IReadOnlyList<string> Added { get; set; } = default!;
 
         [JsonPropertyName(name: "removed")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-        public List<string> Removed { get; set; } = default!;
+        public IReadOnlyList<string> Removed { get; set; } = default!;
 
         [JsonPropertyName(name: "modified")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-        public List<string> Modified { get; set; } = default!;
+        public IReadOnlyList<string> Modified { get; set; } = default!;
 
         [JsonPropertyName(name: "author")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]

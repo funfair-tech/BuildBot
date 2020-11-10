@@ -24,7 +24,7 @@ namespace BuildBot.ServiceModel.GitHub
 
         [JsonPropertyName(name: "commits")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-        public List<Commit> Commits { get; set; } = default!;
+        public IReadOnlyList<Commit> Commits { get; set; } = default!;
 
         [JsonPropertyName(name: "repository")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
