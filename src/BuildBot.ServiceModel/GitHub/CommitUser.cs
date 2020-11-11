@@ -15,6 +15,6 @@ namespace BuildBot.ServiceModel.GitHub
 
         [JsonPropertyName(name: "username")]
         [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-        public string Username { get; set; } = default!;
+        public string? Username { get; set; }
     }
 }
