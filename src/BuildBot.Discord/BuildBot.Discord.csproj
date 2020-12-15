@@ -24,7 +24,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
-    <PackageReference Include="Octopus.Client" Version="9.0.4" />
+    <PackageReference Include="Octopus.Client" Version="9.0.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
