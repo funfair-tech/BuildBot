@@ -44,19 +44,19 @@ namespace BuildBot.Discord.Publishers.GitHub
             string commitString = message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
             string title = $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({message.Ref.Substring("refs/heads/".Length)})";
 
-            EmbedBuilder builder = new EmbedBuilder();
+            EmbedBuilder builder = new();
             builder.WithTitle(title);
             builder.WithUrl(message.CompareUrl);
 
             foreach (Commit commit in message.Commits)
             {
-                EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder
+                EmbedFieldBuilder commitFieldBuilder = new()
                                                        {
                                                            Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
                                                            Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
                                                        };
 
-                StringBuilder commitBuilder = new StringBuilder();
+                StringBuilder commitBuilder = new();
 
                 if (commit.Added.Any())
                 {

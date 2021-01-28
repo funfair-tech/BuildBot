@@ -22,7 +22,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
-            EmbedBuilder builder = new EmbedBuilder();
+            EmbedBuilder builder = new();
             builder.WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({message.Branches.Last().Name})");
             builder.WithUrl(message.TargetUrl);
             builder.Description = $"Built at {message.StatusCommit.Sha}";
@@ -37,7 +37,7 @@ namespace BuildBot.Discord.Publishers.GitHub
                 builder.Color = Color.Red;
             }
 
-            EmbedFieldBuilder commitFieldBuilder = new EmbedFieldBuilder();
+            EmbedFieldBuilder commitFieldBuilder = new();
             commitFieldBuilder.Name = "Head commit";
             commitFieldBuilder.Value = $"{message.StatusCommit.Author.Login} - {message.StatusCommit.Commit.Message}";
             builder.AddField(commitFieldBuilder);

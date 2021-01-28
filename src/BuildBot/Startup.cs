@@ -60,7 +60,7 @@ namespace BuildBot
             string uri = this.Configuration.GetValue<string>(key: @"ServerOctopus:Url");
             string apiKey = this.Configuration.GetValue<string>(key: @"ServerOctopus:ApiKey");
 
-            OctopusServerEndpoint ose = new OctopusServerEndpoint(octopusServerAddress: uri, apiKey: apiKey);
+            OctopusServerEndpoint ose = new(octopusServerAddress: uri, apiKey: apiKey);
 
             services.AddSingleton(ose);
 
