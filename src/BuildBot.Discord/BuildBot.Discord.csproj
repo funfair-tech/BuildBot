@@ -23,7 +23,7 @@
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.2.0" />
+    <PackageReference Include="Discord.Net" Version="2.3.0" />
     <PackageReference Include="Octopus.Client" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   </ItemGroup>
