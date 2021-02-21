@@ -35,6 +35,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated TeamCity.VSTest.TestAdapter to 1.0.25
 - FF-1429 - Updated Octopus.Client to 10.0.1
 - FF-1429 - Updated Octopus.Client to 11.0.0
+- FF-1429 - Updated coverlet to 3.0.3
 ### Deployment Changes
 
 <!--
