@@ -75,8 +75,6 @@ namespace BuildBot
         /// <param name="loggerFactory">Logging factory.</param>
         /// <param name="applicationLifeTime">The lifetime of the application.</param>
         /// <remarks>This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</remarks>
-
-
         [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]
         [SuppressMessage(category: "Microsoft.Performance", checkId: "CA1822:MarkMembersAsStatic", Justification = "Can't be static as called by the runtime.")]
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifeTime)
@@ -90,4 +88,5 @@ namespace BuildBot
         }
     }
 }
+
 
