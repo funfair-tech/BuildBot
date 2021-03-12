@@ -42,6 +42,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 16.9.54
 - FF-1429 - Updated Octopus.Client to 11.1.2
 - FF-1429 - Updated Discord.Net to 2.3.1
+- FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 16.9.60
 ### Deployment Changes
 
 <!--
