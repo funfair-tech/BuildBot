@@ -49,6 +49,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 11.1.3236
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 16.9.4
 - FF-1429 - Updated FunFair.Test.Common to 5.3.0.920
+- FF-1429 - Updated Octopus.Client to 11.1.3245
 ### Deployment Changes
 
 <!--
