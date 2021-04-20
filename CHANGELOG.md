@@ -53,6 +53,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 11.2.3255
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.21.0.30542
 - FF-1429 - Updated Octopus.Client to 11.2.3271
+- FF-1429 - Updated Octopus.Client to 11.2.3274
 ### Deployment Changes
 
 <!--
