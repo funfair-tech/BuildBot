@@ -79,5 +79,6 @@
     <TrimmerRootAssembly Include="System.Resources.Writer" />
     <TrimmerRootAssembly Include="System.Transactions" />
     <TrimmerRootAssembly Include="System.Diagnostics.FileVersionInfo" />
+    <TrimmerRootAssembly Include="Octopus.Client"/>
   </ItemGroup>
 </Project>
