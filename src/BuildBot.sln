@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{397984
 ProjectSection(SolutionItems) = preProject
 	CodeAnalysis.ruleset = CodeAnalysis.ruleset
 	global.json = global.json
+	..\CHANGELOG.md = ..\CHANGELOG.md
+	..\README.md = ..\README.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Tests", "BuildBot.Tests\BuildBot.Tests.csproj", "{38851CCE-4A5C-44D4-B4A5-6EE3142C3E38}"
