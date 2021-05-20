@@ -56,6 +56,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 11.2.3274
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.22.0.31243
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.2.0.740
+- FF-1429 - Updated Octopus.Client to 11.2.3291
 ### Deployment Changes
 
 <!--
