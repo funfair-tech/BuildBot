@@ -26,7 +26,7 @@ namespace BuildBot
                                                   .CreateLogger();
 
             IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
-                                                                      .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
+                                                                      .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
                                                                       .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                                                                       .AddEnvironmentVariables();
 
