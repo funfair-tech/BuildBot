@@ -80,6 +80,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 11.3.3425
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 16.11.0
 - FF-1429 - Updated Roslynator.Analyzers to 3.2.2
+- FF-1429 - Updated FunFair.CodeAnalysis to 5.4.0.915
 ### Deployment Changes
 
 <!--
