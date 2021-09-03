@@ -81,6 +81,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 16.11.0
 - FF-1429 - Updated Roslynator.Analyzers to 3.2.2
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.4.0.915
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.28.0.36354
 ### Deployment Changes
 
 <!--
