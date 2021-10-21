@@ -31,8 +31,8 @@ namespace BuildBot.Discord.Publishers.Octopus
             string projectId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Projects-", comparisonType: StringComparison.OrdinalIgnoreCase));
             string releaseId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Releases-", comparisonType: StringComparison.OrdinalIgnoreCase));
             string environmentId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Environments-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string? deploymentId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Deployments-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string? tenantId = message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: "Tenants-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string? deploymentId = Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: "Deployments-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string? tenantId = Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: "Tenants-", comparisonType: StringComparison.OrdinalIgnoreCase));
 
             ProjectResource? project = await client.Repository.Projects.Get(projectId);
             ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
@@ -233,7 +233,7 @@ namespace BuildBot.Discord.Publishers.Octopus
             tenantName = null;
             string name = environment != null ? environment.Name : environmentId;
 
-            string[] releaseChannels = {"Beta", "Showcase", "Live"};
+            string[] releaseChannels = { "Beta", "Showcase", "Live" };
 
             isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
 

@@ -24,7 +24,7 @@ namespace BuildBot.Discord.Publishers.GitHub
         {
             // only publish Push messages if there are commits, otherwise we'll be publishing
             // all the tagging that goes on.
-            if (!message.Commits.Any())
+            if (message.Commits.Count == 0)
             {
                 return;
             }
@@ -58,17 +58,17 @@ namespace BuildBot.Discord.Publishers.GitHub
 
                 StringBuilder commitBuilder = new();
 
-                if (commit.Added.Any())
+                if (commit.Added.Count != 0)
                 {
                     commitBuilder.AppendLine($"{commit.Added.Count} added");
                 }
 
-                if (commit.Modified.Any())
+                if (commit.Modified.Count != 0)
                 {
                     commitBuilder.AppendLine($"{commit.Modified.Count} modified");
                 }
 
-                if (commit.Removed.Any())
+                if (commit.Removed.Count != 0)
                 {
                     commitBuilder.AppendLine($"{commit.Removed.Count} removed");
                 }
