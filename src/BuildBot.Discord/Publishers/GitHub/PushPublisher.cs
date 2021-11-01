@@ -60,17 +60,20 @@ namespace BuildBot.Discord.Publishers.GitHub
 
                 if (commit.Added.Count != 0)
                 {
-                    commitBuilder.AppendLine($"{commit.Added.Count} added");
+                    commitBuilder.Append(commit.Added.Count)
+                                 .AppendLine(" added");
                 }
 
                 if (commit.Modified.Count != 0)
                 {
-                    commitBuilder.AppendLine($"{commit.Modified.Count} modified");
+                    commitBuilder.Append(commit.Modified.Count)
+                                 .AppendLine(" modified");
                 }
 
                 if (commit.Removed.Count != 0)
                 {
-                    commitBuilder.AppendLine($"{commit.Removed.Count} removed");
+                    commitBuilder.Append(commit.Removed.Count)
+                                 .AppendLine(" removed");
                 }
 
                 builder.AddField(commitFieldBuilder);
