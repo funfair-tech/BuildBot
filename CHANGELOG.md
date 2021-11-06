@@ -93,6 +93,7 @@ Please ADD ALL Changes to the UNRELASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 5.6.1.1333
 - FF-1429 - Updated FunFair.Test.Common to 5.6.2.1337
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.6.1.965
+- FF-1429 - Updated FunFair.Test.Common to 5.6.3.1339
 ### Deployment Changes
 
 <!--
