@@ -24,9 +24,6 @@
         <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    </ItemGroup>
-    <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.5.1" PrivateAssets="All" />
         <PackageReference Include="FunFair.CodeAnalysis" Version="5.6.1.965" PrivateAssets="All" />
         <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.0.64" PrivateAssets="All" />
