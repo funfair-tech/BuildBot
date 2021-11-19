@@ -105,7 +105,7 @@ namespace BuildBot.Discord
                 {
                     if (arg.Exception != null)
                     {
-                        this._logger.LogError(new EventId(arg.Exception.HResult), message: arg.Message, arg.Exception);
+                        this._logger.LogError(new EventId(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
                     }
                     else
                     {

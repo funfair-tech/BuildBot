@@ -25,9 +25,9 @@ namespace BuildBot.Controllers
             {
                 await action();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                this._logger.LogError(new EventId(ex.HResult), message: ex.Message, ex);
+                this._logger.LogError(new EventId(exception.HResult), exception: exception, message: exception.Message);
             }
 
             return this.Ok();
