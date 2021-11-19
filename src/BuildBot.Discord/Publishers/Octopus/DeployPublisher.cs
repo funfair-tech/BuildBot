@@ -28,11 +28,11 @@ namespace BuildBot.Discord.Publishers.Octopus
         {
             IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
-            string projectId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Projects-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string releaseId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Releases-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string environmentId = message.Payload.Event.RelatedDocumentIds.First(predicate: x => x.StartsWith(value: "Environments-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string? deploymentId = Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: "Deployments-", comparisonType: StringComparison.OrdinalIgnoreCase));
-            string? tenantId = Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: "Tenants-", comparisonType: StringComparison.OrdinalIgnoreCase));
+            string projectId = FindDocumentId(message: message, documentPrefix: "Projects-")!;
+            string releaseId = FindDocumentId(message: message, documentPrefix: "Releases-")!;
+            string environmentId = FindDocumentId(message: message, documentPrefix: "Environments-")!;
+            string? deploymentId = FindDocumentId(message: message, documentPrefix: "Deployments-");
+            string? tenantId = FindDocumentId(message: message, documentPrefix: "Tenants-");
 
             ProjectResource? project = await client.Repository.Projects.Get(projectId);
             ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
@@ -59,42 +59,11 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             if (succeeded)
             {
-                builder.Color = Color.Green;
-                builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
-
-                if (!string.IsNullOrWhiteSpace(tenantName))
-                {
-                    builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
-                }
-
-                string? releaseNotes = release?.ReleaseNotes;
-
-                if (!string.IsNullOrWhiteSpace(releaseNotes))
-                {
-                    string reformatted = ReformatReleaseNotes(releaseNotes);
-
-                    if (reformatted.Length > 2048)
-                    {
-                        reformatted = reformatted.Substring(startIndex: 0, length: 2048)
-                                                 .Trim();
-                        builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(reformatted))
-                    {
-                        builder.Description = reformatted;
-                    }
-                }
+                BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
             }
             else
             {
-                builder.Color = Color.Red;
-                builder.Title = $"{projectName} {releaseVersion} failed to deploy to {environmentName.ToLowerInvariant()}";
-
-                if (!string.IsNullOrWhiteSpace(tenantName))
-                {
-                    builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
-                }
+                BuildFailedDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
             }
 
             if (!string.IsNullOrWhiteSpace(deploymentId))
@@ -105,6 +74,18 @@ namespace BuildBot.Discord.Publishers.Octopus
                 builder.WithUrl(url);
             }
 
+            AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
+
+            await this._bot.PublishAsync(builder);
+
+            if (succeeded && releaseNoteWorthy)
+            {
+                await this._bot.PublishToReleaseChannelAsync(builder);
+            }
+        }
+
+        private static void AddDeploymentDetails(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName)
+        {
             builder.AddField(name: "Product", value: projectName);
             builder.AddField(name: "Release", value: releaseVersion);
             builder.AddField(name: "Environment", value: environmentName);
@@ -113,13 +94,52 @@ namespace BuildBot.Discord.Publishers.Octopus
             {
                 builder.AddField(name: "Tenant", value: tenantName);
             }
+        }
 
-            await this._bot.PublishAsync(builder);
+        private static void BuildFailedDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName)
+        {
+            builder.Color = Color.Red;
+            builder.Title = $"{projectName} {releaseVersion} failed to deploy to {environmentName.ToLowerInvariant()}";
 
-            if (succeeded && releaseNoteWorthy)
+            if (!string.IsNullOrWhiteSpace(tenantName))
             {
-                await this._bot.PublishToReleaseChannelAsync(builder);
+                builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
             }
+        }
+
+        private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
+        {
+            builder.Color = Color.Green;
+            builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
+
+            if (!string.IsNullOrWhiteSpace(tenantName))
+            {
+                builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
+            }
+
+            string? releaseNotes = release?.ReleaseNotes;
+
+            if (!string.IsNullOrWhiteSpace(releaseNotes))
+            {
+                string reformatted = ReformatReleaseNotes(releaseNotes);
+
+                if (reformatted.Length > 2048)
+                {
+                    reformatted = reformatted.Substring(startIndex: 0, length: 2048)
+                                             .Trim();
+                    builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
+                }
+
+                if (!string.IsNullOrWhiteSpace(reformatted))
+                {
+                    builder.Description = reformatted;
+                }
+            }
+        }
+
+        private static string? FindDocumentId(Deploy message, string documentPrefix)
+        {
+            return message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
         }
 
         private static string NormalizeProjectName(ProjectResource? project, string projectId)

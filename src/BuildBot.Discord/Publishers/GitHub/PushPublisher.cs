@@ -35,18 +35,29 @@ namespace BuildBot.Discord.Publishers.GitHub
                 return;
             }
 
-            if (message.Commits.Count == 1 && message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
+            if (message.Commits.Count == 1 && IsIgnoredCommit(message))
             {
                 // ignore commits which contain "chore"
                 return;
             }
 
-            string commitString = message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
-            string title = $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({message.Ref.Substring("refs/heads/".Length)})";
+            EmbedBuilder builder = BuildPushEmbed(message);
 
-            EmbedBuilder builder = new();
-            builder.WithTitle(title);
-            builder.WithUrl(message.CompareUrl);
+            await this._bot.PublishAsync(builder);
+        }
+
+        private static bool IsIgnoredCommit(Push message)
+        {
+            return message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal));
+        }
+
+        private static EmbedBuilder BuildPushEmbed(Push message)
+        {
+            string commitString = GetCommitString(message);
+            string title = GetCommitTitle(message: message, commitString: commitString);
+
+            EmbedBuilder builder = new EmbedBuilder().WithTitle(title)
+                                                     .WithUrl(message.CompareUrl);
 
             foreach (Commit commit in message.Commits)
             {
@@ -79,7 +90,17 @@ namespace BuildBot.Discord.Publishers.GitHub
                 builder.AddField(commitFieldBuilder);
             }
 
-            await this._bot.PublishAsync(builder);
+            return builder;
+        }
+
+        private static string GetCommitTitle(Push message, string commitString)
+        {
+            return $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({message.Ref.Substring("refs/heads/".Length)})";
+        }
+
+        private static string GetCommitString(Push message)
+        {
+            return message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
         }
     }
 }
