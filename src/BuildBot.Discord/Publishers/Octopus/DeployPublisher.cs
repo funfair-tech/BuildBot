@@ -139,7 +139,7 @@ namespace BuildBot.Discord.Publishers.Octopus
 
         private static string? FindDocumentId(Deploy message, string documentPrefix)
         {
-            return message.Payload.Event.RelatedDocumentIds.FirstOrDefault(predicate: x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
+            return Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
         }
 
         private static string NormalizeProjectName(ProjectResource? project, string projectId)
