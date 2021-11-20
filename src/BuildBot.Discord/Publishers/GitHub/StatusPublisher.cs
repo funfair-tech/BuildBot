@@ -37,9 +37,8 @@ namespace BuildBot.Discord.Publishers.GitHub
                 builder.Color = Color.Red;
             }
 
-            EmbedFieldBuilder commitFieldBuilder = new();
-            commitFieldBuilder.Name = "Head commit";
-            commitFieldBuilder.Value = $"{message.StatusCommit.Author.Login} - {message.StatusCommit.Commit.Message}";
+            StatusCommit statusCommit = message.StatusCommit;
+            EmbedFieldBuilder commitFieldBuilder = new() { Name = "Head commit", Value = $"{statusCommit.Author.Login} - {statusCommit.Commit.Message}" };
             builder.AddField(commitFieldBuilder);
 
             await this._bot.PublishAsync(builder);
