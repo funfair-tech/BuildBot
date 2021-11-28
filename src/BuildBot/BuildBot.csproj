@@ -17,10 +17,10 @@
         <IsPublishable>true</IsPublishable>
         <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
         <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-      <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
-      <TieredCompilation>true</TieredCompilation>
-      <ImplicitUsings>disable</ImplicitUsings>
-      <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
+        <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
+        <TieredCompilation>true</TieredCompilation>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
     </PropertyGroup>
     <PropertyGroup>
         <AnalysisLevel>latest</AnalysisLevel>
@@ -40,25 +40,6 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0"/>
-      <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0"/>
-      <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
-      <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1"/>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="AsyncFixer" Version="1.5.1" PrivateAssets="All" />
-        <PackageReference Include="Discord.Net.Analyzers" Version="2.4.0" PrivateAssets="All" />
-        <PackageReference Include="FunFair.CodeAnalysis" Version="5.7.0.995" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.0.64" PrivateAssets="All" />
-        <PackageReference Include="Roslynator.Analyzers" Version="3.2.2" PrivateAssets="All" />
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516" PrivateAssets="All" />
-        <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
-        <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
-    </ItemGroup>
-    <ItemGroup>
         <Content Update="buildbot-config.json" Condition="Exists('buildbot-config.json')">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -73,15 +54,37 @@
         </Content>
     </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="buildbot-config.json" DestinationFiles="$(OutDir)\buildbot-config.json" SkipUnchangedFiles="true" Condition="Exists('buildbot-config.json')" />
+        <Copy SourceFiles="buildbot-config.json" DestinationFiles="$(OutDir)\buildbot-config.json"
+              SkipUnchangedFiles="true" Condition="Exists('buildbot-config.json')" />
     </Target>
     <Target Name="PrePublish" BeforeTargets="PrepareForPublish">
-        <Copy SourceFiles="buildbot-config.json.template" DestinationFiles="$(PublishDir)\buildbot-config.json" SkipUnchangedFiles="true" />
-        <Copy SourceFiles="appsettings.json" DestinationFiles="$(PublishDir)\appsettings.json" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="buildbot-config.json.template" DestinationFiles="$(PublishDir)\buildbot-config.json"
+              SkipUnchangedFiles="true" />
+        <Copy SourceFiles="appsettings.json" DestinationFiles="$(PublishDir)\appsettings.json"
+              SkipUnchangedFiles="true" />
     </Target>
     <ItemGroup>
         <TrimmerRootAssembly Include="System.Resources.Writer" />
         <TrimmerRootAssembly Include="System.Transactions" />
         <TrimmerRootAssembly Include="System.Diagnostics.FileVersionInfo" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AsyncFixer" Version="1.5.1" PrivateAssets="All" />
+        <PackageReference Include="Discord.Net.Analyzers" Version="2.4.0" PrivateAssets="All" />
+        <PackageReference Include="FunFair.CodeAnalysis" Version="5.7.0.995" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.0.64" PrivateAssets="All" />
+        <PackageReference Include="Roslynator.Analyzers" Version="3.2.2" PrivateAssets="All" />
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516" PrivateAssets="All" />
+        <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
+        <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
     </ItemGroup>
 </Project>
