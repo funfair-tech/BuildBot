@@ -59,7 +59,12 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             if (succeeded)
             {
-                BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
+                BuildSuccessfulDeployment(builder: builder,
+                                          projectName: projectName,
+                                          releaseVersion: releaseVersion,
+                                          environmentName: environmentName,
+                                          tenantName: tenantName,
+                                          release: release);
             }
             else
             {
@@ -107,7 +112,12 @@ namespace BuildBot.Discord.Publishers.Octopus
             }
         }
 
-        private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
+        private static void BuildSuccessfulDeployment(EmbedBuilder builder,
+                                                      string projectName,
+                                                      string releaseVersion,
+                                                      string environmentName,
+                                                      string? tenantName,
+                                                      ReleaseResource? release)
         {
             builder.Color = Color.Green;
             builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";

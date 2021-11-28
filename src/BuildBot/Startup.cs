@@ -47,7 +47,7 @@ namespace BuildBot
 
             // register the bot for DI
             services.AddSingleton<IDiscordBot, DiscordBot>();
-            services.AddSingleton(x => (DiscordBot) x.GetRequiredService<IDiscordBot>());
+            services.AddSingleton(x => (DiscordBot)x.GetRequiredService<IDiscordBot>());
 
             // register publishers
             services.AddSingleton<IPublisher<Push>, PushPublisher>();
@@ -88,5 +88,3 @@ namespace BuildBot
         }
     }
 }
-
-
