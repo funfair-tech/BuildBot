@@ -16,7 +16,7 @@ namespace BuildBot.Discord
         public DiscordBot(DiscordBotConfiguration botConfiguration, ILogger<DiscordBot> logger)
         {
             this._logger = logger;
-            this._client = new DiscordSocketClient();
+            this._client = new();
             this._botConfiguration = botConfiguration;
 
             this._client.Log += this.LogAsync;
@@ -105,7 +105,7 @@ namespace BuildBot.Discord
                 {
                     if (arg.Exception != null)
                     {
-                        this._logger.LogError(new EventId(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
+                        this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
                     }
                     else
                     {
