@@ -47,7 +47,9 @@ namespace BuildBot.Discord.Publishers.Octopus
 
             string projectName = NormalizeProjectName(project: project, projectId: projectId);
             string environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
-            string releaseVersion = release != null ? release.Version : releaseId;
+            string releaseVersion = release != null
+                ? release.Version
+                : releaseId;
 
             if (tenant != null)
             {
@@ -262,9 +264,16 @@ namespace BuildBot.Discord.Publishers.Octopus
         private static string NormaliseEnvironmentName(EnvironmentResource? environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
         {
             tenantName = null;
-            string name = environment != null ? environment.Name : environmentId;
+            string name = environment != null
+                ? environment.Name
+                : environmentId;
 
-            string[] releaseChannels = { "Beta", "Showcase", "Live" };
+            string[] releaseChannels =
+            {
+                "Beta",
+                "Showcase",
+                "Live"
+            };
 
             isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
 

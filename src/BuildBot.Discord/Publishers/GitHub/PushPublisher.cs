@@ -100,7 +100,9 @@ namespace BuildBot.Discord.Publishers.GitHub
 
         private static string GetCommitString(Push message)
         {
-            return message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
+            return message.Commits.Count > 1
+                ? $"{message.Commits.Count} commits"
+                : $"{message.Commits.Count} commit";
         }
     }
 }
