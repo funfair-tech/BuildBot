@@ -5,104 +5,103 @@ using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
 
-namespace BuildBot.Discord.Publishers.GitHub
+namespace BuildBot.Discord.Publishers.GitHub;
+
+/// <summary>
+///     Publish the GitHub "push" event to Discord
+/// </summary>
+public sealed class PushPublisher : IPublisher<Push>
 {
-    /// <summary>
-    ///     Publish the GitHub "push" event to Discord
-    /// </summary>
-    public sealed class PushPublisher : IPublisher<Push>
+    private readonly IDiscordBot _bot;
+
+    public PushPublisher(IDiscordBot bot)
     {
-        private readonly IDiscordBot _bot;
+        this._bot = bot;
+    }
 
-        public PushPublisher(IDiscordBot bot)
+    /// <inheritdoc />
+    public async Task PublishAsync(Push message)
+    {
+        // only publish Push messages if there are commits, otherwise we'll be publishing
+        // all the tagging that goes on.
+        if (message.Commits.Count == 0)
         {
-            this._bot = bot;
+            return;
         }
 
-        /// <inheritdoc />
-        public async Task PublishAsync(Push message)
+        if (message.Repository.Name == @"TeamCity")
         {
-            // only publish Push messages if there are commits, otherwise we'll be publishing
-            // all the tagging that goes on.
-            if (message.Commits.Count == 0)
+            // ignore commits to TeamCity, it's pretty annoying!
+            return;
+        }
+
+        if (message.Commits.Count == 1 && IsIgnoredCommit(message))
+        {
+            // ignore commits which contain "chore"
+            return;
+        }
+
+        EmbedBuilder builder = BuildPushEmbed(message);
+
+        await this._bot.PublishAsync(builder);
+    }
+
+    private static bool IsIgnoredCommit(Push message)
+    {
+        return message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal));
+    }
+
+    private static EmbedBuilder BuildPushEmbed(Push message)
+    {
+        string commitString = GetCommitString(message);
+        string title = GetCommitTitle(message: message, commitString: commitString);
+
+        EmbedBuilder builder = new EmbedBuilder().WithTitle(title)
+                                                 .WithUrl(message.CompareUrl);
+
+        foreach (Commit commit in message.Commits)
+        {
+            EmbedFieldBuilder commitFieldBuilder = new()
+                                                   {
+                                                       Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
+                                                       Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
+                                                   };
+
+            StringBuilder commitBuilder = new();
+
+            if (commit.Added.Count != 0)
             {
-                return;
+                commitBuilder.Append(commit.Added.Count)
+                             .AppendLine(" added");
             }
 
-            if (message.Repository.Name == @"TeamCity")
+            if (commit.Modified.Count != 0)
             {
-                // ignore commits to TeamCity, it's pretty annoying!
-                return;
+                commitBuilder.Append(commit.Modified.Count)
+                             .AppendLine(" modified");
             }
 
-            if (message.Commits.Count == 1 && IsIgnoredCommit(message))
+            if (commit.Removed.Count != 0)
             {
-                // ignore commits which contain "chore"
-                return;
+                commitBuilder.Append(commit.Removed.Count)
+                             .AppendLine(" removed");
             }
 
-            EmbedBuilder builder = BuildPushEmbed(message);
-
-            await this._bot.PublishAsync(builder);
+            builder.AddField(commitFieldBuilder);
         }
 
-        private static bool IsIgnoredCommit(Push message)
-        {
-            return message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal));
-        }
+        return builder;
+    }
 
-        private static EmbedBuilder BuildPushEmbed(Push message)
-        {
-            string commitString = GetCommitString(message);
-            string title = GetCommitTitle(message: message, commitString: commitString);
+    private static string GetCommitTitle(Push message, string commitString)
+    {
+        return $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({message.Ref.Substring("refs/heads/".Length)})";
+    }
 
-            EmbedBuilder builder = new EmbedBuilder().WithTitle(title)
-                                                     .WithUrl(message.CompareUrl);
-
-            foreach (Commit commit in message.Commits)
-            {
-                EmbedFieldBuilder commitFieldBuilder = new()
-                                                       {
-                                                           Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
-                                                           Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
-                                                       };
-
-                StringBuilder commitBuilder = new();
-
-                if (commit.Added.Count != 0)
-                {
-                    commitBuilder.Append(commit.Added.Count)
-                                 .AppendLine(" added");
-                }
-
-                if (commit.Modified.Count != 0)
-                {
-                    commitBuilder.Append(commit.Modified.Count)
-                                 .AppendLine(" modified");
-                }
-
-                if (commit.Removed.Count != 0)
-                {
-                    commitBuilder.Append(commit.Removed.Count)
-                                 .AppendLine(" removed");
-                }
-
-                builder.AddField(commitFieldBuilder);
-            }
-
-            return builder;
-        }
-
-        private static string GetCommitTitle(Push message, string commitString)
-        {
-            return $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({message.Ref.Substring("refs/heads/".Length)})";
-        }
-
-        private static string GetCommitString(Push message)
-        {
-            return message.Commits.Count > 1
-                ? $"{message.Commits.Count} commits"
-                : $"{message.Commits.Count} commit";
-        }
+    private static string GetCommitString(Push message)
+    {
+        return message.Commits.Count > 1
+            ? $"{message.Commits.Count} commits"
+            : $"{message.Commits.Count} commit";
     }
 }

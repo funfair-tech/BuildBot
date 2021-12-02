@@ -5,39 +5,38 @@ using BuildBot.ServiceModel.Octopus;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace BuildBot.Controllers
+namespace BuildBot.Controllers;
+
+[Route(template: "[controller]")]
+public sealed class OctopusController : Controller
 {
-    [Route(template: "[controller]")]
-    public sealed class OctopusController : Controller
+    private readonly IPublisher<Deploy> _deployPublisher;
+    private readonly ILogger<OctopusController> _logger;
+
+    public OctopusController(IPublisher<Deploy> deployPublisher, ILogger<OctopusController> logger)
     {
-        private readonly IPublisher<Deploy> _deployPublisher;
-        private readonly ILogger<OctopusController> _logger;
+        this._deployPublisher = deployPublisher;
+        this._logger = logger;
+    }
 
-        public OctopusController(IPublisher<Deploy> deployPublisher, ILogger<OctopusController> logger)
+    private async Task<IActionResult> ProcessAsync(Func<Task> action)
+    {
+        try
         {
-            this._deployPublisher = deployPublisher;
-            this._logger = logger;
+            await action();
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, message: exception.Message);
         }
 
-        private async Task<IActionResult> ProcessAsync(Func<Task> action)
-        {
-            try
-            {
-                await action();
-            }
-            catch (Exception exception)
-            {
-                this._logger.LogError(new(exception.HResult), exception: exception, message: exception.Message);
-            }
+        return this.Ok();
+    }
 
-            return this.Ok();
-        }
-
-        [HttpPost]
-        [Route(template: "deploy")]
-        public Task<IActionResult> PushAsync([FromBody] Deploy request)
-        {
-            return this.ProcessAsync(action: () => this._deployPublisher.PublishAsync(request));
-        }
+    [HttpPost]
+    [Route(template: "deploy")]
+    public Task<IActionResult> PushAsync([FromBody] Deploy request)
+    {
+        return this.ProcessAsync(action: () => this._deployPublisher.PublishAsync(request));
     }
 }

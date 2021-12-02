@@ -1,13 +1,12 @@
-﻿namespace BuildBot.ServiceModel.Octopus
+﻿namespace BuildBot.ServiceModel.Octopus;
+
+public sealed class DeploymentPayloadSubscription
 {
-    public sealed class DeploymentPayloadSubscription
-    {
-        public string Id { get; set; } = default!;
+    public string Id { get; set; } = default!;
 
-        public string Name { get; set; } = default!;
+    public string Name { get; set; } = default!;
 
-        public int Type { get; set; }
+    public int Type { get; set; }
 
-        public bool IsDisabled { get; set; }
-    }
+    public bool IsDisabled { get; set; }
 }

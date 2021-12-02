@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace BuildBot.Discord.Publishers
+namespace BuildBot.Discord.Publishers;
+
+public interface IPublisher<in T>
 {
-    public interface IPublisher<in T>
-    {
-        Task PublishAsync(T message);
-    }
+    Task PublishAsync(T message);
 }

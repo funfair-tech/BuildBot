@@ -9,303 +9,287 @@ using Discord;
 using Octopus.Client;
 using Octopus.Client.Model;
 
-namespace BuildBot.Discord.Publishers.Octopus
+namespace BuildBot.Discord.Publishers.Octopus;
+
+public sealed class DeployPublisher : IPublisher<Deploy>
 {
-    public sealed class DeployPublisher : IPublisher<Deploy>
+    private readonly IDiscordBot _bot;
+    private readonly IOctopusClientFactory _octopusClientFactory;
+    private readonly OctopusServerEndpoint _octopusServerEndpoint;
+
+    public DeployPublisher(IDiscordBot bot, IOctopusClientFactory octopusClientFactory, OctopusServerEndpoint octopusServerEndpoint)
     {
-        private readonly IDiscordBot _bot;
-        private readonly IOctopusClientFactory _octopusClientFactory;
-        private readonly OctopusServerEndpoint _octopusServerEndpoint;
+        this._bot = bot;
+        this._octopusClientFactory = octopusClientFactory;
+        this._octopusServerEndpoint = octopusServerEndpoint;
+    }
 
-        public DeployPublisher(IDiscordBot bot, IOctopusClientFactory octopusClientFactory, OctopusServerEndpoint octopusServerEndpoint)
+    public async Task PublishAsync(Deploy message)
+    {
+        IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
+
+        string projectId = FindDocumentId(message: message, documentPrefix: "Projects-")!;
+        string releaseId = FindDocumentId(message: message, documentPrefix: "Releases-")!;
+        string environmentId = FindDocumentId(message: message, documentPrefix: "Environments-")!;
+        string? deploymentId = FindDocumentId(message: message, documentPrefix: "Deployments-");
+        string? tenantId = FindDocumentId(message: message, documentPrefix: "Tenants-");
+
+        ProjectResource? project = await client.Repository.Projects.Get(projectId);
+        ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
+        EnvironmentResource? environment = await client.Repository.Environments.Get(environmentId);
+
+        TenantResource? tenant = null;
+
+        if (!string.IsNullOrWhiteSpace(tenantId))
         {
-            this._bot = bot;
-            this._octopusClientFactory = octopusClientFactory;
-            this._octopusServerEndpoint = octopusServerEndpoint;
+            tenant = await client.Repository.Tenants.Get(tenantId);
         }
 
-        public async Task PublishAsync(Deploy message)
+        string projectName = NormalizeProjectName(project: project, projectId: projectId);
+        string environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
+        string releaseVersion = release != null
+            ? release.Version
+            : releaseId;
+
+        if (tenant != null)
         {
-            IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
-
-            string projectId = FindDocumentId(message: message, documentPrefix: "Projects-")!;
-            string releaseId = FindDocumentId(message: message, documentPrefix: "Releases-")!;
-            string environmentId = FindDocumentId(message: message, documentPrefix: "Environments-")!;
-            string? deploymentId = FindDocumentId(message: message, documentPrefix: "Deployments-");
-            string? tenantId = FindDocumentId(message: message, documentPrefix: "Tenants-");
-
-            ProjectResource? project = await client.Repository.Projects.Get(projectId);
-            ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
-            EnvironmentResource? environment = await client.Repository.Environments.Get(environmentId);
-
-            TenantResource? tenant = null;
-
-            if (!string.IsNullOrWhiteSpace(tenantId))
-            {
-                tenant = await client.Repository.Tenants.Get(tenantId);
-            }
-
-            string projectName = NormalizeProjectName(project: project, projectId: projectId);
-            string environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
-            string releaseVersion = release != null
-                ? release.Version
-                : releaseId;
-
-            if (tenant != null)
-            {
-                tenantName = NormaliseTenantName(tenant);
-            }
-
-            EmbedBuilder builder = new();
-            bool succeeded = HasSucceeded(message);
-
-            if (succeeded)
-            {
-                BuildSuccessfulDeployment(builder: builder,
-                                          projectName: projectName,
-                                          releaseVersion: releaseVersion,
-                                          environmentName: environmentName,
-                                          tenantName: tenantName,
-                                          release: release);
-            }
-            else
-            {
-                BuildFailedDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
-            }
-
-            if (!string.IsNullOrWhiteSpace(deploymentId))
-            {
-                DeployPayload payload = message.Payload;
-                string url = $"{payload.ServerUri}/app#/{payload.Event.SpaceId}/deployments/{deploymentId}";
-
-                builder.WithUrl(url);
-            }
-
-            AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
-
-            await this._bot.PublishAsync(builder);
-
-            if (succeeded && releaseNoteWorthy)
-            {
-                await this._bot.PublishToReleaseChannelAsync(builder);
-            }
+            tenantName = NormaliseTenantName(tenant);
         }
 
-        private static void AddDeploymentDetails(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName)
-        {
-            builder.AddField(name: "Product", value: projectName);
-            builder.AddField(name: "Release", value: releaseVersion);
-            builder.AddField(name: "Environment", value: environmentName);
+        EmbedBuilder builder = new();
+        bool succeeded = HasSucceeded(message);
 
-            if (!string.IsNullOrWhiteSpace(tenantName))
-            {
-                builder.AddField(name: "Tenant", value: tenantName);
-            }
+        if (succeeded)
+        {
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
+        }
+        else
+        {
+            BuildFailedDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
         }
 
-        private static void BuildFailedDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName)
+        if (!string.IsNullOrWhiteSpace(deploymentId))
         {
-            builder.Color = Color.Red;
-            builder.Title = $"{projectName} {releaseVersion} failed to deploy to {environmentName.ToLowerInvariant()}";
+            DeployPayload payload = message.Payload;
+            string url = $"{payload.ServerUri}/app#/{payload.Event.SpaceId}/deployments/{deploymentId}";
 
-            if (!string.IsNullOrWhiteSpace(tenantName))
-            {
-                builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
-            }
+            builder.WithUrl(url);
         }
 
-        private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                      string projectName,
-                                                      string releaseVersion,
-                                                      string environmentName,
-                                                      string? tenantName,
-                                                      ReleaseResource? release)
+        AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
+
+        await this._bot.PublishAsync(builder);
+
+        if (succeeded && releaseNoteWorthy)
         {
-            builder.Color = Color.Green;
-            builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
+            await this._bot.PublishToReleaseChannelAsync(builder);
+        }
+    }
 
-            if (!string.IsNullOrWhiteSpace(tenantName))
-            {
-                builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
-            }
+    private static void AddDeploymentDetails(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName)
+    {
+        builder.AddField(name: "Product", value: projectName);
+        builder.AddField(name: "Release", value: releaseVersion);
+        builder.AddField(name: "Environment", value: environmentName);
 
-            string? releaseNotes = release?.ReleaseNotes;
+        if (!string.IsNullOrWhiteSpace(tenantName))
+        {
+            builder.AddField(name: "Tenant", value: tenantName);
+        }
+    }
 
-            if (!string.IsNullOrWhiteSpace(releaseNotes))
-            {
-                string reformatted = ReformatReleaseNotes(releaseNotes);
+    private static void BuildFailedDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName)
+    {
+        builder.Color = Color.Red;
+        builder.Title = $"{projectName} {releaseVersion} failed to deploy to {environmentName.ToLowerInvariant()}";
 
-                if (reformatted.Length > 2048)
-                {
-                    reformatted = reformatted.Substring(startIndex: 0, length: 2048)
-                                             .Trim();
-                    builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
-                }
+        if (!string.IsNullOrWhiteSpace(tenantName))
+        {
+            builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
+        }
+    }
 
-                if (!string.IsNullOrWhiteSpace(reformatted))
-                {
-                    builder.Description = reformatted;
-                }
-            }
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
+    {
+        builder.Color = Color.Green;
+        builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
+
+        if (!string.IsNullOrWhiteSpace(tenantName))
+        {
+            builder.Title += string.Concat(str0: " (", str1: tenantName, str2: ")");
         }
 
-        private static string? FindDocumentId(Deploy message, string documentPrefix)
+        string? releaseNotes = release?.ReleaseNotes;
+
+        if (!string.IsNullOrWhiteSpace(releaseNotes))
         {
-            return Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
+            string reformatted = ReformatReleaseNotes(releaseNotes);
+
+            if (reformatted.Length > 2048)
+            {
+                reformatted = reformatted.Substring(startIndex: 0, length: 2048)
+                                         .Trim();
+                builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
+            }
+
+            if (!string.IsNullOrWhiteSpace(reformatted))
+            {
+                builder.Description = reformatted;
+            }
+        }
+    }
+
+    private static string? FindDocumentId(Deploy message, string documentPrefix)
+    {
+        return Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string NormalizeProjectName(ProjectResource? project, string projectId)
+    {
+        if (project == null)
+        {
+            return projectId;
         }
 
-        private static string NormalizeProjectName(ProjectResource? project, string projectId)
+        if (!string.IsNullOrWhiteSpace(project.Description))
         {
-            if (project == null)
-            {
-                return projectId;
-            }
-
-            if (!string.IsNullOrWhiteSpace(project.Description))
-            {
-                return project.Description;
-            }
-
-            return project.Name;
+            return project.Description;
         }
 
-        private static string NormaliseTenantName(TenantResource tenant)
+        return project.Name;
+    }
+
+    private static string NormaliseTenantName(TenantResource tenant)
+    {
+        if (!string.IsNullOrWhiteSpace(tenant.Description))
         {
-            if (!string.IsNullOrWhiteSpace(tenant.Description))
-            {
-                return tenant.Description;
-            }
-
-            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: tenant.Name, y: "CasinoFair"))
-            {
-                return "TTM";
-            }
-
-            return tenant.Name;
+            return tenant.Description;
         }
 
-        private static string ReformatReleaseNotes(string releaseNotes)
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: tenant.Name, y: "CasinoFair"))
         {
-            static string MakeUpperCase(Match match)
+            return "TTM";
+        }
+
+        return tenant.Name;
+    }
+
+    private static string ReformatReleaseNotes(string releaseNotes)
+    {
+        static string MakeUpperCase(Match match)
+        {
+            return Bold(match.ToString()
+                             .ToUpperInvariant());
+        }
+
+        StringBuilder builder = new();
+        string[] text = releaseNotes.Split(separator: '\n');
+
+        for (int lineIndex = 0; lineIndex < text.Length; ++lineIndex)
+        {
+            string line = text[lineIndex];
+
+            if (line.StartsWith(value: "### ", comparisonType: StringComparison.Ordinal))
             {
-                return Bold(match.ToString()
-                                 .ToUpperInvariant());
-            }
-
-            StringBuilder builder = new();
-            string[] text = releaseNotes.Split(separator: '\n');
-
-            for (int lineIndex = 0; lineIndex < text.Length; ++lineIndex)
-            {
-                string line = text[lineIndex];
-
-                if (line.StartsWith(value: "### ", comparisonType: StringComparison.Ordinal))
-                {
-                    if (IsLastLine(text: text, lineIndex: lineIndex))
-                    {
-                        continue;
-                    }
-
-                    builder.AppendLine();
-                    string replacement = Bold(line.Substring(startIndex: 4)
-                                                  .Trim())
-                        .ToUpperInvariant();
-
-                    builder.AppendLine(replacement);
-
-                    continue;
-                }
-
-                string detail = Regex.Replace(input: line, pattern: "(ff\\-\\d+)", evaluator: MakeUpperCase, options: RegexOptions.IgnoreCase)
-                                     .Trim();
-
-                if (string.IsNullOrWhiteSpace(detail))
+                if (IsLastLine(text: text, lineIndex: lineIndex))
                 {
                     continue;
                 }
 
-                builder.AppendLine(EnsurePrefixed(detail));
+                builder.AppendLine();
+                string replacement = Bold(line.Substring(startIndex: 4)
+                                              .Trim())
+                    .ToUpperInvariant();
+
+                builder.AppendLine(replacement);
+
+                continue;
             }
 
-            return builder.ToString()
-                          .Trim();
-        }
+            string detail = Regex.Replace(input: line, pattern: "(ff\\-\\d+)", evaluator: MakeUpperCase, options: RegexOptions.IgnoreCase)
+                                 .Trim();
 
-        private static bool IsLastLine(in string[] text, int lineIndex)
-        {
-            for (int subsequentLine = lineIndex + 1; subsequentLine < text.Length; ++subsequentLine)
+            if (string.IsNullOrWhiteSpace(detail))
             {
-                if (!string.IsNullOrWhiteSpace(text[subsequentLine]))
-                {
-                    return false;
-                }
+                continue;
             }
 
-            return true;
+            builder.AppendLine(EnsurePrefixed(detail));
         }
 
-        private static string EnsurePrefixed(string trim)
-        {
-            const string prefix = "- ";
+        return builder.ToString()
+                      .Trim();
+    }
 
-            if (trim.StartsWith(value: prefix, comparisonType: StringComparison.Ordinal))
+    private static bool IsLastLine(in string[] text, int lineIndex)
+    {
+        for (int subsequentLine = lineIndex + 1; subsequentLine < text.Length; ++subsequentLine)
+        {
+            if (!string.IsNullOrWhiteSpace(text[subsequentLine]))
             {
-                return trim;
+                return false;
             }
-
-            return prefix + trim;
         }
 
-        private static bool HasSucceeded(Deploy message)
+        return true;
+    }
+
+    private static string EnsurePrefixed(string trim)
+    {
+        const string prefix = "- ";
+
+        if (trim.StartsWith(value: prefix, comparisonType: StringComparison.Ordinal))
         {
-            return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Payload.Event.Category, y: "DeploymentSucceeded");
+            return trim;
         }
 
-        private static string NormaliseEnvironmentName(EnvironmentResource? environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
+        return prefix + trim;
+    }
+
+    private static bool HasSucceeded(Deploy message)
+    {
+        return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Payload.Event.Category, y: "DeploymentSucceeded");
+    }
+
+    private static string NormaliseEnvironmentName(EnvironmentResource? environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
+    {
+        tenantName = null;
+        string name = environment != null
+            ? environment.Name
+            : environmentId;
+
+        string[] releaseChannels = { "Beta", "Showcase", "Live" };
+
+        isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
+
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Beta"))
         {
-            tenantName = null;
-            string name = environment != null
-                ? environment.Name
-                : environmentId;
-
-            string[] releaseChannels =
-            {
-                "Beta",
-                "Showcase",
-                "Live"
-            };
-
-            isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
-
-            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Beta"))
-            {
-                return "Staging";
-            }
-
-            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Showcase"))
-            {
-                tenantName = "Showcase";
-
-                return "Live";
-            }
-
-            return name;
+            return "Staging";
         }
 
-        private static string Wrap(string value, string wrapWith)
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Showcase"))
         {
-            return string.Concat(str0: wrapWith, str1: value, str2: wrapWith);
+            tenantName = "Showcase";
+
+            return "Live";
         }
 
-        private static string Bold(string value)
-        {
-            return Wrap(value: value, wrapWith: @"**");
-        }
+        return name;
+    }
 
-        [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Local", Justification = "TODO: Review")]
-        private static string Underline(string value)
-        {
-            return Wrap(value: value, wrapWith: @"__");
-        }
+    private static string Wrap(string value, string wrapWith)
+    {
+        return string.Concat(str0: wrapWith, str1: value, str2: wrapWith);
+    }
+
+    private static string Bold(string value)
+    {
+        return Wrap(value: value, wrapWith: @"**");
+    }
+
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Local", Justification = "TODO: Review")]
+    private static string Underline(string value)
+    {
+        return Wrap(value: value, wrapWith: @"__");
     }
 }
