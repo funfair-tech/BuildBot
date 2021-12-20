@@ -1,20 +1,25 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace BuildBot.Discord;
 
 public sealed class DiscordBotConfiguration
 {
-    public string Token { get; set; } = default!;
+    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Used by serialisation")]
+    public string Token { get; init; } = default!;
 
-    public string Server { get; set; } = default!;
+    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Used by serialisation")]
+    public string Server { get; init; } = default!;
 
-    public string Channel { get; set; } = default!;
+    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Used by serialisation")]
+    public string Channel { get; init; } = default!;
 
-    public string ReleaseChannel { get; set; } = default!;
+    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Used by serialisation")]
+    public string ReleaseChannel { get; init; } = default!;
 
     public static DiscordBotConfiguration Load(string jsonFile)
     {
-        return JsonConvert.DeserializeObject<DiscordBotConfiguration>(File.ReadAllText(jsonFile));
+        return JsonConvert.DeserializeObject<DiscordBotConfiguration>(File.ReadAllText(jsonFile))!;
     }
 }
