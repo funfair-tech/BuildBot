@@ -50,10 +50,7 @@ public sealed class DiscordBot : IDiscordBot
     {
         using (socketTextChannel.EnterTypingState())
         {
-            EmbedAuthorBuilder authorBuilder = new()
-                                               {
-                                                   Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
-                                               };
+            EmbedAuthorBuilder authorBuilder = new() { Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png" };
             builder.WithAuthor(authorBuilder);
 
             await socketTextChannel.SendMessageAsync(text: string.Empty, embed: builder.Build());
@@ -69,57 +66,56 @@ public sealed class DiscordBot : IDiscordBot
 
     private Task LogAsync(LogMessage arg)
     {
-        switch (arg.Severity)
+        return arg.Severity switch
         {
-            case LogSeverity.Debug:
-            {
-                this._logger.LogDebug(arg.Message);
+            LogSeverity.Debug => this.LogDebugAsync(arg),
+            LogSeverity.Verbose => this.LogInformationAsync(arg),
+            LogSeverity.Info => this.LogInformationAsync(arg),
+            LogSeverity.Warning => this.LogWarningAsync(arg),
+            LogSeverity.Error => this.LogErrorAsync(arg),
+            LogSeverity.Critical => this.LogCriticalAsync(arg),
+            _ => this.LogCriticalAsync(arg)
+        };
+    }
 
-                break;
-            }
+    private Task LogCriticalAsync(LogMessage arg)
+    {
+        this._logger.LogCritical(arg.Message);
 
-            case LogSeverity.Verbose:
-            {
-                this._logger.LogInformation(arg.Message);
+        return Task.CompletedTask;
+    }
 
-                break;
-            }
-
-            case LogSeverity.Info:
-            {
-                this._logger.LogInformation(arg.Message);
-
-                break;
-            }
-
-            case LogSeverity.Warning:
-            {
-                this._logger.LogWarning(arg.Message);
-
-                break;
-            }
-
-            case LogSeverity.Error:
-            {
-                if (arg.Exception != null)
-                {
-                    this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
-                }
-                else
-                {
-                    this._logger.LogError(arg.Message);
-                }
-
-                break;
-            }
-
-            case LogSeverity.Critical:
-            {
-                this._logger.LogCritical(arg.Message);
-
-                break;
-            }
+    private Task LogErrorAsync(LogMessage arg)
+    {
+        if (arg.Exception != null)
+        {
+            this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
         }
+        else
+        {
+            this._logger.LogError(arg.Message);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task LogWarningAsync(LogMessage arg)
+    {
+        this._logger.LogWarning(arg.Message);
+
+        return Task.CompletedTask;
+    }
+
+    private Task LogInformationAsync(LogMessage arg)
+    {
+        this._logger.LogInformation(arg.Message);
+
+        return Task.CompletedTask;
+    }
+
+    private Task LogDebugAsync(LogMessage arg)
+    {
+        this._logger.LogDebug(arg.Message);
 
         return Task.CompletedTask;
     }
