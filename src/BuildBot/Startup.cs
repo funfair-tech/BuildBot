@@ -11,6 +11,7 @@ using BuildBot.Middleware;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +43,8 @@ public sealed class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddLogging();
+        services.AddLogging()
+                .AddHttpLogging(options => { options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.RequestBody; });
 
         string configFile = Path.Combine(path1: ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
         DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(configFile);
@@ -106,6 +108,8 @@ public sealed class Startup
     {
         loggerFactory.AddSerilog();
         applicationLifeTime.ApplicationStopping.Register(Log.CloseAndFlush);
+
+        app.UseHttpLogging();
 
         app.UseResponseCompression()
            .UseRouting()
