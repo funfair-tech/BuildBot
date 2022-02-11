@@ -22,25 +22,31 @@ public sealed class StatusPublisher : IPublisher<Status>
             return;
         }
 
-        EmbedBuilder builder = new();
-        builder.WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({message.Branches.Last().Name})");
-        builder.WithUrl(message.TargetUrl);
-        builder.Description = $"Built at {message.StatusCommit.Sha}";
+        StatusCommit statusCommit = message.StatusCommit;
+        EmbedBuilder builder = new EmbedBuilder().WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({message.Branches.Last().Name})")
+                                                 .WithUrl(message.TargetUrl)
+                                                 .WithDescription($"Built at {message.StatusCommit.Sha}")
+                                                 .WithColor(GetEmbedColor(message))
+                                                 .WithFields(new EmbedFieldBuilder().WithName("Head commit")
+                                                                                    .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}"),
+                                                             new EmbedFieldBuilder().WithName("Branch")
+                                                                                    .WithValue(message.Branches.FirstOrDefault()));
 
+        await this._bot.PublishAsync(builder);
+    }
+
+    private static Color GetEmbedColor(Status message)
+    {
         if (message.State == "success")
         {
-            builder.Color = Color.Green;
+            return Color.Green;
         }
 
         if (message.State == "failure")
         {
-            builder.Color = Color.Red;
+            return Color.Red;
         }
 
-        StatusCommit statusCommit = message.StatusCommit;
-        EmbedFieldBuilder commitFieldBuilder = new() { Name = "Head commit", Value = $"{statusCommit.Author.Login} - {statusCommit.Commit.Message}" };
-        builder.AddField(commitFieldBuilder);
-
-        await this._bot.PublishAsync(builder);
+        return Color.Default;
     }
 }
