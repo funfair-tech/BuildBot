@@ -22,17 +22,26 @@ public sealed class StatusPublisher : IPublisher<Status>
             return;
         }
 
-        StatusCommit statusCommit = message.StatusCommit;
         EmbedBuilder builder = new EmbedBuilder().WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({message.Branches.Last().Name})")
                                                  .WithUrl(message.TargetUrl)
                                                  .WithDescription($"Built at {message.StatusCommit.Sha}")
                                                  .WithColor(GetEmbedColor(message))
-                                                 .WithFields(new EmbedFieldBuilder().WithName("Head commit")
-                                                                                    .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}"),
-                                                             new EmbedFieldBuilder().WithName("Branch")
-                                                                                    .WithValue(message.Branches.FirstOrDefault()));
+                                                 .WithFields(GetFields(message));
 
         await this._bot.PublishAsync(builder);
+    }
+
+    private static EmbedFieldBuilder[] GetFields(Status message)
+    {
+        StatusCommit statusCommit = message.StatusCommit;
+
+        return new[]
+               {
+                   new EmbedFieldBuilder().WithName("Head commit")
+                                          .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}"),
+                   new EmbedFieldBuilder().WithName("Branch")
+                                          .WithValue(message.Branches.FirstOrDefault())
+               };
     }
 
     private static Color GetEmbedColor(Status message)
