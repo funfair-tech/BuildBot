@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace BuildBot.Controllers;
 
 [Route(template: "[controller]")]
-public sealed class GitHubController : Controller
+public sealed class GitHubController : ControllerBase
 {
     private readonly ILogger<GitHubController> _logger;
     private readonly IPublisher<Push> _pushPublisher;
