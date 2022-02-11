@@ -1,13 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using BuildBot.Discord;
 using BuildBot.Discord.Publishers;
 using BuildBot.Discord.Publishers.GitHub;
 using BuildBot.Discord.Publishers.Octopus;
+using BuildBot.Helpers;
 using BuildBot.Middleware;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -46,16 +50,14 @@ public sealed class Startup
         services.AddSingleton(botConfiguration);
 
         // register the bot for DI
-        services.AddSingleton<IDiscordBot, DiscordBot>();
-        services.AddSingleton(x => (DiscordBot)x.GetRequiredService<IDiscordBot>());
+        services.AddSingleton<IDiscordBot, DiscordBot>()
+                .AddSingleton(x => (DiscordBot)x.GetRequiredService<IDiscordBot>());
 
         // register publishers
-        services.AddSingleton<IPublisher<Push>, PushPublisher>();
-        services.AddSingleton<IPublisher<Status>, StatusPublisher>();
-
-        services.AddSingleton<IPublisher<Deploy>, DeployPublisher>();
-
-        services.AddSingleton<IOctopusClientFactory, OctopusClientFactory>();
+        services.AddSingleton<IPublisher<Push>, PushPublisher>()
+                .AddSingleton<IPublisher<Status>, StatusPublisher>()
+                .AddSingleton<IPublisher<Deploy>, DeployPublisher>()
+                .AddSingleton<IOctopusClientFactory, OctopusClientFactory>();
 
         string uri = this.Configuration.GetValue<string>(key: @"ServerOctopus:Url");
         string apiKey = this.Configuration.GetValue<string>(key: @"ServerOctopus:ApiKey");
@@ -65,7 +67,30 @@ public sealed class Startup
         services.AddSingleton(ose);
 
         // Add framework services
-        services.AddMvc();
+        services.Configure<GzipCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
+                .Configure<BrotliCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
+                .AddResponseCompression(configureOptions: options =>
+                                                          {
+                                                              options.EnableForHttps = true;
+
+                                                              // Explicitly enable Gzip
+                                                              options.Providers.Add<BrotliCompressionProvider>();
+                                                              options.Providers.Add<GzipCompressionProvider>();
+
+                                                              // Add Custom mime types
+                                                              options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+                                                                                                                               {
+                                                                                                                                   "image/svg+xml"
+                                                                                                                               });
+                                                          })
+                .AddMvc()
+                .AddMvcOptions(setupAction: _ =>
+                                            {
+                                                // Note Additional ModelMetadata providers that require DI are enabled elsewhere
+                                            })
+                .AddJsonOptions(configure: options => JsonSerialiser.Configure(options.JsonSerializerOptions));
+
+        services.AddRouting();
     }
 
     /// <summary>
@@ -82,7 +107,8 @@ public sealed class Startup
         loggerFactory.AddSerilog();
         applicationLifeTime.ApplicationStopping.Register(Log.CloseAndFlush);
 
-        app.UseRouting()
+        app.UseResponseCompression()
+           .UseRouting()
            .UseMiddleware<GitHubMiddleware>()
            .UseEndpoints(configure: endpoints => { endpoints.MapControllers(); });
     }
