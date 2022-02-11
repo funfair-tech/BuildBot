@@ -10,11 +10,13 @@ using BuildBot.Helpers;
 using BuildBot.Middleware;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
+using BuildBot.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octopus.Client;
@@ -26,6 +28,8 @@ public sealed class Startup
 {
     public Startup(IHostEnvironment env)
     {
+        env.ContentRootFileProvider = new NullFileProvider();
+
         Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
                                               .WriteTo.Console()
                                               .CreateLogger();
@@ -91,6 +95,8 @@ public sealed class Startup
                 .AddJsonOptions(configure: options => JsonSerialiser.Configure(options.JsonSerializerOptions));
 
         services.AddRouting();
+
+        services.AddHostedService<BotService>();
     }
 
     private static DiscordBotConfiguration LoadDiscordConfig()
