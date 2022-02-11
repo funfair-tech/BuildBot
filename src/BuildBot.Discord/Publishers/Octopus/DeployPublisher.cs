@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.Octopus;
 using Discord;
+using Microsoft.Extensions.Logging;
 using Octopus.Client;
 using Octopus.Client.Model;
 
@@ -22,18 +25,31 @@ public sealed class DeployPublisher : IPublisher<Deploy>
                                                                     };
 
     private readonly IDiscordBot _bot;
+    private readonly ILogger<DeployPublisher> _logger;
     private readonly IOctopusClientFactory _octopusClientFactory;
     private readonly OctopusServerEndpoint _octopusServerEndpoint;
 
-    public DeployPublisher(IDiscordBot bot, IOctopusClientFactory octopusClientFactory, OctopusServerEndpoint octopusServerEndpoint)
+    public DeployPublisher(IDiscordBot bot, IOctopusClientFactory octopusClientFactory, OctopusServerEndpoint octopusServerEndpoint, ILogger<DeployPublisher> logger)
     {
-        this._bot = bot;
-        this._octopusClientFactory = octopusClientFactory;
-        this._octopusServerEndpoint = octopusServerEndpoint;
+        this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
+        this._octopusClientFactory = octopusClientFactory ?? throw new ArgumentNullException(nameof(octopusClientFactory));
+        this._octopusServerEndpoint = octopusServerEndpoint ?? throw new ArgumentNullException(nameof(octopusServerEndpoint));
+        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
+
+    private static JsonSerializerOptions SerializerOptions { get; } = new()
+                                                                      {
+                                                                          DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                                                                          PropertyNameCaseInsensitive = false,
+                                                                          PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                                                          WriteIndented = true
+                                                                      };
 
     public async Task PublishAsync(Deploy message)
     {
+        string packet = JsonSerializer.Serialize(value: message, options: SerializerOptions);
+        this._logger.LogInformation(packet);
+
         IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
         string? projectId = FindDocumentId(message: message, documentPrefix: "Projects-");
