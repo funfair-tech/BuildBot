@@ -64,6 +64,8 @@ public sealed class DeployPublisher : IPublisher<Deploy>
     {
         IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
+        string serverUri = payload.ServerUri;
+        string spaceId = payload.Event?.SpaceId ?? "Spaces-1";
         string? projectId = FindDocumentId(payload: payload, documentPrefix: "Projects-");
         string? releaseId = FindDocumentId(payload: payload, documentPrefix: "Releases-");
         string? environmentId = FindDocumentId(payload: payload, documentPrefix: "Environments-");
@@ -102,7 +104,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
-        AddDeploymentId(payload: payload, deploymentId: deploymentId, builder: builder);
+        AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
         AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
 
@@ -114,14 +116,14 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void AddDeploymentId(DeployPayload payload, string? deploymentId, EmbedBuilder builder)
+    private static void AddDeploymentId(string serverUri, string spaceId, string? deploymentId, EmbedBuilder builder)
     {
         if (string.IsNullOrWhiteSpace(deploymentId))
         {
             return;
         }
 
-        string url = $"{payload.ServerUri}/app#/{payload.Event?.SpaceId}/deployments/{deploymentId}";
+        string url = $"{serverUri}/app#/{spaceId}/deployments/{deploymentId}";
 
         builder.WithUrl(url);
     }

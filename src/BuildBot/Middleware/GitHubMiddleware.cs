@@ -18,7 +18,7 @@ public sealed class GitHubMiddleware
         if (!context.Request.Headers.ContainsKey(GITHUB_EVENT_HEADER))
         {
             // no github request header, pass this request on to the next middleware
-            return this._next.Invoke(context);
+            return this._next(context);
         }
 
         // get the event header
