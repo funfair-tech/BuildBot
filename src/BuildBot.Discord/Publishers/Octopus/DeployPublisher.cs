@@ -322,6 +322,11 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         isReleaseNoteWorthy = ReleaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
 
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Build"))
+        {
+            return "Build";
+        }
+
         if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Showcase"))
         {
             tenantName = "Showcase";
