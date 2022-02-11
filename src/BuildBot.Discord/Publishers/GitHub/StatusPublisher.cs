@@ -40,7 +40,8 @@ public sealed class StatusPublisher : IPublisher<Status>
                    new EmbedFieldBuilder().WithName("Head commit")
                                           .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}"),
                    new EmbedFieldBuilder().WithName("Branch")
-                                          .WithValue(message.Branches.FirstOrDefault())
+                                          .WithValue(message.Branches.Select(b => b.Name)
+                                                            .FirstOrDefault())
                };
     }
 
