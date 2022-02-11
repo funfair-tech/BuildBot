@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using BuildBot.Discord;
@@ -94,13 +95,15 @@ public sealed class Startup
 
     private static DiscordBotConfiguration LoadDiscordConfig()
     {
-#if DEBUG
-        DiscordBotConfiguration botConfiguration = new();
-#else
         string configFile = Path.Combine(path1: ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
-        DiscordBotConfiguration botConfiguration = DiscordBotConfiguration.Load(configFile);
+
+#if DEBUG
+        if (!File.Exists(configFile))
+        {
+            return new();
+        }
 #endif
-        return botConfiguration;
+        return DiscordBotConfiguration.Load(configFile);
     }
 
     /// <summary>
