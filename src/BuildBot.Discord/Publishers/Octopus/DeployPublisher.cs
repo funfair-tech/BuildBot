@@ -45,18 +45,30 @@ public sealed class DeployPublisher : IPublisher<Deploy>
                                                                           WriteIndented = true
                                                                       };
 
-    public async Task PublishAsync(Deploy message)
+    public Task PublishAsync(Deploy message)
     {
         string packet = JsonSerializer.Serialize(value: message, options: SerializerOptions);
         this._logger.LogWarning($"Received deploy Packet: {packet}");
 
+        DeployPayload? payload = message.Payload;
+
+        if (payload == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        return this.PublishPayloadAsync(payload);
+    }
+
+    private async Task PublishPayloadAsync(DeployPayload payload)
+    {
         IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
-        string? projectId = FindDocumentId(message: message, documentPrefix: "Projects-");
-        string? releaseId = FindDocumentId(message: message, documentPrefix: "Releases-");
-        string? environmentId = FindDocumentId(message: message, documentPrefix: "Environments-");
-        string? deploymentId = FindDocumentId(message: message, documentPrefix: "Deployments-");
-        string? tenantId = FindDocumentId(message: message, documentPrefix: "Tenants-");
+        string? projectId = FindDocumentId(payload: payload, documentPrefix: "Projects-");
+        string? releaseId = FindDocumentId(payload: payload, documentPrefix: "Releases-");
+        string? environmentId = FindDocumentId(payload: payload, documentPrefix: "Environments-");
+        string? deploymentId = FindDocumentId(payload: payload, documentPrefix: "Deployments-");
+        string? tenantId = FindDocumentId(payload: payload, documentPrefix: "Tenants-");
 
         ProjectResource? project = await client.Repository.Projects.Get(projectId);
         ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
@@ -86,11 +98,11 @@ public sealed class DeployPublisher : IPublisher<Deploy>
             return;
         }
 
-        bool succeeded = HasSucceeded(message);
+        bool succeeded = HasSucceeded(payload);
 
         EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
-        AddDeploymentId(message: message, deploymentId: deploymentId, builder: builder);
+        AddDeploymentId(payload: payload, deploymentId: deploymentId, builder: builder);
 
         AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
 
@@ -102,15 +114,14 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void AddDeploymentId(Deploy message, string? deploymentId, EmbedBuilder builder)
+    private static void AddDeploymentId(DeployPayload payload, string? deploymentId, EmbedBuilder builder)
     {
         if (string.IsNullOrWhiteSpace(deploymentId))
         {
             return;
         }
 
-        DeployPayload payload = message.Payload;
-        string url = $"{payload.ServerUri}/app#/{payload.Event.SpaceId}/deployments/{deploymentId}";
+        string url = $"{payload.ServerUri}/app#/{payload.Event?.SpaceId}/deployments/{deploymentId}";
 
         builder.WithUrl(url);
     }
@@ -186,9 +197,9 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static string? FindDocumentId(Deploy message, string documentPrefix)
+    private static string? FindDocumentId(DeployPayload payload, string documentPrefix)
     {
-        IReadOnlyList<string>? relatedDocumentIds = message.Payload?.Event?.RelatedDocumentIds;
+        IReadOnlyList<string>? relatedDocumentIds = payload.Event?.RelatedDocumentIds;
 
         return relatedDocumentIds?.FirstOrDefault(x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
     }
@@ -295,9 +306,9 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         return prefix + trim;
     }
 
-    private static bool HasSucceeded(Deploy message)
+    private static bool HasSucceeded(DeployPayload payload)
     {
-        return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Payload.Event.Category, y: "DeploymentSucceeded");
+        return StringComparer.InvariantCultureIgnoreCase.Equals(x: payload.Event?.Category, y: "DeploymentSucceeded");
     }
 
     private static string? NormaliseEnvironmentName(EnvironmentResource? environment, string? environmentId, out bool isReleaseNoteWorthy, out string? tenantName)

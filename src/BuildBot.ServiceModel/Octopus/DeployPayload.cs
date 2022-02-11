@@ -7,15 +7,15 @@ public sealed class DeployPayload
 {
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
     [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string ServerUri { get; set; } = default!;
+    public string ServerUri { get; init; } = default!;
 
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
-    public string ServerAuditUri { get; set; } = default!;
+    public string ServerAuditUri { get; init; } = default!;
 
-    public DateTime BatchProcessingDate { get; set; }
+    public DateTime BatchProcessingDate { get; init; }
 
-    public DeploymentPayloadSubscription Subscription { get; set; } = default!;
+    public DeploymentPayloadSubscription? Subscription { get; init; } = default!;
 
     [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public DeploymentEvent Event { get; set; } = default!;
+    public DeploymentEvent? Event { get; init; } = default!;
 }
