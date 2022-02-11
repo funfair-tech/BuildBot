@@ -1,10 +1,15 @@
-﻿namespace BuildBot.ServiceModel.Octopus;
+﻿using System.Text.Json.Serialization;
+
+namespace BuildBot.ServiceModel.Octopus;
 
 public sealed class DeployMessageReference
 {
-    public string ReferencedDocumentId { get; set; } = default!;
+    [JsonPropertyName("ReferencedDocumentId")]
+    public string ReferencedDocumentId { get; init; } = default!;
 
-    public int StartIndex { get; set; }
+    [JsonPropertyName("StartIndex")]
+    public int StartIndex { get; init; }
 
-    public int Length { get; set; }
+    [JsonPropertyName("Length")]
+    public int Length { get; init; }
 }
