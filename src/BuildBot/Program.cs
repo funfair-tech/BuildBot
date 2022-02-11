@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BuildBot.Discord;
-using Microsoft.AspNetCore.Hosting;
+using BuildBot.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -9,9 +8,15 @@ namespace BuildBot;
 
 public static class Program
 {
+    private const int MIN_THREADS = 32;
+
     public static async Task Main(string[] args)
     {
-        using (IHost host = CreateHostBuilder(args))
+        StartupBanner.Show();
+
+        ServerStartup.SetThreads(MIN_THREADS);
+
+        using (IHost host = ServerStartup.CreateWebHost<Startup>(args: args, httpPort: 49781, httpsPort: 0, h2Port: 0, configurationFiledPath: ApplicationConfigLocator.ConfigurationFilesPath))
         {
             DiscordBot bot = host.Services.GetRequiredService<DiscordBot>();
 
@@ -22,20 +27,5 @@ public static class Program
 
             await bot.StopAsync();
         }
-    }
-
-    private static IHost CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
-                   .ConfigureWebHostDefaults(webHostBuilder =>
-                                             {
-                                                 webHostBuilder.UseKestrel()
-                                                               .UseContentRoot(Directory.GetCurrentDirectory())
-                                                               .UseStartup<Startup>()
-                                                               .UseUrls("http://*:49781");
-                                             })
-                   .UseWindowsService()
-                   .UseSystemd()
-                   .Build();
     }
 }

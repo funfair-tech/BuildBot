@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace BuildBot.Helpers;
 
-public static class JsonSerialiser
+internal static class JsonSerialiser
 {
     public static JsonSerializerOptions Configure(JsonSerializerOptions jsonSerializerOptions)
     {
