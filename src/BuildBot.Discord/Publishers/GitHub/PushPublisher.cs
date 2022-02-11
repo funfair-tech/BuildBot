@@ -29,7 +29,7 @@ public sealed class PushPublisher : IPublisher<Push>
             return;
         }
 
-        if (message.Repository.Name == @"TeamCity")
+        if (IsIgnoredRepo(message))
         {
             // ignore commits to TeamCity, it's pretty annoying!
             return;
@@ -46,9 +46,34 @@ public sealed class PushPublisher : IPublisher<Push>
         await this._bot.PublishAsync(builder);
     }
 
+    private static bool IsIgnoredRepo(Push message)
+    {
+        return message.Repository.Name == @"TeamCity";
+    }
+
     private static bool IsIgnoredCommit(Push message)
     {
-        return message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal));
+        if (message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
+        {
+            return true;
+        }
+
+        string branch = BranchName(message);
+
+        if (branch is "master" or "main")
+        {
+            static bool IsPackageUpdate(Commit c)
+            {
+                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) || c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
+            }
+
+            if (message.Commits.Any(predicate: IsPackageUpdate))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static EmbedBuilder BuildPushEmbed(Push message)
@@ -95,7 +120,12 @@ public sealed class PushPublisher : IPublisher<Push>
 
     private static string GetCommitTitle(Push message, string commitString)
     {
-        return $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({message.Ref.Substring("refs/heads/".Length)})";
+        return $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({BranchName(message)})";
+    }
+
+    private static string BranchName(Push message)
+    {
+        return message.Ref.Substring("refs/heads/".Length);
     }
 
     private static string GetCommitString(Push message)
