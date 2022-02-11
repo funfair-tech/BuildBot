@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,13 @@ namespace BuildBot.Discord.Publishers.Octopus;
 
 public sealed class DeployPublisher : IPublisher<Deploy>
 {
+    private static readonly IReadOnlyList<string> ReleaseChannels = new[]
+                                                                    {
+                                                                        "Staging",
+                                                                        "Showcase",
+                                                                        "Live"
+                                                                    };
+
     private readonly IDiscordBot _bot;
     private readonly IOctopusClientFactory _octopusClientFactory;
     private readonly OctopusServerEndpoint _octopusServerEndpoint;
@@ -28,9 +36,9 @@ public sealed class DeployPublisher : IPublisher<Deploy>
     {
         IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
-        string projectId = FindDocumentId(message: message, documentPrefix: "Projects-")!;
-        string releaseId = FindDocumentId(message: message, documentPrefix: "Releases-")!;
-        string environmentId = FindDocumentId(message: message, documentPrefix: "Environments-")!;
+        string? projectId = FindDocumentId(message: message, documentPrefix: "Projects-");
+        string? releaseId = FindDocumentId(message: message, documentPrefix: "Releases-");
+        string? environmentId = FindDocumentId(message: message, documentPrefix: "Environments-");
         string? deploymentId = FindDocumentId(message: message, documentPrefix: "Deployments-");
         string? tenantId = FindDocumentId(message: message, documentPrefix: "Tenants-");
 
@@ -45,9 +53,9 @@ public sealed class DeployPublisher : IPublisher<Deploy>
             tenant = await client.Repository.Tenants.Get(tenantId);
         }
 
-        string projectName = NormalizeProjectName(project: project, projectId: projectId);
-        string environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
-        string releaseVersion = release != null
+        string? projectName = NormalizeProjectName(project: project, projectId: projectId);
+        string? environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
+        string? releaseVersion = release != null
             ? release.Version
             : releaseId;
 
@@ -56,17 +64,18 @@ public sealed class DeployPublisher : IPublisher<Deploy>
             tenantName = NormaliseTenantName(tenant);
         }
 
+        if (projectName == null || releaseVersion == null || environmentName == null)
+        {
+            // no idea what we're releasing if it has none of the above.
+            return;
+        }
+
         EmbedBuilder builder = new();
         bool succeeded = HasSucceeded(message);
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -114,12 +123,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
@@ -131,21 +135,23 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         string? releaseNotes = release?.ReleaseNotes;
 
-        if (!string.IsNullOrWhiteSpace(releaseNotes))
+        if (string.IsNullOrWhiteSpace(releaseNotes))
         {
-            string reformatted = ReformatReleaseNotes(releaseNotes);
+            return;
+        }
 
-            if (reformatted.Length > 2048)
-            {
-                reformatted = reformatted.Substring(startIndex: 0, length: 2048)
-                                         .Trim();
-                builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
-            }
+        string reformatted = ReformatReleaseNotes(releaseNotes);
 
-            if (!string.IsNullOrWhiteSpace(reformatted))
-            {
-                builder.Description = reformatted;
-            }
+        if (reformatted.Length > 2048)
+        {
+            reformatted = reformatted.Substring(startIndex: 0, length: 2048)
+                                     .Trim();
+            builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
+        }
+
+        if (!string.IsNullOrWhiteSpace(reformatted))
+        {
+            builder.Description = reformatted;
         }
     }
 
@@ -154,7 +160,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         return Array.Find(array: message.Payload.Event.RelatedDocumentIds, match: x => x.StartsWith(value: documentPrefix, comparisonType: StringComparison.OrdinalIgnoreCase));
     }
 
-    private static string NormalizeProjectName(ProjectResource? project, string projectId)
+    private static string? NormalizeProjectName(ProjectResource? project, string? projectId)
     {
         if (project == null)
         {
@@ -261,26 +267,14 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Payload.Event.Category, y: "DeploymentSucceeded");
     }
 
-    private static string NormaliseEnvironmentName(EnvironmentResource? environment, string environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
+    private static string? NormaliseEnvironmentName(EnvironmentResource? environment, string? environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
     {
         tenantName = null;
-        string name = environment != null
+        string? name = environment != null
             ? environment.Name
             : environmentId;
 
-        string[] releaseChannels =
-        {
-            "Beta",
-            "Showcase",
-            "Live"
-        };
-
-        isReleaseNoteWorthy = releaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
-
-        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Beta"))
-        {
-            return "Staging";
-        }
+        isReleaseNoteWorthy = ReleaseChannels.Any(predicate: x => StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: x));
 
         if (StringComparer.InvariantCultureIgnoreCase.Equals(x: name, y: "Showcase"))
         {
