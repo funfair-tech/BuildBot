@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BuildBot.Helpers;
+namespace BuildBot.Json;
 
-internal static class JsonSerialiser
+public static class JsonSerialiser
 {
     public static JsonSerializerOptions Configure(JsonSerializerOptions jsonSerializerOptions)
     {
@@ -11,6 +11,7 @@ internal static class JsonSerialiser
         jsonSerializerOptions.PropertyNameCaseInsensitive = false;
         jsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         jsonSerializerOptions.WriteIndented = false;
+        jsonSerializerOptions.AddContext<SerializationContext>();
 
         return jsonSerializerOptions;
     }

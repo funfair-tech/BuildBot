@@ -6,7 +6,7 @@ using BuildBot.Discord;
 using BuildBot.Discord.Publishers;
 using BuildBot.Discord.Publishers.GitHub;
 using BuildBot.Discord.Publishers.Octopus;
-using BuildBot.Helpers;
+using BuildBot.Json;
 using BuildBot.Middleware;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;

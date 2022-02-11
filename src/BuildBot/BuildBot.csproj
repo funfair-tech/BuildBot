@@ -66,13 +66,14 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
+        <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj"/>
     </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0"/>
-      <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0"/>
-      <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
-      <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0"/>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1"/>
+  </ItemGroup>
     <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.5.1" PrivateAssets="All" />
         <PackageReference Include="Discord.Net.Analyzers" Version="3.3.0" PrivateAssets="All" />
