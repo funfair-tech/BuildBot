@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 5.9.1.1665
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.8.1.1203
 - FF-1429 - Updated Octopus.Client to 11.4.3624
+- FF-1429 - Updated Octopus.Client to 11.5.3639
 ### Removed
 ### Deployment Changes
 
