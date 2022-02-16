@@ -30,7 +30,7 @@
         <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Discord.Net" Version="3.3.1" />
+        <PackageReference Include="Discord.Net" Version="3.3.2" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
         <PackageReference Include="Octopus.Client" Version="11.6.3644" />
     </ItemGroup>
