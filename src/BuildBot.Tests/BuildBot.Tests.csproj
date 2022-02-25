@@ -48,6 +48,5 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
-        <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
     </ItemGroup>
 </Project>
