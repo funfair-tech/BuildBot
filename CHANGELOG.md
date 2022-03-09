@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 11.6.3682
 - FF-1429 - Updated Octopus.Client to 12.0.3685
 - FF-1429 - Updated Microsoft.Extensions to 6.0.1
+- FF-1429 - Updated FunFair.Test.Common to 5.9.3.1699
 ### Removed
 ### Deployment Changes
 
