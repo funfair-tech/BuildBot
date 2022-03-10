@@ -64,7 +64,8 @@ public sealed class PushPublisher : IPublisher<Push>
         {
             static bool IsPackageUpdate(Commit c)
             {
-                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) || c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
+                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) ||
+                       c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
             }
 
             if (message.Commits.Any(predicate: IsPackageUpdate))
