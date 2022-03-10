@@ -8,6 +8,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [1.3.30] - 2022-03-10
+### Changed
 - FF-1429 - Updated Octopus.Client to 11.6.3682
 - FF-1429 - Updated Octopus.Client to 12.0.3685
 - FF-1429 - Updated Microsoft.Extensions to 6.0.1
@@ -15,12 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Discord.Net to 3.4.1
 - FF-1429 - Updated Discord.Net.Analyzers to 3.4.1
 - FF-1429 - Updated Octopus.Client to 12.0.3694
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [1.3.29] - 2022-03-05
 ### Changed
 - FF-1429 - Updated Octopus.Client to 11.6.3673
