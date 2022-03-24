@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - FF-1429 - Updated Octopus.Client to 13.0.3724
 - FF-1429 - Updated Octopus.Client to 13.0.3731
+- FF-1429 - Updated FunFair.Test.Common to 5.9.4.1729
 ### Removed
 ### Deployment Changes
 
