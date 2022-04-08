@@ -8,14 +8,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated Octopus.Client to 13.0.3754
-- FF-1429 - Updated Octopus.Client to 13.0.3756
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.35] - 2022-04-08
+### Changed
+- FF-1429 - Updated Octopus.Client to 13.0.3754
+- FF-1429 - Updated Octopus.Client to 13.0.3756
+
 ## [1.3.34] - 2022-04-06
 ### Changed
 - FF-1429 - Updated Roslynator.Analyzers to 4.1.0
