@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - FF-3881 - Updated DotNet SDK to 6.0.202
 - FF-1429 - Updated Octopus.Client to 13.0.3778
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.38.0.46746
 ### Removed
 ### Deployment Changes
 
