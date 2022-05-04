@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.38.0.46746
 - FF-1429 - Updated Discord.Net to 3.6.0
 - FF-1429 - Updated Discord.Net to 3.6.1
+- FF-1429 - Updated Octopus.Client to 13.0.3790
 ### Removed
 ### Deployment Changes
 
