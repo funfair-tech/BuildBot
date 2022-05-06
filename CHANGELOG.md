@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 13.0.3790
 - FF-1429 - Updated xunit.runner.visualstudio to 2.4.4
 - FF-1429 - Updated xunit.runner.visualstudio to 2.4.5
+- FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.2.32
 ### Removed
 ### Deployment Changes
 
