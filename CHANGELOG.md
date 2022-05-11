@@ -21,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.2.0
 - FF-1429 - Updated Octopus.Client to 13.0.3807
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.39.0.47922
+- FF-3881 - Updated DotNet SDK to 6.0.300
 ### Removed
 ### Deployment Changes
 
