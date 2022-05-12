@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.2.32
 - FF-1429 - Updated AsyncFixer to 1.6.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.2.0
+- FF-1429 - Updated Octopus.Client to 13.0.3807
 ### Removed
 ### Deployment Changes
 
