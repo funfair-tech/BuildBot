@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-      <RunAOTCompilation>true</RunAOTCompilation>
-      <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+  <PropertyGroup>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <Features>strict;flow-analysis</Features>
     <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -12,6 +11,7 @@
     <NoWarn />
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
+    <RunAOTCompilation>true</RunAOTCompilation>
     <TargetFramework>net6.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TreatSpecificWarningsAsErrors />
