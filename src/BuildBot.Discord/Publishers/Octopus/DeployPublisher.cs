@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.Octopus;
@@ -37,19 +35,8 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    private static JsonSerializerOptions SerializerOptions { get; } = new()
-                                                                      {
-                                                                          DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                                                                          PropertyNameCaseInsensitive = false,
-                                                                          PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                                                          WriteIndented = true
-                                                                      };
-
     public Task PublishAsync(Deploy message)
     {
-        string packet = JsonSerializer.Serialize(value: message, options: SerializerOptions);
-        this._logger.LogWarning($"Received deploy Packet: {packet}");
-
         DeployPayload? payload = message.Payload;
 
         if (payload == null)
@@ -102,18 +89,15 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
         AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
 
         await this._bot.PublishAsync(builder);
+
+        this._logger.LogDebug($"{projectName}: {releaseVersion} Build successful: {succeeded} Noteworthy: {releaseNoteWorthy}");
 
         if (succeeded && releaseNoteWorthy)
         {
@@ -139,12 +123,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -177,12 +156,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
