@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
     <Features>strict;flow-analysis</Features>
     <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -9,6 +10,7 @@
     <IsPackable>false</IsPackable>
     <IsPublishable>true</IsPublishable>
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+    <IsTrimmable>false</IsTrimmable>
     <LangVersion>latest</LangVersion>
     <NoWarn>1591</NoWarn>
     <Nullable>enable</Nullable>
@@ -19,9 +21,7 @@
     <TieredCompilation>true</TieredCompilation>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
-    <WarningsAsErrors/>
-    <IsTrimmable>false</IsTrimmable>
-    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>
