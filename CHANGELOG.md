@@ -30,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Roslynator.Analyzers to 4.1.1
 - FF-1429 - Updated Octopus.Client to 13.0.3842
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.40.0.48530
+- FF-1429 - Updated Octopus.Client to 13.0.3851
 ### Removed
 ### Deployment Changes
 
