@@ -8,6 +8,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [1.3.36] - 2022-06-16
+### Changed
 - FF-3881 - Updated DotNet SDK to 6.0.202
 - FF-1429 - Updated Octopus.Client to 13.0.3778
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.38.0.46746
@@ -36,12 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 5.9.6.1865
 - FF-1429 - Updated Octopus.Client to 13.0.3882
 - FF-3881 - Updated DotNet SDK to 6.0.301
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [1.3.35] - 2022-04-08
 ### Changed
 - FF-1429 - Updated Octopus.Client to 13.0.3754
