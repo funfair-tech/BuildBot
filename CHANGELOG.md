@@ -8,15 +8,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated FunFair.Test.Common to 5.9.7.1871
-- FF-1429 - Updated FunFair.CodeAnalysis to 5.8.3.1353
-- FF-1429 - Updated Octopus.Client to 13.0.3891
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.37] - 2022-06-25
+### Changed
+- FF-1429 - Updated FunFair.Test.Common to 5.9.7.1871
+- FF-1429 - Updated FunFair.CodeAnalysis to 5.8.3.1353
+- FF-1429 - Updated Octopus.Client to 13.0.3891
+
 ## [1.3.36] - 2022-06-16
 ### Changed
 - FF-3881 - Updated DotNet SDK to 6.0.202
