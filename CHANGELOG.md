@@ -8,13 +8,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated Octopus.Client to 13.0.3912
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.39] - 2022-06-29
+### Changed
+- FF-1429 - Updated Octopus.Client to 13.0.3912
+
 ## [1.3.38] - 2022-06-28
 ### Changed
 - FF-1429 - Updated FunFair.Test.Common to 5.9.8.1897
