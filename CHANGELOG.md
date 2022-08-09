@@ -8,16 +8,19 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated xunit.analyzers to 1.0.0
-- FF-1429 - Updated SonarAnalyzer.CSharp to 8.43.0.51858
-- FF-1429 - Updated Octopus.Client to 13.0.4061
-- FF-3881 - Updated DotNet SDK to 6.0.400
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.47] - 2022-08-09
+### Changed
+- FF-1429 - Updated xunit.analyzers to 1.0.0
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.43.0.51858
+- FF-1429 - Updated Octopus.Client to 13.0.4061
+- FF-3881 - Updated DotNet SDK to 6.0.400
+
 ## [1.3.46] - 2022-07-31
 ### Changed
 - FF-1429 - Updated Octopus.Client to 13.0.4037
