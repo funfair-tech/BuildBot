@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.46.0.54807
 - FF-1429 - Updated Microsoft.Extensions to 6.0.1
 - FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.4.0
+- FF-1429 - Updated FunFair.Test.Common to 6.0.4.1998
 ### Removed
 ### Deployment Changes
 
