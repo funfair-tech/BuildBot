@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 13.1.111
 - FF-1429 - Updated Octopus.Client to 13.1.122
 - FF-1429 - Updated Octopus.Client to 13.1.125
+- FF-1429 - Updated Octopus.Client to 13.2.130
 ### Removed
 ### Deployment Changes
 
