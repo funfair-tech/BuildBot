@@ -23,6 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 13.2.153
 - FF-1429 - Updated Octopus.Client to 13.2.158
 - FF-1429 - Updated Octopus.Client to 13.2.161
+- FF-1429 - Updated Discord.Net to 3.8.0
 ### Removed
 ### Deployment Changes
 
