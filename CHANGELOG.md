@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.8.5.1436
-- FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.0
 - FF-1429 - Updated Octopus.Client to 13.1.111
 - FF-1429 - Updated Octopus.Client to 13.1.122
 - FF-1429 - Updated Octopus.Client to 13.1.125
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 13.2.161
 - FF-1429 - Updated Discord.Net to 3.8.0
 - FF-1429 - Updated Octopus.Client to 13.2.172
+- FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
 ### Removed
 ### Deployment Changes
 
