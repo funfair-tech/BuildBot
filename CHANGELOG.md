@@ -25,6 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
 - FF-1429 - Updated Octopus.Client to 13.2.185
 - FF-1429 - Updated Octopus.Client to 14.0.188
+- FF-1429 - Updated Serilog.Sinks.Console to 4.1.0
 ### Removed
 ### Deployment Changes
 
