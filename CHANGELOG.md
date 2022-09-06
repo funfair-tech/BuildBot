@@ -9,7 +9,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
-- FF-1429 - Updated FunFair.CodeAnalysis to 5.8.5.1436
 - FF-1429 - Updated Octopus.Client to 13.1.125
 - FF-1429 - Updated Octopus.Client to 13.2.130
 - FF-1429 - Updated Octopus.Client to 13.2.145
@@ -26,6 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 13.2.185
 - FF-1429 - Updated Octopus.Client to 14.0.188
 - FF-1429 - Updated Serilog.Sinks.Console to 4.1.0
+- FF-1429 - Updated FunFair.CodeAnalysis to 5.9.0.1493
 ### Removed
 ### Deployment Changes
 
