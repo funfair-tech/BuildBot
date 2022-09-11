@@ -12,11 +12,13 @@
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>true</RunAOTCompilation>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TreatSpecificWarningsAsErrors/>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningsAsErrors/>
+    <IsTrimmable>false</IsTrimmable>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
     <!-- Dotnet 7 features -->
     <TieredPGO>true</TieredPGO>
     <UseSystemResourceKeys>true</UseSystemResourceKeys>

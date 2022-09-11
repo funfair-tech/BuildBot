@@ -70,8 +70,8 @@ public sealed class Startup
                 .AddSingleton<IPublisher<Deploy>, DeployPublisher>()
                 .AddSingleton<IOctopusClientFactory, OctopusClientFactory>();
 
-        string uri = this.Configuration.GetValue<string>(key: @"ServerOctopus:Url");
-        string apiKey = this.Configuration.GetValue<string>(key: @"ServerOctopus:ApiKey");
+        string uri = this.Configuration[@"ServerOctopus:Url"] ?? string.Empty;
+        string apiKey = this.Configuration[@"ServerOctopus:ApiKey"] ?? string.Empty;
 
         OctopusServerEndpoint ose = new(octopusServerAddress: uri, apiKey: apiKey);
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 
 namespace BuildBot.Middleware;
 
@@ -22,7 +23,7 @@ public sealed class GitHubMiddleware
         }
 
         // get the event header
-        string eventHeader = context.Request.Headers[GITHUB_EVENT_HEADER];
+        StringValues eventHeader = context.Request.Headers[GITHUB_EVENT_HEADER];
 
         // update the request path (this will fire corresponding methods on the github controller)
         context.Request.Path = $"/github/{eventHeader}";

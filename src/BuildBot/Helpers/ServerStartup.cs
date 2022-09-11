@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -52,7 +53,12 @@ internal static class ServerStartup
     /// <param name="h2Port">The H2P port to listen on; 0 = do not listen on this port.</param>
     /// <param name="configurationFiledPath">Path to configuration files.</param>
     /// <returns>Host.</returns>
-    public static IHost CreateWebHost<TStartup>(string[] args, int httpPort, int httpsPort, int h2Port, string configurationFiledPath)
+    public static IHost CreateWebHost<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] TStartup>(
+        string[] args,
+        int httpPort,
+        int httpsPort,
+        int h2Port,
+        string configurationFiledPath)
         where TStartup : class
     {
         if (httpPort == 0 && httpsPort == 0 && h2Port == 0)
