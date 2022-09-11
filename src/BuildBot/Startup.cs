@@ -110,13 +110,10 @@ public sealed class Startup
 
     private DiscordBotConfiguration LoadDiscordConfig()
     {
-        return new()
-               {
-                   Server = this.Configuration[@"Discord:Server"] ?? string.Empty,
-                   Channel = this.Configuration[@"Discord:Channel"] ?? string.Empty,
-                   ReleaseChannel = this.Configuration[@"Discord:ReleaseChannel"] ?? string.Empty,
-                   Token = this.Configuration[@"Discord:Token"] ?? string.Empty
-               };
+        return new(server: this.Configuration[@"Discord:Server"] ?? string.Empty,
+                   channel: this.Configuration[@"Discord:Channel"] ?? string.Empty,
+                   releaseChannel: this.Configuration[@"Discord:ReleaseChannel"] ?? string.Empty,
+                   token: this.Configuration[@"Discord:Token"] ?? string.Empty);
     }
 
     /// <summary>
