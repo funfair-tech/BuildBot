@@ -7,13 +7,14 @@ namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Commit
 {
+    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]
     public Commit(string id,
                   string sha,
                   string treeId,
                   bool distinct,
                   string message,
-                  in DateTime timeStamp,
+                  DateTime timeStamp,
                   string url,
                   IReadOnlyList<string> added,
                   IReadOnlyList<string> removed,
