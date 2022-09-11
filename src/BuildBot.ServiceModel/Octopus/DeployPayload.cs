@@ -6,22 +6,30 @@ namespace BuildBot.ServiceModel.Octopus;
 
 public sealed class DeployPayload
 {
+    [JsonConstructor]
+    public DeployPayload(string serverUri, string serverAuditUri, in DateTime batchProcessingDate, DeploymentPayloadSubscription? subscription, DeploymentEvent? @event)
+    {
+        this.ServerUri = serverUri;
+        this.ServerAuditUri = serverAuditUri;
+        this.BatchProcessingDate = batchProcessingDate;
+        this.Subscription = subscription;
+        this.Event = @event;
+    }
+
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
     [JsonPropertyName("ServerUri")]
-    public string ServerUri { get; set; } = default!;
+    public string ServerUri { get; }
 
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
     [JsonPropertyName("ServerAuditUri")]
-    public string ServerAuditUri { get; set; } = default!;
+    public string ServerAuditUri { get; }
 
     [JsonPropertyName("BatchProcessingDate")]
-    public DateTime BatchProcessingDate { get; set; }
+    public DateTime BatchProcessingDate { get; }
 
     [JsonPropertyName("Subscription")]
-    public DeploymentPayloadSubscription? Subscription { get; set; }
+    public DeploymentPayloadSubscription? Subscription { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
     [JsonPropertyName("Event")]
-    public DeploymentEvent? Event { get; set; } = default!;
+    public DeploymentEvent? Event { get; }
 }

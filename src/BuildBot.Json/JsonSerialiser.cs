@@ -15,4 +15,11 @@ public static class JsonSerialiser
 
         return jsonSerializerOptions;
     }
+
+    public static JsonSerializerOptions ConfigureContext(JsonSerializerOptions serializerSettings)
+    {
+        serializerSettings.AddContext<SerializationContext>();
+
+        return serializerSettings;
+    }
 }

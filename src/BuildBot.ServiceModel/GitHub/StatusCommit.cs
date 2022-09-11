@@ -1,19 +1,26 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class StatusCommit
 {
+    [JsonConstructor]
+    public StatusCommit(Commit commit, string sha, Author author)
+    {
+        this.Commit = commit;
+        this.Sha = sha;
+        this.Author = author;
+    }
+
     [JsonPropertyName(name: "commit")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Commit Commit { get; set; } = default!;
+
+    public Commit Commit { get; }
 
     [JsonPropertyName(name: "sha")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Sha { get; set; } = default!;
+
+    public string Sha { get; }
 
     [JsonPropertyName(name: "author")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Author Author { get; set; } = default!;
+
+    public Author Author { get; }
 }

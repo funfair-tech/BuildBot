@@ -6,32 +6,44 @@ namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Status
 {
+    [JsonConstructor]
+    public Status(string targetUrl, Repository repository, string context, string state, IReadOnlyList<Branch> branches, string description, StatusCommit statusCommit)
+    {
+        this.TargetUrl = targetUrl;
+        this.Repository = repository;
+        this.Context = context;
+        this.State = state;
+        this.Branches = branches;
+        this.Description = description;
+        this.StatusCommit = statusCommit;
+    }
+
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
     [JsonPropertyName(name: "target_url")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string TargetUrl { get; set; } = default!;
+
+    public string TargetUrl { get; }
 
     [JsonPropertyName(name: "repository")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Repository Repository { get; set; } = default!;
+
+    public Repository Repository { get; }
 
     [JsonPropertyName(name: "context")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Context { get; set; } = default!;
+
+    public string Context { get; }
 
     [JsonPropertyName(name: "state")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string State { get; set; } = default!;
+
+    public string State { get; }
 
     [JsonPropertyName(name: "branches")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public IReadOnlyList<Branch> Branches { get; set; } = default!;
+
+    public IReadOnlyList<Branch> Branches { get; }
 
     [JsonPropertyName(name: "description")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Description { get; set; } = default!;
+
+    public string Description { get; }
 
     [JsonPropertyName(name: "commit")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public StatusCommit StatusCommit { get; set; } = default!;
+
+    public StatusCommit StatusCommit { get; }
 }

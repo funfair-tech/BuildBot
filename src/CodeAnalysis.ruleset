@@ -352,7 +352,7 @@
         <!-- S1118 - Utility classes should not have public constructors -->
         <Rule Id="S1118" Action="None"/>
         <!-- S1135 - Track uses of "TODO" tags -->
-        <Rule Id="S1135" Action="Info"/>
+        <Rule Id="S1135" Action="Error"/>
         <!-- S1168 - Returning <code>null</code> instead of an actual array or collection forces callers of the method to explicitly test for nullity, making them more complex and less readable. -->
         <Rule Id="S1168" Action="None"/>
         <!-- S1172 - Remove Unused method parameter-->
@@ -713,6 +713,6 @@
         <!-- FFS0041 - Do not use System.Console in test assemblies -->
         <Rule Id="FFS0041" Action="Error"/>
         <!-- FFS0042 - Do not have TODO's in SuppressMessage justifications. -->
-        <Rule Id="FFS0042" Action="Info"/>
+        <Rule Id="FFS0042" Action="Error"/>
     </Rules>
 </RuleSet>

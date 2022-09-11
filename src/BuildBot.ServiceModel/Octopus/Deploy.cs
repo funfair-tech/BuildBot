@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.Octopus;
@@ -8,13 +7,20 @@ namespace BuildBot.ServiceModel.Octopus;
 [JsonSourceGenerationOptionsAttribute(GenerationMode = JsonSourceGenerationMode.Serialization)]
 public sealed class Deploy
 {
+    [JsonConstructor]
+    public Deploy(in DateTime timestamp, string eventType, DeployPayload? payload)
+    {
+        this.Timestamp = timestamp;
+        this.EventType = eventType;
+        this.Payload = payload;
+    }
+
     [JsonPropertyName("Timestamp")]
-    public DateTime Timestamp { get; set; }
+    public DateTime Timestamp { get; }
 
     [JsonPropertyName("EventType")]
-    public string EventType { get; set; } = default!;
+    public string EventType { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "UnusedAutoPropertyAccessor.Global", Justification = "TODO: Review")]
     [JsonPropertyName("Payload")]
-    public DeployPayload? Payload { get; set; }
+    public DeployPayload? Payload { get; }
 }

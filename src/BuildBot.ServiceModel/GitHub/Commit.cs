@@ -7,50 +7,69 @@ namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Commit
 {
+    [JsonConstructor]
+    public Commit(string id,
+                  string sha,
+                  string treeId,
+                  bool distinct,
+                  string message,
+                  in DateTime timeStamp,
+                  string url,
+                  IReadOnlyList<string> added,
+                  IReadOnlyList<string> removed,
+                  IReadOnlyList<string> modified,
+                  CommitUser author,
+                  CommitUser committer)
+    {
+        this.Id = id;
+        this.Sha = sha;
+        this.TreeId = treeId;
+        this.Distinct = distinct;
+        this.Message = message;
+        this.TimeStamp = timeStamp;
+        this.Url = url;
+        this.Added = added;
+        this.Removed = removed;
+        this.Modified = modified;
+        this.Author = author;
+        this.Committer = committer;
+    }
+
     [JsonPropertyName(name: "id")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Id { get; set; } = default!;
+    public string Id { get; }
 
     [JsonPropertyName(name: "sha")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Sha { get; set; } = default!;
+    public string Sha { get; }
 
     [JsonPropertyName(name: "tree_id")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string TreeId { get; set; } = default!;
+    public string TreeId { get; }
 
     [JsonPropertyName(name: "distinct")]
-    public bool Distinct { get; set; }
+    public bool Distinct { get; }
 
     [JsonPropertyName(name: "message")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Message { get; set; } = default!;
+    public string Message { get; }
 
     [JsonPropertyName(name: "timestamp")]
-    public DateTime TimeStamp { get; set; }
+    public DateTime TimeStamp { get; }
 
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
     [JsonPropertyName(name: "url")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Url { get; set; } = default!;
+    public string Url { get; }
 
     [JsonPropertyName(name: "added")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public IReadOnlyList<string> Added { get; set; } = default!;
+    public IReadOnlyList<string> Added { get; }
 
     [JsonPropertyName(name: "removed")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public IReadOnlyList<string> Removed { get; set; } = default!;
+    public IReadOnlyList<string> Removed { get; }
 
     [JsonPropertyName(name: "modified")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public IReadOnlyList<string> Modified { get; set; } = default!;
+    public IReadOnlyList<string> Modified { get; }
 
     [JsonPropertyName(name: "author")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public CommitUser Author { get; set; } = default!;
+    public CommitUser Author { get; }
 
     [JsonPropertyName(name: "committer")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public CommitUser Committer { get; set; } = default!;
+
+    public CommitUser Committer { get; }
 }

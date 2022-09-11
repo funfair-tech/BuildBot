@@ -1,11 +1,15 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Branch
 {
+    [JsonConstructor]
+    public Branch(string name)
+    {
+        this.Name = name;
+    }
+
     [JsonPropertyName(name: "name")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Name { get; set; } = default!;
+    public string Name { get; }
 }

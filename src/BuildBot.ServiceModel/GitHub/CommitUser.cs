@@ -1,19 +1,23 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class CommitUser
 {
+    [JsonConstructor]
+    public CommitUser(string name, string email, string? username)
+    {
+        this.Name = name;
+        this.Email = email;
+        this.Username = username;
+    }
+
     [JsonPropertyName(name: "name")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Name { get; set; } = default!;
+    public string Name { get; }
 
     [JsonPropertyName(name: "email")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Email { get; set; } = default!;
+    public string Email { get; }
 
     [JsonPropertyName(name: "username")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string? Username { get; set; }
+    public string? Username { get; }
 }

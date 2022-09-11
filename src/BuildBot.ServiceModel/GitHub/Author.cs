@@ -1,11 +1,17 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
+[DebuggerDisplay("{Login}")]
 public sealed class Author
 {
+    [JsonConstructor]
+    public Author(string login)
+    {
+        this.Login = login;
+    }
+
     [JsonPropertyName(name: "login")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Login { get; set; } = default!;
+    public string Login { get; }
 }

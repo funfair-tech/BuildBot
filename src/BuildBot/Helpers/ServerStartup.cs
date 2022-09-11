@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -13,14 +12,12 @@ namespace BuildBot.Helpers;
 /// <summary>
 ///     Server Startup
 /// </summary>
-[SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "TODO: Add unit tests")]
 internal static class ServerStartup
 {
     /// <summary>
     ///     Set Thread details.
     /// </summary>
     /// <param name="minThreads">Minimum number of threads</param>
-    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
     public static void SetThreads(int minThreads)
     {
         ThreadPool.GetMinThreads(out int minWorker, out int minIoc);
@@ -55,7 +52,6 @@ internal static class ServerStartup
     /// <param name="h2Port">The H2P port to listen on; 0 = do not listen on this port.</param>
     /// <param name="configurationFiledPath">Path to configuration files.</param>
     /// <returns>Host.</returns>
-    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
     public static IHost CreateWebHost<TStartup>(string[] args, int httpPort, int httpsPort, int h2Port, string configurationFiledPath)
         where TStartup : class
     {
@@ -114,7 +110,7 @@ internal static class ServerStartup
         }
         else
         {
-            // TODO Enable HTTP3 when it isn't a preview feature
+            // Enable HTTP3 when it isn't a preview feature
             listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
             listenOptions.UseHttps(fileName: certFile);
         }

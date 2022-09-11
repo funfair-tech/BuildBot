@@ -1,15 +1,19 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Ping
 {
+    [JsonConstructor]
+    public Ping(string zen, string hookId)
+    {
+        this.Zen = zen;
+        this.HookId = hookId;
+    }
+
     [JsonPropertyName(name: "zen")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Zen { get; set; } = default!;
+    public string Zen { get; }
 
     [JsonPropertyName(name: "hook_id")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string HookId { get; set; } = default!;
+    public string HookId { get; }
 }

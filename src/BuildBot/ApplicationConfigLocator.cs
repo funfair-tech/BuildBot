@@ -1,18 +1,19 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace BuildBot;
 
 /// <summary>
-///     Application configuration helpers
+///     Locator of the application configuration
 /// </summary>
-public static class ApplicationConfig
+[SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "Used in exe code. Not possible to unit test.")]
+public static class ApplicationConfigLocator
 {
-    // really should be using AppContext.BaseDirectory, but this seems to break sometimes when running unit tests with dotnet-xuint.
-
     /// <summary>
     ///     The base path of the folder with the configuration files in them.
     /// </summary>
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Used in exe code. Not possible to unit test.")]
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
     private static string LookupConfigurationFilesPath()
@@ -30,7 +31,7 @@ public static class ApplicationConfig
 
     private static string? LookupAppSettingsLocationByAssemblyName()
     {
-        string location = AppLocation();
+        string location = AppContext.BaseDirectory;
 
         string? path = Path.GetDirectoryName(location);
 
@@ -45,10 +46,5 @@ public static class ApplicationConfig
         }
 
         return path;
-    }
-
-    private static string AppLocation()
-    {
-        return ApplicationConfigLocator.ConfigurationFilesPath;
     }
 }

@@ -1,22 +1,30 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Repository
 {
+    [JsonConstructor]
+    public Repository(int id, string name, string fullName, Owner owner)
+    {
+        this.Id = id;
+        this.Name = name;
+        this.FullName = fullName;
+        this.Owner = owner;
+    }
+
     [JsonPropertyName(name: "id")]
-    public int Id { get; set; }
+    public int Id { get; }
 
     [JsonPropertyName(name: "name")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Name { get; set; } = default!;
+
+    public string Name { get; }
 
     [JsonPropertyName(name: "full_name")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string FullName { get; set; } = default!;
+
+    public string FullName { get; }
 
     [JsonPropertyName(name: "owner")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Owner Owner { get; set; } = default!;
+
+    public Owner Owner { get; }
 }

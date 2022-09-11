@@ -6,36 +6,49 @@ namespace BuildBot.ServiceModel.GitHub;
 
 public sealed class Push
 {
+    [JsonConstructor]
+    public Push(string @ref, string before, string after, Commit headCommit, IReadOnlyList<Commit> commits, Repository repository, Pusher pusher, string compareUrl)
+    {
+        this.Ref = @ref;
+        this.Before = before;
+        this.After = after;
+        this.HeadCommit = headCommit;
+        this.Commits = commits;
+        this.Repository = repository;
+        this.Pusher = pusher;
+        this.CompareUrl = compareUrl;
+    }
+
     [JsonPropertyName(name: "ref")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Ref { get; set; } = default!;
+
+    public string Ref { get; }
 
     [JsonPropertyName(name: "before")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string Before { get; set; } = default!;
+
+    public string Before { get; }
 
     [JsonPropertyName(name: "after")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string After { get; set; } = default!;
+
+    public string After { get; }
 
     [JsonPropertyName(name: "head_commit")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Commit HeadCommit { get; set; } = default!;
+
+    public Commit HeadCommit { get; }
 
     [JsonPropertyName(name: "commits")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public IReadOnlyList<Commit> Commits { get; set; } = default!;
+
+    public IReadOnlyList<Commit> Commits { get; }
 
     [JsonPropertyName(name: "repository")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Repository Repository { get; set; } = default!;
+
+    public Repository Repository { get; }
 
     [JsonPropertyName(name: "pusher")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public Pusher Pusher { get; set; } = default!;
+
+    public Pusher Pusher { get; }
 
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
     [JsonPropertyName(name: "compare")]
-    [SuppressMessage(category: "ReSharper", checkId: "RedundantDefaultMemberInitializer", Justification = "TODO: Review")]
-    public string CompareUrl { get; set; } = default!;
+
+    public string CompareUrl { get; }
 }
