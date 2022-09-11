@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octopus.Client;
 using Serilog;
+using Serilog.Enrichers.Sensitive;
 
 namespace BuildBot;
 
@@ -31,6 +32,12 @@ public sealed class Startup
         env.ContentRootFileProvider = new NullFileProvider();
 
         Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
+                                              .Enrich.WithSensitiveDataMasking()
+                                              .Enrich.WithDemystifiedStackTraces()
+                                              .Enrich.FromLogContext()
+                                              .Enrich.WithMachineName()
+                                              .Enrich.WithProcessId()
+                                              .Enrich.WithThreadId()
                                               .WriteTo.Console()
                                               .CreateLogger();
 
