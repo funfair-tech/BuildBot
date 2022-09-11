@@ -40,33 +40,18 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="buildbot-config.json"/>
-    <Content Remove="token.json"/>
-    <Content Update="appsettings.Production.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </Content>
     <Content Update="appsettings-local.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Update="buildbot-config.json" Condition="Exists('buildbot-config.json')">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </Content>
-    <Content Update="appsettings.json" Condition="Exists('buildbot-config.json')">
+    <Content Update="appsettings.json" Condition="Exists('appsettings.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="buildbot-config.json" DestinationFiles="$(OutDir)\buildbot-config.json" SkipUnchangedFiles="true" Condition="Exists('buildbot-config.json')" />
-  </Target>
   <Target Name="PrePublish" BeforeTargets="PrepareForPublish">
-    <Copy SourceFiles="buildbot-config.json.template" DestinationFiles="$(PublishDir)\buildbot-config.json" SkipUnchangedFiles="true" />
     <Copy SourceFiles="appsettings.json" DestinationFiles="$(PublishDir)\appsettings.json" SkipUnchangedFiles="true" />
   </Target>
   <ItemGroup>
