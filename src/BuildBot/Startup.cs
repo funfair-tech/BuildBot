@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using BuildBot.Discord;
@@ -54,11 +53,9 @@ public sealed class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        DiscordBotConfiguration botConfiguration = LoadDiscordConfig();
-        string uri = this.Configuration[@"ServerOctopus:Url"] ?? string.Empty;
-        string apiKey = this.Configuration[@"ServerOctopus:ApiKey"] ?? string.Empty;
+        DiscordBotConfiguration botConfiguration = this.LoadDiscordConfig();
+        OctopusServerEndpoint ose = this.LoadOctopusServerEndpoint();
 
-        OctopusServerEndpoint ose = new(octopusServerAddress: uri, apiKey: apiKey);
         services.AddLogging()
                 .AddHttpLogging(options => options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.RequestBody)
                 .AddSingleton(botConfiguration)
@@ -101,17 +98,25 @@ public sealed class Startup
                 .AddJsonOptions(configure: options => JsonSerialiser.Configure(options.JsonSerializerOptions));
     }
 
-    private static DiscordBotConfiguration LoadDiscordConfig()
+    private OctopusServerEndpoint LoadOctopusServerEndpoint()
     {
-        string configFile = Path.Combine(path1: ApplicationConfig.ConfigurationFilesPath, path2: "buildbot-config.json");
+        string uri = this.Configuration[@"ServerOctopus:Url"] ?? string.Empty;
+        string apiKey = this.Configuration[@"ServerOctopus:ApiKey"] ?? string.Empty;
 
-#if DEBUG
-        if (!File.Exists(configFile))
-        {
-            return new();
-        }
-#endif
-        return DiscordBotConfiguration.Load(configFile);
+        OctopusServerEndpoint ose = new(octopusServerAddress: uri, apiKey: apiKey);
+
+        return ose;
+    }
+
+    private DiscordBotConfiguration LoadDiscordConfig()
+    {
+        return new()
+               {
+                   Server = this.Configuration[@"Discord:Server"] ?? string.Empty,
+                   Channel = this.Configuration[@"Discord:Channel"] ?? string.Empty,
+                   ReleaseChannel = this.Configuration[@"Discord:ReleaseChannel"] ?? string.Empty,
+                   Token = this.Configuration[@"Discord:Token"] ?? string.Empty
+               };
     }
 
     /// <summary>
