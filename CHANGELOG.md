@@ -9,20 +9,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
-- FF-1429 - Updated Octopus.Client to 13.2.130
-- FF-1429 - Updated Octopus.Client to 13.2.145
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.44.0.52574
-- FF-1429 - Updated Octopus.Client to 13.2.146
-- FF-1429 - Updated Octopus.Client to 13.2.147
-- FF-1429 - Updated Octopus.Client to 13.2.148
-- FF-1429 - Updated Octopus.Client to 13.2.153
-- FF-1429 - Updated Octopus.Client to 13.2.158
-- FF-1429 - Updated Octopus.Client to 13.2.161
 - FF-1429 - Updated Discord.Net to 3.8.0
 - FF-1429 - Updated Octopus.Client to 13.2.172
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
-- FF-1429 - Updated Octopus.Client to 13.2.185
-- FF-1429 - Updated Octopus.Client to 14.0.188
 - FF-1429 - Updated Serilog.Sinks.Console to 4.1.0
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.9.0.1493
 - FF-1429 - Updated Octopus.Client to 14.1.191
