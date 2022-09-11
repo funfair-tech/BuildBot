@@ -43,6 +43,7 @@ public sealed class Startup
 
         this.Configuration = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
                                                        .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
+                                                       .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
                                                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
                                                        .AddEnvironmentVariables()
                                                        .Build();
