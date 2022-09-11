@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.Octopus;
 
 public sealed class DeploymentEvent
 {
+    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]
     public DeploymentEvent(string id,
                            string category,
@@ -13,7 +15,7 @@ public sealed class DeploymentEvent
                            bool isService,
                            string identityEstablishedWith,
                            string userAgent,
-                           in DateTime occurred,
+                           DateTime occurred,
                            string message,
                            string messageHtml,
                            DeployMessageReference[] messageReferences,

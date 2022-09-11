@@ -6,8 +6,9 @@ namespace BuildBot.ServiceModel.Octopus;
 
 public sealed class DeployPayload
 {
+    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]
-    public DeployPayload(string serverUri, string serverAuditUri, in DateTime batchProcessingDate, DeploymentPayloadSubscription? subscription, DeploymentEvent? @event)
+    public DeployPayload(string serverUri, string serverAuditUri, DateTime batchProcessingDate, DeploymentPayloadSubscription? subscription, DeploymentEvent? @event)
     {
         this.ServerUri = serverUri;
         this.ServerAuditUri = serverAuditUri;

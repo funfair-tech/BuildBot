@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
@@ -14,14 +13,12 @@ using BuildBot.ServiceModel.Octopus;
 using BuildBot.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Octopus.Client;
 using Serilog;
 
@@ -126,8 +123,6 @@ public sealed class Startup
     [SuppressMessage(category: "Microsoft.Performance", checkId: "CA1822:MarkMembersAsStatic", Justification = "Can't be static as called by the runtime.")]
     public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifeTime)
     {
-        RegisterEthereumNetworkConverter(app.ApplicationServices);
-
         loggerFactory.AddSerilog();
         applicationLifeTime.ApplicationStopping.Register(Log.CloseAndFlush);
 
@@ -137,12 +132,5 @@ public sealed class Startup
            .UseRouting()
            .UseMiddleware<GitHubMiddleware>()
            .UseEndpoints(configure: endpoints => endpoints.MapControllers());
-    }
-
-    private static void RegisterEthereumNetworkConverter(IServiceProvider serviceProvider)
-    {
-        IOptions<JsonOptions> mvcJsonOptions = serviceProvider.GetRequiredService<IOptions<JsonOptions>>();
-
-        JsonSerialiser.ConfigureContext(mvcJsonOptions.Value.JsonSerializerOptions);
     }
 }

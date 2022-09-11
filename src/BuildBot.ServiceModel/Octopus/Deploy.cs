@@ -1,14 +1,15 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.Octopus;
 
 //https://octopus.com/blog/notifications-with-subscriptions-and-webhooks
-[JsonSourceGenerationOptionsAttribute(GenerationMode = JsonSourceGenerationMode.Serialization)]
 public sealed class Deploy
 {
+    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]
-    public Deploy(in DateTime timestamp, string eventType, DeployPayload? payload)
+    public Deploy(DateTime timestamp, string eventType, DeployPayload? payload)
     {
         this.Timestamp = timestamp;
         this.EventType = eventType;
