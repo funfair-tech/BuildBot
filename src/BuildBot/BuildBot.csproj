@@ -70,9 +70,10 @@
     <Copy SourceFiles="appsettings.json" DestinationFiles="$(PublishDir)\appsettings.json" SkipUnchangedFiles="true" />
   </Target>
   <ItemGroup>
-    <TrimmerRootAssembly Include="System.Resources.Writer" />
-    <TrimmerRootAssembly Include="System.Transactions" />
-    <TrimmerRootAssembly Include="System.Diagnostics.FileVersionInfo" />
+    <TrimmerRootAssembly Include="System.Web.HttpUtility"/>
+    <TrimmerRootAssembly Include="System.Diagnostics.FileVersionInfo"/>
+    <TrimmerRootAssembly Include="System.Resources.Writer"/>
+    <TrimmerRootAssembly Include="System.Runtime"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
