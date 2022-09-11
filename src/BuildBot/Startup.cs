@@ -41,12 +41,11 @@ public sealed class Startup
                                               .WriteTo.Console()
                                               .CreateLogger();
 
-        IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
-                                                                  .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
-                                                                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
-                                                                  .AddEnvironmentVariables();
-
-        this.Configuration = builder.Build();
+        this.Configuration = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
+                                                       .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
+                                                       .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+                                                       .AddEnvironmentVariables()
+                                                       .Build();
     }
 
     public IConfigurationRoot Configuration { get; }
@@ -54,31 +53,30 @@ public sealed class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddLogging()
-                .AddHttpLogging(options => { options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.RequestBody; });
-
         DiscordBotConfiguration botConfiguration = LoadDiscordConfig();
-        services.AddSingleton(botConfiguration);
-
-        // register the bot for DI
-        services.AddSingleton<IDiscordBot, DiscordBot>()
-                .AddSingleton(x => (DiscordBot)x.GetRequiredService<IDiscordBot>());
-
-        // register publishers
-        services.AddSingleton<IPublisher<Push>, PushPublisher>()
-                .AddSingleton<IPublisher<Status>, StatusPublisher>()
-                .AddSingleton<IPublisher<Deploy>, DeployPublisher>()
-                .AddSingleton<IOctopusClientFactory, OctopusClientFactory>();
-
         string uri = this.Configuration[@"ServerOctopus:Url"] ?? string.Empty;
         string apiKey = this.Configuration[@"ServerOctopus:ApiKey"] ?? string.Empty;
 
         OctopusServerEndpoint ose = new(octopusServerAddress: uri, apiKey: apiKey);
+        services.AddLogging()
+                .AddHttpLogging(options => options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.RequestBody)
+                .AddSingleton(botConfiguration)
 
-        services.AddSingleton(ose);
+                // register the bot for DI
+                .AddSingleton<IDiscordBot, DiscordBot>()
+                .AddSingleton(x => (DiscordBot)x.GetRequiredService<IDiscordBot>())
 
-        // Add framework services
-        services.Configure<GzipCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
+                // register publishers
+                .AddSingleton<IPublisher<Push>, PushPublisher>()
+                .AddSingleton<IPublisher<Status>, StatusPublisher>()
+                .AddSingleton<IPublisher<Deploy>, DeployPublisher>()
+                .AddSingleton<IOctopusClientFactory, OctopusClientFactory>()
+                .AddSingleton(ose)
+                .AddHostedService<BotService>()
+                .AddRouting()
+
+                // Add framework services
+                .Configure<GzipCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
                 .Configure<BrotliCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
                 .AddResponseCompression(configureOptions: options =>
                                                           {
@@ -100,10 +98,6 @@ public sealed class Startup
                                                 // Note Additional ModelMetadata providers that require DI are enabled elsewhere
                                             })
                 .AddJsonOptions(configure: options => JsonSerialiser.Configure(options.JsonSerializerOptions));
-
-        services.AddRouting();
-
-        services.AddHostedService<BotService>();
     }
 
     private static DiscordBotConfiguration LoadDiscordConfig()
