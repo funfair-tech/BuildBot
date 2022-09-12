@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.9.0.1493
 - Dotnet 7 initial support
 - FF-1429 - Updated Octopus.Client to 14.1.206
+- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.2.0
 ### Removed
 ### Deployment Changes
 
