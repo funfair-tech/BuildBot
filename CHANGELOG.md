@@ -14,8 +14,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
 - FF-1429 - Updated Serilog.Sinks.Console to 4.1.0
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.9.0.1493
-- FF-1429 - Updated Octopus.Client to 14.1.191
 - Dotnet 7 initial support
+- FF-1429 - Updated Octopus.Client to 14.1.206
 ### Removed
 ### Deployment Changes
 
