@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.2.0
 - FF-1429 - Updated Serilog to 2.12.0
 - FF-1429 - Updated Microsoft.Extensions to 6.0.2
+- FF-3881 - Updated DotNet SDK to 6.0.401
 ### Removed
 ### Deployment Changes
 
@@ -30,7 +31,6 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 - FF-1429 - Updated xunit.analyzers to 1.0.0
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.43.0.51858
 - FF-1429 - Updated Octopus.Client to 13.0.4061
-- FF-3881 - Updated DotNet SDK to 6.0.400
 
 ## [1.3.46] - 2022-07-31
 ### Changed
