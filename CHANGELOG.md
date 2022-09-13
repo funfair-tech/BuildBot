@@ -17,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dotnet 7 initial support
 - FF-1429 - Updated Octopus.Client to 14.1.206
 - FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.2.0
+- FF-1429 - Updated Serilog to 2.12.0
 ### Removed
 ### Deployment Changes
 
