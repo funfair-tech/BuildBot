@@ -18,6 +18,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 14.1.206
 - FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.2.0
 - FF-1429 - Updated Serilog to 2.12.0
+- FF-1429 - Updated Microsoft.Extensions to 6.0.2
 ### Removed
 ### Deployment Changes
 
@@ -142,7 +143,6 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 ### Changed
 - FF-1429 - Updated Octopus.Client to 11.6.3682
 - FF-1429 - Updated Octopus.Client to 12.0.3685
-- FF-1429 - Updated Microsoft.Extensions to 6.0.1
 - FF-1429 - Updated FunFair.Test.Common to 5.9.3.1699
 - FF-1429 - Updated Discord.Net to 3.4.1
 - FF-1429 - Updated Discord.Net.Analyzers to 3.4.1
