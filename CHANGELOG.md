@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- FF-1429 - Updated Octopus.Client to 14.1.216
 ### Removed
 ### Deployment Changes
 
@@ -23,7 +24,6 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 - FF-1429 - Updated Serilog.Sinks.Console to 4.1.0
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.9.0.1493
 - Dotnet 7 initial support
-- FF-1429 - Updated Octopus.Client to 14.1.206
 - FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.2.0
 - FF-1429 - Updated Serilog to 2.12.0
 - FF-1429 - Updated Microsoft.Extensions to 6.0.2
