@@ -8,8 +8,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated Octopus.Client to 14.1.216
 - FF-1429 - Updated Discord.Net to 3.8.1
+- FF-1429 - Updated Octopus.Client to 14.1.221
 ### Removed
 ### Deployment Changes
 
