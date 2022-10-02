@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 14.1.221
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.45.0.54064
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.2
+- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.3.0
 ### Removed
 ### Deployment Changes
 
