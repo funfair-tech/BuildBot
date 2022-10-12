@@ -31,7 +31,19 @@ public sealed class Startup
         env.ContentRootFileProvider = new NullFileProvider();
 
         Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
-                                              .Enrich.WithSensitiveDataMasking()
+                                              .Enrich.WithSensitiveDataMasking(options =>
+                                                                               {
+                                                                                   options.Mode = MaskingMode.Globally;
+                                                                                   options.MaskingOperators = new()
+                                                                                                              {
+                                                                                                                  new EmailAddressMaskingOperator(),
+                                                                                                                  new CreditCardMaskingOperator(),
+                                                                                                                  new IbanMaskingOperator()
+
+                                                                                                                  // need to find a sane way of adding these
+                                                                                                              };
+                                                                                   options.MaskValue = "**MASKED*";
+                                                                               })
                                               .Enrich.WithDemystifiedStackTraces()
                                               .Enrich.FromLogContext()
                                               .Enrich.WithMachineName()
@@ -86,9 +98,9 @@ public sealed class Startup
 
                                                               // Add Custom mime types
                                                               options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                                                                  {
-                                                                      "image/svg+xml"
-                                                                  });
+                                                                                                                               {
+                                                                                                                                   "image/svg+xml"
+                                                                                                                               });
                                                           })
                 .AddMvc()
                 .AddMvcOptions(setupAction: _ =>
