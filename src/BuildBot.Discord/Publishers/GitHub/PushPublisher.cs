@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
@@ -20,7 +21,7 @@ public sealed class PushPublisher : IPublisher<Push>
     }
 
     /// <inheritdoc />
-    public async Task PublishAsync(Push message)
+    public async Task PublishAsync(Push message, CancellationToken cancellationToken)
     {
         // only publish Push messages if there are commits, otherwise we'll be publishing
         // all the tagging that goes on.
@@ -64,8 +65,7 @@ public sealed class PushPublisher : IPublisher<Push>
         {
             static bool IsPackageUpdate(Commit c)
             {
-                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) ||
-                       c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
+                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) || c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
             }
 
             if (message.Commits.Any(predicate: IsPackageUpdate))
