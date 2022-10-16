@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Publishers;
 using BuildBot.ServiceModel.Octopus;
@@ -35,8 +36,8 @@ public sealed class OctopusController : ControllerBase
 
     [HttpPost]
     [Route(template: "deploy")]
-    public Task<IActionResult> PushAsync([FromBody] Deploy request)
+    public Task<IActionResult> PushAsync([FromBody] Deploy request, CancellationToken cancellationToken)
     {
-        return this.ProcessAsync(action: () => this._deployPublisher.PublishAsync(request));
+        return this.ProcessAsync(action: () => this._deployPublisher.PublishAsync(message: request, cancellationToken: cancellationToken));
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
@@ -14,7 +15,7 @@ public sealed class StatusPublisher : IPublisher<Status>
         this._bot = bot;
     }
 
-    public async Task PublishAsync(Status message)
+    public async Task PublishAsync(Status message, CancellationToken cancellationToken)
     {
         if (message.State == "pending")
         {

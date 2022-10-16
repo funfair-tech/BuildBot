@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Publishers;
 using BuildBot.ServiceModel.GitHub;
@@ -46,15 +47,15 @@ public sealed class GitHubController : ControllerBase
 
     [HttpPost]
     [Route(template: "push")]
-    public Task<IActionResult> PushAsync([FromBody] Push request)
+    public Task<IActionResult> PushAsync([FromBody] Push request, CancellationToken cancellationToken)
     {
-        return this.ProcessAsync(action: () => this._pushPublisher.PublishAsync(request));
+        return this.ProcessAsync(action: () => this._pushPublisher.PublishAsync(message: request, cancellationToken: cancellationToken));
     }
 
     [HttpPost]
     [Route(template: "status")]
-    public Task<IActionResult> StatusAsync([FromBody] Status request)
+    public Task<IActionResult> StatusAsync([FromBody] Status request, CancellationToken cancellationToken)
     {
-        return this.ProcessAsync(action: () => this._statusPublisher.PublishAsync(request));
+        return this.ProcessAsync(action: () => this._statusPublisher.PublishAsync(message: request, cancellationToken: cancellationToken));
     }
 }

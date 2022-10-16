@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.Octopus;
 using Discord;
@@ -35,7 +36,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task PublishAsync(Deploy message)
+    public Task PublishAsync(Deploy message, CancellationToken cancellationToken)
     {
         DeployPayload? payload = message.Payload;
 
@@ -44,10 +45,10 @@ public sealed class DeployPublisher : IPublisher<Deploy>
             return Task.CompletedTask;
         }
 
-        return this.PublishPayloadAsync(payload);
+        return this.PublishPayloadAsync(payload: payload, cancellationToken: cancellationToken);
     }
 
-    private async Task PublishPayloadAsync(DeployPayload payload)
+    private async Task PublishPayloadAsync(DeployPayload payload, CancellationToken cancellationToken)
     {
         IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
@@ -59,15 +60,15 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         string? deploymentId = FindDocumentId(payload: payload, documentPrefix: "Deployments-");
         string? tenantId = FindDocumentId(payload: payload, documentPrefix: "Tenants-");
 
-        ProjectResource? project = await client.Repository.Projects.Get(projectId);
-        ReleaseResource? release = await client.Repository.Releases.Get(releaseId);
-        EnvironmentResource? environment = await client.Repository.Environments.Get(environmentId);
+        ProjectResource? project = await client.Repository.Projects.Get(idOrHref: projectId, cancellationToken: cancellationToken);
+        ReleaseResource? release = await client.Repository.Releases.Get(idOrHref: releaseId, cancellationToken: cancellationToken);
+        EnvironmentResource? environment = await client.Repository.Environments.Get(idOrHref: environmentId, cancellationToken: cancellationToken);
 
         TenantResource? tenant = null;
 
         if (!string.IsNullOrWhiteSpace(tenantId))
         {
-            tenant = await client.Repository.Tenants.Get(tenantId);
+            tenant = await client.Repository.Tenants.Get(idOrHref: tenantId, cancellationToken: cancellationToken);
         }
 
         string? projectName = NormalizeProjectName(project: project, projectId: projectId);
@@ -89,12 +90,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -128,12 +124,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -166,12 +157,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";

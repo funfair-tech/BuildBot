@@ -50,10 +50,7 @@ public sealed class DiscordBot : IDiscordBot
     {
         using (socketTextChannel.EnterTypingState())
         {
-            EmbedAuthorBuilder authorBuilder = new()
-                                               {
-                                                   Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
-                                               };
+            EmbedAuthorBuilder authorBuilder = new() { Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png" };
             builder.WithAuthor(authorBuilder);
 
             await socketTextChannel.SendMessageAsync(text: string.Empty, embed: builder.Build());
