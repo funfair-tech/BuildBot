@@ -98,9 +98,9 @@ public sealed class Startup
 
                                                               // Add Custom mime types
                                                               options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                                                                                                                               {
-                                                                                                                                   "image/svg+xml"
-                                                                                                                               });
+                                                                  {
+                                                                      "image/svg+xml"
+                                                                  });
                                                           })
                 .AddMvc()
                 .AddMvcOptions(setupAction: _ =>
