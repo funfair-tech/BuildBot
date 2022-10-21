@@ -8,14 +8,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated SonarAnalyzer.CSharp to 8.47.0.55603
-- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.5.1
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.50] - 2022-10-21
+### Changed
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.47.0.55603
+- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.5.1
+
 ## [1.3.49] - 2022-10-17
 ### Changed
 - FF-1429 - Updated Discord.Net to 3.8.1
