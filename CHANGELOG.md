@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.48
+- FF-1429 - Updated Octopus.Client to 14.2.281
 ### Removed
 ### Deployment Changes
 
