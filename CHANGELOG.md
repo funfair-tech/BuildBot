@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- FF-1429 - Updated coverlet to 3.2.0
 ### Removed
 ### Deployment Changes
 
