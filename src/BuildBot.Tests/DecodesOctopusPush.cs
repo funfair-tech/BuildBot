@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using BuildBot.Json;
 using BuildBot.ServiceModel.Octopus;
@@ -131,6 +132,7 @@ public sealed class DecodesOctopusPush : LoggingTestBase
     private static JsonSerializerOptions SerializerOptionsWithContext { get; } = JsonSerialiser.Configure(new());
 
     [Fact]
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071:DuplicateCodeDetection", Justification = "Test code")]
     public void Decode()
     {
         Deploy packet = AssertReallyNotNull(JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptions));

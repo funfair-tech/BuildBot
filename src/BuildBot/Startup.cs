@@ -98,9 +98,9 @@ public sealed class Startup
 
                                                               // Add Custom mime types
                                                               options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                                                                  {
-                                                                      "image/svg+xml"
-                                                                  });
+                                                                                                                               {
+                                                                                                                                   "image/svg+xml"
+                                                                                                                               });
                                                           })
                 .AddMvc()
                 .AddMvcOptions(setupAction: _ =>
@@ -137,6 +137,8 @@ public sealed class Startup
     /// <remarks>This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</remarks>
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Called by the runtime")]
     [SuppressMessage(category: "Microsoft.Performance", checkId: "CA1822:MarkMembersAsStatic", Justification = "Can't be static as called by the runtime.")]
+    [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make static", Justification = "Called by the runtime")]
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE007: Handle dispose correctly", Justification = "Called by the runtime")]
     public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifeTime)
     {
         loggerFactory.AddSerilog();
