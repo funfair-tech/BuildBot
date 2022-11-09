@@ -12,7 +12,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-3881 - Updated DotNet SDK to 7.0.100
 - FF-1429 - Updated AsyncFixer to 1.6.0
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.9.0.1493
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.745
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.4.27
 - FF-1429 - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 1.1.7
 - FF-1429 - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.29
@@ -21,6 +20,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.48.0.56517
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.0
 - FF-1429 - Updated Octopus.Client to 14.2.303
+- FF-1429 - Updated Meziantou.Analyzer to 1.0.746
 ### Removed
 ### Deployment Changes
 
