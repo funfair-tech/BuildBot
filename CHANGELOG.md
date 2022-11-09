@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated coverlet to 3.2.0
 - FF-1429 - Updated Roslynator.Analyzers to 4.1.2
 - FF-3881 - Updated DotNet SDK to 7.0.100
+- FF-1429 - Updated AsyncFixer to 1.6.0
 ### Removed
 ### Deployment Changes
 
