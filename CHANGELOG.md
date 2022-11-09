@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Roslynator.Analyzers to 4.1.2
 - FF-1429 - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.7
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.48.0.56517
+- FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.0
 ### Removed
 ### Deployment Changes
 
