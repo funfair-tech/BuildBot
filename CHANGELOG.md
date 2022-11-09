@@ -21,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Octopus.Client to 14.2.303
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.746
 - FF-1429 - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.30
+- FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 0.0.8.10
 ### Removed
 ### Deployment Changes
 
