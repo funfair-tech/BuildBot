@@ -8,15 +8,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated FunFair.Test.Common to 6.0.8.2334
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.748
-- FF-1429 - Updated Octopus.Client to 14.2.319
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.53] - 2022-11-17
+### Changed
+- FF-1429 - Updated FunFair.Test.Common to 6.0.8.2334
+- FF-1429 - Updated Meziantou.Analyzer to 1.0.748
+- FF-1429 - Updated Octopus.Client to 14.2.319
+
 ## [1.3.52] - 2022-11-10
 ### Changed
 - FF-1429 - Updated coverlet to 3.2.0
