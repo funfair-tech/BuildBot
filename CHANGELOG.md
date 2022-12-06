@@ -8,17 +8,20 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.756
-- FF-1429 - Updated Roslynator.Analyzers to 4.2.0
-- FF-1429 - Updated xunit.analyzers to 1.1.0
-- FF-1429 - Updated SonarAnalyzer.CSharp to 8.50.0.58025
-- FF-1429 - Updated Octopus.Client to 14.3.365
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.58] - 2022-12-06
+### Changed
+- FF-1429 - Updated Meziantou.Analyzer to 1.0.756
+- FF-1429 - Updated Roslynator.Analyzers to 4.2.0
+- FF-1429 - Updated xunit.analyzers to 1.1.0
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.50.0.58025
+- FF-1429 - Updated Octopus.Client to 14.3.365
+
 ## [1.3.57] - 2022-11-25
 ### Changed
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.752
