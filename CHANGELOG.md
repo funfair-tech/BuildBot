@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.51.0.59060
+- FF-1429 - Updated Octopus.Client to 14.3.407
 ### Removed
 ### Deployment Changes
 
