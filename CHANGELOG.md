@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated FunFair.Test.Common to 6.0.18.2581
+- FF-1429 - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 ### Removed
 ### Deployment Changes
 
