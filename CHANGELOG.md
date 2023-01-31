@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.14
 - FF-1429 - Updated Octopus.Client to 14.3.459
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.52.0.60960
 ### Removed
 ### Deployment Changes
 
