@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
+- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.7.1
 ### Removed
 ### Deployment Changes
 
