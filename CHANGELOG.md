@@ -8,14 +8,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
-- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.7.1
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.75] - 2023-02-04
+### Changed
+- FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
+- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.7.1
+
 ## [1.3.74] - 2023-02-01
 ### Changed
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.14
