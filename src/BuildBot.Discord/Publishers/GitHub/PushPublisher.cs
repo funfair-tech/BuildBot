@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,6 +14,12 @@ namespace BuildBot.Discord.Publishers.GitHub;
 /// </summary>
 public sealed class PushPublisher : IPublisher<Push>
 {
+    private static readonly IReadOnlyList<string> MainBranches = new[]
+                                                                 {
+                                                                     "main",
+                                                                     "master"
+                                                                 };
+
     private readonly IDiscordBot _bot;
 
     public PushPublisher(IDiscordBot bot)
@@ -61,12 +68,11 @@ public sealed class PushPublisher : IPublisher<Push>
 
         string branch = BranchName(message);
 
-        if (branch is "master" or "main")
+        if (IsRepoMainBranch(branch))
         {
             static bool IsPackageUpdate(Commit c)
             {
-                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) ||
-                       c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
+                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) || c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
             }
 
             if (message.Commits.Any(predicate: IsPackageUpdate))
@@ -76,6 +82,11 @@ public sealed class PushPublisher : IPublisher<Push>
         }
 
         return false;
+    }
+
+    private static bool IsRepoMainBranch(string branch)
+    {
+        return MainBranches.Contains(value: branch, comparer: StringComparer.Ordinal);
     }
 
     private static EmbedBuilder BuildPushEmbed(Push message)
