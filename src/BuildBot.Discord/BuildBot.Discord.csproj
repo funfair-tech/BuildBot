@@ -42,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="3.9.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Octopus.Client" Version="14.3.467" />
+    <PackageReference Include="Octopus.Client" Version="14.3.478" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />

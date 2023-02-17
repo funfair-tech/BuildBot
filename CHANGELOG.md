@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-3881 - Updated DotNet SDK to 7.0.200
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.15
 - FF-1429 - Updated FunFair.Test.Common to 6.0.22.2685
+- FF-1429 - Updated Octopus.Client to 14.3.478
 ### Removed
 ### Deployment Changes
 
