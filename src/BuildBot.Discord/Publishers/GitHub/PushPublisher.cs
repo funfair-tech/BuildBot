@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
@@ -99,33 +98,11 @@ public sealed class PushPublisher : IPublisher<Push>
 
         foreach (Commit commit in message.Commits)
         {
-            EmbedFieldBuilder commitFieldBuilder = new()
-                                                   {
-                                                       Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
-                                                       Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
-                                                   };
-
-            StringBuilder commitBuilder = new();
-
-            if (commit.Added.Count != 0)
-            {
-                commitBuilder.Append(commit.Added.Count)
-                             .AppendLine(" added");
-            }
-
-            if (commit.Modified.Count != 0)
-            {
-                commitBuilder.Append(commit.Modified.Count)
-                             .AppendLine(" modified");
-            }
-
-            if (commit.Removed.Count != 0)
-            {
-                commitBuilder.Append(commit.Removed.Count)
-                             .AppendLine(" removed");
-            }
-
-            builder.AddField(commitFieldBuilder);
+            builder.AddField(new EmbedFieldBuilder
+                             {
+                                 Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
+                                 Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
+                             });
         }
 
         return builder;
