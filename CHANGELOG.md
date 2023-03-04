@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.7.2
 ### Removed
 ### Deployment Changes
 
