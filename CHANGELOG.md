@@ -8,15 +8,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated FunFair.Test.Common to 6.0.26.2754
-- FF-1429 - Updated Octopus.Client to 14.3.506
-- FF-1429 - Updated SonarAnalyzer.CSharp to 8.54.0.64047
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.3.83] - 2023-03-08
+### Changed
+- FF-1429 - Updated FunFair.Test.Common to 6.0.26.2754
+- FF-1429 - Updated Octopus.Client to 14.3.506
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.54.0.64047
+
 ## [1.3.82] - 2023-03-05
 ### Changed
 - FF-1429 - Updated Serilog.Enrichers.Sensitive to 1.7.2
