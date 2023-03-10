@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octopus.Client;
 using Serilog;
+using Serilog.Core;
 using Serilog.Enrichers.Sensitive;
 
 namespace BuildBot;
@@ -30,29 +31,9 @@ public sealed class Startup
     {
         env.ContentRootFileProvider = new NullFileProvider();
 
-        Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
-                                              .Enrich.WithSensitiveDataMasking(options =>
-                                                                               {
-                                                                                   options.Mode = MaskingMode.Globally;
-                                                                                   options.MaskingOperators = new()
-                                                                                                              {
-                                                                                                                  new EmailAddressMaskingOperator(),
-                                                                                                                  new CreditCardMaskingOperator(),
-                                                                                                                  new IbanMaskingOperator()
+        Log.Logger = CreateLogger();
 
-                                                                                                                  // need to find a sane way of adding these
-                                                                                                              };
-                                                                                   options.MaskValue = "**MASKED*";
-                                                                               })
-                                              .Enrich.WithDemystifiedStackTraces()
-                                              .Enrich.FromLogContext()
-                                              .Enrich.WithMachineName()
-                                              .Enrich.WithProcessId()
-                                              .Enrich.WithThreadId()
-                                              .WriteTo.Console()
-                                              .CreateLogger();
-
-        this.Configuration = new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
+        this.Configuration = new ConfigurationBuilder().SetBasePath(ApplicationConfigLocator.ConfigurationFilesPath)
                                                        .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
                                                        .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
                                                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
@@ -61,6 +42,31 @@ public sealed class Startup
     }
 
     public IConfigurationRoot Configuration { get; }
+
+    private static Logger CreateLogger()
+    {
+        return new LoggerConfiguration().Enrich.FromLogContext()
+                                        .Enrich.WithSensitiveDataMasking(options =>
+                                                                         {
+                                                                             options.Mode = MaskingMode.Globally;
+                                                                             options.MaskingOperators = new()
+                                                                                                        {
+                                                                                                            new EmailAddressMaskingOperator(),
+                                                                                                            new CreditCardMaskingOperator(),
+                                                                                                            new IbanMaskingOperator()
+
+                                                                                                            // need to find a sane way of adding these
+                                                                                                        };
+                                                                             options.MaskValue = "**MASKED*";
+                                                                         })
+                                        .Enrich.WithDemystifiedStackTraces()
+                                        .Enrich.FromLogContext()
+                                        .Enrich.WithMachineName()
+                                        .Enrich.WithProcessId()
+                                        .Enrich.WithThreadId()
+                                        .WriteTo.Console()
+                                        .CreateLogger();
+    }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
@@ -98,9 +104,9 @@ public sealed class Startup
 
                                                               // Add Custom mime types
                                                               options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                                                                  {
-                                                                      "image/svg+xml"
-                                                                  });
+                                                                                                                               {
+                                                                                                                                   "image/svg+xml"
+                                                                                                                               });
                                                           })
                 .AddMvc()
                 .AddMvcOptions(setupAction: _ =>
