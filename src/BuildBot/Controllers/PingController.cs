@@ -18,7 +18,7 @@ public sealed class PingController : ControllerBase
     [ProducesResponseType(typeof(PongDto), (int)HttpStatusCode.OK)]
     public IActionResult Get()
     {
-        PongDto model = new() { Value = "Pong!" };
+        PongDto model = new("Pong!");
 
         return this.Ok(model);
     }

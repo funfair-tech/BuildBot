@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace BuildBot.Models;
 
@@ -8,8 +9,14 @@ namespace BuildBot.Models;
 [DebuggerDisplay(value: "{Value}")]
 public sealed class PongDto
 {
+    [JsonConstructor]
+    public PongDto(string value)
+    {
+        this.Value = value;
+    }
+
     /// <summary>
     ///     The value
     /// </summary>
-    public string Value { get; init; } = default!;
+    public string Value { get; }
 }
