@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- SDK - Updated DotNet SDK to 7.0.201
 ### Removed
 ### Deployment Changes
 
