@@ -1,32 +1,50 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace BuildBot.Helpers;
 
-/// <summary>Locator of the application configuration</summary>
+/// <summary>
+///     Locator of the application configuration
+/// </summary>
+[SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "Used in exe code. Not possible to unit test.")]
 internal static class ApplicationConfigLocator
 {
     /// <summary>
     ///     The base path of the folder with the configuration files in them.
     /// </summary>
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Used in exe code. Not possible to unit test.")]
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
     private static string LookupConfigurationFilesPath()
     {
-        return LookupAppSettingsLocationByAssemblyName() ?? Environment.CurrentDirectory;
+        string? path = LookupAppSettingsLocationByAssemblyName();
+
+        if (path == null)
+        {
+            // https://stackoverflow.com/questions/57222718/how-to-configure-self-contained-single-file-program
+            return Environment.CurrentDirectory;
+        }
+
+        return path;
     }
 
     private static string? LookupAppSettingsLocationByAssemblyName()
     {
-        string? directoryName = Path.GetDirectoryName(AppContext.BaseDirectory);
+        string location = AppContext.BaseDirectory;
 
-        if (string.IsNullOrWhiteSpace(directoryName))
+        string? path = Path.GetDirectoryName(location);
+
+        if (string.IsNullOrWhiteSpace(path))
         {
             return null;
         }
 
-        return !File.Exists(Path.Combine(path1: directoryName, path2: "appsettings.json"))
-            ? null
-            : directoryName;
+        if (!File.Exists(Path.Combine(path1: path, path2: @"appsettings.json")))
+        {
+            return null;
+        }
+
+        return path;
     }
 }
