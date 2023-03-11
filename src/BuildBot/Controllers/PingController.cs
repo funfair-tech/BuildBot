@@ -1,4 +1,5 @@
 using System.Net;
+using BuildBot.Helpers;
 using BuildBot.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +19,6 @@ public sealed class PingController : ControllerBase
     [ProducesResponseType(typeof(PongDto), (int)HttpStatusCode.OK)]
     public IActionResult Get()
     {
-        PongDto model = new("Pong!");
-
-        return this.Ok(model);
+        return this.Ok(PingPong.Model);
     }
 }
