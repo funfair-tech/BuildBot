@@ -8,13 +8,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- SDK - Updated DotNet SDK to 7.0.201
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.0] - 2023-03-11
+### Changed
+- SDK - Updated DotNet SDK to 7.0.201
+
 ## [1.3.83] - 2023-03-08
 ### Changed
 - FF-1429 - Updated FunFair.Test.Common to 6.0.26.2754
