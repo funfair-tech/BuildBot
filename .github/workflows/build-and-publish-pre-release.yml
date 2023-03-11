@@ -238,7 +238,7 @@ jobs:
           OCTOPUS_SPACE: "${{env.OCTOPUS_SPACE_NAME}}"
       - if: ${{steps.check_files.outputs.CSPROJ_EXIST == 'true' && steps.check_files.outputs.SLN_EXIST == 'true' && env.OCTOPUS_DEPLOY_PACKAGE != '' && env.OCTOPUS_CHANNEL != '' && env.GIT_BRANCH == 'refs/heads/main'}}
         name: Create Octopus Release
-        run: octopus release create --no-prompt --project "${{env.OCTOPUS_PROJECT}}" --version "${{env.BUILD_VERSION}}" --channel "${{env.OCTOPUS_CHANNEL}}" --package "${{env.OCTOPUS_DEPLOY_PACKAGE_ZIP}}-x64:${{env.BUILD_VERSION}}" --package "${{env.OCTOPUS_DEPLOY_PACKAGE_ZIP}}-arm64:${{env.BUILD_VERSION}}" $DB_PACKAGE_DEPLOY --release-notes-file="RELEASE_NOTES.md"
+        run: octopus release create --no-prompt --project "${{env.OCTOPUS_PROJECT}}" --version "${{env.BUILD_VERSION}}" --channel "${{env.OCTOPUS_CHANNEL}}" --package "${{env.OCTOPUS_DEPLOY_PACKAGE_ZIP}}-win-x64:${{env.BUILD_VERSION}}" --package "${{env.OCTOPUS_DEPLOY_PACKAGE_ZIP}}-linux-x64:${{env.BUILD_VERSION}}" --package "${{env.OCTOPUS_DEPLOY_PACKAGE_ZIP}}-linux-arm64:${{env.BUILD_VERSION}}" $DB_PACKAGE_DEPLOY --release-notes-file="RELEASE_NOTES.md"
         env:
           OCTOPUS_URL: "${{env.OCTOPUS_SERVER}}"
           OCTOPUS_API_KEY: "${{env.OCTOPUS_API_KEY}}"
