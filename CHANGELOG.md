@@ -8,16 +8,19 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- SDK - Updated DotNet SDK to 7.0.202
-- Dependencies - Updated Meziantou.Analyzer to 2.0.22
-- Dependencies - Updated Octopus.Client to 14.3.516
-- Dependencies - Updated SonarAnalyzer.CSharp to 8.55.0.65544
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.1] - 2023-03-21
+### Changed
+- SDK - Updated DotNet SDK to 7.0.202
+- Dependencies - Updated Meziantou.Analyzer to 2.0.22
+- Dependencies - Updated Octopus.Client to 14.3.516
+- Dependencies - Updated SonarAnalyzer.CSharp to 8.55.0.65544
+
 ## [1.4.0] - 2023-03-11
 ### Changed
 - SDK - Updated DotNet SDK to 7.0.201
