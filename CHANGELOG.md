@@ -10,7 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Octopus.Client to 14.3.530
 - Dependencies - Updated Discord.Net to 3.10.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.28
+- Dependencies - Updated Meziantou.Analyzer to 2.0.29
 ### Removed
 ### Deployment Changes
 
