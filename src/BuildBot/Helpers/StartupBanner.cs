@@ -4,10 +4,6 @@ namespace BuildBot.Helpers;
 
 internal static class StartupBanner
 {
-    /// <summary>
-    ///     Display the program startup banner
-    /// </summary>
-    /// <remarks>Generated from https://www.coolgenerator.com/ascii-text-generator  Font: Roman</remarks>
     public static void Show()
     {
         const string banner = @"

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -9,17 +9,9 @@ using System.Reflection;
 
 namespace BuildBot.Helpers;
 
-/// <summary>
-///     Version detection.
-/// </summary>
 [SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "Used in exe code. Not possible to unit test.")]
 internal static class VersionDetection
 {
-    /// <summary>
-    ///     Gets the program version
-    /// </summary>
-    /// <param name="programType">The type that represents the program.</param>
-    /// <returns>The program.</returns>
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Used in exe code. Not possible to unit test.")]
     public static string ProgramVersion(Type programType)
     {

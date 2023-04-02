@@ -8,9 +8,6 @@ using Discord;
 
 namespace BuildBot.Discord.Publishers.GitHub;
 
-/// <summary>
-///     Publish the GitHub "push" event to Discord
-/// </summary>
 public sealed class PushPublisher : IPublisher<Push>
 {
     private static readonly IReadOnlyList<string> MainBranches = new[]
@@ -26,7 +23,6 @@ public sealed class PushPublisher : IPublisher<Push>
         this._bot = bot;
     }
 
-    /// <inheritdoc />
     public async Task PublishAsync(Push message, CancellationToken cancellationToken)
     {
         // only publish Push messages if there are commits, otherwise we'll be publishing
@@ -71,7 +67,8 @@ public sealed class PushPublisher : IPublisher<Push>
         {
             static bool IsPackageUpdate(Commit c)
             {
-                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) || c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
+                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) ||
+                       c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
             }
 
             if (message.Commits.Any(predicate: IsPackageUpdate))

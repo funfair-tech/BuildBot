@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.Models;
 
-/// <summary>
-///     Returned after a successful call to PING!
-/// </summary>
 [DebuggerDisplay(value: "{Value}")]
 public sealed class PongDto
 {
@@ -15,8 +12,5 @@ public sealed class PongDto
         this.Value = value;
     }
 
-    /// <summary>
-    ///     The value
-    /// </summary>
     public string Value { get; }
 }

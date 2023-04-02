@@ -4,15 +4,9 @@ using System.IO;
 
 namespace BuildBot.Helpers;
 
-/// <summary>
-///     Locator of the application configuration
-/// </summary>
 [SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "Used in exe code. Not possible to unit test.")]
 internal static class ApplicationConfigLocator
 {
-    /// <summary>
-    ///     The base path of the folder with the configuration files in them.
-    /// </summary>
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Used in exe code. Not possible to unit test.")]
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 

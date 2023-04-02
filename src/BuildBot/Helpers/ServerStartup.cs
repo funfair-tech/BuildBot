@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
@@ -10,15 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Helpers;
 
-/// <summary>
-///     Server Startup
-/// </summary>
 internal static class ServerStartup
 {
-    /// <summary>
-    ///     Set Thread details.
-    /// </summary>
-    /// <param name="minThreads">Minimum number of threads</param>
     public static void SetThreads(int minThreads)
     {
         ThreadPool.GetMinThreads(out int minWorker, out int minIoc);
@@ -44,15 +37,6 @@ internal static class ServerStartup
         Console.WriteLine($"Max worker threads {maxWorker}, Max IOC threads {maxIoc}");
     }
 
-    /// <summary>
-    ///     Create the web host on the specified ports
-    /// </summary>
-    /// <param name="args">Command line arguments</param>
-    /// <param name="httpPort">The HTTP port to listen on; 0 = do not listen.</param>
-    /// <param name="httpsPort">The HTTPS port to listen on; 0 = do not listen.</param>
-    /// <param name="h2Port">The H2P port to listen on; 0 = do not listen on this port.</param>
-    /// <param name="configurationFiledPath">Path to configuration files.</param>
-    /// <returns>Host.</returns>
     public static IHost CreateWebHost<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] TStartup>(
         string[] args,
         int httpPort,
