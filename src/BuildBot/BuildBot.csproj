@@ -10,7 +10,6 @@
     <IsPackable>false</IsPackable>
     <IsPublishable>true</IsPublishable>
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-    <IsTrimmable>false</IsTrimmable>
     <LangVersion>latest</LangVersion>
     <NoWarn>1591</NoWarn>
     <Nullable>enable</Nullable>
