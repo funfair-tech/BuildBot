@@ -8,8 +8,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Meziantou.Analyzer to 2.0.32
 - Dependencies - Updated Octopus.Client to 14.3.547
+- Dependencies - Updated Meziantou.Analyzer to 2.0.33
 ### Removed
 ### Deployment Changes
 
