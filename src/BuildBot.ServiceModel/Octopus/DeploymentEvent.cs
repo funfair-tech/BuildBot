@@ -7,6 +7,7 @@ namespace BuildBot.ServiceModel.Octopus;
 public sealed class DeploymentEvent
 {
     [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
+    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0109: Add an overload with a Span or Memory parameter", Justification = "Won't work here")]
     [JsonConstructor]
     public DeploymentEvent(string id,
                            string category,
