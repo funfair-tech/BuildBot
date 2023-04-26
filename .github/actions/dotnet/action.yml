@@ -120,16 +120,14 @@ runs:
       repository: ${{github.repository}}
       token: ${{inputs.GITHUB_TOKEN}}
 
-<<<<<<< Updated upstream
-=======
   - name: "Show Repo Visibility"
+    working-directory: ${{github.workspace}}/src
     shell: bash
     run: |
       echo "Is Public: ${{steps.visibility.outputs.is_public}}"
       echo "Is Private: ${{steps.visibility.outputs.is_private}}"
-      echo "Status : ${{steps.visibility.outputs.status}}"
+      echo "Status: ${{steps.visibility.outputs.status}}"
 
->>>>>>> Stashed changes
   - if: ${{steps.visibility.outputs.is_public == 'true'}}
     name: "Upload SARIF file for diagnostics"
     uses: github/codeql-action/upload-sarif@v2
@@ -220,7 +218,7 @@ runs:
   - if: ${{inputs.NUGET_API_KEY != '' && inputs.NUGET_PACK == 'true'}}
     name: "Dotnet: Copy packed to dist"
     shell: bash
-    run:  |
+    run: |
       shopt -s globstar
       [ ! -d ../dist ] && mkdir ../dist
       cp **/*.nupkg ../dist
