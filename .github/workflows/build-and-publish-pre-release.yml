@@ -47,9 +47,10 @@ jobs:
         working-directory: ${{github.workspace}}/src
         shell: bash
         run: |
-          echo "Is Public: ${{steps.visibility.outputs.is_public}}"
-          echo "Is Private: ${{steps.visibility.outputs.is_private}}"
-          echo "Status: ${{steps.visibility.outputs.status}}"
+          cat $GITHUB_OUTPUT
+          echo "Is Public: ${{steps.visibility.outputs.is_public}} // ${{env.REPO_IS_PUBLIC}}
+          echo "Is Private: ${{steps.visibility.outputs.is_private}} // ${{env.REPO_IS_PRIVATE}}"
+          echo "Status: ${{steps.visibility.outputs.status}} // ${{env.REPO_STATUS}}"
           exit 1
 
       - name: Build and deploy
