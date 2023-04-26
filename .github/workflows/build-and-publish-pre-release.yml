@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Check Repo Visibility"
-        uses: credfeto/action-repo-visibility@v1.1.0
+        uses: credfeto/action-repo-visibility@m
         id: visibility
         with:
           repository: ${{github.repository}}
