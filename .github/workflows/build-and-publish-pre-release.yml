@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Check Repo Visibility"
-        uses: credfeto/action-repo-visibility@m
+        uses: credfeto/action-repo-visibility@main
         id: visibility
         with:
           repository: ${{github.repository}}
@@ -50,6 +50,7 @@ jobs:
           echo "Is Public: ${{steps.visibility.outputs.is_public}}"
           echo "Is Private: ${{steps.visibility.outputs.is_private}}"
           echo "Status: ${{steps.visibility.outputs.status}}"
+          exit 1
 
       - name: Build and deploy
         uses: ./.github/actions/build
