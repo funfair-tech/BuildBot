@@ -1,44 +1,43 @@
 "C#":
- - any: [ './**/*.cs', './**/*.csproj' ]
-"C# Project":
- - any: [ './**/*.csproj' ]
-"C# Solution":
- - any: [ './**/*.sln' ]
-"Powershell":
- - any: [ './**/*.ps1', './**/*.psm1' ]
+    - src/**/*.cs
+    - src/**/*.csproj
+
 "SQL":
- - any: [ 'db/**/*', './**/*.sql' ]
+    - db/**/*
+    - tools/**/*.sql
+
 "Solidity":
- - any: [ './**/*.sol' ]
+    - src/**/*.sol
+
 "unit-tests":
- - any: [ 'src/*.Tests.*/**/*', 'src/*.Tests/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*' ]
+    - src/*.Tests.*/**/*
+    - src/*.Tests.Integration.*/**/*
+    - src/*.Tests/**/*
+    - src/*.Tests.Integration/**/*
+
 ".NET update":
- - any: [ 'src/global.json' ]
+    - src/global.json
+
 "Config Change":
- - any: [ 'src/**/*.json', '!src/global.json' ]
+    - src/**/*.json
+
 "Static Code Analysis Rules":
- - any: [ 'src/CodeAnalysis.ruleset' ]
+    - src/CodeAnalysis.ruleset
+
 "Migration Script":
- - any: [ 'tools/MigrationScripts/**/*' ]
+    - tools/MigrationScripts/**/*
+
 "Legal Text":
- - any: [ 'tools/LegalText/**/*' ]
+    - tools/LegalText/**/*
+
 "Change Log":
- - any: [ 'CHANGELOG.md' ]
+    - CHANGELOG.md
+
 "Read Me":
- - any: [ 'README.md' ]
+    - README.md
+
 "Setup":
- - any: [ 'SETUP.md' ]
-"Markdown":
- - any: [ './**/*.md' ]
+    - SETUP.md
+
 "github-actions":
- - any: [ '.github/workflows/*.yml' ]
-"BuildBot":
- - any: [ 'src/BuildBot/**/*' ]
-"Discord":
- - any: [ 'src/BuildBot.Discord/**/*' ]
-"Json":
- - any: [ 'src/BuildBot.Json/**/*' ]
-"ServiceModel":
- - any: [ 'src/BuildBot.ServiceModel/**/*' ]
-"Tests":
- - any: [ 'src/BuildBot.Tests/**/*' ]
+    - ".github/workflows/*.yml"
