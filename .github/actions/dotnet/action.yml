@@ -117,6 +117,16 @@ runs:
       DOTNET_TieredPGO: "1"
 
   - if: ${{inputs.REPO_VISIBILITY == 'public'}}
+    working-directory: ${{github.workspace}}/src
+    shell: bash
+    run: echo "Need to upload SARIF file for diagnostics"
+
+  - if: ${{inputs.REPO_VISIBILITY != 'public'}}
+    working-directory: ${{github.workspace}}/src
+    shell: bash
+    run: echo "Cannot upload SARIF file for diagnostics"
+
+  - if: ${{inputs.REPO_VISIBILITY == 'public'}}
     name: "Upload SARIF file for diagnostics"
     uses: github/codeql-action/upload-sarif@v2
     with:
