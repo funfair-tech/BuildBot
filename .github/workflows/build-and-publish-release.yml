@@ -31,7 +31,7 @@ jobs:
         id: visibility
         with:
           repository: ${{github.repository}}
-          token: ${{inputs.GITHUB_TOKEN}}
+          token: ${{secrets.GITHUB_TOKEN}}
 
       - name: "Show Repo Visibility"
         working-directory: ${{github.workspace}}/src
