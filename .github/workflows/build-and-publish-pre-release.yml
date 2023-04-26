@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           cat $GITHUB_OUTPUT
-          echo "Is Public: ${{steps.visibility.outputs.is_public}} // ${{env.REPO_IS_PUBLIC}}
+          echo "Is Public: ${{steps.visibility.outputs.is_public}} // ${{env.REPO_IS_PUBLIC}}"
           echo "Is Private: ${{steps.visibility.outputs.is_private}} // ${{env.REPO_IS_PRIVATE}}"
           echo "Status: ${{steps.visibility.outputs.status}} // ${{env.REPO_STATUS}}"
           exit 1
