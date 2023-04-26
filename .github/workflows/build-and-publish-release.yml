@@ -27,19 +27,11 @@ jobs:
           fetch-depth: 0
 
       - name: "Check Repo Visibility"
-        uses: credfeto/action-repo-visibility@v1.1.0
+        uses: credfeto/action-repo-visibility@v1.2.0
         id: visibility
         with:
           repository: ${{github.repository}}
           token: ${{secrets.GITHUB_TOKEN}}
-
-      - name: "Show Repo Visibility"
-        working-directory: ${{github.workspace}}/src
-        shell: bash
-        run: |
-          echo "Is Public: ${{steps.visibility.outputs.is_public}}"
-          echo "Is Private: ${{steps.visibility.outputs.is_private}}"
-          echo "Status: ${{steps.visibility.outputs.status}}"
 
       - name: Build and deploy
         uses: ./.github/actions/build
@@ -62,5 +54,5 @@ jobs:
           OCTOPUS_DEPLOY_PACKAGE: ${{vars.OCTOPUS_DEPLOY_PACKAGE}}
           OCTOPUS_DEPLOY_PACKAGE_ZIP: ${{vars.OCTOPUS_DEPLOY_PACKAGE_ZIP}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          REPO_VISIBILITY: ${{steps.visibility.outputs.status}}
+          REPO_VISIBILITY: ${{env.REPO_STATUS}}
           CREATE_RELEASE: true
