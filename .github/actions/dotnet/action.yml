@@ -122,7 +122,7 @@ runs:
     with:
       sarif_file: ${{github.workspace}}/src/Diagnostics.sarif
       category: dotnet
-      token: ${{inputs.GITHUB_TOKEN}}
+#      token: ${{inputs.GITHUB_TOKEN}}
 
   ## RUN TESTS
   - name: "Dotnet: Test"
