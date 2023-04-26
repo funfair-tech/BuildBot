@@ -120,6 +120,16 @@ runs:
       repository: ${{github.repository}}
       token: ${{inputs.GITHUB_TOKEN}}
 
+<<<<<<< Updated upstream
+=======
+  - name: "Show Repo Visibility"
+    shell: bash
+    run: |
+      echo "Is Public: ${{steps.visibility.outputs.is_public}}"
+      echo "Is Private: ${{steps.visibility.outputs.is_private}}"
+      echo "Status : ${{steps.visibility.outputs.status}}"
+
+>>>>>>> Stashed changes
   - if: ${{steps.visibility.outputs.is_public == 'true'}}
     name: "Upload SARIF file for diagnostics"
     uses: github/codeql-action/upload-sarif@v2
