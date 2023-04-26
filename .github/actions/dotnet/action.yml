@@ -126,7 +126,7 @@ runs:
     uses: ./.github/actions/dotnet-publish
     with:
       GITHUB_TOKEN: ${{inputs.GITHUB_TOKEN}}
-      REPO_VISIBILITY: ${{intputs.REPO_VISIBILITY}}
+      REPO_VISIBILITY: ${{inputs.REPO_VISIBILITY}}
 
   ## RUN TESTS
   - name: "Dotnet: Test"
