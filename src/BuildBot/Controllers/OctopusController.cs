@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Publishers;
 using BuildBot.ServiceModel.Octopus;
@@ -8,30 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Controllers;
 
-[Route(template: "[controller]")]
-public sealed class OctopusController : ControllerBase
+public sealed class OctopusController : BuildBotControllerBase
 {
     private readonly IPublisher<Deploy> _deployPublisher;
-    private readonly ILogger<OctopusController> _logger;
 
     public OctopusController(IPublisher<Deploy> deployPublisher, ILogger<OctopusController> logger)
+        : base(logger: logger)
     {
         this._deployPublisher = deployPublisher;
-        this._logger = logger;
-    }
-
-    private async Task<IActionResult> ProcessAsync(Func<Task> action)
-    {
-        try
-        {
-            await action();
-        }
-        catch (Exception exception)
-        {
-            this._logger.LogError(new(exception.HResult), exception: exception, message: exception.Message);
-        }
-
-        return this.Ok();
     }
 
     [HttpPost]
