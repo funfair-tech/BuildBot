@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.0.18
+- Dependencies - .NET 8 Preview 3
 ### Removed
 ### Deployment Changes
 
