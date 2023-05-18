@@ -13,17 +13,20 @@
     <IsPublishable>false</IsPublishable>
     <IsTrimmable>false</IsTrimmable>
     <LangVersion>latest</LangVersion>
-    <NoWarn />
+    <NoWarn/>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
     <TargetFramework>net8.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
-    <TreatSpecificWarningsAsErrors />
+    <TreatSpecificWarningsAsErrors/>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <UseSystemResourceKeys>true</UseSystemResourceKeys>
-    <WarningsAsErrors />
+    <WarningsAsErrors/>
+    <EnableMicrosoftExtensionsConfigurationBinderSourceGenerator>true</EnableMicrosoftExtensionsConfigurationBinderSourceGenerator>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <OptimizationPreference>speed</OptimizationPreference>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>

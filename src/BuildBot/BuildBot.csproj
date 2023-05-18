@@ -26,7 +26,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseSystemResourceKeys>true</UseSystemResourceKeys>
     <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
-    <WarningsAsErrors />
+    <WarningsAsErrors/>
+    <EnableMicrosoftExtensionsConfigurationBinderSourceGenerator>true</EnableMicrosoftExtensionsConfigurationBinderSourceGenerator>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <OptimizationPreference>speed</OptimizationPreference>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>

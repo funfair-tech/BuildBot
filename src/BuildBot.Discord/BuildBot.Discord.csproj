@@ -20,10 +20,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
-    <TreatSpecificWarningsAsErrors />
+    <TreatSpecificWarningsAsErrors/>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseSystemResourceKeys>true</UseSystemResourceKeys>
-    <WarningsAsErrors />
+    <WarningsAsErrors/>
+    <EnableMicrosoftExtensionsConfigurationBinderSourceGenerator>true</EnableMicrosoftExtensionsConfigurationBinderSourceGenerator>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <OptimizationPreference>speed</OptimizationPreference>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>
