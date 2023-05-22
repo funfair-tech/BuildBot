@@ -11,14 +11,13 @@ public static class JsonSerialiser
         jsonSerializerOptions.PropertyNameCaseInsensitive = false;
         jsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         jsonSerializerOptions.WriteIndented = false;
-        jsonSerializerOptions.AddContext<SerializationContext>();
 
-        return jsonSerializerOptions;
+        return ConfigureContext(jsonSerializerOptions);
     }
 
     public static JsonSerializerOptions ConfigureContext(JsonSerializerOptions serializerSettings)
     {
-        serializerSettings.AddContext<SerializationContext>();
+        serializerSettings.TypeInfoResolverChain.Add(SerializationContext.Default);
 
         return serializerSettings;
     }
