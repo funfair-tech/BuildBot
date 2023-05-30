@@ -133,29 +133,6 @@ public sealed class DecodesOctopusPush : LoggingTestBase
 
     [Fact]
     [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071:DuplicateCodeDetection", Justification = "Test code")]
-    public void Decode()
-    {
-        Deploy packet = AssertReallyNotNull(JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptions));
-
-        Assert.Equal(expected: "SubscriptionPayload", actual: packet.EventType);
-        Assert.Equal(expected: "https://octopus.funfair.io", actual: packet.Payload?.ServerUri);
-        Assert.Equal(expected: "Spaces-1", actual: packet.Payload?.Event?.SpaceId);
-        Assert.Equal(new[]
-                     {
-                         "Deployments-84781",
-                         "Projects-825",
-                         "Releases-81092",
-                         "Environments-2",
-                         "ServerTasks-197738",
-                         "Channels-1070"
-                     },
-                     actual: packet.Payload?.Event?.RelatedDocumentIds);
-
-        Assert.Equal(expected: "DeploymentSucceeded", actual: packet.Payload?.Event?.Category);
-    }
-
-    [Fact]
-    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071:DuplicateCodeDetection", Justification = "Test code")]
     public void DecodeOpt()
     {
         Deploy packet = AssertReallyNotNull(JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptionsWithContext));
