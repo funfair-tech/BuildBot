@@ -23,13 +23,18 @@ public sealed class StatusPublisher : IPublisher<Status>
             return;
         }
 
-        EmbedBuilder builder = new EmbedBuilder().WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({message.Branches.Last().Name})")
-                                                 .WithUrl(message.TargetUrl)
-                                                 .WithDescription($"Built at {message.StatusCommit.Sha}")
-                                                 .WithColor(GetEmbedColor(message))
-                                                 .WithFields(GetFields(message));
+        await this._bot.PublishAsync(BuildStatusMessage(message));
+    }
 
-        await this._bot.PublishAsync(builder);
+    private static EmbedBuilder BuildStatusMessage(Status message)
+    {
+        Branch lastBranch = message.Branches[^1];
+
+        return new EmbedBuilder().WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch.Name})")
+                                 .WithUrl(message.TargetUrl)
+                                 .WithDescription($"Built at {message.StatusCommit.Sha}")
+                                 .WithColor(GetEmbedColor(message))
+                                 .WithFields(GetFields(message));
     }
 
     private static EmbedFieldBuilder[] GetFields(Status message)
