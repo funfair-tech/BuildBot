@@ -14,7 +14,7 @@ internal static class ApplicationConfigLocator
     {
         string? path = LookupAppSettingsLocationByAssemblyName();
 
-        if (path == null)
+        if (path is null)
         {
             // https://stackoverflow.com/questions/57222718/how-to-configure-self-contained-single-file-program
             return Environment.CurrentDirectory;

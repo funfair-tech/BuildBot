@@ -26,7 +26,7 @@ public sealed class DiscordBot : IDiscordBot
     {
         SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.Channel);
 
-        if (socketTextChannel == null)
+        if (socketTextChannel is null)
         {
             return;
         }
@@ -38,7 +38,7 @@ public sealed class DiscordBot : IDiscordBot
     {
         SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.ReleaseChannel);
 
-        if (socketTextChannel == null)
+        if (socketTextChannel is null)
         {
             return;
         }
@@ -50,10 +50,7 @@ public sealed class DiscordBot : IDiscordBot
     {
         using (socketTextChannel.EnterTypingState())
         {
-            EmbedAuthorBuilder authorBuilder = new()
-                                               {
-                                                   Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
-                                               };
+            EmbedAuthorBuilder authorBuilder = new() { Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png" };
             builder.WithAuthor(authorBuilder);
 
             await socketTextChannel.SendMessageAsync(text: string.Empty, embed: builder.Build());
@@ -90,7 +87,7 @@ public sealed class DiscordBot : IDiscordBot
 
     private Task LogErrorAsync(LogMessage arg)
     {
-        if (arg.Exception != null)
+        if (arg.Exception is not null)
         {
             this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
         }

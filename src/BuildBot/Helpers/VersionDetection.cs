@@ -46,7 +46,7 @@ internal static class VersionDetection
         AssemblyFileVersionAttribute? fvi = assembly.GetCustomAttributes<AssemblyFileVersionAttribute>()
                                                     .FirstOrDefault();
 
-        if (fvi == null)
+        if (fvi is null)
         {
             Console.WriteLine("Finding Assembly File Version: No Attribute found");
 
@@ -61,7 +61,7 @@ internal static class VersionDetection
         Version? assemblyVersion = assembly.GetName()
                                            .Version;
 
-        if (assemblyVersion == null)
+        if (assemblyVersion is null)
         {
             Console.WriteLine("Finding Assembly Version: No Assembly Version");
 

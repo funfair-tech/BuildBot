@@ -40,7 +40,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
     {
         DeployPayload? payload = message.Payload;
 
-        if (payload == null)
+        if (payload is null)
         {
             return Task.CompletedTask;
         }
@@ -73,16 +73,16 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         string? projectName = NormalizeProjectName(project: project, projectId: projectId);
         string? environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
-        string? releaseVersion = release != null
+        string? releaseVersion = release is not null
             ? release.Version
             : releaseId;
 
-        if (tenant != null)
+        if (tenant is not null)
         {
             tenantName = NormaliseTenantName(tenant);
         }
 
-        if (projectName == null || releaseVersion == null || environmentName == null)
+        if (projectName is null || releaseVersion is null || environmentName is null)
         {
             // no idea what we're releasing if it has none of the above.
             return;
@@ -90,12 +90,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -129,12 +124,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -167,12 +157,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
@@ -213,7 +198,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
     private static string? NormalizeProjectName(ProjectResource? project, string? projectId)
     {
-        if (project == null)
+        if (project is null)
         {
             return projectId;
         }
@@ -322,7 +307,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
     private static string? NormaliseEnvironmentName(EnvironmentResource? environment, string? environmentId, out bool isReleaseNoteWorthy, out string? tenantName)
     {
         tenantName = null;
-        string? name = environment != null
+        string? name = environment is not null
             ? environment.Name
             : environmentId;
 
