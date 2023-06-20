@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using BuildBot.Json;
 using BuildBot.ServiceModel.Octopus;
 using FunFair.Test.Common;
@@ -121,35 +120,27 @@ public sealed class DecodesOctopusPush : LoggingTestBase
     {
     }
 
-    private static JsonSerializerOptions SerializerOptions { get; } = new()
-                                                                      {
-                                                                          DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                                                                          PropertyNameCaseInsensitive = false,
-                                                                          PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                                                          WriteIndented = true
-                                                                      };
-
     private static JsonSerializerOptions SerializerOptionsWithContext { get; } = JsonSerialiser.Configure(new());
 
     [Fact]
     [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071:DuplicateCodeDetection", Justification = "Test code")]
     public void DecodeOpt()
     {
+        string[] expected =
+        {
+            "Deployments-84781",
+            "Projects-825",
+            "Releases-81092",
+            "Environments-2",
+            "ServerTasks-197738",
+            "Channels-1070"
+        };
         Deploy packet = AssertReallyNotNull(JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptionsWithContext));
 
         Assert.Equal(expected: "SubscriptionPayload", actual: packet.EventType);
         Assert.Equal(expected: "https://octopus.funfair.io", actual: packet.Payload?.ServerUri);
         Assert.Equal(expected: "Spaces-1", actual: packet.Payload?.Event?.SpaceId);
-        Assert.Equal(new[]
-                     {
-                         "Deployments-84781",
-                         "Projects-825",
-                         "Releases-81092",
-                         "Environments-2",
-                         "ServerTasks-197738",
-                         "Channels-1070"
-                     },
-                     actual: packet.Payload?.Event?.RelatedDocumentIds);
+        Assert.Equal(expected: expected, actual: packet.Payload?.Event?.RelatedDocumentIds);
 
         Assert.Equal(expected: "DeploymentSucceeded", actual: packet.Payload?.Event?.Category);
     }

@@ -72,6 +72,23 @@ public sealed class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        static void ConfigureResponseCompression(ResponseCompressionOptions options)
+        {
+            options.EnableForHttps = true;
+
+            // Explicitly enable Gzip
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+
+            string[] customMimeTypes =
+            {
+                "image/svg+xml"
+            };
+
+            // Add Custom mime types
+            options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(customMimeTypes);
+        }
+
         DiscordBotConfiguration botConfiguration = this.LoadDiscordConfig();
         OctopusServerEndpoint ose = this.LoadOctopusServerEndpoint();
 
@@ -95,20 +112,7 @@ public sealed class Startup
                 // Add framework services
                 .Configure<GzipCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
                 .Configure<BrotliCompressionProviderOptions>(configureOptions: options => options.Level = CompressionLevel.Fastest)
-                .AddResponseCompression(configureOptions: options =>
-                                                          {
-                                                              options.EnableForHttps = true;
-
-                                                              // Explicitly enable Gzip
-                                                              options.Providers.Add<BrotliCompressionProvider>();
-                                                              options.Providers.Add<GzipCompressionProvider>();
-
-                                                              // Add Custom mime types
-                                                              options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                                                                  {
-                                                                      "image/svg+xml"
-                                                                  });
-                                                          })
+                .AddResponseCompression(configureOptions: ConfigureResponseCompression)
                 .AddMvc()
                 .AddMvcOptions(setupAction: _ =>
                                             {

@@ -16,14 +16,11 @@ public sealed class GitHubMiddleware
 
     public Task InvokeAsync(HttpContext context)
     {
-        if (!context.Request.Headers.ContainsKey(GITHUB_EVENT_HEADER))
+        if (!context.Request.Headers.TryGetValue(key: GITHUB_EVENT_HEADER, out StringValues eventHeader))
         {
             // no github request header, pass this request on to the next middleware
             return this._next(context);
         }
-
-        // get the event header
-        StringValues eventHeader = context.Request.Headers[GITHUB_EVENT_HEADER];
 
         // update the request path (this will fire corresponding methods on the github controller)
         context.Request.Path = $"/github/{eventHeader}";
