@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 7.0.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.4.0.72892
 - Dependencies - Updated Octopus.Client to 14.3.667
+- Dependencies - Updated Serilog to 3.0.0
 ### Removed
 ### Deployment Changes
 
