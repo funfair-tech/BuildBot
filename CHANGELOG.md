@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Meziantou.Analyzer to 2.0.62
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.6.3
+- Dependencies - Updated Discord.Net to 3.11.0
 ### Removed
 ### Deployment Changes
 
