@@ -11,8 +11,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.6.0.74858
 - Dependencies - Updated Octopus.Client to 14.3.722
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.1.87
-- Dependencies - Updated Meziantou.Analyzer to 2.0.76
 - Dependencies - Updated FunFair.Test.Common to 6.1.4.103
+- Dependencies - Updated Meziantou.Analyzer to 2.0.77
 ### Removed
 ### Deployment Changes
 
