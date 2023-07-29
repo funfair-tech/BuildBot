@@ -8,17 +8,20 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated SonarAnalyzer.CSharp to 9.6.0.74858
-- Dependencies - Updated Octopus.Client to 14.3.722
-- Dependencies - Updated FunFair.CodeAnalysis to 7.0.1.87
-- Dependencies - Updated FunFair.Test.Common to 6.1.4.103
-- Dependencies - Updated Meziantou.Analyzer to 2.0.77
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.16] - 2023-07-29
+### Changed
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.6.0.74858
+- Dependencies - Updated Octopus.Client to 14.3.722
+- Dependencies - Updated FunFair.CodeAnalysis to 7.0.1.87
+- Dependencies - Updated FunFair.Test.Common to 6.1.4.103
+- Dependencies - Updated Meziantou.Analyzer to 2.0.77
+
 ## [1.4.15] - 2023-07-19
 ### Changed
 - Dependencies - Updated xunit.analyzers to 1.2.0
