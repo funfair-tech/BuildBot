@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.4.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.7.0.75501
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.7.0
+- Dependencies - Updated Octopus.Client to 14.3.752
 ### Removed
 ### Deployment Changes
 
