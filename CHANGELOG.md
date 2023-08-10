@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated FunFair.Test.Common to 6.1.5.120
 - Dependencies - Updated Octopus.Client to 14.3.758
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.7.30
 ### Removed
 ### Deployment Changes
 
