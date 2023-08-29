@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.37
 - Dependencies - Updated Roslynator.Analyzers to 4.5.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.2.121
+- Dependencies - Updated Octopus.Client to 14.3.791
 ### Removed
 ### Deployment Changes
 
