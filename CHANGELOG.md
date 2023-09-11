@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- Dependencies - Updated NSubstitute to 5.1.0
 ### Removed
 ### Deployment Changes
 
