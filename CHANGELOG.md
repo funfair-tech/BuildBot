@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
 - Dependencies - Updated FunFair.Test.Common to 6.1.10.156
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.3.138
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.10.0.77988
 ### Removed
 ### Deployment Changes
 
