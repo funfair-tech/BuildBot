@@ -8,16 +8,19 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated xunit.runner.visualstudio to 2.5.1
-- Dependencies - Updated xunit.analyzers to 1.3.0
-- Dependencies - Updated xunit to 2.5.1
-- Dependencies - Updated Octopus.Client to 14.3.824
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.24] - 2023-09-25
+### Changed
+- Dependencies - Updated xunit.runner.visualstudio to 2.5.1
+- Dependencies - Updated xunit.analyzers to 1.3.0
+- Dependencies - Updated xunit to 2.5.1
+- Dependencies - Updated Octopus.Client to 14.3.824
+
 ## [1.4.23] - 2023-09-16
 ### Changed
 - Dependencies - Updated NSubstitute to 5.1.0
