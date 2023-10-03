@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
+[DebuggerDisplay("{AvatarUrl}")]
 public sealed class Owner
 {
     [JsonConstructor]

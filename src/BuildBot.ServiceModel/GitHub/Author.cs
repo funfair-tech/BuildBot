@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Login}")]
-public sealed class Author
+public readonly record struct Author
 {
     [JsonConstructor]
     public Author(string login)

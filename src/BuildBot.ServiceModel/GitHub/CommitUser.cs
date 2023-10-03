@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
+[DebuggerDisplay("{Username}: {Name}: {Email}")]
 public sealed class CommitUser
 {
     [JsonConstructor]
