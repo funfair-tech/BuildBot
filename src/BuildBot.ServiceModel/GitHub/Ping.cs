@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
+[DebuggerDisplay("{Zen}: {HookId}")]
 public sealed class Ping
 {
     [JsonConstructor]

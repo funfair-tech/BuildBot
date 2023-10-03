@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.Octopus;
 
 //https://octopus.com/blog/notifications-with-subscriptions-and-webhooks
+[DebuggerDisplay("{EventType}")]
 public sealed class Deploy
 {
     [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]

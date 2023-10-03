@@ -1,7 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.Octopus;
 
+[DebuggerDisplay("{ReferencedDocumentId}")]
 public sealed class DeployMessageReference
 {
     [JsonConstructor]

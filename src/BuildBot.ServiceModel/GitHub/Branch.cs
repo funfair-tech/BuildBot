@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
-public sealed class Branch
+[DebuggerDisplay("{Name}")]
+public readonly record struct Branch
 {
     [JsonConstructor]
     public Branch(string name)

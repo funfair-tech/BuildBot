@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
+[DebuggerDisplay("{Ref}: {Repository.FullName}")]
 public sealed class Push
 {
     [JsonConstructor]

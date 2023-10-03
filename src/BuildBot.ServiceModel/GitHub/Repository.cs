@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace BuildBot.ServiceModel.GitHub;
 
+[DebuggerDisplay("{FullName}")]
 public sealed class Repository
 {
     [JsonConstructor]
