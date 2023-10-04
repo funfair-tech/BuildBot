@@ -8,15 +8,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Meziantou.Analyzer to 2.0.92
-- Dependencies - Updated Octopus.Client to 14.3.854
-- Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.26] - 2023-10-04
+### Changed
+- Dependencies - Updated Meziantou.Analyzer to 2.0.92
+- Dependencies - Updated Octopus.Client to 14.3.854
+- Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
+
 ## [1.4.25] - 2023-09-27
 ### Changed
 - Dependencies - Updated Octopus.Client to 14.3.838
