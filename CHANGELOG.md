@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.4.0
 - Dependencies - Updated Octopus.Client to 14.3.900
 - Dependencies - Updated xunit to 2.5.2
+- Dependencies - Updated xunit.runner.visualstudio to 2.5.3
 ### Removed
 ### Deployment Changes
 
