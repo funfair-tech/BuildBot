@@ -8,17 +8,20 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
-- Dependencies - Updated xunit.analyzers to 1.4.0
-- Dependencies - Updated Octopus.Client to 14.3.900
-- Dependencies - Updated xunit to 2.5.2
-- Dependencies - Updated xunit.runner.visualstudio to 2.5.3
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.30] - 2023-10-14
+### Changed
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
+- Dependencies - Updated xunit.analyzers to 1.4.0
+- Dependencies - Updated Octopus.Client to 14.3.900
+- Dependencies - Updated xunit to 2.5.2
+- Dependencies - Updated xunit.runner.visualstudio to 2.5.3
+
 ## [1.4.29] - 2023-10-12
 ### Changed
 - Dependencies - Updated Meziantou.Analyzer to 2.0.93
