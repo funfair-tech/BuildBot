@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Name}: {Email}")]
-public sealed class Pusher
+public readonly record struct Pusher
 {
     [JsonConstructor]
     public Pusher(string name, string email)

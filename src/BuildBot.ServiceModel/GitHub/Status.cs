@@ -6,10 +6,10 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Repository.FullName}: {Context}: {State}")]
-public sealed class Status
+public readonly record struct Status
 {
     [JsonConstructor]
-    public Status(string targetUrl, Repository repository, string context, string state, IReadOnlyList<Branch> branches, string description, StatusCommit statusCommit)
+    public Status(string targetUrl, in Repository repository, string context, string state, IReadOnlyList<Branch> branches, string description, in StatusCommit statusCommit)
     {
         this.TargetUrl = targetUrl;
         this.Repository = repository;

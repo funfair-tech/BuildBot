@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.Octopus;
 
 [DebuggerDisplay("{Id}: {Message}")]
-public sealed class DeploymentEvent
+public readonly record struct DeploymentEvent
 {
     [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0109: Add an overload with a Span or Memory parameter", Justification = "Won't work here")]

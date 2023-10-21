@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.Octopus;
 
 [DebuggerDisplay("{Id}: {Name}")]
-public sealed class DeploymentPayloadSubscription
+public readonly record struct DeploymentPayloadSubscription
 {
     [JsonConstructor]
     public DeploymentPayloadSubscription(string id, string name, string type, bool isDisabled)

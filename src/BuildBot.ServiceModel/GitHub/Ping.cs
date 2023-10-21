@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Zen}: {HookId}")]
-public sealed class Ping
+public readonly record struct Ping
 {
     [JsonConstructor]
     public Ping(string zen, string hookId)

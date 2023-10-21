@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.Octopus;
 
 [DebuggerDisplay("{ServerUri}")]
-public sealed class DeployPayload
+public readonly record struct DeployPayload
 {
     [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]

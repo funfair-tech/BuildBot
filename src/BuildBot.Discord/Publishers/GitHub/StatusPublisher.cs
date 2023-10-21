@@ -26,7 +26,7 @@ public sealed class StatusPublisher : IPublisher<Status>
         await this._bot.PublishAsync(BuildStatusMessage(message));
     }
 
-    private static EmbedBuilder BuildStatusMessage(Status message)
+    private static EmbedBuilder BuildStatusMessage(in Status message)
     {
         Branch lastBranch = message.Branches[^1];
 
@@ -37,7 +37,7 @@ public sealed class StatusPublisher : IPublisher<Status>
                                  .WithFields(GetFields(message));
     }
 
-    private static EmbedFieldBuilder[] GetFields(Status message)
+    private static EmbedFieldBuilder[] GetFields(in Status message)
     {
         StatusCommit statusCommit = message.StatusCommit;
 
@@ -51,7 +51,7 @@ public sealed class StatusPublisher : IPublisher<Status>
                };
     }
 
-    private static Color GetEmbedColor(Status message)
+    private static Color GetEmbedColor(in Status message)
     {
         if (message.State == "success")
         {

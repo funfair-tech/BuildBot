@@ -45,7 +45,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
             return Task.CompletedTask;
         }
 
-        return this.PublishPayloadAsync(payload: payload, cancellationToken: cancellationToken);
+        return this.PublishPayloadAsync(payload: payload.Value, cancellationToken: cancellationToken);
     }
 
     private async Task PublishPayloadAsync(DeployPayload payload, CancellationToken cancellationToken)
@@ -90,12 +90,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -129,12 +124,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -167,12 +157,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
@@ -204,7 +189,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static string? FindDocumentId(DeployPayload payload, string documentPrefix)
+    private static string? FindDocumentId(in DeployPayload payload, string documentPrefix)
     {
         IReadOnlyList<string>? relatedDocumentIds = payload.Event?.RelatedDocumentIds;
 
@@ -314,7 +299,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         return prefix + trim;
     }
 
-    private static bool HasSucceeded(DeployPayload payload)
+    private static bool HasSucceeded(in DeployPayload payload)
     {
         return StringComparer.InvariantCultureIgnoreCase.Equals(x: payload.Event?.Category, y: "DeploymentSucceeded");
     }

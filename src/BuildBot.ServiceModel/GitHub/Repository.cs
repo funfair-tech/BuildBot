@@ -4,10 +4,10 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{FullName}")]
-public sealed class Repository
+public readonly record struct Repository
 {
     [JsonConstructor]
-    public Repository(int id, string name, string fullName, Owner owner)
+    public Repository(int id, string name, string fullName, in Owner owner)
     {
         this.Id = id;
         this.Name = name;

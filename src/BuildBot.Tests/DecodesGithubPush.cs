@@ -232,7 +232,7 @@ public sealed class DecodesGithubPush : TestBase
     [Fact]
     public void DecodeOpt()
     {
-        Push packet = AssertReallyNotNull(JsonSerializer.Deserialize<Push>(json: GITHUB_PUSH, options: SerializerOptionsWithContext));
+        Push packet = JsonSerializer.Deserialize<Push>(json: GITHUB_PUSH, options: SerializerOptionsWithContext);
 
         Assert.Equal(expected: "refs/heads/main", actual: packet.Ref);
         Assert.NotEmpty(packet.Commits);

@@ -7,7 +7,7 @@ namespace BuildBot.ServiceModel.Octopus;
 
 //https://octopus.com/blog/notifications-with-subscriptions-and-webhooks
 [DebuggerDisplay("{EventType}")]
-public sealed class Deploy
+public readonly record struct Deploy
 {
     [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]

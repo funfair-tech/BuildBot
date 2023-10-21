@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.Octopus;
 
 [DebuggerDisplay("{ReferencedDocumentId}")]
-public sealed class DeployMessageReference
+public readonly record struct DeployMessageReference
 {
     [JsonConstructor]
     public DeployMessageReference(string referencedDocumentId, int startIndex, int length)
