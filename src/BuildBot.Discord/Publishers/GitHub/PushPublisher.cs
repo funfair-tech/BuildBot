@@ -49,12 +49,12 @@ public sealed class PushPublisher : IPublisher<Push>
         await this._bot.PublishAsync(builder);
     }
 
-    private static bool IsIgnoredRepo(Push message)
+    private static bool IsIgnoredRepo(in Push message)
     {
         return message.Repository.Name == @"TeamCity";
     }
 
-    private static bool IsIgnoredCommit(Push message)
+    private static bool IsIgnoredCommit(in Push message)
     {
         if (message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
         {
@@ -67,8 +67,7 @@ public sealed class PushPublisher : IPublisher<Push>
         {
             static bool IsPackageUpdate(Commit c)
             {
-                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) ||
-                       c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
+                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) || c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
             }
 
             if (message.Commits.Any(predicate: IsPackageUpdate))
@@ -85,7 +84,7 @@ public sealed class PushPublisher : IPublisher<Push>
         return MainBranches.Contains(value: branch, comparer: StringComparer.Ordinal);
     }
 
-    private static EmbedBuilder BuildPushEmbed(Push message)
+    private static EmbedBuilder BuildPushEmbed(in Push message)
     {
         string commitString = GetCommitString(message);
         string title = GetCommitTitle(message: message, commitString: commitString);
@@ -105,17 +104,17 @@ public sealed class PushPublisher : IPublisher<Push>
         return builder;
     }
 
-    private static string GetCommitTitle(Push message, string commitString)
+    private static string GetCommitTitle(in Push message, string commitString)
     {
         return $"{message.Pusher.Name} pushed {commitString} to {message.Repository.Name} ({BranchName(message)})";
     }
 
-    private static string BranchName(Push message)
+    private static string BranchName(in Push message)
     {
         return message.Ref.Substring("refs/heads/".Length);
     }
 
-    private static string GetCommitString(Push message)
+    private static string GetCommitString(in Push message)
     {
         return message.Commits.Count > 1
             ? $"{message.Commits.Count} commits"
