@@ -248,12 +248,8 @@ public sealed class DeployPublisher : IPublisher<Deploy>
                     continue;
                 }
 
-                builder.AppendLine();
-                string replacement = Bold(line.Substring(startIndex: 4)
-                                              .Trim())
-                    .ToUpperInvariant();
-
-                builder.AppendLine(replacement);
+                builder = builder.AppendLine()
+                                 .AppendLine(MakeCodeBold(line));
 
                 continue;
             }
@@ -267,11 +263,18 @@ public sealed class DeployPublisher : IPublisher<Deploy>
                 continue;
             }
 
-            builder.AppendLine(EnsurePrefixed(detail));
+            builder = builder.AppendLine(EnsurePrefixed(detail));
         }
 
         return builder.ToString()
                       .Trim();
+    }
+
+    private static string MakeCodeBold(string line)
+    {
+        return Bold(line.Substring(startIndex: 4)
+                        .Trim())
+            .ToUpperInvariant();
     }
 
     private static bool IsLastLine(in string[] text, int lineIndex)
