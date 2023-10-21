@@ -6,10 +6,10 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Ref}: {Repository.FullName}")]
-public sealed class Push
+public readonly record struct Push
 {
     [JsonConstructor]
-    public Push(string @ref, string before, string after, Commit headCommit, IReadOnlyList<Commit> commits, Repository repository, Pusher pusher, string compareUrl)
+    public Push(string @ref, string before, string after, in Commit headCommit, IReadOnlyList<Commit> commits, in Repository repository, in Pusher pusher, string compareUrl)
     {
         this.Ref = @ref;
         this.Before = before;

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Username}: {Name}: {Email}")]
-public sealed class CommitUser
+public readonly record struct CommitUser
 {
     [JsonConstructor]
     public CommitUser(string name, string email, string? username)

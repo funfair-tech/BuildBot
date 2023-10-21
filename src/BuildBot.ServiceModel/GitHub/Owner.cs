@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{AvatarUrl}")]
-public sealed class Owner
+public readonly record struct Owner
 {
     [JsonConstructor]
     public Owner(string avatarUrl)
