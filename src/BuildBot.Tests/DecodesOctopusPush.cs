@@ -135,7 +135,7 @@ public sealed class DecodesOctopusPush : LoggingTestBase
             "ServerTasks-197738",
             "Channels-1070"
         };
-        Deploy packet = AssertReallyNotNull(JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptionsWithContext));
+        Deploy packet = JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptionsWithContext);
 
         Assert.Equal(expected: "SubscriptionPayload", actual: packet.EventType);
         Assert.Equal(expected: "https://octopus.funfair.io", actual: packet.Payload?.ServerUri);
