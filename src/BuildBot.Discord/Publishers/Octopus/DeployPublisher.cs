@@ -90,12 +90,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -129,12 +124,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -167,12 +157,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
@@ -243,12 +228,6 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
     private static string ReformatReleaseNotes(string releaseNotes)
     {
-        static string MakeUpperCase(Match match)
-        {
-            return Bold(match.ToString()
-                             .ToUpperInvariant());
-        }
-
         StringBuilder builder = new();
         string[] text = releaseNotes.Split(separator: '\n');
 
@@ -269,9 +248,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
                 continue;
             }
 
-            string detail = RegexExpressions.BuildNumber()
-                                            .Replace(input: line, evaluator: MakeUpperCase)
-                                            .Trim();
+            string detail = BuildDetail(line);
 
             if (string.IsNullOrWhiteSpace(detail))
             {
@@ -283,6 +260,19 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         return builder.ToString()
                       .Trim();
+    }
+
+    private static string BuildDetail(string line)
+    {
+        static string MakeUpperCase(Match match)
+        {
+            return Bold(match.ToString()
+                             .ToUpperInvariant());
+        }
+
+        return RegexExpressions.BuildNumber()
+                               .Replace(input: line, evaluator: MakeUpperCase)
+                               .Trim();
     }
 
     private static string MakeCodeBold(string line)
