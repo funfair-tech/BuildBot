@@ -8,8 +8,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Octopus.Client to 14.3.977
 - Dependencies - Updated xunit to 2.6.0
+- Dependencies - Updated Octopus.Client to 14.3.980
 ### Removed
 ### Deployment Changes
 
