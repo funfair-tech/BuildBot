@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.106
 - Dependencies - Updated FunFair.Test.Common to 6.1.15.215
 - Dependencies - Updated Octopus.Client to 14.3.997
+- Dependencies - Updated Serilog to 3.1.0
 ### Removed
 ### Deployment Changes
 
