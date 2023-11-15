@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.8.14
 - Dependencies - Updated FunFair.Test.Common to 6.1.18.233
 - Dependencies - Updated Octopus.Client to 14.3.1009
+- Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 ### Removed
 ### Deployment Changes
 
