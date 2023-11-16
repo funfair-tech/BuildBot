@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
 - Dependencies - Updated Octopus.Client to 14.3.1013
+- Dependencies - Updated FunFair.Test.Common to 6.1.19.238
 ### Removed
 ### Deployment Changes
 
