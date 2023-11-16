@@ -8,15 +8,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
-- Dependencies - Updated Octopus.Client to 14.3.1013
-- Dependencies - Updated FunFair.Test.Common to 6.1.19.238
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.42] - 2023-11-16
+### Changed
+- Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
+- Dependencies - Updated Octopus.Client to 14.3.1013
+- Dependencies - Updated FunFair.Test.Common to 6.1.19.238
+
 ## [1.4.41] - 2023-11-15
 ### Changed
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.4.0
