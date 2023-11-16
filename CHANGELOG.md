@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
+- Dependencies - Updated Octopus.Client to 14.3.1013
 ### Removed
 ### Deployment Changes
 
