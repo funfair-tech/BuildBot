@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- Dependencies - Updated xunit.analyzers to 1.6.0
 ### Removed
 ### Deployment Changes
 
