@@ -8,16 +8,19 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated xunit.analyzers to 1.6.0
-- Dependencies - Updated Discord.Net to 3.13.0
-- Dependencies - Updated xunit to 2.6.2
-- Dependencies - Updated xunit.runner.visualstudio to 2.5.4
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.43] - 2023-11-19
+### Changed
+- Dependencies - Updated xunit.analyzers to 1.6.0
+- Dependencies - Updated Discord.Net to 3.13.0
+- Dependencies - Updated xunit to 2.6.2
+- Dependencies - Updated xunit.runner.visualstudio to 2.5.4
+
 ## [1.4.42] - 2023-11-16
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
