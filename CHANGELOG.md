@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated xunit.analyzers to 1.6.0
 - Dependencies - Updated Discord.Net to 3.13.0
+- Dependencies - Updated xunit to 2.6.2
 ### Removed
 ### Deployment Changes
 
