@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.15.0.81779
 - Dependencies - Updated Octopus.Client to 14.3.1073
 - Dependencies - Updated Meziantou.Analyzer to 2.0.120
+- Dependencies - Updated xunit.analyzers to 1.7.0
 ### Removed
 ### Deployment Changes
 
