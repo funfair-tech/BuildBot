@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,32 +38,35 @@ public sealed class StatusPublisher : IPublisher<Status>
                                  .WithFields(GetFields(message));
     }
 
-    private static EmbedFieldBuilder[] GetFields(in Status message)
+    private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Status message)
     {
-        StatusCommit statusCommit = message.StatusCommit;
+        return
+        [
+            AddHeadCommitEmbed(message.StatusCommit),
+            AddBranchEmbed(message)
+        ];
+    }
 
-        return new[]
-               {
-                   new EmbedFieldBuilder().WithName("Head commit")
-                                          .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}"),
-                   new EmbedFieldBuilder().WithName("Branch")
-                                          .WithValue(message.Branches.Select(b => b.Name)
-                                                            .FirstOrDefault())
-               };
+    private static EmbedFieldBuilder AddBranchEmbed(Status message)
+    {
+        return new EmbedFieldBuilder().WithName("Branch")
+                                      .WithValue(message.Branches.Select(b => b.Name)
+                                                        .FirstOrDefault());
+    }
+
+    private static EmbedFieldBuilder AddHeadCommitEmbed(StatusCommit statusCommit)
+    {
+        return new EmbedFieldBuilder().WithName("Head commit")
+                                      .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
     }
 
     private static Color GetEmbedColor(in Status message)
     {
-        if (message.State == "success")
+        return message.State switch
         {
-            return Color.Green;
-        }
-
-        if (message.State == "failure")
-        {
-            return Color.Red;
-        }
-
-        return Color.Default;
+            "success" => Color.Green,
+            "failure" => Color.Red,
+            _ => Color.Default
+        };
     }
 }

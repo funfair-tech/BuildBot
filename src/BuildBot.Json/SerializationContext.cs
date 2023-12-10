@@ -29,4 +29,5 @@ namespace BuildBot.Json;
 [JsonSerializable(typeof(DeployPayload))]
 internal sealed partial class SerializationContext : JsonSerializerContext
 {
+    // Code generated
 }

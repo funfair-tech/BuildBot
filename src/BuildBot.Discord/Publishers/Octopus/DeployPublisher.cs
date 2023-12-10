@@ -16,12 +16,12 @@ namespace BuildBot.Discord.Publishers.Octopus;
 
 public sealed class DeployPublisher : IPublisher<Deploy>
 {
-    private static readonly IReadOnlyList<string> ReleaseChannels = new[]
-                                                                    {
-                                                                        "Staging",
-                                                                        "Showcase",
-                                                                        "Live"
-                                                                    };
+    private static readonly IReadOnlyList<string> ReleaseChannels =
+    [
+        "Staging",
+        "Showcase",
+        "Live"
+    ];
 
     private readonly IDiscordBot _bot;
     private readonly ILogger<DeployPublisher> _logger;
@@ -40,12 +40,9 @@ public sealed class DeployPublisher : IPublisher<Deploy>
     {
         DeployPayload? payload = message.Payload;
 
-        if (payload is null)
-        {
-            return Task.CompletedTask;
-        }
-
-        return this.PublishPayloadAsync(payload: payload.Value, cancellationToken: cancellationToken);
+        return payload is null
+            ? Task.CompletedTask
+            : this.PublishPayloadAsync(payload: payload.Value, cancellationToken: cancellationToken);
     }
 
     private async Task PublishPayloadAsync(DeployPayload payload, CancellationToken cancellationToken)

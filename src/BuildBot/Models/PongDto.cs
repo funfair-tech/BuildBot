@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BuildBot.Models;
 
 [DebuggerDisplay(value: "{Value}")]
-public sealed class PongDto
+public readonly record struct PongDto
 {
     [JsonConstructor]
     public PongDto(string value)
