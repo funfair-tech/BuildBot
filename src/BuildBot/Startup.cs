@@ -50,14 +50,14 @@ public sealed class Startup
                                         .Enrich.WithSensitiveDataMasking(options =>
                                                                          {
                                                                              options.Mode = MaskingMode.Globally;
-                                                                             options.MaskingOperators = new()
-                                                                                                        {
-                                                                                                            new EmailAddressMaskingOperator(),
-                                                                                                            new CreditCardMaskingOperator(),
-                                                                                                            new IbanMaskingOperator()
+                                                                             options.MaskingOperators =
+                                                                             [
+                                                                                 new EmailAddressMaskingOperator(),
+                                                                                 new CreditCardMaskingOperator(),
+                                                                                 new IbanMaskingOperator()
 
-                                                                                                            // need to find a sane way of adding these
-                                                                                                        };
+                                                                                 // need to find a sane way of adding these
+                                                                             ];
                                                                              options.MaskValue = "**MASKED*";
                                                                          })
                                         .Enrich.WithDemystifiedStackTraces()
@@ -72,23 +72,6 @@ public sealed class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        static void ConfigureResponseCompression(ResponseCompressionOptions options)
-        {
-            options.EnableForHttps = true;
-
-            // Explicitly enable Gzip
-            options.Providers.Add<BrotliCompressionProvider>();
-            options.Providers.Add<GzipCompressionProvider>();
-
-            string[] customMimeTypes =
-            {
-                "image/svg+xml"
-            };
-
-            // Add Custom mime types
-            options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(customMimeTypes);
-        }
-
         DiscordBotConfiguration botConfiguration = this.LoadDiscordConfig();
         OctopusServerEndpoint ose = this.LoadOctopusServerEndpoint();
 
@@ -119,12 +102,29 @@ public sealed class Startup
                                                 // Note Additional ModelMetadata providers that require DI are enabled elsewhere
                                             })
                 .AddJsonOptions(configure: options => JsonSerialiser.Configure(options.JsonSerializerOptions));
+
+        static void ConfigureResponseCompression(ResponseCompressionOptions options)
+        {
+            options.EnableForHttps = true;
+
+            // Explicitly enable Gzip
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+
+            string[] customMimeTypes =
+            {
+                "image/svg+xml"
+            };
+
+            // Add Custom mime types
+            options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(customMimeTypes);
+        }
     }
 
     private OctopusServerEndpoint LoadOctopusServerEndpoint()
     {
-        string uri = this.Configuration[@"ServerOctopus:Url"] ?? string.Empty;
-        string apiKey = this.Configuration[@"ServerOctopus:ApiKey"] ?? string.Empty;
+        string uri = this.Configuration["ServerOctopus:Url"] ?? string.Empty;
+        string apiKey = this.Configuration["ServerOctopus:ApiKey"] ?? string.Empty;
 
         OctopusServerEndpoint ose = new(octopusServerAddress: uri, apiKey: apiKey);
 
@@ -133,10 +133,10 @@ public sealed class Startup
 
     private DiscordBotConfiguration LoadDiscordConfig()
     {
-        return new(server: this.Configuration[@"Discord:Server"] ?? string.Empty,
-                   channel: this.Configuration[@"Discord:Channel"] ?? string.Empty,
-                   releaseChannel: this.Configuration[@"Discord:ReleaseChannel"] ?? string.Empty,
-                   token: this.Configuration[@"Discord:Token"] ?? string.Empty);
+        return new(server: this.Configuration["Discord:Server"] ?? string.Empty,
+                   channel: this.Configuration["Discord:Channel"] ?? string.Empty,
+                   releaseChannel: this.Configuration["Discord:ReleaseChannel"] ?? string.Empty,
+                   token: this.Configuration["Discord:Token"] ?? string.Empty);
     }
 
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Called by the runtime")]
