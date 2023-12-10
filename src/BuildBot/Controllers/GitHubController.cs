@@ -21,7 +21,7 @@ public sealed class GitHubController : BuildBotControllerBase
 
     [HttpPost]
     [Route(template: "ping")]
-    public IActionResult Ping([FromBody] Ping request)
+    public IActionResult Ping([FromBody] PingModel request)
     {
         this.Logger.LogTrace($"Ping: {request.HookId}");
 

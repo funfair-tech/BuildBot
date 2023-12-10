@@ -16,7 +16,7 @@ namespace BuildBot.Json;
 [JsonSerializable(typeof(Commit))]
 [JsonSerializable(typeof(CommitUser))]
 [JsonSerializable(typeof(Owner))]
-[JsonSerializable(typeof(Ping))]
+[JsonSerializable(typeof(PingModel))]
 [JsonSerializable(typeof(Push))]
 [JsonSerializable(typeof(Pusher))]
 [JsonSerializable(typeof(Repository))]

@@ -4,10 +4,10 @@ using System.Text.Json.Serialization;
 namespace BuildBot.ServiceModel.GitHub;
 
 [DebuggerDisplay("{Zen}: {HookId}")]
-public readonly record struct Ping
+public readonly record struct PingModel
 {
     [JsonConstructor]
-    public Ping(string zen, string hookId)
+    public PingModel(string zen, string hookId)
     {
         this.Zen = zen;
         this.HookId = hookId;
