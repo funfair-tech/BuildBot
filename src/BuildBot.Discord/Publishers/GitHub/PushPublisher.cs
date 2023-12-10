@@ -86,24 +86,27 @@ public sealed class PushPublisher : IPublisher<Push>
 
     private static EmbedBuilder BuildPushEmbed(in Push message)
     {
+        return message.Commits.Aggregate(CreateBasicEmbed(message), func: AddCommit);
+    }
+
+    private static EmbedBuilder CreateBasicEmbed(Push message)
+    {
         string commitString = GetCommitString(message);
         string title = GetCommitTitle(message: message, commitString: commitString);
 
-        EmbedBuilder builder = new EmbedBuilder().WithTitle(title)
-                                                 .WithUrl(message.CompareUrl);
-
-        return message.Commits.Aggregate(builder, AddField);
+        return new EmbedBuilder().WithTitle(title)
+                                 .WithUrl(message.CompareUrl);
     }
 
-    private static EmbedBuilder AddField(EmbedBuilder current, Commit commit)
+    private static EmbedBuilder AddCommit(EmbedBuilder current, Commit commit)
     {
-        EmbedFieldBuilder efb = new()
-                                {
-                                    Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
-                                    Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
-                                };
+        return current.AddField(CreateCommitEmbed(commit));
+    }
 
-        return current.AddField(efb);
+    private static EmbedFieldBuilder CreateCommitEmbed(Commit commit)
+    {
+        return new EmbedFieldBuilder().WithName($"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}")
+                                      .WithValue($"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed");
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
