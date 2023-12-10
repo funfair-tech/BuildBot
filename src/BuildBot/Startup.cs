@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Linq;
@@ -28,6 +29,11 @@ namespace BuildBot;
 
 public sealed class Startup
 {
+    private static readonly IReadOnlyList<string> CustomMimeTypes =
+    [
+        "image/svg+xml"
+    ];
+
     public Startup(IHostEnvironment env)
     {
         env.ContentRootFileProvider = new NullFileProvider();
@@ -102,23 +108,18 @@ public sealed class Startup
                                                 // Note Additional ModelMetadata providers that require DI are enabled elsewhere
                                             })
                 .AddJsonOptions(configure: options => JsonSerialiser.Configure(options.JsonSerializerOptions));
+    }
 
-        static void ConfigureResponseCompression(ResponseCompressionOptions options)
-        {
-            options.EnableForHttps = true;
+    private static void ConfigureResponseCompression(ResponseCompressionOptions options)
+    {
+        options.EnableForHttps = true;
 
-            // Explicitly enable Gzip
-            options.Providers.Add<BrotliCompressionProvider>();
-            options.Providers.Add<GzipCompressionProvider>();
+        // Explicitly enable Gzip
+        options.Providers.Add<BrotliCompressionProvider>();
+        options.Providers.Add<GzipCompressionProvider>();
 
-            string[] customMimeTypes =
-            {
-                "image/svg+xml"
-            };
-
-            // Add Custom mime types
-            options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(customMimeTypes);
-        }
+        // Add Custom mime types
+        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(CustomMimeTypes);
     }
 
     private OctopusServerEndpoint LoadOctopusServerEndpoint()
@@ -142,17 +143,30 @@ public sealed class Startup
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Called by the runtime")]
     [SuppressMessage(category: "Microsoft.Performance", checkId: "CA1822:MarkMembersAsStatic", Justification = "Can't be static as called by the runtime.")]
     [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make static", Justification = "Called by the runtime")]
-    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE007: Handle dispose correctly", Justification = "Called by the runtime")]
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE005: Use return value", Justification = "Lives for application lifetime")]
     public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifeTime)
     {
-        loggerFactory.AddSerilog();
-        applicationLifeTime.ApplicationStopping.Register(Log.CloseAndFlush);
+        EnableLogging(loggerFactory);
+        RegisterForCleanup(applicationLifeTime);
 
-        app.UseHttpLogging();
-
-        app.UseResponseCompression()
+        app.UseHttpLogging()
+           .UseResponseCompression()
            .UseRouting()
            .UseMiddleware<GitHubMiddleware>()
            .UseEndpoints(configure: endpoints => endpoints.MapControllers());
+    }
+
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE005: Use return value", Justification = "Lives for application lifetime")]
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE007: Handle dispose correctly", Justification = "Lives for application lifetime")]
+    private static void EnableLogging(ILoggerFactory loggerFactory)
+    {
+        loggerFactory.AddSerilog();
+    }
+
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE005: Use return value", Justification = "Lives for application lifetime")]
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE007: Handle dispose correctly", Justification = "Lives for application lifetime")]
+    private static void RegisterForCleanup(IHostApplicationLifetime applicationLifeTime)
+    {
+        applicationLifeTime.ApplicationStopping.Register(Log.CloseAndFlush);
     }
 }
