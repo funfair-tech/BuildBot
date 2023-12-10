@@ -24,15 +24,17 @@ public sealed class StatusPublisher : IPublisher<Status>
         this._bot = bot;
     }
 
-    public async Task PublishAsync(Status message, CancellationToken cancellationToken)
+    public Task PublishAsync(Status message, CancellationToken cancellationToken)
     {
-        if (message.State == "pending")
-        {
-            // don't output messages for pending builds
-            return;
-        }
+        // don't output messages for pending builds
+        return IsPendingBuild(message)
+            ? Task.CompletedTask
+            : this._bot.PublishAsync(BuildStatusMessage(message));
+    }
 
-        await this._bot.PublishAsync(BuildStatusMessage(message));
+    private static bool IsPendingBuild(Status message)
+    {
+        return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.State, y: "pending");
     }
 
     private static EmbedBuilder BuildStatusMessage(in Status message)
