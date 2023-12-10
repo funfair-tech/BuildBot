@@ -53,19 +53,7 @@ public sealed class Startup
     private static Logger CreateLogger()
     {
         return new LoggerConfiguration().Enrich.FromLogContext()
-                                        .Enrich.WithSensitiveDataMasking(options =>
-                                                                         {
-                                                                             options.Mode = MaskingMode.Globally;
-                                                                             options.MaskingOperators =
-                                                                             [
-                                                                                 new EmailAddressMaskingOperator(),
-                                                                                 new CreditCardMaskingOperator(),
-                                                                                 new IbanMaskingOperator()
-
-                                                                                 // need to find a sane way of adding these
-                                                                             ];
-                                                                             options.MaskValue = "**MASKED*";
-                                                                         })
+                                        .Enrich.WithSensitiveDataMasking(ConfigureMasking)
                                         .Enrich.WithDemystifiedStackTraces()
                                         .Enrich.FromLogContext()
                                         .Enrich.WithMachineName()
@@ -73,6 +61,20 @@ public sealed class Startup
                                         .Enrich.WithThreadId()
                                         .WriteTo.Console()
                                         .CreateLogger();
+    }
+
+    private static void ConfigureMasking(SensitiveDataEnricherOptions options)
+    {
+        options.Mode = MaskingMode.Globally;
+        options.MaskingOperators =
+        [
+            new EmailAddressMaskingOperator(),
+            new CreditCardMaskingOperator(),
+            new IbanMaskingOperator()
+
+            // need to find a sane way of adding these
+        ];
+        options.MaskValue = "**MASKED*";
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
