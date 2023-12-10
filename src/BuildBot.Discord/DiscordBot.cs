@@ -59,7 +59,7 @@ public sealed class DiscordBot : IDiscordBot
 
     private SocketTextChannel? GetChannel(string channelName)
     {
-        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g => g.Name == this._botConfiguration.Server);
+        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g => StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server));
 
         return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Name, y: channelName));
     }
