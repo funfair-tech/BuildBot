@@ -10,11 +10,11 @@ namespace BuildBot.Discord.Publishers.GitHub;
 
 public sealed class PushPublisher : IPublisher<Push>
 {
-    private static readonly IReadOnlyList<string> MainBranches = new[]
-                                                                 {
-                                                                     "main",
-                                                                     "master"
-                                                                 };
+    private static readonly IReadOnlyList<string> MainBranches =
+    [
+        "main",
+        "master"
+    ];
 
     private readonly IDiscordBot _bot;
 
@@ -92,16 +92,18 @@ public sealed class PushPublisher : IPublisher<Push>
         EmbedBuilder builder = new EmbedBuilder().WithTitle(title)
                                                  .WithUrl(message.CompareUrl);
 
-        foreach (Commit commit in message.Commits)
-        {
-            builder.AddField(new EmbedFieldBuilder
-                             {
-                                 Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
-                                 Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
-                             });
-        }
+        return message.Commits.Aggregate(builder, AddField);
+    }
 
-        return builder;
+    private static EmbedBuilder AddField(EmbedBuilder current, Commit commit)
+    {
+        EmbedFieldBuilder efb = new()
+                                {
+                                    Name = $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
+                                    Value = $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
+                                };
+
+        return current.AddField(efb);
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
