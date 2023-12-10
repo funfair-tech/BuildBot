@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +11,12 @@ namespace BuildBot.Discord.Publishers.GitHub;
 
 public sealed class StatusPublisher : IPublisher<Status>
 {
+    private static readonly IReadOnlyList<ColourMapping> ColourMappings =
+    [
+        new(State: "success", Colour: Color.Green),
+        new(State: "failure", Colour: Color.Red)
+    ];
+
     private readonly IDiscordBot _bot;
 
     public StatusPublisher(IDiscordBot bot)
@@ -60,13 +68,19 @@ public sealed class StatusPublisher : IPublisher<Status>
                                       .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
     }
 
-    private static Color GetEmbedColor(in Status message)
+    private static Color GetEmbedColor(Status message)
     {
-        return message.State switch
+        return ColourMappings.Where(mapping => mapping.IsMatch(message))
+                             .Select(mapping => mapping.Colour)
+                             .FirstOrDefault(Color.Default);
+    }
+
+    [DebuggerDisplay("{State} => {Colour}")]
+    private readonly record struct ColourMapping(string State, Color Colour)
+    {
+        public bool IsMatch(in Status message)
         {
-            "success" => Color.Green,
-            "failure" => Color.Red,
-            _ => Color.Default
-        };
+            return StringComparer.OrdinalIgnoreCase.Equals(x: this.State, y: message.State);
+        }
     }
 }
