@@ -10,12 +10,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Roslynator.Analyzers to 4.7.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.15.0.81779
-- Dependencies - Updated Octopus.Client to 14.3.1073
 - Dependencies - Updated Meziantou.Analyzer to 2.0.120
 - Dependencies - Updated xunit.analyzers to 1.7.0
 - Dependencies - Updated xunit to 2.6.3
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.5
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.14.6129
+- Dependencies - Updated Octopus.Client to 14.3.1082
 ### Removed
 ### Deployment Changes
 
