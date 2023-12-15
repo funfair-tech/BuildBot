@@ -9,8 +9,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated FunFair.Test.Common to 6.1.22.273
-- Dependencies - Updated Octopus.Client to 14.3.1090
 - Dependencies - Updated Meziantou.Analyzer to 2.0.121
+- Dependencies - Updated Octopus.Client to 14.3.1093
 ### Removed
 ### Deployment Changes
 
