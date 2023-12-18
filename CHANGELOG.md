@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
 - Dependencies - Updated Octopus.Client to 14.3.1098
+- Dependencies - Updated Meziantou.Analyzer to 2.0.123
 ### Removed
 ### Deployment Changes
 
