@@ -127,14 +127,14 @@ public sealed class DecodesOctopusPush : LoggingTestBase
     public void DecodeOpt()
     {
         string[] expected =
-        {
+        [
             "Deployments-84781",
             "Projects-825",
             "Releases-81092",
             "Environments-2",
             "ServerTasks-197738",
             "Channels-1070"
-        };
+        ];
         Deploy packet = JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptionsWithContext);
 
         Assert.Equal(expected: "SubscriptionPayload", actual: packet.EventType);

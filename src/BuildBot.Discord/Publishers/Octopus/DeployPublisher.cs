@@ -57,9 +57,11 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         string? deploymentId = FindDocumentId(payload: payload, documentPrefix: "Deployments-");
         string? tenantId = FindDocumentId(payload: payload, documentPrefix: "Tenants-");
 
-        ProjectResource? project = await client.Repository.Projects.Get(idOrHref: projectId, cancellationToken: cancellationToken);
-        ReleaseResource? release = await client.Repository.Releases.Get(idOrHref: releaseId, cancellationToken: cancellationToken);
-        EnvironmentResource? environment = await client.Repository.Environments.Get(idOrHref: environmentId, cancellationToken: cancellationToken);
+        IOctopusAsyncRepository repo = client.Repository;
+
+        ProjectResource? project = await repo.Projects.Get(idOrHref: projectId, cancellationToken: cancellationToken);
+        ReleaseResource? release = await repo.Releases.Get(idOrHref: releaseId, cancellationToken: cancellationToken);
+        EnvironmentResource? environment = await repo.Environments.Get(idOrHref: environmentId, cancellationToken: cancellationToken);
 
         TenantResource? tenant = null;
 
@@ -70,9 +72,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         string? projectName = NormalizeProjectName(project: project, projectId: projectId);
         string? environmentName = NormaliseEnvironmentName(environment: environment, environmentId: environmentId, out bool releaseNoteWorthy, out string? tenantName);
-        string? releaseVersion = release is not null
-            ? release.Version
-            : releaseId;
+        string? releaseVersion = GetReleaseVersion(release: release, releaseId: releaseId);
 
         if (tenant is not null)
         {
@@ -87,12 +87,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -102,10 +97,22 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         this._logger.LogDebug($"{projectName}: {releaseVersion} Build successful: {succeeded} Noteworthy: {releaseNoteWorthy}");
 
+        await this.PublishToReleaseChannelAsync(succeeded: succeeded, releaseNoteWorthy: releaseNoteWorthy, builder: builder);
+    }
+
+    private async Task PublishToReleaseChannelAsync(bool succeeded, bool releaseNoteWorthy, EmbedBuilder builder)
+    {
         if (succeeded && releaseNoteWorthy)
         {
             await this._bot.PublishToReleaseChannelAsync(builder);
         }
+    }
+
+    private static string? GetReleaseVersion(ReleaseResource release, string? releaseId)
+    {
+        return release is not null
+            ? release.Version
+            : releaseId;
     }
 
     private static void AddDeploymentId(string serverUri, string spaceId, string? deploymentId, EmbedBuilder builder)
@@ -126,12 +133,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -164,12 +166,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
