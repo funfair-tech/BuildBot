@@ -87,7 +87,12 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName,
+                                            releaseVersion: releaseVersion,
+                                            environmentName: environmentName,
+                                            tenantName: tenantName,
+                                            release: release,
+                                            succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -133,7 +138,12 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
+            BuildSuccessfulDeployment(builder: builder,
+                                      projectName: projectName,
+                                      releaseVersion: releaseVersion,
+                                      environmentName: environmentName,
+                                      tenantName: tenantName,
+                                      release: release);
         }
         else
         {
@@ -166,7 +176,12 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
+                                                  string projectName,
+                                                  string releaseVersion,
+                                                  string environmentName,
+                                                  string? tenantName,
+                                                  ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
