@@ -8,18 +8,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
-- Dependencies - Updated Octopus.Client to 14.3.1098
-- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.39
-- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.5.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.127
-- Dependencies - Updated SonarAnalyzer.CSharp to 9.16.0.82469
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [1.4.48] - 2023-12-22
+### Changed
+- Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
+- Dependencies - Updated Octopus.Client to 14.3.1098
+- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.39
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.5.0
+- Dependencies - Updated Meziantou.Analyzer to 2.0.127
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.16.0.82469
+
 ## [1.4.47] - 2023-12-16
 ### Changed
 - Dependencies - Updated Octopus.Client to 14.3.1094
