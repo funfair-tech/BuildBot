@@ -16,6 +16,14 @@ public sealed class PushPublisher : IPublisher<Push>
         "master"
     ];
 
+    private static readonly IReadOnlyList<string> PackageUpdatePrefixes =
+    [
+        "FF-1429",
+        "[FF-1429]",
+        "Dependencies",
+        "[Dependencies]"
+    ];
+
     private readonly IDiscordBot _bot;
 
     public PushPublisher(IDiscordBot bot)
@@ -51,7 +59,8 @@ public sealed class PushPublisher : IPublisher<Push>
 
     private static bool IsIgnoredRepo(in Push message)
     {
-        return message.Repository.Name == "TeamCity";
+        // TODO: Consider making this configurable
+        return StringComparer.OrdinalIgnoreCase.Equals(x: message.Repository.Name, y: "TeamCity");
     }
 
     private static bool IsIgnoredCommit(in Push message)
@@ -63,21 +72,12 @@ public sealed class PushPublisher : IPublisher<Push>
 
         string branch = BranchName(message);
 
-        if (IsRepoMainBranch(branch))
-        {
-            static bool IsPackageUpdate(Commit c)
-            {
-                return c.Message.StartsWith(value: "FF-1429", comparisonType: StringComparison.Ordinal) ||
-                       c.Message.StartsWith(value: "[FF-1429]", comparisonType: StringComparison.Ordinal);
-            }
+        return IsRepoMainBranch(branch) && message.Commits.Any(predicate: IsPackageUpdate);
+    }
 
-            if (message.Commits.Any(predicate: IsPackageUpdate))
-            {
-                return true;
-            }
-        }
-
-        return false;
+    private static bool IsPackageUpdate(Commit c)
+    {
+        return PackageUpdatePrefixes.Any(prefix => c.Message.StartsWith(value: prefix, comparisonType: StringComparison.Ordinal));
     }
 
     private static bool IsRepoMainBranch(string branch)
