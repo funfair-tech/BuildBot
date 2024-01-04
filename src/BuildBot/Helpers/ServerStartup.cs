@@ -119,6 +119,7 @@ internal static class ServerStartup
         builder.Services.AddLogging()
                .AddHttpLogging(options => options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.RequestBody)
                .AddSingleton(botConfiguration)
+               .AddRouting()
 
                // register the bot for DI
                .AddSingleton<IDiscordBot, DiscordBot>()
