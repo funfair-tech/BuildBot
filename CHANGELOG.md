@@ -17,8 +17,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.10.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.18.0.83559
 - Dependencies - Updated Meziantou.Analyzer to 2.0.139
-- Dependencies - Updated Octopus.Client to 14.3.1155
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 1.4.3
+- Dependencies - Updated Octopus.Client to 14.3.1159
 ### Removed
 ### Deployment Changes
 
