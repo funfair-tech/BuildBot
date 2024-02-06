@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 1.4.3
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.19.0.84025
 - Dependencies - Updated Octopus.Client to 14.3.1167
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
 ### Removed
 ### Deployment Changes
 
