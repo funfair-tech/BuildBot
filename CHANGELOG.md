@@ -15,12 +15,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.10.0
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 1.4.3
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.19.0.84025
-- Dependencies - Updated Octopus.Client to 14.3.1167
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.140
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.7.269
 - Dependencies - Updated FunFair.Test.Common to 6.1.40.352
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.9.28
+- Dependencies - Updated Octopus.Client to 14.3.1186
 ### Removed
 ### Deployment Changes
 
