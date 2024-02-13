@@ -23,7 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.141
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
-- Dependencies - Updated Octopus.Client to 14.3.1198
+- Dependencies - Updated Octopus.Client to 14.3.1201
 ### Removed
 ### Deployment Changes
 
