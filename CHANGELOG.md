@@ -8,7 +8,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated xunit.runner.visualstudio to 2.5.6
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6169
 - Dependencies - Updated xunit to 2.6.6
 - Dependencies - Updated Roslynator.Analyzers to 4.10.0
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 8.0.200
 - Dependencies - Updated Octopus.Client to 14.3.1208
 - Dependencies - Updated xunit.analyzers to 1.11.0
+- Dependencies - Updated xunit.runner.visualstudio to 2.5.7
 ### Removed
 ### Deployment Changes
 
