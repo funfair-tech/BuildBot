@@ -8,7 +8,8 @@ public static class DiscordSetup
     public static IServiceCollection AddDiscord(this IServiceCollection services, DiscordBotConfiguration discordConfig)
     {
         return services.AddSingleton(discordConfig)
-                       .AddSingleton<IDiscordBot, DiscordBot>()
+                       .AddSingleton<DiscordBot>()
+                       .AddSingleton<IDiscordBot>(s => s.GetRequiredService<DiscordBot>())
                        .AddHostedService<BotService>();
     }
 }
