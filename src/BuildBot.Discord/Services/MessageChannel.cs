@@ -19,11 +19,6 @@ public sealed class MessageChannel<T> : IMessageChannel<T>
         return this._channel.Writer.WriteAsync(item: message, cancellationToken: cancellationToken);
     }
 
-    public ValueTask<T> ReceiveAsync(CancellationToken cancellationToken)
-    {
-        return this._channel.Reader.ReadAsync(cancellationToken);
-    }
-
     public IAsyncEnumerable<T> ReadAllAsync(in CancellationToken cancellationToken)
     {
         return this._channel.Reader.ReadAllAsync(cancellationToken);
