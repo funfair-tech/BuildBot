@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading;
+using BuildBot.GitHub;
+using BuildBot.Octopus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -56,6 +58,8 @@ internal static class ServerStartup
                .ConfigureLogging((_, logger) => logger.ClearProviders());
 
         builder.Services.ConfigureHttpJsonOptions(options => { options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppJsonSerializerContext.Default); })
+               .AddGitHub()
+               .AddOctopus()
                .AddMediator();
 
         return builder.Build();

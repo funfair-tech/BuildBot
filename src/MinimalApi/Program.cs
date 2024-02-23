@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.GitHub.Models;
+using BuildBot.Octopus.Models;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
 using Mediator;
@@ -8,7 +10,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApi.Helpers;
-using MinimalApi.Messages;
 
 namespace MinimalApi;
 

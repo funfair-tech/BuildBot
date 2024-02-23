@@ -1,10 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.GitHub.Models;
 using Mediator;
 using Microsoft.Extensions.Logging;
-using MinimalApi.Messages;
 
-namespace MinimalApi.Publishers;
+namespace BuildBot.GitHub.Publishers;
 
 public sealed class GithubStatusNotificationHandler : INotificationHandler<GithubStatus>
 {

@@ -1,10 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Octopus.Models;
 using Mediator;
 using Microsoft.Extensions.Logging;
-using MinimalApi.Messages;
 
-namespace MinimalApi.Publishers;
+namespace BuildBot.Octopus.Publishers;
 
 public sealed class OctopusDeployNotificationHandler : INotificationHandler<OctopusDeploy>
 {
@@ -17,7 +17,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
     public ValueTask Handle(OctopusDeploy notification, CancellationToken cancellationToken)
     {
-        this._logger.LogDebug($"Octopus: [{notification.Model.Timestamp}]");
+        this._logger.LogDebug($"Octopus: [{notification.Model.EventType}]");
 
         return ValueTask.CompletedTask;
     }
