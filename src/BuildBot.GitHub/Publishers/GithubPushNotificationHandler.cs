@@ -72,7 +72,6 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static bool IsIgnoredRepo(in Push message)
     {
-        // TODO: Consider making this configurable
         return StringComparer.OrdinalIgnoreCase.Equals(x: message.Repository.Name, y: "TeamCity");
     }
 
