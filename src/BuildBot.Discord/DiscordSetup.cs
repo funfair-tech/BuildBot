@@ -10,6 +10,7 @@ public static class DiscordSetup
         return services.AddSingleton(discordConfig)
                        .AddSingleton<DiscordBot>()
                        .AddSingleton<IDiscordBot>(s => s.GetRequiredService<DiscordBot>())
-                       .AddHostedService<BotService>();
+                       .AddHostedService<BotService>()
+                       .AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>));
     }
 }

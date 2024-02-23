@@ -7,15 +7,15 @@ namespace BuildBot.Discord.Publishers;
 
 public sealed class DiscordBotMessageNotificationHandler : INotificationHandler<BotMessage>
 {
-    private readonly IDiscordBot _discordBot;
+    private readonly IMessageChannel<BotMessage> _messageChannel;
 
-    public DiscordBotMessageNotificationHandler(IDiscordBot discordBot)
+    public DiscordBotMessageNotificationHandler(IMessageChannel<BotMessage> messageChannel)
     {
-        this._discordBot = discordBot;
+        this._messageChannel = messageChannel;
     }
 
     public ValueTask Handle(BotMessage notification, CancellationToken cancellationToken)
     {
-        return this._discordBot.PublishAsync(builder: notification.Message, cancellationToken: cancellationToken);
+        return this._messageChannel.PublishAsync(message: notification, cancellationToken: cancellationToken);
     }
 }

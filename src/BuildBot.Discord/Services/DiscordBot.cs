@@ -6,7 +6,7 @@ using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
-namespace BuildBot.Discord;
+namespace BuildBot.Discord.Services;
 
 public sealed class DiscordBot : IDiscordBot
 {
