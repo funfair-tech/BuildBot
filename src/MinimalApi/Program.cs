@@ -1,12 +1,15 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
+using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApi.Helpers;
+using MinimalApi.Messages;
 
 namespace MinimalApi;
 
@@ -41,9 +44,9 @@ public static class Program
     {
         RouteGroupBuilder group = app.MapGroup("/github");
         group.MapPost(pattern: "ping",
-                      handler: (PingModel model) =>
+                      handler: async (PingModel model, IMediator mediator, CancellationToken cancellationToken) =>
                                {
-                                   Console.WriteLine($"Hello {model.Zen}");
+                                   await mediator.Publish(new GithubPing(model), cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
                                });
@@ -78,5 +81,7 @@ public static class Program
 
                                    return Results.NoContent();
                                });
+
+        return app;
     }
 }

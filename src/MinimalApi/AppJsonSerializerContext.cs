@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using BuildBot.Models;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
+using MinimalApi.Models;
 
 namespace MinimalApi;
 

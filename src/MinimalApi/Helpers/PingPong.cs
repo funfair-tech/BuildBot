@@ -1,4 +1,4 @@
-using BuildBot.Models;
+using MinimalApi.Models;
 
 namespace MinimalApi.Helpers;
 

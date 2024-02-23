@@ -55,7 +55,8 @@ internal static class ServerStartup
                .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
                .ConfigureLogging((_, logger) => logger.ClearProviders());
 
-        builder.Services.ConfigureHttpJsonOptions(options => { options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppJsonSerializerContext.Default); });
+        builder.Services.ConfigureHttpJsonOptions(options => { options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppJsonSerializerContext.Default); })
+               .AddMediator();
 
         return builder.Build();
     }
