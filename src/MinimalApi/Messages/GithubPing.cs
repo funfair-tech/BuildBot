@@ -4,5 +4,5 @@ using Mediator;
 
 namespace MinimalApi.Messages;
 
-[DebuggerDisplay("{PingModel.Zen}: {PingModel.HookId}")]
-public sealed record GithubPing(PingModel PingModel) : INotification;
+[DebuggerDisplay("{Model.Zen}: {Model.HookId}")]
+public sealed record GithubPing(PingModel Model) : INotification;

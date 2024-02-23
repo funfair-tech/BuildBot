@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,17 +51,17 @@ public static class Program
                                });
 
         group.MapPost(pattern: "push",
-                      handler: (Push model) =>
+                      handler: async (Push model, IMediator mediator, CancellationToken cancellationToken) =>
                                {
-                                   Console.WriteLine($"Hello {model.Ref}");
+                                   await mediator.Publish(new GithubPush(model), cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
                                });
 
         group.MapPost(pattern: "status",
-                      handler: (Status model) =>
+                      handler: async (Status model, IMediator mediator, CancellationToken cancellationToken) =>
                                {
-                                   Console.WriteLine($"Hello {model.TargetUrl}");
+                                   await mediator.Publish(new GithubStatus(model), cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
                                });
@@ -75,9 +74,9 @@ public static class Program
         RouteGroupBuilder group = app.MapGroup("/octopus");
 
         group.MapPost(pattern: "deploy",
-                      handler: (Deploy model) =>
+                      handler: async (Deploy model, IMediator mediator, CancellationToken cancellationToken) =>
                                {
-                                   Console.WriteLine($"Hello {model.Timestamp}");
+                                   await mediator.Publish(new OctopusDeploy(model), cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
                                });

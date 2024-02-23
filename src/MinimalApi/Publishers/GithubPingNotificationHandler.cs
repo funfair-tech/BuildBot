@@ -17,7 +17,7 @@ public sealed class GithubPingNotificationHandler : INotificationHandler<GithubP
 
     public ValueTask Handle(GithubPing notification, CancellationToken cancellationToken)
     {
-        this._logger.LogDebug($"Github: [{notification.PingModel.HookId}] {notification.PingModel.Zen}");
+        this._logger.LogDebug($"Github: [{notification.Model.HookId}] {notification.Model.Zen}");
 
         return ValueTask.CompletedTask;
     }
