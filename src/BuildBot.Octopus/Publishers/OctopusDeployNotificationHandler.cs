@@ -75,9 +75,9 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
         IOctopusAsyncRepository repo = client.Repository;
 
-        ProjectResource? project = await repo.Projects.Get(idOrHref: projectId, cancellationToken: cancellationToken);
-        ReleaseResource? release = await repo.Releases.Get(idOrHref: releaseId, cancellationToken: cancellationToken);
-        EnvironmentResource? environment = await repo.Environments.Get(idOrHref: environmentId, cancellationToken: cancellationToken);
+        ProjectResource? project = await this.GetProjectAsync(repo: repo, projectId: projectId, cancellationToken: cancellationToken);
+        ReleaseResource? release = await this.GetReleaseAsync(repo: repo, releaseId: releaseId, cancellationToken: cancellationToken);
+        EnvironmentResource? environment = await this.GetEnvironmentAsync(repo: repo, environmentId: environmentId, cancellationToken: cancellationToken);
 
         TenantResource? tenant = null;
 
@@ -114,6 +114,63 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         this._logger.LogDebug($"{projectName}: {releaseVersion} Build successful: {succeeded} Noteworthy: {releaseNoteWorthy}");
 
         await this.PublishToReleaseChannelAsync(succeeded: succeeded, releaseNoteWorthy: releaseNoteWorthy, builder: builder, cancellationToken: cancellationToken);
+    }
+
+    private async ValueTask<EnvironmentResource?> GetEnvironmentAsync(IOctopusAsyncRepository repo, string? environmentId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(environmentId))
+        {
+            return null;
+        }
+
+        try
+        {
+            return await repo.Environments.Get(idOrHref: environmentId, cancellationToken: cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get environment {environmentId}: {exception.Message}");
+
+            return null;
+        }
+    }
+
+    private async ValueTask<ReleaseResource?> GetReleaseAsync(IOctopusAsyncRepository repo, string? releaseId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(releaseId))
+        {
+            return null;
+        }
+
+        try
+        {
+            return await repo.Releases.Get(idOrHref: releaseId, cancellationToken: cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get environment {releaseId}: {exception.Message}");
+
+            return null;
+        }
+    }
+
+    private async ValueTask<ProjectResource?> GetProjectAsync(IOctopusAsyncRepository repo, string? projectId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(projectId))
+        {
+            return null;
+        }
+
+        try
+        {
+            return await repo.Projects.Get(idOrHref: projectId, cancellationToken: cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get environment {projectId}: {exception.Message}");
+
+            return null;
+        }
     }
 
     private async Task PublishToReleaseChannelAsync(bool succeeded, bool releaseNoteWorthy, EmbedBuilder builder, CancellationToken cancellationToken)
