@@ -6,15 +6,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Discord.Models;
+using BuildBot.Octopus.Models;
 using BuildBot.ServiceModel.Octopus;
 using Discord;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Octopus.Client;
 using Octopus.Client.Model;
+using RegexExpressions = BuildBot.Octopus.Helpers.RegexExpressions;
 
-namespace BuildBot.Discord.Publishers.Octopus;
+namespace BuildBot.Octopus.Publishers;
 
-public sealed class DeployPublisher : IPublisher<Deploy>
+public sealed class OctopusDeployNotificationHandler : INotificationHandler<OctopusDeploy>
 {
     private static readonly IReadOnlyList<string> ReleaseChannels =
     [
@@ -23,29 +27,40 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         "Live"
     ];
 
-    private readonly IDiscordBot _bot;
-    private readonly ILogger<DeployPublisher> _logger;
+    private readonly ILogger<OctopusDeployNotificationHandler> _logger;
+    private readonly IMediator _mediator;
+
     private readonly IOctopusClientFactory _octopusClientFactory;
     private readonly OctopusServerEndpoint _octopusServerEndpoint;
 
-    public DeployPublisher(IDiscordBot bot, IOctopusClientFactory octopusClientFactory, OctopusServerEndpoint octopusServerEndpoint, ILogger<DeployPublisher> logger)
+    public OctopusDeployNotificationHandler(IMediator mediator,
+                                            IOctopusClientFactory octopusClientFactory,
+                                            OctopusServerEndpoint octopusServerEndpoint,
+                                            ILogger<OctopusDeployNotificationHandler> logger)
     {
-        this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
-        this._octopusClientFactory = octopusClientFactory ?? throw new ArgumentNullException(nameof(octopusClientFactory));
-        this._octopusServerEndpoint = octopusServerEndpoint ?? throw new ArgumentNullException(nameof(octopusServerEndpoint));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._mediator = mediator;
+        this._octopusClientFactory = octopusClientFactory;
+        this._octopusServerEndpoint = octopusServerEndpoint;
+        this._logger = logger;
     }
 
-    public Task PublishAsync(Deploy message, CancellationToken cancellationToken)
+    public ValueTask Handle(OctopusDeploy notification, CancellationToken cancellationToken)
+    {
+        this._logger.LogDebug($"Octopus: [{notification.Model.EventType}]");
+
+        return this.PublishAsync(message: notification.Model, cancellationToken: cancellationToken);
+    }
+
+    private ValueTask PublishAsync(Deploy message, CancellationToken cancellationToken)
     {
         DeployPayload? payload = message.Payload;
 
         return payload is null
-            ? Task.CompletedTask
+            ? ValueTask.CompletedTask
             : this.PublishPayloadAsync(payload: payload.Value, cancellationToken: cancellationToken);
     }
 
-    private async Task PublishPayloadAsync(DeployPayload payload, CancellationToken cancellationToken)
+    private async ValueTask PublishPayloadAsync(DeployPayload payload, CancellationToken cancellationToken)
     {
         IOctopusAsyncClient client = await this._octopusClientFactory.CreateAsyncClient(this._octopusServerEndpoint);
 
@@ -87,33 +102,28 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
         AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
 
-        await this._bot.PublishAsync(builder);
+        await this._mediator.Publish(new BotMessage(builder), cancellationToken: cancellationToken);
 
         this._logger.LogDebug($"{projectName}: {releaseVersion} Build successful: {succeeded} Noteworthy: {releaseNoteWorthy}");
 
-        await this.PublishToReleaseChannelAsync(succeeded: succeeded, releaseNoteWorthy: releaseNoteWorthy, builder: builder);
+        await this.PublishToReleaseChannelAsync(succeeded: succeeded, releaseNoteWorthy: releaseNoteWorthy, builder: builder, cancellationToken: cancellationToken);
     }
 
-    private async Task PublishToReleaseChannelAsync(bool succeeded, bool releaseNoteWorthy, EmbedBuilder builder)
+    private async Task PublishToReleaseChannelAsync(bool succeeded, bool releaseNoteWorthy, EmbedBuilder builder, CancellationToken cancellationToken)
     {
         if (succeeded && releaseNoteWorthy)
         {
-            await this._bot.PublishToReleaseChannelAsync(builder);
+            await this._mediator.Publish(new BotReleaseMessage(builder), cancellationToken: cancellationToken);
         }
     }
 
-    private static string? GetReleaseVersion(ReleaseResource release, string? releaseId)
+    private static string? GetReleaseVersion(ReleaseResource? release, string? releaseId)
     {
         return release is not null
             ? release.Version
@@ -138,12 +148,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -176,12 +181,7 @@ public sealed class DeployPublisher : IPublisher<Deploy>
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";

@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Discord.Models;
+using BuildBot.GitHub.Models;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
+using Mediator;
+using Microsoft.Extensions.Logging;
 
-namespace BuildBot.Discord.Publishers.GitHub;
+namespace BuildBot.GitHub.Publishers;
 
-public sealed class PushPublisher : IPublisher<Push>
+public sealed class GithubPushNotificationHandler : INotificationHandler<GithubPush>
 {
     private static readonly IReadOnlyList<string> MainBranches =
     [
@@ -24,14 +28,23 @@ public sealed class PushPublisher : IPublisher<Push>
         "[Dependencies]"
     ];
 
-    private readonly IDiscordBot _bot;
+    private readonly ILogger<GithubPushNotificationHandler> _logger;
+    private readonly IMediator _mediator;
 
-    public PushPublisher(IDiscordBot bot)
+    public GithubPushNotificationHandler(IMediator mediator, ILogger<GithubPushNotificationHandler> logger)
     {
-        this._bot = bot;
+        this._mediator = mediator;
+        this._logger = logger;
     }
 
-    public async Task PublishAsync(Push message, CancellationToken cancellationToken)
+    public ValueTask Handle(GithubPush notification, CancellationToken cancellationToken)
+    {
+        this._logger.LogDebug($"Github: [{notification.Model.Ref}]");
+
+        return this.PublishAsync(message: notification.Model, cancellationToken: cancellationToken);
+    }
+
+    private async ValueTask PublishAsync(Push message, CancellationToken cancellationToken)
     {
         // only publish Push messages if there are commits, otherwise we'll be publishing
         // all the tagging that goes on.
@@ -54,12 +67,11 @@ public sealed class PushPublisher : IPublisher<Push>
 
         EmbedBuilder builder = BuildPushEmbed(message);
 
-        await this._bot.PublishAsync(builder);
+        await this._mediator.Publish(new BotMessage(builder), cancellationToken: cancellationToken);
     }
 
     private static bool IsIgnoredRepo(in Push message)
     {
-        // TODO: Consider making this configurable
         return StringComparer.OrdinalIgnoreCase.Equals(x: message.Repository.Name, y: "TeamCity");
     }
 

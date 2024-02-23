@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Tests", "BuildBot.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Json", "BuildBot.Json\BuildBot.Json.csproj", "{487DFDA5-E6F6-4650-AF1B-DA3C54BCC847}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.GitHub", "BuildBot.GitHub\BuildBot.GitHub.csproj", "{B1B08CF7-79EE-4115-A3CB-0EC94C30A335}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Octopus", "BuildBot.Octopus\BuildBot.Octopus.csproj", "{494A0F8A-2D82-4BAA-8B00-B2244859E106}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,8 +51,18 @@ Global
 		{487DFDA5-E6F6-4650-AF1B-DA3C54BCC847}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{487DFDA5-E6F6-4650-AF1B-DA3C54BCC847}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{487DFDA5-E6F6-4650-AF1B-DA3C54BCC847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1B08CF7-79EE-4115-A3CB-0EC94C30A335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B08CF7-79EE-4115-A3CB-0EC94C30A335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B08CF7-79EE-4115-A3CB-0EC94C30A335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B08CF7-79EE-4115-A3CB-0EC94C30A335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{494A0F8A-2D82-4BAA-8B00-B2244859E106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{494A0F8A-2D82-4BAA-8B00-B2244859E106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{494A0F8A-2D82-4BAA-8B00-B2244859E106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{494A0F8A-2D82-4BAA-8B00-B2244859E106}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

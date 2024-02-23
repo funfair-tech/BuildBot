@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
-namespace BuildBot.Discord;
+namespace BuildBot.Discord.Services;
 
 public sealed class DiscordBot : IDiscordBot
 {
+    private static readonly TimeSpan TypingDelay = TimeSpan.FromSeconds(2);
     private readonly DiscordBotConfiguration _botConfiguration;
     private readonly DiscordSocketClient _client;
     private readonly ILogger<DiscordBot> _logger;
@@ -22,7 +24,11 @@ public sealed class DiscordBot : IDiscordBot
         this._client.Log += this.LogAsync;
     }
 
-    public async Task PublishAsync(EmbedBuilder builder)
+    private static EmbedAuthorBuilder Author { get; } = new EmbedAuthorBuilder().WithName("FunFair BuildBot")
+                                                                                .WithUrl("https://funfair.io")
+                                                                                .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
+
+    public async ValueTask PublishAsync(EmbedBuilder builder, CancellationToken cancellationToken)
     {
         SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.Channel);
 
@@ -31,10 +37,10 @@ public sealed class DiscordBot : IDiscordBot
             return;
         }
 
-        await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel);
+        await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
     }
 
-    public async Task PublishToReleaseChannelAsync(EmbedBuilder builder)
+    public async ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken)
     {
         SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.ReleaseChannel);
 
@@ -43,21 +49,24 @@ public sealed class DiscordBot : IDiscordBot
             return;
         }
 
-        await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel);
+        await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
     }
 
-    private static async Task PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel)
+    private static async ValueTask PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel, CancellationToken cancellationToken)
     {
         using (socketTextChannel.EnterTypingState())
         {
-            EmbedAuthorBuilder authorBuilder = new()
-                                               {
-                                                   Name = "FunFair BuildBot", Url = "https://funfair.io", IconUrl = "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
-                                               };
-            builder.WithAuthor(authorBuilder);
+            Embed embed = IncludeStandardParameters(builder);
 
-            await socketTextChannel.SendMessageAsync(text: string.Empty, embed: builder.Build());
+            await socketTextChannel.SendMessageAsync(text: string.Empty, embed: embed);
+            await Task.Delay(delay: TypingDelay, cancellationToken: cancellationToken);
         }
+    }
+
+    private static Embed IncludeStandardParameters(EmbedBuilder builder)
+    {
+        return builder.WithAuthor(Author)
+                      .Build();
     }
 
     private SocketTextChannel? GetChannel(string channelName)

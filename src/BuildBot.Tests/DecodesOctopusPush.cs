@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using BuildBot.Json;
 using BuildBot.ServiceModel.Octopus;
 using FunFair.Test.Common;
@@ -120,8 +121,6 @@ public sealed class DecodesOctopusPush : LoggingTestBase
     {
     }
 
-    private static JsonSerializerOptions SerializerOptionsWithContext { get; } = JsonSerialiser.Configure(new());
-
     [Fact]
     [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071:DuplicateCodeDetection", Justification = "Test code")]
     public void DecodeOpt()
@@ -135,7 +134,10 @@ public sealed class DecodesOctopusPush : LoggingTestBase
             "ServerTasks-197738",
             "Channels-1070"
         ];
-        Deploy packet = JsonSerializer.Deserialize<Deploy>(json: OCTOPUS_PUSH, options: SerializerOptionsWithContext);
+
+        JsonTypeInfo<Deploy> pushTypeInfo = AssertReallyNotNull(AppSerializationContext.Default.GetTypeInfo(typeof(Deploy)) as JsonTypeInfo<Deploy>);
+
+        Deploy packet = JsonSerializer.Deserialize(json: OCTOPUS_PUSH, jsonTypeInfo: pushTypeInfo);
 
         Assert.Equal(expected: "SubscriptionPayload", actual: packet.EventType);
         Assert.Equal(expected: "https://octopus.funfair.io", actual: packet.Payload?.ServerUri);

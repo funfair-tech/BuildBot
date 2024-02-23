@@ -4,12 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Discord.Models;
+using BuildBot.GitHub.Models;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
+using Mediator;
+using Microsoft.Extensions.Logging;
 
-namespace BuildBot.Discord.Publishers.GitHub;
+namespace BuildBot.GitHub.Publishers;
 
-public sealed class StatusPublisher : IPublisher<Status>
+public sealed class GithubStatusNotificationHandler : INotificationHandler<GithubStatus>
 {
     private static readonly IReadOnlyList<ColourMapping> ColourMappings =
     [
@@ -17,19 +21,28 @@ public sealed class StatusPublisher : IPublisher<Status>
         new(State: "failure", Colour: Color.Red)
     ];
 
-    private readonly IDiscordBot _bot;
+    private readonly ILogger<GithubStatusNotificationHandler> _logger;
+    private readonly IMediator _mediator;
 
-    public StatusPublisher(IDiscordBot bot)
+    public GithubStatusNotificationHandler(IMediator mediator, ILogger<GithubStatusNotificationHandler> logger)
     {
-        this._bot = bot;
+        this._mediator = mediator;
+        this._logger = logger;
     }
 
-    public Task PublishAsync(Status message, CancellationToken cancellationToken)
+    public ValueTask Handle(GithubStatus notification, CancellationToken cancellationToken)
+    {
+        this._logger.LogDebug($"Github: [{notification.Model.Context}]");
+
+        return this.PublishAsync(message: notification.Model, cancellationToken: cancellationToken);
+    }
+
+    private ValueTask PublishAsync(Status message, CancellationToken cancellationToken)
     {
         // don't output messages for pending builds
         return IsPendingBuild(message)
-            ? Task.CompletedTask
-            : this._bot.PublishAsync(BuildStatusMessage(message));
+            ? ValueTask.CompletedTask
+            : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)), cancellationToken: cancellationToken);
     }
 
     private static bool IsPendingBuild(Status message)

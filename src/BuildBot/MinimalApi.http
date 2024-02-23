@@ -1,0 +1,552 @@
+@MinimalApi_HostAddress = http://localhost:49781
+
+### Server Ping
+GET {{MinimalApi_HostAddress}}/ping
+Accept: application/json
+
+### Github Ping
+POST {{MinimalApi_HostAddress}}/github/ping
+Content-Type: application/json
+Accept: application/json
+X-GitHub-Event: ping
+
+{
+  "zen": "Design for failure.",
+  "hook_id": "123456789"
+}
+
+### Github Push
+POST {{MinimalApi_HostAddress}}/github/push
+Accept: */*
+Content-Type: application/json
+User-Agent: GitHub-Hookshot/8ea4230
+X-GitHub-Delivery: 44d0ea42-d264-11ee-9f50-a20d302de821
+X-GitHub-Event: push
+X-GitHub-Hook-ID: 15460912
+X-GitHub-Hook-Installation-Target-ID: 29401895
+X-GitHub-Hook-Installation-Target-Type: organization
+
+{
+  "ref": "refs/tags/github-build-number-623",
+  "before": "cbd0e8901bc936b2e2feafe996826de6f1659ec7",
+  "after": "0000000000000000000000000000000000000000",
+  "repository": {
+    "id": 115020942,
+    "node_id": "MDEwOlJlcG9zaXRvcnkxMTUwMjA5NDI=",
+    "name": "funfair-server-common",
+    "full_name": "funfair-tech/funfair-server-common",
+    "private": true,
+    "owner": {
+      "name": "funfair-tech",
+      "email": "info@funfair.eu",
+      "login": "funfair-tech",
+      "id": 29401895,
+      "node_id": "MDEyOk9yZ2FuaXphdGlvbjI5NDAxODk1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29401895?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/funfair-tech",
+      "html_url": "https://github.com/funfair-tech",
+      "followers_url": "https://api.github.com/users/funfair-tech/followers",
+      "following_url": "https://api.github.com/users/funfair-tech/following{/other_user}",
+      "gists_url": "https://api.github.com/users/funfair-tech/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/funfair-tech/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/funfair-tech/subscriptions",
+      "organizations_url": "https://api.github.com/users/funfair-tech/orgs",
+      "repos_url": "https://api.github.com/users/funfair-tech/repos",
+      "events_url": "https://api.github.com/users/funfair-tech/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/funfair-tech/received_events",
+      "type": "Organization",
+      "site_admin": false
+    },
+    "html_url": "https://github.com/funfair-tech/funfair-server-common",
+    "description": "Common functionality shared across most projects",
+    "fork": false,
+    "url": "https://github.com/funfair-tech/funfair-server-common",
+    "forks_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/forks",
+    "keys_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/teams",
+    "hooks_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/hooks",
+    "issue_events_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/events",
+    "assignees_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/tags",
+    "blobs_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/languages",
+    "stargazers_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/stargazers",
+    "contributors_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/contributors",
+    "subscribers_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/subscribers",
+    "subscription_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/subscription",
+    "commits_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/merges",
+    "archive_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/downloads",
+    "issues_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/labels{/name}",
+    "releases_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/funfair-tech/funfair-server-common/deployments",
+    "created_at": 1513870612,
+    "updated_at": "2023-05-09T14:52:21Z",
+    "pushed_at": 1708703858,
+    "git_url": "git://github.com/funfair-tech/funfair-server-common.git",
+    "ssh_url": "git@github.com:funfair-tech/funfair-server-common.git",
+    "clone_url": "https://github.com/funfair-tech/funfair-server-common.git",
+    "svn_url": "https://github.com/funfair-tech/funfair-server-common",
+    "homepage": "",
+    "size": 11611,
+    "stargazers_count": 1,
+    "watchers_count": 1,
+    "language": "C#",
+    "has_issues": false,
+    "has_projects": false,
+    "has_downloads": true,
+    "has_wiki": false,
+    "has_pages": false,
+    "has_discussions": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "archived": false,
+    "disabled": false,
+    "open_issues_count": 0,
+    "license": null,
+    "allow_forking": false,
+    "is_template": false,
+    "web_commit_signoff_required": false,
+    "topics": [
+      "base-classes",
+      "dotnet",
+      "dotnet-core",
+      "unit-testing",
+      "xunit"
+    ],
+    "visibility": "private",
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 1,
+    "default_branch": "main",
+    "stargazers": 1,
+    "master_branch": "main",
+    "organization": "funfair-tech",
+    "custom_properties": {
+    }
+  },
+  "pusher": {
+    "name": "credfeto",
+    "email": "credfeto@users.noreply.github.com"
+  },
+  "organization": {
+    "login": "funfair-tech",
+    "id": 29401895,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjI5NDAxODk1",
+    "url": "https://api.github.com/orgs/funfair-tech",
+    "repos_url": "https://api.github.com/orgs/funfair-tech/repos",
+    "events_url": "https://api.github.com/orgs/funfair-tech/events",
+    "hooks_url": "https://api.github.com/orgs/funfair-tech/hooks",
+    "issues_url": "https://api.github.com/orgs/funfair-tech/issues",
+    "members_url": "https://api.github.com/orgs/funfair-tech/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/funfair-tech/public_members{/member}",
+    "avatar_url": "https://avatars.githubusercontent.com/u/29401895?v=4",
+    "description": ""
+  },
+  "sender": {
+    "login": "credfeto",
+    "id": 1020430,
+    "node_id": "MDQ6VXNlcjEwMjA0MzA=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1020430?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/credfeto",
+    "html_url": "https://github.com/credfeto",
+    "followers_url": "https://api.github.com/users/credfeto/followers",
+    "following_url": "https://api.github.com/users/credfeto/following{/other_user}",
+    "gists_url": "https://api.github.com/users/credfeto/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/credfeto/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/credfeto/subscriptions",
+    "organizations_url": "https://api.github.com/users/credfeto/orgs",
+    "repos_url": "https://api.github.com/users/credfeto/repos",
+    "events_url": "https://api.github.com/users/credfeto/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/credfeto/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "created": false,
+  "deleted": true,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/funfair-tech/funfair-server-common/compare/cbd0e8901bc9...000000000000",
+  "commits": [
+  ],
+  "head_commit": null
+}
+
+### Github Status
+POST {{MinimalApi_HostAddress}}/github/status
+Accept: */*
+Content-Type: application/json
+User-Agent: GitHub-Hookshot/8ea4230
+X-GitHub-Delivery: 4d32bf16-d238-11ee-8fd6-e713b1db2d3b
+X-GitHub-Event: status
+X-GitHub-Hook-ID: 186607581
+X-GitHub-Hook-Installation-Target-ID: 29401895
+X-GitHub-Hook-Installation-Target-Type: organization
+
+{
+  "id": 27682796547,
+  "sha": "c25f0fb0f167c156678fe267c6b127f6ad4dea85",
+  "name": "funfair-tech/funfair-ethereum-proxy-server-monitor",
+  "target_url": "https://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor/actions/runs/8018023150",
+  "avatar_url": "https://avatars.githubusercontent.com/u/1020430?v=4",
+  "context": "--> Linted: JSON",
+  "description": "No errors were found in the linting process",
+  "state": "success",
+  "commit": {
+    "sha": "c25f0fb0f167c156678fe267c6b127f6ad4dea85",
+    "node_id": "C_kwDOE1LVfdoAKGMyNWYwZmIwZjE2N2MxNTY2NzhmZTI2N2M2YjEyN2Y2YWQ0ZGVhODU",
+    "commit": {
+      "author": {
+        "name": "dependabot[bot]",
+        "email": "49699333+dependabot[bot]@users.noreply.github.com",
+        "date": "2024-02-23T10:41:21Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-02-23T10:41:21Z"
+      },
+      "message": "[Dependencies]: Bump @angular/material from 17.2.0 to 17.2.1 in /src\n\nBumps [@angular/material](https://github.com/angular/components) from 17.2.0 to 17.2.1.\n- [Release notes](https://github.com/angular/components/releases)\n- [Changelog](https://github.com/angular/components/blob/main/CHANGELOG.md)\n- [Commits](https://github.com/angular/components/compare/17.2.0...17.2.1)\n\n---\nupdated-dependencies:\n- dependency-name: \"@angular/material\"\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>",
+      "tree": {
+        "sha": "9e4708c1cdd16022dd37894f58e26c77f3c7c45a",
+        "url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/trees/9e4708c1cdd16022dd37894f58e26c77f3c7c45a"
+      },
+      "url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/commits/c25f0fb0f167c156678fe267c6b127f6ad4dea85",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJl2HZRCRC1aQ7uu5UhlAAASQwQADxcwcdWKCi0iFcaCNojnHfb\nVXax0E48lltulNdWhnGvqLXxK8R7y8rzaKD8EbOEzkrJApgSHvrOFYI2V4K5VHzR\n8EdjVIe+Mz74TNktJUaNekDwnrOqXqfGkIAxoI4xEGxdcebhIEqclSH5fMVKnfCV\nJk4NIWY4nTzau+9yPz2ISto8G+xIXZJvAyxMHG5hkBkFF4PNZ1dTlaJvY6v9WmWr\n8qI9x/kQeDKX3250gk8kgTET+W2BrtLd0SAOTwDmyWzh0g9JmWlonystN5tSCuPc\nNoSOFPWtGAJgKYt/Mu71BC3uaH+o1/Fx5uufRwv3vf/IRSy4XWnX7yGeZOeX4o/I\nykJcS51YAe1/LVBiTG2v+KoZcV8hoboziRkuqxcNAkixkobzuTaeGeuhJuXtbd9O\nrTgmtRnkgMIy2J6MA6gr7OI+kCvQXE37gkF0i1X+9l+ZXFg/Dea+CMFeYqaidI0M\n5OJnPEv4ulepJXe3MyUiIdPJ68VE5okwdGyztPcsymbytg/OYxeoLbxQyhS8b05D\nRWKSWZWgbyyk4NXwDMumIDQpK/r8HCVUum4o3jLTrhl5FtdTvIJaPnmA5siyM1GC\nrC3+9/M62SRCGV5G90a9PJ55xCpQbeVYjSViv7UsA1QfExCMgwUKen4Ee2vT1A62\nAe/AFxeNKV3IkVbkb3D/\n=I9e/\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 9e4708c1cdd16022dd37894f58e26c77f3c7c45a\nparent 323c0819c5a65a4bd60b6f5989fd96262bf39a07\nauthor dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> 1708684881 +0000\ncommitter GitHub <noreply@github.com> 1708684881 +0000\n\n[Dependencies]: Bump @angular/material from 17.2.0 to 17.2.1 in /src\n\nBumps [@angular/material](https://github.com/angular/components) from 17.2.0 to 17.2.1.\n- [Release notes](https://github.com/angular/components/releases)\n- [Changelog](https://github.com/angular/components/blob/main/CHANGELOG.md)\n- [Commits](https://github.com/angular/components/compare/17.2.0...17.2.1)\n\n---\nupdated-dependencies:\n- dependency-name: \"@angular/material\"\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>"
+      }
+    },
+    "url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/commits/c25f0fb0f167c156678fe267c6b127f6ad4dea85",
+    "html_url": "https://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor/commit/c25f0fb0f167c156678fe267c6b127f6ad4dea85",
+    "comments_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/commits/c25f0fb0f167c156678fe267c6b127f6ad4dea85/comments",
+    "author": {
+      "login": "dependabot[bot]",
+      "id": 49699333,
+      "node_id": "MDM6Qm90NDk2OTkzMzM=",
+      "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dependabot%5Bbot%5D",
+      "html_url": "https://github.com/apps/dependabot",
+      "followers_url": "https://api.github.com/users/dependabot%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/dependabot%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dependabot%5Bbot%5D/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dependabot%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dependabot%5Bbot%5D/subscriptions",
+      "organizations_url": "https://api.github.com/users/dependabot%5Bbot%5D/orgs",
+      "repos_url": "https://api.github.com/users/dependabot%5Bbot%5D/repos",
+      "events_url": "https://api.github.com/users/dependabot%5Bbot%5D/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dependabot%5Bbot%5D/received_events",
+      "type": "Bot",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "323c0819c5a65a4bd60b6f5989fd96262bf39a07",
+        "url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/commits/323c0819c5a65a4bd60b6f5989fd96262bf39a07",
+        "html_url": "https://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor/commit/323c0819c5a65a4bd60b6f5989fd96262bf39a07"
+      }
+    ]
+  },
+  "branches": [
+    {
+      "name": "dependabot/npm_and_yarn/src/angular/material-17.2.1",
+      "commit": {
+        "sha": "c25f0fb0f167c156678fe267c6b127f6ad4dea85",
+        "url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/commits/c25f0fb0f167c156678fe267c6b127f6ad4dea85"
+      },
+      "protected": false
+    }
+  ],
+  "created_at": "2024-02-23T10:42:54+00:00",
+  "updated_at": "2024-02-23T10:42:54+00:00",
+  "repository": {
+    "id": 324195709,
+    "node_id": "MDEwOlJlcG9zaXRvcnkzMjQxOTU3MDk=",
+    "name": "funfair-ethereum-proxy-server-monitor",
+    "full_name": "funfair-tech/funfair-ethereum-proxy-server-monitor",
+    "private": true,
+    "owner": {
+      "login": "funfair-tech",
+      "id": 29401895,
+      "node_id": "MDEyOk9yZ2FuaXphdGlvbjI5NDAxODk1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29401895?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/funfair-tech",
+      "html_url": "https://github.com/funfair-tech",
+      "followers_url": "https://api.github.com/users/funfair-tech/followers",
+      "following_url": "https://api.github.com/users/funfair-tech/following{/other_user}",
+      "gists_url": "https://api.github.com/users/funfair-tech/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/funfair-tech/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/funfair-tech/subscriptions",
+      "organizations_url": "https://api.github.com/users/funfair-tech/orgs",
+      "repos_url": "https://api.github.com/users/funfair-tech/repos",
+      "events_url": "https://api.github.com/users/funfair-tech/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/funfair-tech/received_events",
+      "type": "Organization",
+      "site_admin": false
+    },
+    "html_url": "https://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor",
+    "description": "Ethereum Client Proxy Server monitor",
+    "fork": false,
+    "url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor",
+    "forks_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/forks",
+    "keys_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/teams",
+    "hooks_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/hooks",
+    "issue_events_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/events",
+    "assignees_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/tags",
+    "blobs_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/languages",
+    "stargazers_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/stargazers",
+    "contributors_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/contributors",
+    "subscribers_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/subscribers",
+    "subscription_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/subscription",
+    "commits_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/merges",
+    "archive_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/downloads",
+    "issues_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/labels{/name}",
+    "releases_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/funfair-tech/funfair-ethereum-proxy-server-monitor/deployments",
+    "created_at": "2020-12-24T16:27:06Z",
+    "updated_at": "2022-01-06T14:36:43Z",
+    "pushed_at": "2024-02-23T10:42:46Z",
+    "git_url": "git://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor.git",
+    "ssh_url": "git@github.com:funfair-tech/funfair-ethereum-proxy-server-monitor.git",
+    "clone_url": "https://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor.git",
+    "svn_url": "https://github.com/funfair-tech/funfair-ethereum-proxy-server-monitor",
+    "homepage": null,
+    "size": 9074,
+    "stargazers_count": 1,
+    "watchers_count": 1,
+    "language": "TypeScript",
+    "has_issues": false,
+    "has_projects": false,
+    "has_downloads": true,
+    "has_wiki": false,
+    "has_pages": false,
+    "has_discussions": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "archived": false,
+    "disabled": false,
+    "open_issues_count": 1,
+    "license": null,
+    "allow_forking": false,
+    "is_template": false,
+    "web_commit_signoff_required": false,
+    "topics": [
+    ],
+    "visibility": "private",
+    "forks": 0,
+    "open_issues": 1,
+    "watchers": 1,
+    "default_branch": "main",
+    "custom_properties": {
+    }
+  },
+  "organization": {
+    "login": "funfair-tech",
+    "id": 29401895,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjI5NDAxODk1",
+    "url": "https://api.github.com/orgs/funfair-tech",
+    "repos_url": "https://api.github.com/orgs/funfair-tech/repos",
+    "events_url": "https://api.github.com/orgs/funfair-tech/events",
+    "hooks_url": "https://api.github.com/orgs/funfair-tech/hooks",
+    "issues_url": "https://api.github.com/orgs/funfair-tech/issues",
+    "members_url": "https://api.github.com/orgs/funfair-tech/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/funfair-tech/public_members{/member}",
+    "avatar_url": "https://avatars.githubusercontent.com/u/29401895?v=4",
+    "description": ""
+  },
+  "sender": {
+    "login": "credfeto",
+    "id": 1020430,
+    "node_id": "MDQ6VXNlcjEwMjA0MzA=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1020430?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/credfeto",
+    "html_url": "https://github.com/credfeto",
+    "followers_url": "https://api.github.com/users/credfeto/followers",
+    "following_url": "https://api.github.com/users/credfeto/following{/other_user}",
+    "gists_url": "https://api.github.com/users/credfeto/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/credfeto/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/credfeto/subscriptions",
+    "organizations_url": "https://api.github.com/users/credfeto/orgs",
+    "repos_url": "https://api.github.com/users/credfeto/repos",
+    "events_url": "https://api.github.com/users/credfeto/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/credfeto/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
+
+### Octopus Deploy
+POST {{MinimalApi_HostAddress}}/octopus/deploy
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Timestamp": "2022-02-11T15:48:01.796+00:00",
+  "EventType": "SubscriptionPayload",
+  "Payload": {
+    "ServerUri": "https://octopus.funfair.io",
+    "ServerAuditUri": "https://octopus.funfair.io/app#/Spaces-1/configuration/audit?eventCategories=DeploymentFailed&eventCategories=DeploymentSucceeded&from=2022-02-11T15%3a47%3a30.%2b00%3a00&to=2022-02-11T16%3a48%3a01.%2b01%3a00",
+    "BatchProcessingDate": "2022-02-11T16:48:01.723+01:00",
+    "Subscription": {
+      "Id": "Subscriptions-2",
+      "Name": "BuildBot",
+      "Type": "Event",
+      "IsDisabled": false,
+      "EventNotificationSubscription": {
+        "Filter": {
+          "Users": [],
+          "Projects": [],
+          "ProjectGroups": [],
+          "Environments": [],
+          "EventGroups": [],
+          "EventCategories": [
+            "DeploymentFailed",
+            "DeploymentSucceeded"
+          ],
+          "EventAgents": [],
+          "Tenants": [],
+          "Tags": [],
+          "DocumentTypes": []
+        },
+        "EmailTeams": [],
+        "EmailFrequencyPeriod": "01:00:00",
+        "EmailPriority": "Normal",
+        "EmailDigestLastProcessed": null,
+        "EmailDigestLastProcessedEventAutoId": null,
+        "EmailShowDatesInTimeZoneId": "GMT Standard Time",
+        "WebhookURI": "https://buildbot.funfair.io/octopus/deploy",
+        "WebhookTeams": [],
+        "WebhookTimeout": "00:00:59",
+        "WebhookHeaderKey": null,
+        "WebhookHeaderValue": null,
+        "WebhookLastProcessed": "2022-02-11T15:47:30.680+00:00",
+        "WebhookLastProcessedEventAutoId": 1006581
+      },
+      "SpaceId": "Spaces-1",
+      "Links": {
+        "Self": "/api/Spaces-1/subscriptions/Subscriptions-2"
+      }
+    },
+    "Event": {
+      "Id": "Events-693825",
+      "RelatedDocumentIds": [
+        "Deployments-84781",
+        "Projects-825",
+        "Releases-81092",
+        "Environments-2",
+        "ServerTasks-197738",
+        "Channels-1070"
+      ],
+      "Category": "DeploymentSucceeded",
+      "UserId": "users-system",
+      "Username": "system",
+      "IsService": false,
+      "IdentityEstablishedWith": "",
+      "UserAgent": "Server",
+      "Occurred": "2022-02-11T15:47:36.034+00:00",
+      "Message": "Deploy to Staging (#2) succeeded for Ethereum-Gas-Server release 0.0.1.39 to Staging",
+      "MessageHtml": "<a href='#/deployments/Deployments-84781'>Deploy to Staging (#2)</a> succeeded for <a href='#/projects/Projects-825'>Ethereum-Gas-Server</a> release <a href='#/releases/Releases-81092'>0.0.1.39</a> to <a href='#/environments/Environments-2'>Staging</a>",
+      "MessageReferences": [
+        {
+          "ReferencedDocumentId": "Deployments-84781",
+          "StartIndex": 0,
+          "Length": 22
+        },
+        {
+          "ReferencedDocumentId": "Projects-825",
+          "StartIndex": 37,
+          "Length": 19
+        },
+        {
+          "ReferencedDocumentId": "Releases-81092",
+          "StartIndex": 65,
+          "Length": 8
+        },
+        {
+          "ReferencedDocumentId": "Environments-2",
+          "StartIndex": 77,
+          "Length": 7
+        }
+      ],
+      "Comments": null,
+      "Details": null,
+      "ChangeDetails": {
+        "DocumentContext": null,
+        "Differences": null
+      },
+      "SpaceId": "Spaces-1",
+      "Links": {
+        "Self": "/api/events/Events-693825"
+      }
+    },
+    "BatchId": "8cd8baf9-2d1d-414b-988b-b30a7f380377",
+    "TotalEventsInBatch": 1,
+    "EventNumberInBatch": 1
+  }
+}
