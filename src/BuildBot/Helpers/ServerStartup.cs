@@ -1,12 +1,19 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading;
+using BuildBot.Discord;
+using BuildBot.GitHub;
+using BuildBot.Json;
+using BuildBot.Octopus;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Octopus.Client;
 
 namespace BuildBot.Helpers;
 
@@ -37,51 +44,58 @@ internal static class ServerStartup
         Console.WriteLine($"Max worker threads {maxWorker}, Max IOC threads {maxIoc}");
     }
 
-    public static IHost CreateWebHost<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] TStartup>(
-        string[] args,
-        int httpPort,
-        int httpsPort,
-        int h2Port,
-        string configurationFiledPath)
-        where TStartup : class
+    public static WebApplication CreateApp(string[] args)
     {
-        if (httpPort == 0 && httpsPort == 0 && h2Port == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(httpPort), message: "Not listening on any protocol");
-        }
+        const int httpPort = 49781;
+        const int httpsPort = 0;
+        const int h2Port = 0;
+        WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
-        if (httpPort != 0)
-        {
-            Console.WriteLine($"Listening on http://localhost:{httpPort}/");
-        }
+        string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
 
-        if (httpsPort != 0)
-        {
-            Console.WriteLine($"Listening on https://localhost:{httpsPort}/");
-        }
+        IConfigurationRoot config = LoadConfiguration(configPath);
 
-        if (h2Port != 0)
-        {
-            Console.WriteLine($"Listening on http://localhost:{h2Port}/ for H2");
-        }
+        DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
+        OctopusServerEndpoint octopusServerEndpoint = LoadOctopusServerEndpoint(config);
 
-        AppContext.SetSwitch(switchName: "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", isEnabled: true);
+        builder.Host.UseWindowsService()
+               .UseSystemd();
+        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options, httpPort: httpPort, httpsPort: httpsPort, h2Port: h2Port, configurationFiledPath: configPath))
+               .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
+               .ConfigureLogging((_, logger) => logger.ClearProviders());
 
-        return Host.CreateDefaultBuilder(args)
-                   .ConfigureWebHostDefaults(webHostBuilder =>
-                                             {
-                                                 webHostBuilder.UseKestrel(options: options => SetKestrelOptions(options: options,
-                                                                                                                 httpPort: httpPort,
-                                                                                                                 httpsPort: httpsPort,
-                                                                                                                 h2Port: h2Port,
-                                                                                                                 configurationFiledPath: configurationFiledPath))
-                                                               .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
-                                                               .UseStartup<TStartup>()
-                                                               .ConfigureLogging((_, logger) => logger.ClearProviders());
-                                             })
-                   .UseWindowsService()
-                   .UseSystemd()
-                   .Build();
+        builder.Services.ConfigureHttpJsonOptions(options => { options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default); })
+               .AddDiscord(discordConfig)
+               .AddGitHub()
+               .AddOctopus(octopusServerEndpoint)
+               .AddMediator();
+
+        return builder.Build();
+    }
+
+    private static IConfigurationRoot LoadConfiguration(string configPath)
+    {
+        return new ConfigurationBuilder().SetBasePath(configPath)
+                                         .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
+                                         .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
+                                         .AddEnvironmentVariables()
+                                         .Build();
+    }
+
+    private static OctopusServerEndpoint LoadOctopusServerEndpoint(IConfigurationRoot configuration)
+    {
+        string uri = configuration["ServerOctopus:Url"] ?? string.Empty;
+        string apiKey = configuration["ServerOctopus:ApiKey"] ?? string.Empty;
+
+        return new(octopusServerAddress: uri, apiKey: apiKey);
+    }
+
+    private static DiscordBotConfiguration LoadDiscordConfig(IConfigurationRoot configuration)
+    {
+        return new(server: configuration["Discord:Server"] ?? string.Empty,
+                   channel: configuration["Discord:Channel"] ?? string.Empty,
+                   releaseChannel: configuration["Discord:ReleaseChannel"] ?? string.Empty,
+                   token: configuration["Discord:Token"] ?? string.Empty);
     }
 
     private static void SetH2ListenOptions(ListenOptions listenOptions)

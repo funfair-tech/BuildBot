@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using BuildBot.Json;
 using BuildBot.ServiceModel.GitHub;
 using FunFair.Test.Common;
@@ -227,12 +228,12 @@ public sealed class DecodesGithubPush : TestBase
   }
 }";
 
-    private static JsonSerializerOptions SerializerOptionsWithContext { get; } = JsonSerialiser.Configure(new());
-
     [Fact]
     public void DecodeOpt()
     {
-        Push packet = JsonSerializer.Deserialize<Push>(json: GITHUB_PUSH, options: SerializerOptionsWithContext);
+        JsonTypeInfo<Push> pushTypeInfo = AssertReallyNotNull(AppSerializationContext.Default.GetTypeInfo(typeof(Push)) as JsonTypeInfo<Push>);
+
+        Push packet = JsonSerializer.Deserialize(json: GITHUB_PUSH, jsonTypeInfo: pushTypeInfo);
 
         Assert.Equal(expected: "refs/heads/main", actual: packet.Ref);
         Assert.NotEmpty(packet.Commits);

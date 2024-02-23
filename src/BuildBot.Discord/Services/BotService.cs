@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BuildBot.Discord;
 using Microsoft.Extensions.Hosting;
 
-namespace BuildBot.Services;
+namespace BuildBot.Discord.Services;
 
 public sealed class BotService : IHostedService
 {

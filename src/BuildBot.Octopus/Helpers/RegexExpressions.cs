@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BuildBot.Discord.Publishers.Octopus;
+namespace BuildBot.Octopus.Helpers;
 
 internal static partial class RegexExpressions
 {
