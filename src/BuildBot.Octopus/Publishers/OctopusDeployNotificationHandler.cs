@@ -108,7 +108,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
         AddDeploymentDetails(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName);
 
-        await this._mediator.Publish(new BotMessage(builder.Build()), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new BotMessage(builder), cancellationToken: cancellationToken);
 
         this._logger.LogDebug($"{projectName}: {releaseVersion} Build successful: {succeeded} Noteworthy: {releaseNoteWorthy}");
 
@@ -119,7 +119,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
     {
         if (succeeded && releaseNoteWorthy)
         {
-            await this._mediator.Publish(new BotReleaseMessage(builder.Build()), cancellationToken: cancellationToken);
+            await this._mediator.Publish(new BotReleaseMessage(builder), cancellationToken: cancellationToken);
         }
     }
 

@@ -5,4 +5,4 @@ using Mediator;
 namespace BuildBot.Discord.Models;
 
 [DebuggerDisplay("{Message.Title}")]
-public sealed record BotReleaseMessage(Embed Message) : INotification;
+public sealed record BotReleaseMessage(EmbedBuilder Message) : INotification;

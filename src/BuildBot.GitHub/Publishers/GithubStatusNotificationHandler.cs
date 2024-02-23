@@ -42,9 +42,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
         // don't output messages for pending builds
         return IsPendingBuild(message)
             ? ValueTask.CompletedTask
-            : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)
-                                                        .Build()),
-                                     cancellationToken: cancellationToken);
+            : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)), cancellationToken: cancellationToken);
     }
 
     private static bool IsPendingBuild(Status message)

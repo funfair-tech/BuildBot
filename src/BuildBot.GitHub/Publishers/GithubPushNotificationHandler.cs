@@ -67,7 +67,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
         EmbedBuilder builder = BuildPushEmbed(message);
 
-        await this._mediator.Publish(new BotMessage(builder.Build()), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new BotMessage(builder), cancellationToken: cancellationToken);
     }
 
     private static bool IsIgnoredRepo(in Push message)
