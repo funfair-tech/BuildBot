@@ -53,6 +53,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
     private ValueTask PublishAsync(Deploy message, CancellationToken cancellationToken)
     {
+        // TODO... should this queue the message and then process it in a background task?
         DeployPayload? payload = message.Payload;
 
         return payload is null
