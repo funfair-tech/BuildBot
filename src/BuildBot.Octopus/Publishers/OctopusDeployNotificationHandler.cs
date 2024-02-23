@@ -123,7 +123,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         }
     }
 
-    private static string? GetReleaseVersion(ReleaseResource release, string? releaseId)
+    private static string? GetReleaseVersion(ReleaseResource? release, string? releaseId)
     {
         return release is not null
             ? release.Version
