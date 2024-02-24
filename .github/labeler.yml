@@ -36,8 +36,12 @@
  - any: [ 'src/BuildBot/**/*' ]
 "Discord":
  - any: [ 'src/BuildBot.Discord/**/*' ]
+"GitHub":
+ - any: [ 'src/BuildBot.GitHub/**/*' ]
 "Json":
  - any: [ 'src/BuildBot.Json/**/*' ]
+"Octopus":
+ - any: [ 'src/BuildBot.Octopus/**/*' ]
 "ServiceModel":
  - any: [ 'src/BuildBot.ServiceModel/**/*' ]
 "Tests":
