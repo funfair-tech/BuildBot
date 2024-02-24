@@ -60,7 +60,11 @@ internal static class ServerStartup
 
         builder.Host.UseWindowsService()
                .UseSystemd();
-        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options, httpPort: httpPort, httpsPort: httpsPort, h2Port: h2Port, configurationFiledPath: configPath))
+        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options,
+                                                                         httpPort: httpPort,
+                                                                         httpsPort: httpsPort,
+                                                                         h2Port: h2Port,
+                                                                         configurationFiledPath: configPath))
                .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
                .ConfigureLogging((_, logger) => logger.ClearProviders());
 
