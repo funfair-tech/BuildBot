@@ -122,9 +122,17 @@
    color: "96f7d2"
    description: "Changes in BuildBot.Discord project"
 
+ - name: "GitHub"
+   color: "96f7d2"
+   description: "Changes in BuildBot.GitHub project"
+
  - name: "Json"
    color: "96f7d2"
    description: "Changes in BuildBot.Json project"
+
+ - name: "Octopus"
+   color: "96f7d2"
+   description: "Changes in BuildBot.Octopus project"
 
  - name: "ServiceModel"
    color: "96f7d2"
