@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
 - SDK - Updated DotNet SDK to 8.0.200
-- Dependencies - Updated Octopus.Client to 14.3.1208
 - Dependencies - Updated xunit.analyzers to 1.11.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.7
 - Dependencies - Updated xunit to 2.7.0
@@ -27,6 +26,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.11.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.20.0.85982
 - Dependencies - Updated coverlet to 6.0.1
+- Dependencies - Updated Octopus.Client to 14.3.1232
 ### Removed
 ### Deployment Changes
 
