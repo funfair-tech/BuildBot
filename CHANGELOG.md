@@ -27,6 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.20.0.85982
 - Dependencies - Updated coverlet to 6.0.1
 - Dependencies - Updated Octopus.Client to 14.3.1232
+- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
 ### Removed
 ### Deployment Changes
 
