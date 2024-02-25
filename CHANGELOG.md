@@ -27,7 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated coverlet to 6.0.1
 - Dependencies - Updated Octopus.Client to 14.3.1232
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
-- Dependencies - Updated Meziantou.Analyzer to 2.0.144
+- Dependencies - Updated Meziantou.Analyzer to 2.0.145
 ### Removed
 ### Deployment Changes
 
