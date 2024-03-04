@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.GitHub.Models;
+using BuildBot.GitHub.Publishers.LoggingExtensions;
 using Mediator;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ public sealed class GithubPingNotificationHandler : INotificationHandler<GithubP
 
     public ValueTask Handle(GithubPing notification, CancellationToken cancellationToken)
     {
-        this._logger.LogDebug($"Github: [{notification.Model.HookId}] {notification.Model.Zen}");
+        this._logger.HookZen(hookId: notification.Model.HookId, zen: notification.Model.Zen);
 
         return ValueTask.CompletedTask;
     }

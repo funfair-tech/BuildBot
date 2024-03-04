@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
 using BuildBot.GitHub.Models;
+using BuildBot.GitHub.Publishers.LoggingExtensions;
 using BuildBot.ServiceModel.GitHub;
 using Discord;
 using Mediator;
@@ -32,7 +33,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 
     public ValueTask Handle(GithubStatus notification, CancellationToken cancellationToken)
     {
-        this._logger.LogDebug($"Github: [{notification.Model.Context}]");
+        this._logger.GitHubRef(notification.Model.Context);
 
         return this.PublishAsync(message: notification.Model, cancellationToken: cancellationToken);
     }
