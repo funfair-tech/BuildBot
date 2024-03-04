@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
 using BuildBot.Octopus.Models;
+using BuildBot.Octopus.Publishers.LoggingExtensions;
 using BuildBot.ServiceModel.Octopus;
 using Discord;
 using Mediator;
@@ -46,7 +47,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
     public ValueTask Handle(OctopusDeploy notification, CancellationToken cancellationToken)
     {
-        this._logger.LogDebug($"Octopus: [{notification.Model.EventType}]");
+        this._logger.EventType(notification.Model.EventType);
 
         return this.PublishAsync(message: notification.Model, cancellationToken: cancellationToken);
     }
@@ -97,12 +98,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
         bool succeeded = HasSucceeded(payload);
 
-        EmbedBuilder builder = BuildMessage(projectName: projectName,
-                                            releaseVersion: releaseVersion,
-                                            environmentName: environmentName,
-                                            tenantName: tenantName,
-                                            release: release,
-                                            succeeded: succeeded);
+        EmbedBuilder builder = BuildMessage(projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release, succeeded: succeeded);
 
         AddDeploymentId(serverUri: serverUri, deploymentId: deploymentId, builder: builder, spaceId: spaceId);
 
@@ -110,7 +106,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
         await this._mediator.Publish(new BotMessage(builder), cancellationToken: cancellationToken);
 
-        this._logger.LogDebug($"{projectName}: {releaseVersion} Build successful: {succeeded} Noteworthy: {releaseNoteWorthy}");
+        this._logger.BuildCompleted(projectName: projectName, releaseVersion: releaseVersion, succeeded: succeeded, releaseNoteWorthy: releaseNoteWorthy);
 
         await this.PublishToReleaseChannelAsync(succeeded: succeeded, releaseNoteWorthy: releaseNoteWorthy, builder: builder, cancellationToken: cancellationToken);
     }
@@ -128,7 +124,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get tenant {tenantId}: {exception.Message}");
+            this._logger.FailedToGetTenant(tenantId: tenantId, message: exception.Message, exception: exception);
 
             return null;
         }
@@ -147,7 +143,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get environment {environmentId}: {exception.Message}");
+            this._logger.FailedToGetEnvironment(environmentId: environmentId, message: exception.Message, exception: exception);
 
             return null;
         }
@@ -166,7 +162,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get release {releaseId}: {exception.Message}");
+            this._logger.FailedToGetRelease(releaseId: releaseId, message: exception.Message, exception: exception);
 
             return null;
         }
@@ -185,7 +181,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to get project {projectId}: {exception.Message}");
+            this._logger.FailedToGetProject(projectId: projectId, message: exception.Message, exception: exception);
 
             return null;
         }
@@ -224,12 +220,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
         if (succeeded)
         {
-            BuildSuccessfulDeployment(builder: builder,
-                                      projectName: projectName,
-                                      releaseVersion: releaseVersion,
-                                      environmentName: environmentName,
-                                      tenantName: tenantName,
-                                      release: release);
+            BuildSuccessfulDeployment(builder: builder, projectName: projectName, releaseVersion: releaseVersion, environmentName: environmentName, tenantName: tenantName, release: release);
         }
         else
         {
@@ -262,12 +253,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
         }
     }
 
-    private static void BuildSuccessfulDeployment(EmbedBuilder builder,
-                                                  string projectName,
-                                                  string releaseVersion,
-                                                  string environmentName,
-                                                  string? tenantName,
-                                                  ReleaseResource? release)
+    private static void BuildSuccessfulDeployment(EmbedBuilder builder, string projectName, string releaseVersion, string environmentName, string? tenantName, ReleaseResource? release)
     {
         builder.Color = Color.Green;
         builder.Title = $"{projectName} {releaseVersion} was deployed to {environmentName.ToLowerInvariant()}";
