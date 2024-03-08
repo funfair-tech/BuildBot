@@ -1,15 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using System.Threading.Tasks;
-using BuildBot.GitHub.Models;
 using BuildBot.Helpers;
-using BuildBot.Octopus.Models;
-using BuildBot.ServiceModel.GitHub;
-using BuildBot.ServiceModel.Octopus;
-using Mediator;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 
 namespace BuildBot;
 
@@ -26,62 +18,8 @@ public static class Program
 
         await using (WebApplication app = ServerStartup.CreateApp(args))
         {
-            await app.ConfigureTestEndpoints()
-                     .ConfigureGitHubEndpoints()
-                     .ConfigureOctopusEndpoints()
+            await app.ConfigureEndpoints()
                      .RunAsync();
         }
-    }
-
-    private static WebApplication ConfigureTestEndpoints(this WebApplication app)
-    {
-        app.MapGet(pattern: "/ping", handler: () => Results.Ok(PingPong.Model));
-
-        return app;
-    }
-
-    private static WebApplication ConfigureGitHubEndpoints(this WebApplication app)
-    {
-        RouteGroupBuilder group = app.MapGroup("/github");
-        group.MapPost(pattern: "ping",
-                      handler: async (PingModel model, IMediator mediator, CancellationToken cancellationToken) =>
-                               {
-                                   await mediator.Publish(new GithubPing(model), cancellationToken: cancellationToken);
-
-                                   return Results.NoContent();
-                               });
-
-        group.MapPost(pattern: "push",
-                      handler: async (Push model, IMediator mediator, CancellationToken cancellationToken) =>
-                               {
-                                   await mediator.Publish(new GithubPush(model), cancellationToken: cancellationToken);
-
-                                   return Results.NoContent();
-                               });
-
-        group.MapPost(pattern: "status",
-                      handler: async (Status model, IMediator mediator, CancellationToken cancellationToken) =>
-                               {
-                                   await mediator.Publish(new GithubStatus(model), cancellationToken: cancellationToken);
-
-                                   return Results.NoContent();
-                               });
-
-        return app;
-    }
-
-    private static WebApplication ConfigureOctopusEndpoints(this WebApplication app)
-    {
-        RouteGroupBuilder group = app.MapGroup("/octopus");
-
-        group.MapPost(pattern: "deploy",
-                      handler: async (Deploy model, IMediator mediator, CancellationToken cancellationToken) =>
-                               {
-                                   await mediator.Publish(new OctopusDeploy(model), cancellationToken: cancellationToken);
-
-                                   return Results.NoContent();
-                               });
-
-        return app;
     }
 }
