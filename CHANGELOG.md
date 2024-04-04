@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Switched to use minimal APIs
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
 - Dependencies - Updated coverlet to 6.0.2
-- Dependencies - Updated Octopus.Client to 14.3.1277
 - SDK - Updated DotNet SDK to 8.0.203
 - Dependencies - Updated Meziantou.Analyzer to 2.0.146
 - Dependencies - Updated Discord.Net to 3.14.1
@@ -28,6 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.12.324
 - Dependencies - Updated FunFair.Test.Common to 6.1.48.414
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.23.1.88495
+- Dependencies - Updated Octopus.Client to 14.3.1304
 ### Removed
 ### Deployment Changes
 
