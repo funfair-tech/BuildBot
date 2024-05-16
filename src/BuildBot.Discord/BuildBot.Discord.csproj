@@ -39,7 +39,7 @@
     <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="3.14.1" />
+    <PackageReference Include="Discord.Net" Version="3.15.0" />
     <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>

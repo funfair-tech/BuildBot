@@ -15,7 +15,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Switched to use minimal APIs
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
 - Dependencies - Updated coverlet to 6.0.2
-- Dependencies - Updated Discord.Net to 3.14.1
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
 - Dependencies - Updated Octopus.Client to 14.3.1304
 - Dependencies - Updated FunFair.Test.Common to 6.1.49.427
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.13.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.0
 - Dependencies - Updated xunit to 2.8.0
+- Dependencies - Updated Discord.Net to 3.15.0
 ### Removed
 ### Deployment Changes
 
