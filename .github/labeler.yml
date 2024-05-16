@@ -1,48 +1,48 @@
-"C#":
- - any: [ './**/*.cs', './**/*.csproj' ]
-"C# Project":
- - any: [ './**/*.csproj' ]
-"C# Solution":
- - any: [ './**/*.sln' ]
-"Powershell":
- - any: [ './**/*.ps1', './**/*.psm1' ]
-"SQL":
- - any: [ 'db/**/*', './**/*.sql' ]
-"Solidity":
- - any: [ './**/*.sol' ]
-"unit-tests":
- - any: [ 'src/*.Tests.*/**/*', 'src/*.Tests/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*' ]
 ".NET update":
- - any: [ 'src/global.json' ]
-"Config Change":
- - any: [ 'src/**/*.json', '!src/global.json' ]
-"Static Code Analysis Rules":
- - any: [ 'src/CodeAnalysis.ruleset' ]
-"Migration Script":
- - any: [ 'tools/MigrationScripts/**/*' ]
-"Legal Text":
- - any: [ 'tools/LegalText/**/*' ]
+ - any: [ ''src/global.json'' ]
+"buildbot":
+ - any: [ ''src/$BuildBot/**/*'' ]
+"buildbot-discord":
+ - any: [ ''src/$BuildBot.Discord/**/*'' ]
+"buildbot-github":
+ - any: [ ''src/$BuildBot.GitHub/**/*'' ]
+"buildbot-json":
+ - any: [ ''src/$BuildBot.Json/**/*'' ]
+"buildbot-octopus":
+ - any: [ ''src/$BuildBot.Octopus/**/*'' ]
+"buildbot-servicemodel":
+ - any: [ ''src/$BuildBot.ServiceModel/**/*'' ]
+"buildbot-tests":
+ - any: [ ''src/$BuildBot.Tests/**/*'' ]
+"C#":
+ - any: [ ''./**/*.cs', './**/*.csproj'' ]
+"C# Project":
+ - any: [ ''./**/*.csproj'' ]
+"C# Solution":
+ - any: [ ''./**/*.sln'' ]
 "Change Log":
- - any: [ 'CHANGELOG.md' ]
-"Read Me":
- - any: [ 'README.md' ]
-"Setup":
- - any: [ 'SETUP.md' ]
-"Markdown":
- - any: [ './**/*.md' ]
+ - any: [ ''CHANGELOG.md'' ]
+"Config Change":
+ - any: [ ''src/**/*.json', '!src/global.json'' ]
 "github-actions":
- - any: [ '.github/workflows/*.yml' ]
-"BuildBot":
- - any: [ 'src/BuildBot/**/*' ]
-"Discord":
- - any: [ 'src/BuildBot.Discord/**/*' ]
-"GitHub":
- - any: [ 'src/BuildBot.GitHub/**/*' ]
-"Json":
- - any: [ 'src/BuildBot.Json/**/*' ]
-"Octopus":
- - any: [ 'src/BuildBot.Octopus/**/*' ]
-"ServiceModel":
- - any: [ 'src/BuildBot.ServiceModel/**/*' ]
-"Tests":
- - any: [ 'src/BuildBot.Tests/**/*' ]
+ - any: [ ''.github/workflows/*.yml'' ]
+"Legal Text":
+ - any: [ ''tools/LegalText/**/*'' ]
+"Markdown":
+ - any: [ ''./**/*.md'' ]
+"Migration Script":
+ - any: [ ''tools/MigrationScripts/**/*'' ]
+"Powershell":
+ - any: [ ''./**/*.ps1', './**/*.psm1'' ]
+"Read Me":
+ - any: [ ''README.md'' ]
+"Setup":
+ - any: [ ''SETUP.md'' ]
+"Solidity":
+ - any: [ ''./**/*.sol'' ]
+"SQL":
+ - any: [ ''./**/*.sql', 'db/**/*'' ]
+"Static Code Analysis Rules":
+ - any: [ ''src/CodeAnalysis.ruleset'' ]
+"unit-tests":
+ - any: [ ''src/*.Tests.*/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*', 'src/*.Tests/**/*'' ]
