@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
 - Dependencies - Updated coverlet to 6.0.2
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
-- Dependencies - Updated Octopus.Client to 14.3.1304
 - SDK - Updated DotNet SDK to 8.0.300
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.14.369
 - Dependencies - Updated Meziantou.Analyzer to 2.0.150
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.8.0
 - Dependencies - Updated Discord.Net to 3.15.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.55.490
+- Dependencies - Updated Octopus.Client to 14.3.1410
 ### Removed
 ### Deployment Changes
 
