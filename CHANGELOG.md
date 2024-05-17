@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
 - SDK - Updated DotNet SDK to 8.0.300
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.14.369
-- Dependencies - Updated Meziantou.Analyzer to 2.0.150
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.10.48
 - Dependencies - Updated Roslynator.Analyzers to 4.12.3
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.15.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.55.490
 - Dependencies - Updated Octopus.Client to 14.3.1410
+- Dependencies - Updated Meziantou.Analyzer to 2.0.151
 ### Removed
 ### Deployment Changes
 
