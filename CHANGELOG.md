@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6169
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 1.4.3
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.15.397
 - Dependencies - Updated Meziantou.Analyzer to 2.0.152
 - Dependencies - Updated Octopus.Client to 14.3.1419
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.10.0
 ### Removed
 ### Deployment Changes
 
