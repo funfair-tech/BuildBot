@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.10.48
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated Discord.Net to 3.15.0
-- Dependencies - Updated Octopus.Client to 14.3.1419
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.10.0
 - Dependencies - Updated xunit.analyzers to 1.14.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.1
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.26.0.92422
 - Dependencies - Updated Meziantou.Analyzer to 2.0.155
 - Dependencies - Updated Roslynator.Analyzers to 4.12.4
+- Dependencies - Updated Octopus.Client to 14.3.1436
 ### Removed
 ### Deployment Changes
 
