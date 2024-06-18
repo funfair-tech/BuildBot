@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.10.48
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
-- Dependencies - Updated Discord.Net to 3.15.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.10.0
 - Dependencies - Updated xunit.analyzers to 1.14.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.1
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.18.436
 - Dependencies - Updated FunFair.Test.Common to 6.1.60.530
 - Dependencies - Updated Meziantou.Analyzer to 2.0.158
+- Dependencies - Updated Discord.Net to 3.15.1
 ### Removed
 ### Deployment Changes
 
