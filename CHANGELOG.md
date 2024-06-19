@@ -28,7 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.18.436
 - Dependencies - Updated FunFair.Test.Common to 6.1.60.530
 - Dependencies - Updated Meziantou.Analyzer to 2.0.158
-- Dependencies - Updated Discord.Net to 3.15.1
+- Dependencies - Updated Discord.Net to 3.15.2
 ### Removed
 ### Deployment Changes
 
