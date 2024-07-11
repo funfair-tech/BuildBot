@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.4
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.18.436
 - Dependencies - Updated Discord.Net to 3.15.2
-- Dependencies - Updated FunFair.Test.Common to 6.1.61.538
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.28.0.94264
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.1.593
 - Dependencies - Updated xunit.analyzers to 1.15.0
@@ -30,6 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 8.0.303
 - Dependencies - Updated Meziantou.Analyzer to 2.0.160
 - Dependencies - Updated Octopus.Client to 14.3.1529
+- Dependencies - Updated FunFair.Test.Common to 6.1.62.556
 ### Removed
 ### Deployment Changes
 
