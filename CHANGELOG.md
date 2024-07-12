@@ -28,8 +28,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.0
 - SDK - Updated DotNet SDK to 8.0.303
 - Dependencies - Updated Meziantou.Analyzer to 2.0.160
-- Dependencies - Updated Octopus.Client to 14.3.1529
 - Dependencies - Updated FunFair.Test.Common to 6.1.62.556
+- Dependencies - Updated Octopus.Client to 14.3.1534
 ### Removed
 ### Deployment Changes
 
