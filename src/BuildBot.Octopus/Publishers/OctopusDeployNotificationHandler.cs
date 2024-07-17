@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -274,8 +273,8 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
         if (reformatted.Length > 2048)
         {
-            reformatted = reformatted.Substring(startIndex: 0, length: 2048)
-                                     .Trim();
+            reformatted = reformatted[..2048]
+                .Trim();
             builder.AddField(name: "WARNING", value: "Release notes truncated as too long");
         }
 
@@ -373,7 +372,7 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
 
     private static string MakeCodeBold(string line)
     {
-        return Bold(line.Substring(startIndex: 4)
+        return Bold(line[4..]
                         .Trim())
             .ToUpperInvariant();
     }
@@ -440,11 +439,5 @@ public sealed class OctopusDeployNotificationHandler : INotificationHandler<Octo
     private static string Bold(string value)
     {
         return Wrap(value: value, wrapWith: "**");
-    }
-
-    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Local", Justification = "For expanson")]
-    private static string Underline(string value)
-    {
-        return Wrap(value: value, wrapWith: "__");
     }
 }

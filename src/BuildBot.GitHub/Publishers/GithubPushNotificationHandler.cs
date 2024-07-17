@@ -130,7 +130,8 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static string BranchName(in Push message)
     {
-        return message.Ref.Substring("refs/heads/".Length);
+        const string refsHeadsPrefix = "refs/heads/";
+        return message.Ref[refsHeadsPrefix.Length..];
     }
 
     private static string GetCommitString(in Push message)
