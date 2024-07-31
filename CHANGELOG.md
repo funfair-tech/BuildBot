@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.10.0
 - Dependencies - Updated Roslynator.Analyzers to 4.12.4
-- Dependencies - Updated FunFair.CodeAnalysis to 7.0.18.436
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.1.593
 - Dependencies - Updated xunit.analyzers to 1.15.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.2
@@ -30,6 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 1.5.0
 - Dependencies - Updated Discord.Net to 3.15.3
 - Dependencies - Updated Octopus.Client to 14.3.1567
+- Dependencies - Updated FunFair.CodeAnalysis to 7.0.19.498
 ### Removed
 ### Deployment Changes
 
