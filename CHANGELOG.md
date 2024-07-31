@@ -29,7 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.62.556
 - Dependencies - Updated Octopus.Client to 14.3.1534
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.29.0.95321
-- Dependencies - Updated Meziantou.Analyzer to 2.0.161
+- Dependencies - Updated Meziantou.Analyzer to 2.0.163
 ### Removed
 ### Deployment Changes
 
