@@ -74,7 +74,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
     private static EmbedFieldBuilder AddBranchEmbed(Status message)
     {
         return new EmbedFieldBuilder().WithName("Branch")
-                                      .WithValue(message.Branches.Select(b => b.Name)
+                                      .WithValue(message.Branches.Select(static b => b.Name)
                                                         .FirstOrDefault());
     }
 

@@ -15,7 +15,7 @@ internal static partial class Endpoints
         RouteGroupBuilder group = app.MapGroup("/octopus");
 
         group.MapPost(pattern: "deploy",
-                      handler: async (Deploy model, IMediator mediator, CancellationToken cancellationToken) =>
+                      handler: static async (Deploy model, IMediator mediator, CancellationToken cancellationToken) =>
                                {
                                    await mediator.Publish(new OctopusDeploy(model), cancellationToken: cancellationToken);
 

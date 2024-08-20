@@ -78,7 +78,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static bool IsIgnoredCommit(in Push message)
     {
-        if (message.Commits.Any(predicate: c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
+        if (message.Commits.Any(predicate: static c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
         {
             return true;
         }
@@ -131,6 +131,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
     private static string BranchName(in Push message)
     {
         const string refsHeadsPrefix = "refs/heads/";
+
         return message.Ref[refsHeadsPrefix.Length..];
     }
 

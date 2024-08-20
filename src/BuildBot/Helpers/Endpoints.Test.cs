@@ -7,7 +7,7 @@ internal static partial class Endpoints
 {
     private static WebApplication ConfigureTestEndpoints(this WebApplication app)
     {
-        app.MapGet(pattern: "/ping", handler: () => Results.Ok(PingPong.Model));
+        app.MapGet(pattern: "/ping", handler: static () => Results.Ok(PingPong.Model));
 
         return app;
     }
