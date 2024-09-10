@@ -1,0 +1,342 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Coinbot",
+  "Parameters": {
+    "ApplicationOwner": {
+      "Type": "String"
+    },
+    "ApplicationName": {
+      "Type": "String"
+    },
+    "ApplicationContainer": {
+      "Type": "String"
+    },
+    "ApplicationVersion": {
+      "Type": "String"
+    },
+    "Debug": {
+      "Type": "String",
+      "Default": "True"
+    },
+    "ECSClusterName": {
+      "Type": "String",
+      "Default": "DiscordBots"
+    },
+    "SecurityGroupIDs": {
+      "Type": "CommaDelimitedList",
+      "Default": "sg-e3e65a9a,sg-0272027302777cb4d"
+    },
+    "SubnetIDs": {
+      "Type": "CommaDelimitedList",
+      "Default": "subnet-fabb50b3,subnet-d5ea03b2,subnet-c68aa09e"
+    },
+    "VpcID": {
+      "Type": "String",
+      "Default": "vpc-ad3bd9ca"
+    },
+    "TaskDefinitionCPU": {
+      "Type": "String",
+      "Default": "256"
+    },
+    "TaskDefinitionMemory": {
+      "Type": "String",
+      "Default": "1024"
+    },
+    "TaskRole": {
+      "Type": "String",
+      "Default": ""
+    },
+    "TaskExecutionRole": {
+      "Type": "String",
+      "Default": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole"
+    },
+    "DesiredCount": {
+      "Type": "Number",
+      "Default": "1"
+    },
+    "MinimumHealthPercent": {
+      "Type": "Number",
+      "Default": "100"
+    },
+    "MaximumHealthPercent": {
+      "Type": "Number",
+      "Default": "200"
+    },
+    "AwsContainerRegistry": {
+      "Type": "String",
+      "Default": "117769150821.dkr.ecr.eu-west-1.amazonaws.com"
+    },
+    "SecretsManagerArn": {
+      "Type": "String",
+      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:CoinBot-2fo7KN"
+    }
+  },
+  "Resources": {
+    "TaskDefinition": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Essential": true,
+            "Image": {
+              "Fn::Sub": [
+                "${Registry}/${ApplicationOwner}/${ApplicationContainer}:${Version}",
+                {
+                  "Registry": {
+                    "Ref": "AwsContainerRegistry"
+                  },
+                  "Owner": {
+                    "Ref": "ApplicationOwner"
+                  },
+                  "Container": {
+                    "Ref": "ApplicationContainer"
+                  },
+                  "Version": {
+                    "Ref": "ApplicationVersion"
+                  }
+                }
+              ]
+            },
+            "Name": {
+              "Ref": "ApplicationName"
+            },
+            "ResourceRequirements": [],
+            "EnvironmentFiles": [],
+            "Environment": [
+              {
+                "Name": "DEBUG",
+                "Value": {
+                  "Ref": "Debug"
+                }
+              },
+              {
+                "Name": "NODE_ENV",
+                "Value": "production"
+              },
+              {
+                "Name": "SQL_SERVER",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "SQL_SERVER"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "SQL_DB",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "SQL_DB"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "SQL_USER",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "SQL_USER"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "SQL_PASSWORD",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "SQL_PASSWORD"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "DISCORD__TOKEN",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "DISCORD_TOKEN"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "DISCORD__SERVER",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "DISCORD_SERVER"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "DISCORD__TOKEN",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "DISCORD_TOKEN"
+                    }
+                  ]
+                }
+              }
+            ],
+            "DisableNetworking": false,
+            "DnsServers": [],
+            "DnsSearchDomains": [],
+            "ExtraHosts": [],
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Fn::Sub": [
+                    "/ecs/${Path}/",
+                    {
+                      "Path": {
+                        "Ref": "ApplicationName"
+                      }
+                    }
+                  ]
+                },
+                "awslogs-region": "eu-west-1",
+                "awslogs-stream-prefix": "ecs"
+              }
+            },
+            "PortMappings": [],
+            "HealthCheck": {
+              "Command": [
+                "CMD-SHELL",
+                "/bin/sh /usr/src/app/healthcheck"
+              ],
+              "Interval": "5",
+              "Retries": "3",
+              "StartPeriod": "5",
+              "Timeout": "2"
+            },
+            "StartTimeout": "15",
+            "StopTimeout": "15"
+          }
+        ],
+        "Family": {
+          "Ref": "ApplicationName"
+        },
+        "Cpu": {
+          "Ref": "TaskDefinitionCPU"
+        },
+        "Memory": {
+          "Ref": "TaskDefinitionMemory"
+        },
+        "ExecutionRoleArn": {
+          "Ref": "TaskExecutionRole"
+        },
+        "TaskRoleArn": {
+          "Ref": "TaskRole"
+        },
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "NetworkMode": "awsvpc",
+        "Volumes": [],
+        "Tags": [
+          {
+            "Key": "Network",
+            "Value": "avalanche"
+          }
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX"
+        }
+      }
+    },
+    "LogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": [
+            "/ecs/${Path}/",
+            {
+              "Path": {
+                "Ref": "ApplicationName"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ECSService": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Name": {
+          "Ref": "ApplicationName"
+        },
+        "Cluster": {
+          "Ref": "ECSClusterName"
+        },
+        "TaskDefinition": {
+          "Ref": "TaskDefinition"
+        },
+        "DesiredCount": {
+          "Ref": "DesiredCount"
+        },
+        "EnableECSManagedTags": false,
+        "Tags": [],
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": {
+              "Ref": "SecurityGroupIDs"
+            },
+            "Subnets": {
+              "Ref": "SubnetIDs"
+            }
+          }
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": {
+            "Ref": "MaximumHealthPercent"
+          },
+          "MinimumHealthyPercent": {
+            "Ref": "MinimumHealthPercent"
+          }
+        },
+        "LoadBalancers": []
+      },
+      "DependsOn": [
+        "TaskDefinition"
+      ]
+    }
+  }
+}
