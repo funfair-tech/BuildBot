@@ -57,9 +57,6 @@
       "Type": "String",
       "Default": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole"
     },
-    "ApiPrefix": {
-      "Type": "String"
-    },
     "DesiredCount": {
       "Type": "Number",
       "Default": "1"
@@ -170,7 +167,10 @@
               }
             ],
             "HealthCheck": {
-              "Command": ["CMD-SHELL", "/bin/sh /usr/src/app/healthcheck"],
+              "Command": [
+                "CMD-SHELL",
+                "/bin/curl http://localhost:49781/ping?source=docker"
+              ],
               "Interval": "5",
               "Retries": "3",
               "StartPeriod": "5",
@@ -267,8 +267,7 @@
         "Name": {
           "Ref": "ApplicationName"
         },
-        "HealthCheckPath": {
-          "Fn::Sub": ["${ApiPrefix}/ping?source=target-group", { "ApiPrefix": { "Ref": "ApiPrefix" } }]
+        "HealthCheckPath": "/ping?source=target-group"
         },
         "Port": { "Ref": "ContainerPort" },
         "Protocol": "HTTP",
@@ -303,15 +302,6 @@
           {
             "Field": "host-header",
             "Values": [{ "Ref": "LoadBalancerHostName" }]
-          },
-          {
-            "Field": "path-pattern",
-            "Values": [
-              {
-                "Fn::Sub": ["${ApiPrefix}/*", { "ApiPrefix": { "Ref": "ApiPrefix" } }]
-              },
-              { "Ref": "ApiPrefix" }
-            ]
           }
         ],
         "ListenerArn": { "Ref": "LoadBalancerArn" },
