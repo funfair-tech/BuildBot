@@ -157,7 +157,7 @@
             "HealthCheck": {
               "Command": [
                 "CMD-SHELL",
-                "/bin/curl http://localhost:49781/ping?source=docker"
+                "/bin/sh /usr/src/app/healthcheck"
               ],
               "Interval": "5",
               "Retries": "3",

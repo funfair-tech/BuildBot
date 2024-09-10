@@ -5,6 +5,7 @@ WORKDIR /usr/src/app
 # Bundle App Source
 COPY BuildBot .
 COPY appsettings.json .
+COPY healthcheck .
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get autoremove -y && apt-get clean
 

@@ -17,6 +17,7 @@ ProjectSection(SolutionItems) = preProject
 	..\README.md = ..\README.md
 	..\cloudformation.json = ..\cloudformation.json
 	..\Dockerfile = ..\Dockerfile
+	..\healthcheck = ..\healthcheck
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildBot.Tests", "BuildBot.Tests\BuildBot.Tests.csproj", "{38851CCE-4A5C-44D4-B4A5-6EE3142C3E38}"
