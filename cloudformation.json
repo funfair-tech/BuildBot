@@ -131,6 +131,42 @@
                     }
                   ]
                 }
+              },
+              {
+                "Name": "DISCORD__RELEASE_CHANNEL",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "Key": "DISCORD_RELEASE_CHANNEL"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "SERVEROCTOPUS__URL",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "Key": "OCTOPUS_URL"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "SERVEROCTOPUS__APIKEY",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "Key": "OCTOPUS_API_KEY"
+                    }
+                  ]
+                }
               }
             ],
             "DisableNetworking": false,
