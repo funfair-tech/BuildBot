@@ -1,10 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Coinbot",
+  "Description": "BuildBot",
   "Parameters": {
-    "ApplicationOwner": {
-      "Type": "String"
-    },
     "ApplicationName": {
       "Type": "String"
     },
@@ -34,6 +31,20 @@
       "Type": "String",
       "Default": "vpc-ad3bd9ca"
     },
+    "LoadBalancerArn": {
+      "Type": "String",
+      "Default": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/testing/c383c5dd580a74f5/e82083ed48688c7a"
+    },
+    "LoadBalancerHostName": {
+      "Type": "String"
+    },
+    "LoadBalancerPriority": {
+      "Type": "Number"
+    },
+    "ContainerPort": {
+      "Type": "Number",
+      "Default": "8080"
+    },
     "TaskDefinitionCPU": {
       "Type": "String",
       "Default": "256"
@@ -49,6 +60,9 @@
     "TaskExecutionRole": {
       "Type": "String",
       "Default": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole"
+    },
+    "ApiPrefix": {
+      "Type": "String"
     },
     "DesiredCount": {
       "Type": "Number",
@@ -68,7 +82,7 @@
     },
     "SecretsManagerArn": {
       "Type": "String",
-      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:CoinBot-2fo7KN"
+      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
     }
   },
   "Resources": {
@@ -80,14 +94,8 @@
             "Essential": true,
             "Image": {
               "Fn::Sub": [
-                "${Registry}/${ApplicationOwner}/${ApplicationContainer}:${Version}",
+                "117769150821.dkr.ecr.eu-west-1.amazonaws.com/funfair/${ApplicationContainer}:${Version}",
                 {
-                  "Registry": {
-                    "Ref": "AwsContainerRegistry"
-                  },
-                  "Owner": {
-                    "Ref": "ApplicationOwner"
-                  },
                   "Container": {
                     "Ref": "ApplicationContainer"
                   },
@@ -97,89 +105,16 @@
                 }
               ]
             },
-            "Name": {
-              "Ref": "ApplicationName"
-            },
+            "Name": { "Ref": "ApplicationName" },
             "ResourceRequirements": [],
             "EnvironmentFiles": [],
             "Environment": [
-              {
-                "Name": "DEBUG",
-                "Value": {
-                  "Ref": "Debug"
-                }
-              },
-              {
-                "Name": "NODE_ENV",
-                "Value": "production"
-              },
-              {
-                "Name": "SQL_SERVER",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "SQL_SERVER"
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "SQL_DB",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "SQL_DB"
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "SQL_USER",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "SQL_USER"
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "SQL_PASSWORD",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "SQL_PASSWORD"
-                    }
-                  ]
-                }
-              },
               {
                 "Name": "DISCORD__TOKEN",
                 "Value": {
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "DISCORD_TOKEN"
-                    }
+                    { "SecretsManagerArn": { "Ref": "SecretsManagerArn" }, "Key": "DISCORD_TOKEN" }
                   ]
                 }
               },
@@ -188,25 +123,30 @@
                 "Value": {
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    { "SecretsManagerArn": { "Ref": "SecretsManagerArn" }, "Key": "DISCORD_SERVER" }
+                  ]
+                }
+              },
+              {
+                "Name": "DISCORD__CHANNEL",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "DISCORD_SERVER"
+                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "Key": "DISCORD_CHANNEL"
                     }
                   ]
                 }
               },
               {
-                "Name": "DISCORD__TOKEN",
+                "Name": "DISCORD__RELEASECHANNEL",
                 "Value": {
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
-                      "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
-                      },
-                      "Key": "DISCORD_TOKEN"
+                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "Key": "DISCORD_RELEASE_CHANNEL"
                     }
                   ]
                 }
@@ -220,25 +160,21 @@
               "LogDriver": "awslogs",
               "Options": {
                 "awslogs-group": {
-                  "Fn::Sub": [
-                    "/ecs/${Path}/",
-                    {
-                      "Path": {
-                        "Ref": "ApplicationName"
-                      }
-                    }
-                  ]
+                  "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
                 },
                 "awslogs-region": "eu-west-1",
                 "awslogs-stream-prefix": "ecs"
               }
             },
-            "PortMappings": [],
+            "PortMappings": [
+              {
+                "ContainerPort": { "Ref": "ContainerPort" },
+                "HostPort": { "Ref": "ContainerPort" },
+                "Protocol": "tcp"
+              }
+            ],
             "HealthCheck": {
-              "Command": [
-                "CMD-SHELL",
-                "/bin/sh /usr/src/app/healthcheck"
-              ],
+              "Command": ["CMD-SHELL", "/bin/sh /usr/src/app/healthcheck"],
               "Interval": "5",
               "Retries": "3",
               "StartPeriod": "5",
@@ -263,9 +199,7 @@
         "TaskRoleArn": {
           "Ref": "TaskRole"
         },
-        "RequiresCompatibilities": [
-          "FARGATE"
-        ],
+        "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
         "Volumes": [],
         "Tags": [
@@ -284,14 +218,7 @@
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
         "LogGroupName": {
-          "Fn::Sub": [
-            "/ecs/${Path}/",
-            {
-              "Path": {
-                "Ref": "ApplicationName"
-              }
-            }
-          ]
+          "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
         }
       }
     },
@@ -316,12 +243,8 @@
         "NetworkConfiguration": {
           "AwsvpcConfiguration": {
             "AssignPublicIp": "ENABLED",
-            "SecurityGroups": {
-              "Ref": "SecurityGroupIDs"
-            },
-            "Subnets": {
-              "Ref": "SubnetIDs"
-            }
+            "SecurityGroups": { "Ref": "SecurityGroupIDs" },
+            "Subnets": { "Ref": "SubnetIDs" }
           }
         },
         "DeploymentConfiguration": {
@@ -332,11 +255,73 @@
             "Ref": "MinimumHealthPercent"
           }
         },
-        "LoadBalancers": []
+        "LoadBalancers": [
+          {
+            "ContainerName": { "Ref": "ApplicationName" },
+            "ContainerPort": { "Ref": "ContainerPort" },
+            "TargetGroupArn": { "Ref": "TargetGroup" }
+          }
+        ]
       },
-      "DependsOn": [
-        "TaskDefinition"
-      ]
+      "DependsOn": ["TaskDefinition", "TargetGroup", "ListenerRule"]
+    },
+    "TargetGroup": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Name": {
+          "Ref": "ApplicationName"
+        },
+        "HealthCheckPath": {
+          "Fn::Sub": ["${ApiPrefix}/ping?source=target-group", { "ApiPrefix": { "Ref": "ApiPrefix" } }]
+        },
+        "Port": { "Ref": "ContainerPort" },
+        "Protocol": "HTTP",
+        "TargetType": "ip",
+        "HealthCheckEnabled": true,
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckPort": { "Ref": "ContainerPort" },
+        "HealthCheckTimeoutSeconds": 4,
+        "HealthyThresholdCount": 5,
+        "HealthCheckIntervalSeconds": 5,
+        "VpcId": { "Ref": "VpcID" },
+        "TargetGroupAttributes": [
+          {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "5"
+          }
+        ]
+      }
+    },
+    "ListenerRule": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [
+          {
+            "Type": "forward",
+            "TargetGroupArn": {
+              "Ref": "TargetGroup"
+            }
+          }
+        ],
+        "Conditions": [
+          {
+            "Field": "host-header",
+            "Values": [{ "Ref": "LoadBalancerHostName" }]
+          },
+          {
+            "Field": "path-pattern",
+            "Values": [
+              {
+                "Fn::Sub": ["${ApiPrefix}/*", { "ApiPrefix": { "Ref": "ApiPrefix" } }]
+              },
+              { "Ref": "ApiPrefix" }
+            ]
+          }
+        ],
+        "ListenerArn": { "Ref": "LoadBalancerArn" },
+        "Priority": { "Ref": "LoadBalancerPriority" }
+      },
+      "DependsOn": ["TargetGroup"]
     }
   }
 }
