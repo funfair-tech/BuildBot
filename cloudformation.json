@@ -267,8 +267,7 @@
         "Name": {
           "Ref": "ApplicationName"
         },
-        "HealthCheckPath": "/ping?source=target-group"
-        },
+        "HealthCheckPath": "/ping?source=target-group",
         "Port": { "Ref": "ContainerPort" },
         "Protocol": "HTTP",
         "TargetType": "ip",
