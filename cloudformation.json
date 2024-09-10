@@ -11,10 +11,6 @@
     "ApplicationVersion": {
       "Type": "String"
     },
-    "Debug": {
-      "Type": "String",
-      "Default": "True"
-    },
     "ECSClusterName": {
       "Type": "String",
       "Default": "DiscordBots"
