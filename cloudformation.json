@@ -131,18 +131,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "Name": "DISCORD__RELEASECHANNEL",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
-                      "Key": "DISCORD_RELEASE_CHANNEL"
-                    }
-                  ]
-                }
               }
             ],
             "DisableNetworking": false,
