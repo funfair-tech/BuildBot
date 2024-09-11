@@ -14,7 +14,7 @@ echo "Clear $OUTFOLDER" \
   && rm -fr ""$HOME/work/funfair/BuildBot/src/server-dist \
   && echo "CD" \
   && cd $HOME/work/funfair/BuildBot/src/BuildBot \
-  && echo "Build CoinBot" \
+  && echo "Build BuildBot" \
   && dotnet publish \
           --no-restore \
           -warnaserror \
@@ -51,5 +51,5 @@ sudo docker run \
       -e "SERVEROCTOOPUS__URL=https://octopus.example.com" \
       -e "SERVEROCTOOPUS__APIKEY=example" \
       -it \
-      --rm "funfair/coinbot:latest"
+      --rm "funfair/buildbot:latest" \
       --name buildbot
