@@ -1,6 +1,6 @@
 #! /bin/sh
 
-PORT="8080"
+PORT="49781"
 
 # check if the node process is running
 CHECK_TASK_PID=$(pidof BuildBot)
@@ -9,13 +9,9 @@ if [ -z "$CHECK_TASK_PID" ]; then
 fi
 
 # Check if port is open and listening (using ping)
-PING_RESULT=$(curl "http://127.0.0.1/ping?source=docker")
+PING_RESULT=$(curl "http://127.0.0.1:$PORT/ping?source=docker")
 if [ -z "$PING_RESULT" ]; then
   exit 1
 fi
-
-
-# run the node healthcheck script
-#node --no-warnings --no-deprecation /usr/src/app/main.js healthcheck > /dev/null 2>&1 || exit 2
 
 exit 0
