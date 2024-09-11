@@ -43,6 +43,7 @@ echo "Clear $OUTFOLDER" \
   && sudo docker buildx build  . -t "funfair/buildbot:latest"         
           
 sudo docker run \
+      --name buildbot \
       -p 49781:49781 \
       -e "DISCORD__TOKEN=$DISCORDTOKEN" \
       -e "DISCORD__SERVER=FunFair Internal" \
@@ -51,5 +52,5 @@ sudo docker run \
       -e "SERVEROCTOPUS__URL=https://octopus.example.com" \
       -e "SERVEROCTOPUS__APIKEY=example" \
       -it \
-      --rm "funfair/buildbot:latest" \
-      --name buildbot
+      --rm "funfair/buildbot:latest"
+      
