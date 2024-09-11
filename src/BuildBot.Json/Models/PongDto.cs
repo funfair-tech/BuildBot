@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace BuildBot.Models;
+namespace BuildBot.Json.Models;
 
 [DebuggerDisplay(value: "{Value}")]
 public readonly record struct PongDto

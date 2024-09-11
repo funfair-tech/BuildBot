@@ -1,0 +1,55 @@
+#! /bin/sh
+
+die() {
+    echo "$@"
+    exit 1
+}
+
+. dbenv
+
+PLATFORM=linux-x64
+OUTFOLDER="$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM"
+
+echo "Clear $OUTFOLDER" \
+  && rm -fr ""$HOME/work/funfair/BuildBot/src/server-dist \
+  && echo "CD" \
+  && cd $HOME/work/funfair/BuildBot/src/BuildBot \
+  && echo "Build CoinBot" \
+  && dotnet publish \
+          --no-restore \
+          -warnaserror \
+          --configuration:Release \
+          "-r:$PLATFORM" \
+          --self-contained \
+          -nodeReuse:False \
+          -p:NoWarn=NETSDK1179 \
+          -p:SuppressNETCoreSdkPreviewMessage=true \
+          -p:PublishSingleFile=true \
+          -p:PublishAot=false \
+          -p:PublishReadyToRun=False \
+          -p:PublishReadyToRunShowWarnings=True \
+          -p:DisableSwagger=False \
+          -p:TreatWarningsAsErrors=True \
+          -p:IncludeNativeLibrariesForSelfExtract=false \
+          "-p:Version=2.0.1.179-main" \
+          "-p:FFPublishing=True" \
+          "-p:SolutionDir=..\\" \
+          "-p:IsProduction=false" \
+          --output "$OUTFOLDER" \
+  && cd "$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM" \
+  && cp $HOME/work/funfair/BuildBot/Dockerfile . \
+  && cp $HOME/work/funfair/BuildBot/healthcheck . \
+  && ls -lar \
+  && sudo docker buildx build  . -t "funfair/buildbot:latest"         
+          
+sudo docker run \
+      -p 49781:49781 \
+      -e "DISCORD__TOKEN=$DISCORDTOKEN" \
+      -e "DISCORD__SERVER=FunFair Internal" \
+      -e "DISCORD__CHANNEL=build" \
+      -e "DISCORD__RELEASE_CHANNEL=release-notification" \
+      -e "SERVEROCTOOPUS__URL=https://octopus.example.com" \
+      -e "SERVEROCTOOPUS__APIKEY=example" \
+      -it \
+      --rm "funfair/coinbot:latest"
+      --name buildbot

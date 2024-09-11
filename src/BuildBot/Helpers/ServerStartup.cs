@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -14,6 +16,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octopus.Client;
+using Serilog;
+using Serilog.Configuration;
+using Serilog.Core;
 
 namespace BuildBot.Helpers;
 
@@ -60,21 +65,47 @@ internal static class ServerStartup
 
         builder.Host.UseWindowsService()
                .UseSystemd();
-        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options,
-                                                                         httpPort: httpPort,
-                                                                         httpsPort: httpsPort,
-                                                                         h2Port: h2Port,
-                                                                         configurationFiledPath: configPath))
+        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options, httpPort: httpPort, httpsPort: httpsPort, h2Port: h2Port, configurationFiledPath: configPath))
                .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
-               .ConfigureLogging((_, logger) => logger.ClearProviders());
+               .ConfigureLogging((_, logger) => ConfigureLogging(logger));
 
-        builder.Services.ConfigureHttpJsonOptions(options => { options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default); })
+        builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default))
                .AddDiscord(discordConfig)
                .AddGitHub()
                .AddOctopus(octopusServerEndpoint)
                .AddMediator();
 
         return builder.Build();
+    }
+
+    [SuppressMessage(category: "Microsoft.Reliability", checkId: "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]
+    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE007:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]
+    private static void ConfigureLogging(ILoggingBuilder logger)
+    {
+        logger.ClearProviders()
+              .AddSerilog(CreateLogger(), dispose: true);
+    }
+
+    private static Logger CreateLogger()
+    {
+        return new LoggerConfiguration().Enrich.WithDemystifiedStackTraces()
+                                        .Enrich.FromLogContext()
+                                        .Enrich.WithMachineName()
+                                        .Enrich.WithProcessId()
+                                        .Enrich.WithThreadId()
+                                        .Enrich.WithProperty(name: "ServerVersion", value: VersionDetection.ProgramVersion)
+                                        .Enrich.WithProperty(name: "ProcessName", value: VersionDetection.Product)
+                                        .WriteToDebuggerAwareOutput()
+                                        .CreateLogger();
+    }
+
+    private static LoggerConfiguration WriteToDebuggerAwareOutput(this LoggerConfiguration configuration)
+    {
+        LoggerSinkConfiguration writeTo = configuration.WriteTo;
+
+        return Debugger.IsAttached
+            ? writeTo.Debug()
+            : writeTo.Console();
     }
 
     private static IConfigurationRoot LoadConfiguration(string configPath)

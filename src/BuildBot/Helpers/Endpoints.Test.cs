@@ -1,4 +1,3 @@
-using BuildBot.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ internal static partial class Endpoints
     private static WebApplication ConfigureTestEndpoints(this WebApplication app)
     {
         app.MapGet(pattern: "/ping",
-                   handler: static ([FromQuery] string? source, Logger<PongDto> logger) =>
+                   handler: static ([FromQuery] string? source, ILogger<TestEndpointContext> logger) =>
                             {
                                 LogPing(source: source, logger: logger);
 
@@ -21,7 +20,7 @@ internal static partial class Endpoints
         return app;
     }
 
-    private static void LogPing(string? source, Logger<PongDto> logger)
+    private static void LogPing(string? source, ILogger<TestEndpointContext> logger)
     {
         if (!string.IsNullOrWhiteSpace(source))
         {

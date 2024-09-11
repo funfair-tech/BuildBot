@@ -1,7 +1,7 @@
 @MinimalApi_HostAddress = http://localhost:49781
 
 ### Server Ping
-GET {{MinimalApi_HostAddress}}/ping
+GET {{MinimalApi_HostAddress}}/ping?source=test
 Accept: application/json
 
 ### Github Ping

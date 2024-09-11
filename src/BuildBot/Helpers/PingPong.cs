@@ -1,4 +1,4 @@
-using BuildBot.Models;
+using BuildBot.Json.Models;
 
 namespace BuildBot.Helpers;
 
