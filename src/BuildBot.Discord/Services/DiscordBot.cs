@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Discord.Services.LoggingExtensions;
 using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 
@@ -34,10 +36,12 @@ public sealed class DiscordBot : IDiscordBot
 
         if (socketTextChannel is null)
         {
+            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
+
             return;
         }
 
-        await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
+        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
     }
 
     public async ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken)
@@ -46,21 +50,31 @@ public sealed class DiscordBot : IDiscordBot
 
         if (socketTextChannel is null)
         {
+            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
+
             return;
         }
 
-        await PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
+        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
     }
 
-    private static async ValueTask PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel, CancellationToken cancellationToken)
+    private async ValueTask PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel, CancellationToken cancellationToken)
     {
+        this._logger.LogSendingMessage(channelName: socketTextChannel.Name, message: builder.Title);
+
         using (socketTextChannel.EnterTypingState())
         {
             Embed embed = IncludeStandardParameters(builder);
 
-            await socketTextChannel.SendMessageAsync(text: string.Empty, embed: embed);
+            RestUserMessage msg = await socketTextChannel.SendMessageAsync(text: string.Empty, embed: embed);
+            this.LogSent(msg);
             await Task.Delay(delay: TypingDelay, cancellationToken: cancellationToken);
         }
+    }
+
+    private void LogSent(RestUserMessage msg)
+    {
+        this._logger.LogSentMessage(channelName: msg.Channel.Name, message: msg.CleanContent);
     }
 
     private static Embed IncludeStandardParameters(EmbedBuilder builder)
