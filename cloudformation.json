@@ -222,12 +222,7 @@
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
         "Volumes": [],
-        "Tags": [
-          {
-            "Key": "Network",
-            "Value": "avalanche"
-          }
-        ],
+        "Tags": [],
         "RuntimePlatform": {
           "CpuArchitecture": "ARM64",
           "OperatingSystemFamily": "LINUX"
