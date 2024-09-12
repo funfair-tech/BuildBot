@@ -311,16 +311,24 @@
         "Actions": [
           {
             "Type": "forward",
-            "TargetGroupArn": {
-              "Ref": "TargetGroup"
+            "ForwardConfig": {
+                "TargetGroups": [
+                    {
+                    "TargetGroupArn": { "Ref": "TargetGroup" },
+                    "Weight": 1
+                    }
+                ],
+                "TargetGroupStickinessConfig": {
+                    "Enabled": false
+                }
             }
           }
         ],
         "Conditions": [
-          {
-            "Field": "host-header",
-            "Values": [{ "Ref": "LoadBalancerHostName" }]
-          }
+              {
+                "Field": "host-header",
+                "Values": [{ "Ref": "LoadBalancerHostName" }]
+              }
         ],
         "ListenerArn": { "Ref": "LoadBalancerArn" },
         "Priority": { "Ref": "LoadBalancerPriority" }
