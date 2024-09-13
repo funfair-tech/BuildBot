@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.8-jammy
+FROM mcr.microsoft.com/dotnet/runtime-deps:9.0-noble
 
 WORKDIR /usr/src/app
 
@@ -7,7 +7,7 @@ COPY BuildBot .
 COPY appsettings.json .
 COPY healthcheck .
 
-RUN apt-get update && apt-get dist-upgrade -y && apt-get install curl -y && apt-get autoremove -y && apt-get clean
+RUN apt-get update && apt-get upgrade -y && apt-get install curl -y --no-install-recommends && apt-get autoremove -y && apt-get clean
 
 EXPOSE 49781
 ENTRYPOINT [ "/usr/src/app/BuildBot" ]
