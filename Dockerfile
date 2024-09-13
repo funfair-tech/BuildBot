@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.8-jammy
+FROM mcr.microsoft.com/dotnet/runtime-deps:9.0-noble
 
 WORKDIR /usr/src/app
 
