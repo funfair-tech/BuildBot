@@ -21,9 +21,7 @@ public static class Program
         {
             await using (WebApplication app = ServerStartup.CreateApp(args))
             {
-                Console.WriteLine("App Created");
-                await app.ConfigureEndpoints()
-                         .RunAsync();
+                await RunAsync(app);
 
                 return 0;
             }
@@ -36,5 +34,14 @@ public static class Program
 
             return 1;
         }
+    }
+
+    private static Task RunAsync(WebApplication application)
+    {
+        Console.WriteLine("App Created");
+        WebApplication configured = application.ConfigureEndpoints();
+        Console.WriteLine("Endpoints configured");
+
+        return configured.RunAsync();
     }
 }
