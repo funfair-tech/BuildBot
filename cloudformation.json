@@ -43,11 +43,11 @@
     },
     "TaskDefinitionCPU": {
       "Type": "String",
-      "Default": "256"
+      "Default": "512"
     },
     "TaskDefinitionMemory": {
       "Type": "String",
-      "Default": "2048"
+      "Default": "4096"
     },
     "TaskRole": {
       "Type": "String",

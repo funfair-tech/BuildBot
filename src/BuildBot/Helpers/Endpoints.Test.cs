@@ -1,3 +1,4 @@
+using BuildBot.Helpers.LoggingExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,11 @@ internal static partial class Endpoints
     {
         if (!string.IsNullOrWhiteSpace(source))
         {
-            logger.LogError(message: "PING: Source: {Source}", source);
+            logger.LogPing(source);
         }
         else
         {
-            logger.LogError("PING: NO Source");
+            logger.LogPing();
         }
     }
 }
