@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using BuildBot.GitHub.Models;
 using BuildBot.ServiceModel.GitHub;
@@ -12,6 +13,8 @@ internal static partial class Endpoints
 {
     private static WebApplication ConfigureGitHubEndpoints(this WebApplication app)
     {
+        Console.WriteLine("Configuring Github Endpoint");
+
         RouteGroupBuilder group = app.MapGroup("/github");
         group.MapPost(pattern: "ping",
                       handler: static async (PingModel model, IMediator mediator, CancellationToken cancellationToken) =>

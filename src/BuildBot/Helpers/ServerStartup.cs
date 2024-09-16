@@ -133,6 +133,11 @@ internal static class ServerStartup
                    token: configuration["Discord:Token"] ?? string.Empty);
     }
 
+    private static void SetH1ListenOptions(ListenOptions listenOptions)
+    {
+        listenOptions.Protocols = HttpProtocols.Http1;
+    }
+
     private static void SetH2ListenOptions(ListenOptions listenOptions)
     {
         listenOptions.Protocols = HttpProtocols.Http2;
@@ -149,8 +154,7 @@ internal static class ServerStartup
         }
         else
         {
-            // Enable HTTP3 when it isn't a preview feature
-            listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+            listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
             listenOptions.UseHttps(fileName: certFile);
         }
     }
@@ -166,14 +170,17 @@ internal static class ServerStartup
 
         if (httpsPort != 0)
         {
+            Console.WriteLine($"Listening on HTTPS port: {httpsPort}");
             options.Listen(address: IPAddress.Any, port: httpsPort, configure: o => SetHttpsListenOptions(listenOptions: o, configurationFiledPath: configurationFiledPath));
         }
 
         if (h2Port != 0)
         {
+            Console.WriteLine($"Listening on H2 port: {h2Port}");
             options.Listen(address: IPAddress.Any, port: h2Port, configure: SetH2ListenOptions);
         }
 
-        options.Listen(address: IPAddress.Any, port: httpPort);
+        Console.WriteLine($"Listening on HTTP port: {httpPort}");
+        options.Listen(address: IPAddress.Any, port: httpPort, configure: SetH1ListenOptions);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using BuildBot.Octopus.Models;
 using BuildBot.ServiceModel.Octopus;
@@ -12,6 +13,8 @@ internal static partial class Endpoints
 {
     private static WebApplication ConfigureOctopusEndpoints(this WebApplication app)
     {
+        Console.WriteLine("Configuring Octopus Endpoint");
+
         RouteGroupBuilder group = app.MapGroup("/octopus");
 
         group.MapPost(pattern: "deploy",
