@@ -47,7 +47,7 @@
     },
     "TaskDefinitionMemory": {
       "Type": "String",
-      "Default": "1024"
+      "Default": "2048"
     },
     "TaskRole": {
       "Type": "String",
