@@ -51,7 +51,7 @@ internal static class ServerStartup
 
     public static WebApplication CreateApp(string[] args)
     {
-        const int httpPort = 49781;
+        const int httpPort = 8080;
         const int httpsPort = 0;
         const int h2Port = 0;
         WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);

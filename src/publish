@@ -11,9 +11,11 @@ PLATFORM=linux-x64
 OUTFOLDER="$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM"
 
 echo "Clear $OUTFOLDER" \
-  && rm -fr ""$HOME/work/funfair/BuildBot/src/server-dist \
+  && rm -fr "$HOME/work/funfair/BuildBot/src/server-dist" \
+  && cd "$HOME/work/funfair/BuildBot/src" \
+  && dotnet restore \
   && echo "CD" \
-  && cd $HOME/work/funfair/BuildBot/src/BuildBot \
+  && cd "$HOME/work/funfair/BuildBot/src/BuildBot" \
   && echo "Build BuildBot" \
   && dotnet publish \
           --no-restore \
@@ -37,14 +39,14 @@ echo "Clear $OUTFOLDER" \
           "-p:IsProduction=false" \
           --output "$OUTFOLDER" \
   && cd "$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM" \
-  && cp $HOME/work/funfair/BuildBot/Dockerfile . \
-  && cp $HOME/work/funfair/BuildBot/healthcheck . \
+  && cp "$HOME/work/funfair/BuildBot/Dockerfile" . \
+  && cp "$HOME/work/funfair/BuildBot/healthcheck" . \
   && ls -lar \
   && sudo docker buildx build  . -t "funfair/buildbot:latest"         
           
 sudo docker run \
       --name buildbot \
-      -p 49781:49781 \
+      -p 8080:8080 \
       -e "DISCORD__TOKEN=$DISCORDTOKEN" \
       -e "DISCORD__SERVER=FunFair Internal" \
       -e "DISCORD__CHANNEL=build" \

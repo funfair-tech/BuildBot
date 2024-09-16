@@ -1,6 +1,6 @@
 #! /bin/sh
 
-PORT="49781"
+PORT="8080"
 
 # check if the node process is running
 CHECK_TASK_PID=$(pidof BuildBot)

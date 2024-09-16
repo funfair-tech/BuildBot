@@ -1,4 +1,4 @@
-@MinimalApi_HostAddress = http://localhost:49781
+@MinimalApi_HostAddress = http://localhost:8080
 
 ### Server Ping
 GET {{MinimalApi_HostAddress}}/ping?source=test

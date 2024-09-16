@@ -39,7 +39,7 @@
     },
     "ContainerPort": {
       "Type": "Number",
-      "Default": "49781"
+      "Default": "8080"
     },
     "TaskDefinitionCPU": {
       "Type": "String",
