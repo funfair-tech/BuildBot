@@ -25,12 +25,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Octopus.Client to 14.3.1579
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.11.20
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
-- SDK - Updated DotNet SDK to 8.0.401
 - Dependencies - Updated xunit.analyzers to 1.16.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.23.533
 - Dependencies - Updated FunFair.Test.Common to 6.1.69.630
-- SDK - Updated DotNet SDK to 9.0 RC1
+- SDK - Updated DotNet SDK to 8.0.401
 ### Removed
 ### Deployment Changes
 
