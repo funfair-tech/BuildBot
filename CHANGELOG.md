@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.163
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 1.5.0
-- Dependencies - Updated Discord.Net to 3.15.3
 - Dependencies - Updated Octopus.Client to 14.3.1579
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.11.20
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
@@ -30,6 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.69.630
 - SDK - Updated DotNet SDK to 8.0.401
 - Dependencies - Updated Roslynator.Analyzers to 4.12.5
+- Dependencies - Updated Discord.Net to 3.16.0
 ### Removed
 ### Deployment Changes
 
