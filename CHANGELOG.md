@@ -29,7 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.5
 - Dependencies - Updated Discord.Net to 3.16.0
 - Dependencies - Updated Octopus.Client to 14.3.1635
-- Dependencies - Updated Meziantou.Analyzer to 2.0.166
+- Dependencies - Updated Meziantou.Analyzer to 2.0.167
 ### Removed
 ### Deployment Changes
 
