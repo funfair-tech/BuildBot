@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Threading;
+using BuildBot.CloudFormation;
 using BuildBot.Discord;
 using BuildBot.GitHub;
 using BuildBot.Json;
@@ -71,6 +72,7 @@ internal static class ServerStartup
 
         builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default))
                .AddDiscord(discordConfig)
+               .AddCloudFormation()
                .AddGitHub()
                .AddOctopus(octopusServerEndpoint)
                .AddMediator();

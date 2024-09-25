@@ -70,6 +70,7 @@
     <TrimmerRootAssembly Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BuildBot.CloudFormation\BuildBot.CloudFormation.csproj"/>
     <ProjectReference Include="..\BuildBot.GitHub\BuildBot.GitHub.csproj" />
     <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
     <ProjectReference Include="..\BuildBot.Octopus\BuildBot.Octopus.csproj" />
