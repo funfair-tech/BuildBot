@@ -24,12 +24,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.23.533
 - Dependencies - Updated FunFair.Test.Common to 6.1.69.630
-- SDK - Updated DotNet SDK to 8.0.401
 - Dependencies - Updated Discord.Net to 3.16.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.168
 - Dependencies - Updated xunit to 2.9.1
 - Dependencies - Updated Roslynator.Analyzers to 4.12.6
 - Dependencies - Updated Octopus.Client to 14.3.1646
+- SDK - Updated DotNet SDK to 8.0.402
 ### Removed
 ### Deployment Changes
 
