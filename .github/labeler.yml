@@ -2,6 +2,8 @@
  - any: [ 'src/global.json' ]
 "buildbot":
  - any: [ 'src/$BuildBot/**/*' ]
+"buildbot-cloudformation":
+ - any: [ 'src/$BuildBot.CloudFormation/**/*' ]
 "buildbot-discord":
  - any: [ 'src/$BuildBot.Discord/**/*' ]
 "buildbot-github":
