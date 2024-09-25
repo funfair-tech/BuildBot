@@ -27,9 +27,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.16.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.168
 - Dependencies - Updated xunit to 2.9.1
-- Dependencies - Updated Roslynator.Analyzers to 4.12.6
 - Dependencies - Updated Octopus.Client to 14.3.1646
 - SDK - Updated DotNet SDK to 8.0.402
+- Dependencies - Updated Roslynator.Analyzers to 4.12.6
 ### Removed
 ### Deployment Changes
 
