@@ -12,7 +12,11 @@ internal static partial class OctopusDeployNotificationHandlerLoggingExtensions
 
     [Conditional("DEBUG")]
     [LoggerMessage(EventId = 2, Level = LogLevel.Debug, Message = "{projectName}: {releaseVersion} Build successful: {succeeded} NoteWorthy: {releaseNoteWorthy}")]
-    public static partial void BuildCompleted(this ILogger<OctopusDeployNotificationHandler> logger, string projectName, string releaseVersion, bool succeeded, bool releaseNoteWorthy);
+    public static partial void BuildCompleted(this ILogger<OctopusDeployNotificationHandler> logger,
+                                              string projectName,
+                                              string releaseVersion,
+                                              bool succeeded,
+                                              bool releaseNoteWorthy);
 
     [LoggerMessage(EventId = 3, Level = LogLevel.Error, Message = "Failed to get tenant {tenantId}: {message}")]
     public static partial void FailedToGetTenant(this ILogger<OctopusDeployNotificationHandler> logger, string tenantId, string message, Exception exception);

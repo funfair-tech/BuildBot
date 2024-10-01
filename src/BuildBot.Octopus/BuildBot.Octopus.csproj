@@ -18,8 +18,8 @@
     <NoWarn>1591</NoWarn>
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditLevel>low</NuGetAuditLevel>
-    <Nullable>enable</Nullable>
     <NuGetAuditMode>direct</NuGetAuditMode>
+    <Nullable>enable</Nullable>
     <OptimizationPreference>speed</OptimizationPreference>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
