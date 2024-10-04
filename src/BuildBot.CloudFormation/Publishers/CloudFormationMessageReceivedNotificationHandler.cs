@@ -25,11 +25,11 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return ValueTask.CompletedTask;
         }
 
-        this._logger.LogWarning(message: "Received message from {TopicArn} with {MessageId} at {Timestamp}", notification.TopicArn, notification.MessageId, notification.Timestamp);
+        this._logger.LogWarning(message: "CLOUDFORMATION: Received message from {TopicArn} with {MessageId} at {Timestamp}", notification.TopicArn, notification.MessageId, notification.Timestamp);
 
         foreach ((string key, string value) in notification.Properties)
         {
-            this._logger.LogWarning(message: "Property: {Key} = {Value}", key, value);
+            this._logger.LogWarning(message: "CLOUDFORMATION: Property: {Key} = {Value}", key, value);
         }
 
         // TODO: Handle publish to discord
