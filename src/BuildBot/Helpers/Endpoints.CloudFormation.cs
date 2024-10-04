@@ -1,10 +1,9 @@
 using System;
-using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.ServiceModel.CloudFormation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
@@ -18,21 +17,21 @@ internal static partial class Endpoints
 
         RouteGroupBuilder group = app.MapGroup("/cloudformation");
         group.MapPost(pattern: "deploy",
-                      handler: static async ([FromBody] string body, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
+                      handler: static async (SnsMessage message, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
                                {
-                                   logger.LogError(LogMessage(body));
+                                   logger.LogError(LogMessage(message));
 
                                    await Task.Delay(millisecondsDelay: 1, cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
                                })
-             .Accepts<string>(MediaTypeNames.Text.Plain);
+             .Accepts<string>(contentType: "text/plain", "application/json");
 
         return app;
     }
 
-    private static string LogMessage(string body)
+    private static string LogMessage(SnsMessage body)
     {
-        return "CLOUDFORMATION: >>>>" + body + "<<<<";
+        return "CLOUDFORMATION: >>>>" + body.Type + "<<<<" + body.Message;
     }
 }

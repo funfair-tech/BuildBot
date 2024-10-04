@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using BuildBot.Json.Models;
+using BuildBot.ServiceModel.CloudFormation;
 using BuildBot.ServiceModel.GitHub;
 using BuildBot.ServiceModel.Octopus;
 
@@ -29,6 +30,7 @@ namespace BuildBot.Json;
 [JsonSerializable(typeof(DeployMessageReference))]
 [JsonSerializable(typeof(DeployPayload))]
 [JsonSerializable(typeof(PongDto))]
+[JsonSerializable(typeof(SnsMessage))]
 internal sealed partial class SerializationContext : JsonSerializerContext
 {
     // Code generated
