@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using BuildBot.CloudFormation;
+using BuildBot.CloudFormation.Configuration;
 using BuildBot.Discord;
 using BuildBot.GitHub;
 using BuildBot.Json;
@@ -63,6 +64,7 @@ internal static class ServerStartup
 
         DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
         OctopusServerEndpoint octopusServerEndpoint = LoadOctopusServerEndpoint(config);
+        SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
 
         builder.Host.UseWindowsService()
                .UseSystemd();
@@ -72,12 +74,19 @@ internal static class ServerStartup
 
         builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default))
                .AddDiscord(discordConfig)
-               .AddCloudFormation()
+               .AddCloudFormation(snsConfiguration)
                .AddGitHub()
                .AddOctopus(octopusServerEndpoint)
                .AddMediator();
 
         return builder.Build();
+    }
+
+    private static SnsNotificationOptions LoadSnsNotificationConfig(IConfigurationRoot configuration)
+    {
+        string topicArn = configuration["CloudFormation:TopicArn"] ?? string.Empty;
+
+        return new(topicArn);
     }
 
     [SuppressMessage(category: "Microsoft.Reliability", checkId: "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]

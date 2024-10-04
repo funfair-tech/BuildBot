@@ -3,8 +3,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.CloudFormation.Models;
 using BuildBot.Json;
 using BuildBot.ServiceModel.CloudFormation;
+using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -20,23 +22,33 @@ internal static partial class Endpoints
 
         RouteGroupBuilder group = app.MapGroup("/cloudformation");
         group.MapPost(pattern: "deploy",
-                      handler: static async (HttpRequest request, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
+                      handler: static async (HttpRequest request, IMediator mediator, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
                                {
                                    SnsMessage message = await ReadJsonAsync<SnsMessage>(request: request, cancellationToken: cancellationToken);
                                    logger.LogError(LogMessage(message));
 
-                                   if (message.SubscribeURL is not null)
-                                   {
-                                       logger.LogError(message.SubscribeURL);
-                                   }
-
-                                   await Task.Delay(millisecondsDelay: 1, cancellationToken: cancellationToken);
-
-                                   return Results.NoContent();
+                                   return await HandleDeployMessageAsync(message: message, mediator: mediator, cancellationToken: cancellationToken);
                                })
              .Accepts<SnsMessage>(contentType: "text/plain", "application/json");
 
         return app;
+    }
+
+    private static async ValueTask<IResult> HandleDeployMessageAsync(SnsMessage message, IMediator mediator, CancellationToken cancellationToken)
+    {
+        if (StringComparer.Ordinal.Equals(x: message.Type, y: "SubscriptionConfirmation"))
+        {
+            if (message.SubscribeURL is not null)
+            {
+                await mediator.Publish(new CloudFormationSubscriptionConfirmation(TopicArn: message.TopicArn, new(message.SubscribeURL)), cancellationToken: cancellationToken);
+
+                return Results.Accepted();
+            }
+
+            return Results.BadRequest();
+        }
+
+        return Results.NotFound();
     }
 
     private static async ValueTask<T> ReadJsonAsync<T>(HttpRequest request, CancellationToken cancellationToken)

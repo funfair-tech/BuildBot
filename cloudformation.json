@@ -167,6 +167,20 @@
                     }
                   ]
                 }
+              },
+              {
+                "Name": "CLOUDFORMATION__TOPICARN",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "SNS_TOPIC_ARN"
+                    }
+                  ]
+                }
               }
             ],
             "DisableNetworking": false,
