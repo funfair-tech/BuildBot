@@ -1,4 +1,5 @@
 using System;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -19,13 +20,19 @@ internal static partial class Endpoints
         group.MapPost(pattern: "deploy",
                       handler: static async ([FromBody] string body, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
                                {
-                                   logger.LogError(body);
+                                   logger.LogError(LogMessage(body));
 
                                    await Task.Delay(millisecondsDelay: 1, cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
-                               });
+                               })
+             .Accepts<string>(MediaTypeNames.Text.Plain);
 
         return app;
+    }
+
+    private static string LogMessage(string body)
+    {
+        return "CLOUDFORMATION: >>>>" + body + "<<<<";
     }
 }
