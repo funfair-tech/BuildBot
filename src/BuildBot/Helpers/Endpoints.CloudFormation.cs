@@ -20,8 +20,9 @@ internal static partial class Endpoints
 
         RouteGroupBuilder group = app.MapGroup("/cloudformation");
         group.MapPost(pattern: "deploy",
-                      handler: static async (SnsMessage message, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
+                      handler: static async (HttpRequest request, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
                                {
+                                   SnsMessage message = await ReadJsonAsync<SnsMessage>(request: request, cancellationToken: cancellationToken);
                                    logger.LogError(LogMessage(message));
 
                                    if (message.SubscribeURL is not null)
@@ -33,9 +34,26 @@ internal static partial class Endpoints
 
                                    return Results.NoContent();
                                })
-             .Accepts<string>(contentType: "text/plain", "application/json");
+             .Accepts<SnsMessage>(contentType: "text/plain", "application/json");
 
         return app;
+    }
+
+    private static async ValueTask<T> ReadJsonAsync<T>(HttpRequest request, CancellationToken cancellationToken)
+    {
+        if (AppSerializationContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> typeInfo)
+        {
+            throw new JsonException("No type handler found");
+        }
+
+        T? result = await JsonSerializer.DeserializeAsync(utf8Json: request.Body, jsonTypeInfo: typeInfo, cancellationToken: cancellationToken);
+
+        if (result is not null)
+        {
+            return result;
+        }
+
+        throw new JsonException("Could not parse JSON");
     }
 
     private static string LogMessage(SnsMessage body)
