@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading;
@@ -30,7 +29,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
     [SuppressMessage(category: "", checkId: "CSE007: Handle dispose correctly.", Justification = "HttpClient is managed by the HttpClientFactory.")]
     public async ValueTask Handle(CloudFormationSubscriptionConfirmation notification, CancellationToken cancellationToken)
     {
-        if (!this.IsValidArn(notification.TopicArn))
+        if (!this._options.IsValidArn(notification.TopicArn))
         {
             this._logger.LogError(message: "Invalid TopicArn: {TopicArn}", notification.TopicArn);
 
@@ -41,10 +40,5 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
 
         HttpResponseMessage responseMessage = await client.GetAsync(requestUri: notification.SubscribeUrl, cancellationToken: cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
-    }
-
-    private bool IsValidArn(string notificationTopicArn)
-    {
-        return StringComparer.Ordinal.Equals(x: notificationTopicArn, y: this._options.TopicArn);
     }
 }

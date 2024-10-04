@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
@@ -50,8 +52,29 @@ internal static partial class Endpoints
 
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "Notification"))
         {
-            // TODO: Handle the notification
+            Dictionary<string, string> properties = message.Message.Split("\n")
+                                                           .Select(SplitIt)
+                                                           .ToDictionary(keySelector: key => key.key, elementSelector: value => value.value, comparer: StringComparer.Ordinal);
+
+            await mediator.Publish(new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
+                                   cancellationToken: cancellationToken);
+
             return Results.Conflict();
+
+            static (string key, string value) SplitIt(string m)
+            {
+                int i = m.IndexOf(value: '=', comparisonType: StringComparison.Ordinal);
+
+                if (i == -1)
+                {
+                    return (key: m, string.Empty);
+                }
+
+                string key = m.Substring(startIndex: 0, length: i);
+                string value = m.Substring(i + 1);
+
+                return (key, value);
+            }
         }
 
         return Results.NotFound();
