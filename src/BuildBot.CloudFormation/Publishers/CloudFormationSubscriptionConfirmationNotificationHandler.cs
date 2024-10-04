@@ -39,7 +39,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
 
         HttpClient client = this._httpClientFactory.CreateClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler));
 
-        HttpResponseMessage responseMessage = await client.GetAsync(requestUri: notification.SubscribeURL, cancellationToken: cancellationToken);
+        HttpResponseMessage responseMessage = await client.GetAsync(requestUri: notification.SubscribeUrl, cancellationToken: cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
     }
 
