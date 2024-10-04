@@ -1,6 +1,9 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Json;
 using BuildBot.ServiceModel.CloudFormation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +24,11 @@ internal static partial class Endpoints
                                {
                                    logger.LogError(LogMessage(message));
 
+                                   if (message.SubscribeURL is not null)
+                                   {
+                                       logger.LogError(message.SubscribeURL);
+                                   }
+
                                    await Task.Delay(millisecondsDelay: 1, cancellationToken: cancellationToken);
 
                                    return Results.NoContent();
@@ -32,6 +40,8 @@ internal static partial class Endpoints
 
     private static string LogMessage(SnsMessage body)
     {
-        return "CLOUDFORMATION: >>>>" + body.Type + "<<<<" + body.Message;
+        return AppSerializationContext.Default.GetTypeInfo(typeof(SnsMessage)) is JsonTypeInfo<SnsMessage> typeInfo
+            ? JsonSerializer.Serialize(value: body, jsonTypeInfo: typeInfo)
+            : "CLOUDFORMATION: >>>>" + body.Type + "<<<<" + body.Message;
     }
 }
