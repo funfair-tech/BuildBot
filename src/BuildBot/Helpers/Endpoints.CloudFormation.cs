@@ -38,9 +38,9 @@ internal static partial class Endpoints
     {
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "SubscriptionConfirmation"))
         {
-            if (message.SubscribeURL is not null)
+            if (message.SubscribeUrl is not null)
             {
-                await mediator.Publish(new CloudFormationSubscriptionConfirmation(TopicArn: message.TopicArn, new(message.SubscribeURL)), cancellationToken: cancellationToken);
+                await mediator.Publish(new CloudFormationSubscriptionConfirmation(TopicArn: message.TopicArn, new(message.SubscribeUrl)), cancellationToken: cancellationToken);
 
                 return Results.Accepted();
             }

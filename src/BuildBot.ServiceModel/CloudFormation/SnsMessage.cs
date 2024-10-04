@@ -42,9 +42,9 @@ public sealed class SnsMessage
         this.Timestamp = timestamp;
         this.SignatureVersion = signatureVersion;
         this.Signature = signature;
-        this.SigningCertURL = signingCertUrl;
-        this.SubscribeURL = subscribeUrl;
-        this.UnsubscribeURL = unsubscribeUrl;
+        this.SigningCertUrl = signingCertUrl;
+        this.SubscribeUrl = subscribeUrl;
+        this.UnsubscribeUrl = unsubscribeUrl;
     }
 
     [JsonPropertyName("Type")]
@@ -76,13 +76,13 @@ public sealed class SnsMessage
 
     [SuppressMessage(category: "Microsoft.Naming", checkId: "CA1056: Uri properties should not be strings", Justification = "AWS SNS URL")]
     [JsonPropertyName("SigningCertURL")]
-    public string? SigningCertURL { get; }
+    public string? SigningCertUrl { get; }
 
     [SuppressMessage(category: "Microsoft.Naming", checkId: "CA1056: Uri properties should not be strings", Justification = "AWS SNS URL")]
     [JsonPropertyName("SubscribeURL")]
-    public string? SubscribeURL { get; }
+    public string? SubscribeUrl { get; }
 
     [SuppressMessage(category: "Microsoft.Naming", checkId: "CA1056: Uri properties should not be strings", Justification = "AWS SNS URL")]
     [JsonPropertyName("UnsubscribeURL")]
-    public string? UnsubscribeURL { get; }
+    public string? UnsubscribeUrl { get; }
 }
