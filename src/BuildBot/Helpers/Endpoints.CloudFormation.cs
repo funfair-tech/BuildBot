@@ -48,6 +48,12 @@ internal static partial class Endpoints
             return Results.BadRequest();
         }
 
+        if (StringComparer.Ordinal.Equals(x: message.Type, y: "Notification"))
+        {
+            // TODO: Handle the notification
+            return Results.Conflict();
+        }
+
         return Results.NotFound();
     }
 
