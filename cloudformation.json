@@ -83,6 +83,11 @@
       "Ref": "ApplicationVersion"
     }
   },
+  "Tags": {
+    "Version": {
+      "Ref": "ApplicationVersion"
+    }
+  }, 
   "Resources": {
     "TaskDefinition": {
       "Type": "AWS::ECS::TaskDefinition",
