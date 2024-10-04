@@ -79,11 +79,17 @@
     }
   },
   "Metadata": {
+    "Application": {
+      "Ref": "ApplicationName"
+    },
     "Version": {
       "Ref": "ApplicationVersion"
     }
   },
   "Tags": {
+    "Application": {
+      "Ref": "ApplicationName"
+    },
     "Version": {
       "Ref": "ApplicationVersion"
     }
