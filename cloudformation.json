@@ -78,6 +78,11 @@
       "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
     }
   },
+  "Metadata": {
+    "Version": {
+      "Ref": "ApplicationVersion"
+    }
+  },
   "Resources": {
     "TaskDefinition": {
       "Type": "AWS::ECS::TaskDefinition",
