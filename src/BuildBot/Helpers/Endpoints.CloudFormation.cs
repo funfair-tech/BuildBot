@@ -54,8 +54,9 @@ internal static partial class Endpoints
         {
             Dictionary<string, string> properties = SplitMessageToDictionary(message);
 
-            await mediator.Publish(new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
-                                   cancellationToken: cancellationToken);
+            await mediator.Publish(
+                new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
+                cancellationToken: cancellationToken);
 
             return Results.NoContent();
         }

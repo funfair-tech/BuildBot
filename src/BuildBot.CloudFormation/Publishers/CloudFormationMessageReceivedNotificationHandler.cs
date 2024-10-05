@@ -48,7 +48,10 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return ValueTask.CompletedTask;
         }
 
-        this._logger.LogWarning(message: "CLOUDFORMATION: Received message from {TopicArn} with {MessageId} at {Timestamp}", notification.TopicArn, notification.MessageId, notification.Timestamp);
+        this._logger.LogWarning(message: "CLOUDFORMATION: Received message from {TopicArn} with {MessageId} at {Timestamp}",
+                                notification.TopicArn,
+                                notification.MessageId,
+                                notification.Timestamp);
 
         foreach ((string key, string value) in notification.Properties)
         {

@@ -19,7 +19,8 @@ public static class CloudformationSetup
     {
         return services.AddSingleton(typeof(SnsNotificationOptions), implementationInstance: snsConfiguration)
                        .AddHttpClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler))
-                       .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.WaitAndRetryAsync(retryCount: MAX_RETRIES, sleepDurationProvider: HandleRetry, onRetryAsync: OnRetryAsync))
+                       .AddTransientHttpErrorPolicy(
+                           policyBuilder => policyBuilder.WaitAndRetryAsync(retryCount: MAX_RETRIES, sleepDurationProvider: HandleRetry, onRetryAsync: OnRetryAsync))
                        .Services;
     }
 
