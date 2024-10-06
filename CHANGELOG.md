@@ -27,10 +27,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Octopus.Client to 14.3.1646
 - SDK - Updated DotNet SDK to 8.0.402
 - Dependencies - Updated xunit to 2.9.2
-- Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.0
 - Dependencies - Updated Serilog to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 2.0.169
 - Dependencies - Updated Roslynator.Analyzers to 4.12.7
+- Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 ### Removed
 ### Deployment Changes
 
