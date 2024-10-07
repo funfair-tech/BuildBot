@@ -31,7 +31,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
-            this._logger.LogError(message: "Invalid TopicArn: {TopicArn}", notification.TopicArn);
+            this._logger.LogError(message: "CLOUDFORMATION: Received Invalid ARN {Arn}", notification.TopicArn);
 
             return;
         }

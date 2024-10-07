@@ -56,6 +56,8 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: Received Invalid ARN {Arn}", notification.TopicArn);
+
             return;
         }
 
