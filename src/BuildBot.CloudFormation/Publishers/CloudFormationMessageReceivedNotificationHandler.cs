@@ -80,37 +80,51 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
     private async ValueTask<StackDetails?> GetStackDetailsAsync(Deployment deployment, CancellationToken cancellationToken)
     {
-        RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(this._options.Region);
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey: this._options.AccessKey, secretKey: this._options.SecretKey);
-
-        using (AmazonCloudFormationClient cloudFormationClient = new(credentials: credentials, region: endpoint))
+        try
         {
-            DescribeStacksRequest request = new() { StackName = deployment.StackName };
+            RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(this._options.Region);
+            AWSCredentials credentials = new BasicAWSCredentials(accessKey: this._options.AccessKey, secretKey: this._options.SecretKey);
 
-            DescribeStacksResponse? result = await cloudFormationClient.DescribeStacksAsync(request: request, cancellationToken: cancellationToken);
-
-            if (result is null)
+            using (AmazonCloudFormationClient cloudFormationClient = new(credentials: credentials, region: endpoint))
             {
+                DescribeStacksRequest request = new() { StackName = deployment.StackName };
+
+                DescribeStacksResponse? result = await cloudFormationClient.DescribeStacksAsync(request: request, cancellationToken: cancellationToken);
+
+                if (result is null)
+                {
+                    return null;
+                }
+
+                Stack? stack = result.Stacks.FirstOrDefault();
+
+                if (stack is null)
+                {
+                    return null;
+                }
+
+                string? projectDescription = stack.Description;
+
+                Tag? versionTag = stack.Tags.Find(t => StringComparer.Ordinal.Equals(x: t.Key, y: "Version"));
+
+                string? projectVersion = versionTag?.Value;
+
+                if (!string.IsNullOrWhiteSpace(projectDescription) || !string.IsNullOrWhiteSpace(projectVersion))
+                {
+                    return new StackDetails(Description: projectDescription, Version: projectVersion);
+                }
+
                 return null;
             }
+        }
+        catch(Exception exception)
+        {
+            this._logger.LogError(
+                new EventId(exception.HResult),
+                exception,
+                "Failed to get cloudformation stack: {Message}",
+                exception.Message);
 
-            Stack? stack = result.Stacks.FirstOrDefault();
-
-            if (stack is null)
-            {
-                return null;
-            }
-
-            string? projectDescription = stack.Description;
-
-            Tag? versionTag = stack.Tags.Find(t => StringComparer.Ordinal.Equals(x: t.Key, y: "Version"));
-
-            string? projectVersion = versionTag?.Value;
-
-            if (!string.IsNullOrWhiteSpace(projectDescription) || !string.IsNullOrWhiteSpace(projectVersion))
-            {
-                return new StackDetails(Description: projectDescription, Version: projectVersion);
-            }
 
             return null;
         }
