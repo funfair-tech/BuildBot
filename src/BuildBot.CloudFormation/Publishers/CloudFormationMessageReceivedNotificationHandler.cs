@@ -14,6 +14,7 @@ namespace BuildBot.CloudFormation.Publishers;
 
 public sealed class CloudFormationMessageReceivedNotificationHandler : INotificationHandler<CloudFormationMessageReceived>
 {
+    private const string STACK_ID = "StackId";
     private const string STACK_NAME = "StackName";
     private const string RESOURCE_TYPE = "ResourceType";
     private const string LOGICAL_RESOURCE_ID = "LogicalResourceId";
@@ -84,6 +85,11 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return null;
         }
 
+        if (!notification.Properties.TryGetValue(key: STACK_ID, out string? stackId))
+        {
+            return null;
+        }
+
         if (!notification.Properties.TryGetValue(key: STACK_NAME, out string? stackName))
         {
             return null;
@@ -117,7 +123,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
                                         ? "CLOUDFORMATION: SUCCEEDED!!!"
                                         : "CLOUDFORMATION: FAILED!!!");
 
-            return new Deployment(StackName: stackName, Project: project, Arn: arn, Status: status, Success: success);
+            return new Deployment(StackName: stackName, Project: project, Arn: arn, Status: status, Success: success, StackId: stackId);
         }
 
         return null;
@@ -128,10 +134,18 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
         return new EmbedBuilder().WithTitle(deployment.Success
                                                 ? $"{deployment.Project} was deployed"
                                                 : $"{deployment.Project} failed to deploy")
+                                 .WithUrl(BuildStackUrl(deployment)
+                                              .ToString())
                                  .WithColor(deployment.Success
                                                 ? Color.Green
                                                 : Color.Red)
                                  .WithFields(GetFields(deployment));
+    }
+
+    private static Uri BuildStackUrl(in Deployment deployment)
+    {
+        // arn%3Aaws%3Acloudformation%3Aeu-west-1%3A117769150821%3Astack%2FBuildBot%2Ff57a70c0-74cb-11ef-8f69-0aa7e4ea5f05
+        return new("https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/stackinfo?stackId=" + deployment.StackId);
     }
 
     private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Deployment deployment)
@@ -166,5 +180,5 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
     }
 
     [DebuggerDisplay("{StackName} {Project} {Arn} {Status} {Success}")]
-    private readonly record struct Deployment(string StackName, string Project, string Arn, string Status, bool Success);
+    private readonly record struct Deployment(string StackName, string Project, string Arn, string Status, bool Success, string StackId);
 }
