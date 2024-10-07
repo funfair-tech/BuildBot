@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.CloudFormation;
 using BuildBot.CloudFormation.Models;
 using BuildBot.Json;
 using BuildBot.ServiceModel.CloudFormation;
@@ -24,88 +25,80 @@ internal static partial class Endpoints
 
         RouteGroupBuilder group = app.MapGroup("/cloudformation");
         group.MapPost(pattern: "deploy",
-                      handler: static async (HttpRequest request, IMediator mediator, ILogger<RouteGroupBuilder> logger, CancellationToken cancellationToken) =>
+                      handler: static async (HttpRequest request,
+                                             ICloudFormationSnsPropertiesParser parser,
+                                             IMediator mediator,
+                                             ILogger<RouteGroupBuilder> logger,
+                                             CancellationToken cancellationToken) =>
                                {
                                    SnsMessage message = await ReadJsonAsync<SnsMessage>(request: request, cancellationToken: cancellationToken);
                                    logger.LogError(LogMessage(message));
 
-                                   return await HandleDeployMessageAsync(message: message, mediator: mediator, cancellationToken: cancellationToken);
+                                   return await HandleDeployMessageAsync(message: message, parser: parser, mediator: mediator, cancellationToken: cancellationToken);
                                })
              .Accepts<SnsMessage>(contentType: "text/plain", "application/json");
 
         return app;
     }
 
-    private static async ValueTask<IResult> HandleDeployMessageAsync(SnsMessage message, IMediator mediator, CancellationToken cancellationToken)
+    private static async ValueTask<IResult> HandleDeployMessageAsync(SnsMessage message, ICloudFormationSnsPropertiesParser parser, IMediator mediator, CancellationToken cancellationToken)
     {
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "SubscriptionConfirmation"))
         {
-            if (message.SubscribeUrl is not null)
-            {
-                await mediator.Publish(new CloudFormationSubscriptionConfirmation(TopicArn: message.TopicArn, new(message.SubscribeUrl)), cancellationToken: cancellationToken);
-
-                return Results.Accepted();
-            }
-
-            return Results.BadRequest();
+            return await HandleSnsSubscriptionMessagesAsync(message: message, mediator: mediator, cancellationToken: cancellationToken);
         }
 
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "Notification"))
         {
-            Dictionary<string, string> properties = SplitMessageToDictionary(message);
-
-            await mediator.Publish(new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
-                                   cancellationToken: cancellationToken);
-
-            return Results.NoContent();
+            return await HandleNotiifcationMessageAsync(message: message, parser: parser, mediator: mediator, cancellationToken: cancellationToken);
         }
 
         return Results.NotFound();
     }
 
-    private static Dictionary<string, string> SplitMessageToDictionary(SnsMessage message)
+    private static async ValueTask<IResult> HandleNotiifcationMessageAsync(SnsMessage message, ICloudFormationSnsPropertiesParser parser, IMediator mediator, CancellationToken cancellationToken)
     {
-        return message.Message.Split("\n")
-                      .Where(line => !string.IsNullOrWhiteSpace(line))
-                      .Select(SplitLineToKeyAndValue)
-                      .ToDictionary(keySelector: key => key.key, elementSelector: value => value.value, comparer: StringComparer.Ordinal);
+        Dictionary<string, string> properties = parser.SplitMessageToDictionary(message);
+
+        await mediator.Publish(new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
+                               cancellationToken: cancellationToken);
+
+        return Results.NoContent();
     }
 
-    private static (string key, string value) SplitLineToKeyAndValue(string m)
+    private static async ValueTask<IResult> HandleSnsSubscriptionMessagesAsync(SnsMessage message, IMediator mediator, CancellationToken cancellationToken)
     {
-        const string resourceValueStart = "='";
-        const string resourceValueEnd = "'";
-
-        int i = m.IndexOf(value: resourceValueStart, comparisonType: StringComparison.Ordinal);
-
-        if (i < resourceValueStart.Length)
+        if (message.SubscribeUrl is null)
         {
-            return (key: m, string.Empty);
+            return Results.BadRequest();
         }
 
-        string key = m.Substring(startIndex: 0, length: i);
-        int start = i + resourceValueStart.Length;
-        int length = m.Length - start - resourceValueEnd.Length;
+        await mediator.Publish(new CloudFormationSubscriptionConfirmation(TopicArn: message.TopicArn, new(message.SubscribeUrl)), cancellationToken: cancellationToken);
 
-        string value = m.Substring(startIndex: start, length: length);
-
-        return (key, value);
+        return Results.Accepted();
     }
 
     private static async ValueTask<T> ReadJsonAsync<T>(HttpRequest request, CancellationToken cancellationToken)
     {
         if (AppSerializationContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> typeInfo)
         {
-            throw new JsonException("No type handler found");
+            return NoTypeInformation<T>();
         }
 
         T? result = await JsonSerializer.DeserializeAsync(utf8Json: request.Body, jsonTypeInfo: typeInfo, cancellationToken: cancellationToken);
 
-        if (result is not null)
-        {
-            return result;
-        }
+        return result ?? InvalidJson<T>();
+    }
 
+    [DoesNotReturn]
+    private static T NoTypeInformation<T>()
+    {
+        throw new JsonException("No type handler found");
+    }
+
+    [DoesNotReturn]
+    private static T InvalidJson<T>()
+    {
         throw new JsonException("Could not parse JSON");
     }
 

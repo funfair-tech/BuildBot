@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Publishers;
+using BuildBot.CloudFormation.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 
@@ -18,9 +19,14 @@ public static class CloudformationSetup
     public static IServiceCollection AddCloudFormation(this IServiceCollection services, SnsNotificationOptions snsConfiguration)
     {
         return services.AddSingleton(typeof(SnsNotificationOptions), implementationInstance: snsConfiguration)
-                       .AddHttpClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler))
-                       .AddTransientHttpErrorPolicy(
-                           policyBuilder => policyBuilder.WaitAndRetryAsync(retryCount: MAX_RETRIES, sleepDurationProvider: HandleRetry, onRetryAsync: OnRetryAsync))
+                       .AddSingleton<ICloudFormationSnsPropertiesParser, CloudFormationSnsPropertiesParser>()
+                       .AddSubscriptionConfirmationHttpClient();
+    }
+
+    private static IServiceCollection AddSubscriptionConfirmationHttpClient(this IServiceCollection services)
+    {
+        return services.AddHttpClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler))
+                       .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.WaitAndRetryAsync(retryCount: MAX_RETRIES, sleepDurationProvider: HandleRetry, onRetryAsync: OnRetryAsync))
                        .Services;
     }
 
