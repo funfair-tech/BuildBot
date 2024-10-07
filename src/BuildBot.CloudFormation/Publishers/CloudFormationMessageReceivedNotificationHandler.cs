@@ -60,6 +60,8 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return ValueTask.CompletedTask;
         }
 
+        // TODO call  "aws cloudformation describe-stacks --stack-name TreasuryCosmos" to get the stack config and pull pout things like
+
         this._logger.LogWarning(message: "CLOUDFORMATION: Building message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
         EmbedBuilder embed = BuildStatusMessage(deployment.Value);
 
@@ -123,7 +125,9 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
     private static EmbedBuilder BuildStatusMessage(in Deployment deployment)
     {
-        return new EmbedBuilder().WithTitle($"CloudFormation {deployment.Status} for {deployment.Project} in {deployment.StackName}")
+        return new EmbedBuilder().WithTitle(deployment.Success
+                                                ? $"{deployment.Project} was deployed"
+                                                : $"{deployment.Project} failed to deploy")
                                  .WithColor(deployment.Success
                                                 ? Color.Green
                                                 : Color.Red)
