@@ -118,28 +118,33 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
     {
         this._logger.LogWarning(message: "CLOUDFORMATION: Received message from {TopicArn} with {MessageId} at {Timestamp}", notification.TopicArn, notification.MessageId, notification.Timestamp);
 
-        foreach ((string key, string value) in notification.Properties)
-        {
-            this._logger.LogWarning(message: "CLOUDFORMATION: Property: {Key} = {Value}", key, value);
-        }
+        this.DumpAllProperties(notification);
 
         if (!IsMatching(properties: notification.Properties, key: RESOURCE_TYPE, value: "AWS::CloudFormation::Stack"))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: Not a cloud formation stack");
+
             return null;
         }
 
         if (!notification.Properties.TryGetValue(key: STACK_ID, out string? stackId))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: No stack id found");
+
             return null;
         }
 
         if (!notification.Properties.TryGetValue(key: STACK_NAME, out string? stackName))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: No stack name found");
+
             return null;
         }
 
         if (!notification.Properties.TryGetValue(key: LOGICAL_RESOURCE_ID, out string? project))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: No logical resource id found");
+
             return null;
         }
 
@@ -147,29 +152,47 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
         if (!notification.Properties.TryGetValue(key: PHYSICAL_RESOURCE_ID, out string? arn))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: No physical resource id found");
+
             return null;
         }
 
         if (!notification.Properties.TryGetValue(key: RESOURCE_STATUS, out string? status))
         {
+            this._logger.LogWarning(message: "CLOUDFORMATION: No resource status found");
+
             return null;
         }
 
-        this._logger.LogWarning(message: "CLOUDFORMATION: Stack Name: {StackName}", stackName);
-        this._logger.LogWarning(message: "CLOUDFORMATION: Project: {Project}", project);
-        this._logger.LogWarning(message: "CLOUDFORMATION: Arn: {Arn}", arn);
-        this._logger.LogWarning(message: "CLOUDFORMATION: Status: {ResourceStatus}", arn);
-
         if (Statuses.TryGetValue(key: status, out bool success))
         {
-            this._logger.LogWarning(message: success
-                                        ? "CLOUDFORMATION: SUCCEEDED!!!"
-                                        : "CLOUDFORMATION: FAILED!!!");
+            this.LogConfiguration(stackName: stackName, project: project, arn: arn, success: success);
 
             return new Deployment(StackName: stackName, Project: project, Arn: arn, Status: status, Success: success, StackId: stackId);
         }
 
+        this._logger.LogWarning(message: "CLOUDFORMATION: Unknown status");
+
         return null;
+    }
+
+    private void LogConfiguration(string stackName, string project, string arn, bool success)
+    {
+        this._logger.LogWarning(message: "CLOUDFORMATION: Stack Name: {StackName}", stackName);
+        this._logger.LogWarning(message: "CLOUDFORMATION: Project: {Project}", project);
+        this._logger.LogWarning(message: "CLOUDFORMATION: Arn: {Arn}", arn);
+        this._logger.LogWarning(message: "CLOUDFORMATION: Status: {ResourceStatus}", arn);
+        this._logger.LogWarning(message: success
+                                    ? "CLOUDFORMATION: SUCCEEDED!!!"
+                                    : "CLOUDFORMATION: FAILED!!!");
+    }
+
+    private void DumpAllProperties(CloudFormationMessageReceived notification)
+    {
+        foreach ((string key, string value) in notification.Properties)
+        {
+            this._logger.LogWarning(message: "CLOUDFORMATION: Property: {Key} = {Value}", key, value);
+        }
     }
 
     private static EmbedBuilder BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
