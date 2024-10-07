@@ -60,7 +60,10 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return ValueTask.CompletedTask;
         }
 
+        this._logger.LogWarning(message: "CLOUDFORMATION: Building message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
         EmbedBuilder embed = BuildStatusMessage(deployment.Value);
+
+        this._logger.LogWarning(message: "CLOUDFORMATION: publishing message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
 
         return this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
     }
