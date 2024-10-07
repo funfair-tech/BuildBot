@@ -4,6 +4,8 @@
  - any: [ 'src/$BuildBot/**/*' ]
 "buildbot-cloudformation":
  - any: [ 'src/$BuildBot.CloudFormation/**/*' ]
+"buildbot-cloudformation-tests":
+ - any: [ 'src/$BuildBot.CloudFormation.Tests/**/*' ]
 "buildbot-discord":
  - any: [ 'src/$BuildBot.Discord/**/*' ]
 "buildbot-github":
