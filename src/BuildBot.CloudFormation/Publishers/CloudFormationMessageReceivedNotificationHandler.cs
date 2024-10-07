@@ -114,9 +114,11 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             this._logger.LogWarning(message: success
                                         ? "CLOUDFORMATION: SUCCEEDED!!!"
                                         : "CLOUDFORMATION: FAILED!!!");
+
+            return new Deployment(StackName: stackName, Project: project, Arn: arn, Status: status, Success: success);
         }
 
-        return new Deployment(StackName: stackName, Project: project, Arn: arn, Status: status, Success: success);
+        return null;
     }
 
     private static EmbedBuilder BuildStatusMessage(in Deployment deployment)

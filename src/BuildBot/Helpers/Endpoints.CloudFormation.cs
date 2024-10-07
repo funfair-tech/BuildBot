@@ -54,9 +54,8 @@ internal static partial class Endpoints
         {
             Dictionary<string, string> properties = SplitMessageToDictionary(message);
 
-            await mediator.Publish(
-                new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
-                cancellationToken: cancellationToken);
+            await mediator.Publish(new CloudFormationMessageReceived(TopicArn: message.TopicArn, MessageId: message.MessageId, Properties: properties, Timestamp: message.Timestamp),
+                                   cancellationToken: cancellationToken);
 
             return Results.NoContent();
         }
@@ -74,15 +73,21 @@ internal static partial class Endpoints
 
     private static (string key, string value) SplitLineToKeyAndValue(string m)
     {
-        int i = m.IndexOf(value: '=', comparisonType: StringComparison.Ordinal);
+        const string resourceValueStart = "='";
+        const string resourceValueEnd = "'";
 
-        if (i == -1)
+        int i = m.IndexOf(value: resourceValueStart, comparisonType: StringComparison.Ordinal);
+
+        if (i < resourceValueStart.Length)
         {
             return (key: m, string.Empty);
         }
 
         string key = m.Substring(startIndex: 0, length: i);
-        string value = m.Substring(i + 1);
+        int start = i + resourceValueStart.Length;
+        int length = m.Length - start - resourceValueEnd.Length;
+
+        string value = m.Substring(startIndex: start, length: length);
 
         return (key, value);
     }
