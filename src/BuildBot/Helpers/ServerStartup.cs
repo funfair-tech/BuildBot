@@ -68,11 +68,7 @@ internal static class ServerStartup
 
         builder.Host.UseWindowsService()
                .UseSystemd();
-        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options,
-                                                                         httpPort: httpPort,
-                                                                         httpsPort: httpsPort,
-                                                                         h2Port: h2Port,
-                                                                         configurationFiledPath: configPath))
+        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options, httpPort: httpPort, httpsPort: httpsPort, h2Port: h2Port, configurationFiledPath: configPath))
                .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
                .ConfigureLogging((_, logger) => ConfigureLogging(logger));
 
@@ -89,8 +85,11 @@ internal static class ServerStartup
     private static SnsNotificationOptions LoadSnsNotificationConfig(IConfigurationRoot configuration)
     {
         string topicArn = configuration["CloudFormation:TopicArn"] ?? string.Empty;
+        string region = configuration["CloudFormation:Aws:Region"] ?? string.Empty;
+        string accessKeyId = configuration["CloudFormation:Aws:AccessKeyId"] ?? string.Empty;
+        string secretKey = configuration["CloudFormation:Aws:SecretKey"] ?? string.Empty;
 
-        return new(topicArn);
+        return new(TopicArn: topicArn, Region: region, AccessKey: accessKeyId, SecretKey: secretKey);
     }
 
     [SuppressMessage(category: "Microsoft.Reliability", checkId: "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]

@@ -189,6 +189,48 @@
                     }
                   ]
                 }
+              },
+              {
+                "Name": "CLOUDFORMATION__AWS__REGION",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "AWS_REGION"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "CLOUDFORMATION__AWS__ACCESSKEYID",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "AWS_ACCESS_KEY_ID"
+                    }
+                  ]
+                }
+              },
+              {
+                "Name": "CLOUDFORMATION__AWS__SECRETKEY",
+                "Value": {
+                  "Fn::Sub": [
+                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
+                    {
+                      "SecretsManagerArn": {
+                        "Ref": "SecretsManagerArn"
+                      },
+                      "Key": "AWS_SECRET_KEY"
+                    }
+                  ]
+                }
               }
             ],
             "DisableNetworking": false,

@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon;
+using Amazon.CloudFormation;
+using Amazon.CloudFormation.Model;
+using Amazon.Runtime;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Models;
 using BuildBot.Discord.Models;
@@ -47,28 +52,66 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
         this._logger = logger;
     }
 
-    public ValueTask Handle(CloudFormationMessageReceived notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(CloudFormationMessageReceived notification, CancellationToken cancellationToken)
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
-            return ValueTask.CompletedTask;
+            return;
         }
 
         Deployment? deployment = this.ExtractDeploymentProperties(notification);
 
         if (deployment is null)
         {
-            return ValueTask.CompletedTask;
+            return;
         }
 
-        // TODO call  "aws cloudformation describe-stacks --stack-name TreasuryCosmos" to get the stack config and pull pout things like
+        StackDetails? stackDetails = await this.GetStackDetailsAsync(deployment: deployment.Value, cancellationToken: cancellationToken);
 
         this._logger.LogWarning(message: "CLOUDFORMATION: Building message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
-        EmbedBuilder embed = BuildStatusMessage(deployment.Value);
+        EmbedBuilder embed = BuildStatusMessage(deployment: deployment.Value, stackDetails: stackDetails);
 
         this._logger.LogWarning(message: "CLOUDFORMATION: publishing message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
 
-        return this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
+    }
+
+    private async ValueTask<StackDetails?> GetStackDetailsAsync(Deployment deployment, CancellationToken cancellationToken)
+    {
+        RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(this._options.Region);
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey: this._options.AccessKey, secretKey: this._options.SecretKey);
+
+        using (AmazonCloudFormationClient cloudFormationClient = new(credentials: credentials, region: endpoint))
+        {
+            DescribeStacksRequest request = new() { StackName = deployment.StackName };
+
+            DescribeStacksResponse? result = await cloudFormationClient.DescribeStacksAsync(request: request, cancellationToken: cancellationToken);
+
+            if (result is null)
+            {
+                return null;
+            }
+
+            Stack? stack = result.Stacks.FirstOrDefault();
+
+            if (stack is null)
+            {
+                return null;
+            }
+
+            string? projectDescription = stack.Description;
+
+            Tag? versionTag = stack.Tags.Find(t => StringComparer.Ordinal.Equals(x: t.Key, y: "Version"));
+
+            string? projectVersion = versionTag?.Value;
+
+            if (!string.IsNullOrWhiteSpace(projectDescription) || !string.IsNullOrWhiteSpace(projectVersion))
+            {
+                return new StackDetails(Description: projectDescription, Version: projectVersion);
+            }
+
+            return null;
+        }
     }
 
     private Deployment? ExtractDeploymentProperties(CloudFormationMessageReceived notification)
@@ -129,17 +172,37 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
         return null;
     }
 
-    private static EmbedBuilder BuildStatusMessage(in Deployment deployment)
+    private static EmbedBuilder BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
     {
-        return new EmbedBuilder().WithTitle(deployment.Success
-                                                ? $"{deployment.Project} was deployed"
-                                                : $"{deployment.Project} failed to deploy")
-                                 .WithUrl(BuildStackUrl(deployment)
-                                              .ToString())
-                                 .WithColor(deployment.Success
-                                                ? Color.Green
-                                                : Color.Red)
-                                 .WithFields(GetFields(deployment));
+        EmbedBuilder builder = new EmbedBuilder().WithTitle(BuildTitle(deployment: deployment, stackDetails: stackDetails))
+                                                 .WithUrl(BuildStackUrl(deployment)
+                                                              .ToString())
+                                                 .WithColor(deployment.Success
+                                                                ? Color.Green
+                                                                : Color.Red)
+                                                 .WithFields(GetFields(deployment));
+
+        if (stackDetails is not null)
+        {
+            builder.WithDescription(stackDetails.Value.Description)
+                   .AddField(name: "Version", value: stackDetails.Value.Version);
+        }
+
+        return builder;
+    }
+
+    private static string BuildTitle(Deployment deployment, StackDetails? stackDetails)
+    {
+        if (stackDetails is not null && !string.IsNullOrWhiteSpace(stackDetails.Value.Version))
+        {
+            return deployment.Success
+                ? $"{deployment.Project} ({stackDetails.Value.Version}) was deployed "
+                : $"{deployment.Project} ({stackDetails.Value.Version}) failed to deploy";
+        }
+
+        return deployment.Success
+            ? $"{deployment.Project} was deployed "
+            : $"{deployment.Project} failed to deploy";
     }
 
     private static Uri BuildStackUrl(in Deployment deployment)
@@ -178,6 +241,9 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
         return false;
     }
+
+    [DebuggerDisplay("{Description} {Version}")]
+    private readonly record struct StackDetails(string? Description, string? Version);
 
     [DebuggerDisplay("{StackName} {Project} {Arn} {Status} {Success}")]
     private readonly record struct Deployment(string StackName, string Project, string Arn, string Status, bool Success, string StackId);
