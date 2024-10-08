@@ -13,7 +13,6 @@ using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Helpers;
 
@@ -25,14 +24,9 @@ internal static partial class Endpoints
 
         RouteGroupBuilder group = app.MapGroup("/cloudformation");
         group.MapPost(pattern: "deploy",
-                      handler: static async (HttpRequest request,
-                                             ICloudFormationSnsPropertiesParser parser,
-                                             IMediator mediator,
-                                             ILogger<RouteGroupBuilder> logger,
-                                             CancellationToken cancellationToken) =>
+                      handler: static async (HttpRequest request, ICloudFormationSnsPropertiesParser parser, IMediator mediator, CancellationToken cancellationToken) =>
                                {
                                    SnsMessage message = await ReadJsonAsync<SnsMessage>(request: request, cancellationToken: cancellationToken);
-                                   logger.LogError(LogMessage(message));
 
                                    return await HandleDeployMessageAsync(message: message, parser: parser, mediator: mediator, cancellationToken: cancellationToken);
                                })
@@ -100,12 +94,5 @@ internal static partial class Endpoints
     private static T InvalidJson<T>()
     {
         throw new JsonException("Could not parse JSON");
-    }
-
-    private static string LogMessage(SnsMessage body)
-    {
-        return AppSerializationContext.Default.GetTypeInfo(typeof(SnsMessage)) is JsonTypeInfo<SnsMessage> typeInfo
-            ? JsonSerializer.Serialize(value: body, jsonTypeInfo: typeInfo)
-            : "CLOUDFORMATION: >>>>" + body.Type + "<<<<" + body.Message;
     }
 }
