@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon;
-using Amazon.CloudFormation;
-using Amazon.CloudFormation.Model;
-using Amazon.Runtime;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Models;
 using BuildBot.Discord.Models;
@@ -41,13 +35,19 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
                                                                     ["UPDATE_ROLLBACK_IN_PROGRESS"] = false
                                                                 };
 
+    private readonly IAwsCloudFormation _awsCloudFormation;
+
     private readonly ILogger<CloudFormationMessageReceivedNotificationHandler> _logger;
     private readonly IMediator _mediator;
     private readonly SnsNotificationOptions _options;
 
-    public CloudFormationMessageReceivedNotificationHandler(SnsNotificationOptions options, IMediator mediator, ILogger<CloudFormationMessageReceivedNotificationHandler> logger)
+    public CloudFormationMessageReceivedNotificationHandler(SnsNotificationOptions options,
+                                                            IAwsCloudFormation awsCloudFormation,
+                                                            IMediator mediator,
+                                                            ILogger<CloudFormationMessageReceivedNotificationHandler> logger)
     {
         this._options = options;
+        this._awsCloudFormation = awsCloudFormation;
         this._mediator = mediator;
         this._logger = logger;
     }
@@ -68,7 +68,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return;
         }
 
-        StackDetails? stackDetails = await this.GetStackDetailsAsync(deployment: deployment.Value, cancellationToken: cancellationToken);
+        StackDetails? stackDetails = await this._awsCloudFormation.GetStackDetailsAsync(deployment: deployment.Value, cancellationToken: cancellationToken);
 
         this._logger.LogWarning(message: "CLOUDFORMATION: Building message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
         EmbedBuilder embed = BuildStatusMessage(deployment: deployment.Value, stackDetails: stackDetails);
@@ -76,58 +76,6 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
         this._logger.LogWarning(message: "CLOUDFORMATION: publishing message for {Project} in {StackName}", deployment.Value.Project, deployment.Value.StackName);
 
         await this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
-    }
-
-    private async ValueTask<StackDetails?> GetStackDetailsAsync(Deployment deployment, CancellationToken cancellationToken)
-    {
-        try
-        {
-            RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(this._options.Region);
-            AWSCredentials credentials = new BasicAWSCredentials(accessKey: this._options.AccessKey, secretKey: this._options.SecretKey);
-
-            using (AmazonCloudFormationClient cloudFormationClient = new(credentials: credentials, region: endpoint))
-            {
-                DescribeStacksRequest request = new() { StackName = deployment.StackName };
-
-                DescribeStacksResponse? result = await cloudFormationClient.DescribeStacksAsync(request: request, cancellationToken: cancellationToken);
-
-                if (result is null)
-                {
-                    return null;
-                }
-
-                Stack? stack = result.Stacks.FirstOrDefault();
-
-                if (stack is null)
-                {
-                    return null;
-                }
-
-                string? projectDescription = stack.Description;
-
-                Tag? versionTag = stack.Tags.Find(t => StringComparer.Ordinal.Equals(x: t.Key, y: "Version"));
-
-                string? projectVersion = versionTag?.Value;
-
-                if (!string.IsNullOrWhiteSpace(projectDescription) || !string.IsNullOrWhiteSpace(projectVersion))
-                {
-                    return new StackDetails(Description: projectDescription, Version: projectVersion);
-                }
-
-                return null;
-            }
-        }
-        catch(Exception exception)
-        {
-            this._logger.LogError(
-                new EventId(exception.HResult),
-                exception,
-                "Failed to get cloudformation stack: {Message}",
-                exception.Message);
-
-
-            return null;
-        }
     }
 
     private Deployment? ExtractDeploymentProperties(CloudFormationMessageReceived notification)
@@ -280,10 +228,4 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
         return false;
     }
-
-    [DebuggerDisplay("{Description} {Version}")]
-    private readonly record struct StackDetails(string? Description, string? Version);
-
-    [DebuggerDisplay("{StackName} {Project} {Arn} {Status} {Success}")]
-    private readonly record struct Deployment(string StackName, string Project, string Arn, string Status, bool Success, string StackId);
 }

@@ -19,6 +19,7 @@ public static class CloudformationSetup
     public static IServiceCollection AddCloudFormation(this IServiceCollection services, SnsNotificationOptions snsConfiguration)
     {
         return services.AddSingleton(typeof(SnsNotificationOptions), implementationInstance: snsConfiguration)
+                       .AddSingleton<IAwsCloudFormation, AwsCloudFormation>()
                        .AddSingleton<ICloudFormationSnsPropertiesParser, CloudFormationSnsPropertiesParser>()
                        .AddSubscriptionConfirmationHttpClient();
     }
