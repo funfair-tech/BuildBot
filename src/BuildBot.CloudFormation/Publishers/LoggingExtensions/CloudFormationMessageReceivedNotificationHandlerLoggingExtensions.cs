@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics;
+using BuildBot.CloudFormation.Models;
 using Microsoft.Extensions.Logging;
 
 namespace BuildBot.CloudFormation.Publishers.LoggingExtensions;
@@ -23,5 +25,13 @@ internal static partial class CloudFormationMessageReceivedNotificationHandlerLo
     public static void PublishingMessage(this ILogger<CloudFormationMessageReceivedNotificationHandler> logger, in Deployment deployment)
     {
         logger.PublishingMessage(project: deployment.Project, stackName: deployment.StackName);
+    }
+
+    [LoggerMessage(eventId: 3, level: LogLevel.Information, message: "CLOUDFORMATION: Received message from {topicArn} with {messageId} at {timestamp}")]
+    private static partial void RecievedMessage(this ILogger<CloudFormationMessageReceivedNotificationHandler> logger, string topicArn, string messageId, DateTime timestamp);
+
+    public static void RecievedMessage(this ILogger<CloudFormationMessageReceivedNotificationHandler> logger, in CloudFormationMessageReceived notification)
+    {
+        logger.RecievedMessage(topicArn: notification.TopicArn, messageId: notification.MessageId, timestamp: notification.Timestamp);
     }
 }

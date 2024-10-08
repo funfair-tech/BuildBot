@@ -43,6 +43,8 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
             return;
         }
 
+        this._logger.RecievedMessage(notification);
+
         Deployment? deployment = this._cloudFormationDeploymentExtractor.ExtractDeploymentProperties(notification);
 
         if (deployment is null)
