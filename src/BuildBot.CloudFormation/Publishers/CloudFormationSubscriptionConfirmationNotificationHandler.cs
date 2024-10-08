@@ -1,9 +1,11 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Models;
+using BuildBot.CloudFormation.Publishers.LoggingExtensions;
 using Mediator;
 using Microsoft.Extensions.Logging;
 
@@ -14,8 +16,6 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> _logger;
     private readonly SnsNotificationOptions _options;
-
-    // https://sns.eu-west-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:eu-west-1:117769150821:BuildBotDeployments&Token=2336412f37fb687f5d51e6e2425ba1f30ada00b04c0688e251ce22251d1c806ac0afbc4e8033d220dc8b3262f58535e6b029b8adbf2e0ff2238de9c10cd3c2595f210079fe4a127f7d35cec5b3a384a02027a253631106cd138875ec9fed674dc8d2cdc4655c2840d8b5160b814e86e5d065910a637b291e3a42a4f92bae4f1d
 
     public CloudFormationSubscriptionConfirmationNotificationHandler(IHttpClientFactory httpClientFactory,
                                                                      SnsNotificationOptions options,
@@ -31,14 +31,21 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
-            this._logger.LogError(message: "CLOUDFORMATION: Received Invalid ARN {Arn}", notification.TopicArn);
+            this._logger.ReceivedInvalidArn(notification.TopicArn);
 
             return;
         }
 
-        HttpClient client = this._httpClientFactory.CreateClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler));
+        try
+        {
+            HttpClient client = this._httpClientFactory.CreateClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler));
 
-        HttpResponseMessage responseMessage = await client.GetAsync(requestUri: notification.SubscribeUrl, cancellationToken: cancellationToken);
-        responseMessage.EnsureSuccessStatusCode();
+            HttpResponseMessage responseMessage = await client.GetAsync(requestUri: notification.SubscribeUrl, cancellationToken: cancellationToken);
+            responseMessage.EnsureSuccessStatusCode();
+        }
+        catch (Exception exception)
+        {
+            this._logger.FailedToSubscribeToTopic(subscribeUrl: notification.SubscribeUrl, message: exception.Message, exception: exception);
+        }
     }
 }

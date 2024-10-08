@@ -25,9 +25,3 @@ public static partial class CloudFormationMessageReceivedNotificationHandlerLogg
         logger.PublishingMessage(project: deployment.Project, stackName: deployment.StackName);
     }
 }
-
-public static partial class CloudFormationMessageReceivedNotificationHandlerLoggingExtensions
-{
-    [LoggerMessage(eventId: 0, level: LogLevel.Warning, message: "CLOUDFORMATION: Received Invalid ARN {arn}")]
-    public static partial void ReceivedInvalidArn(this ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> logger, string arn);
-}
