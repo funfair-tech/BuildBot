@@ -32,6 +32,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.7
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 - Dependencies - Updated AWSSDK to 3.7.400.31
+- Dependencies - Updated Microsoft.Extensions to 8.0.1
 ### Removed
 ### Deployment Changes
 
