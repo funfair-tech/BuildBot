@@ -7,6 +7,7 @@ using Amazon.CloudFormation;
 using Amazon.CloudFormation.Model;
 using Amazon.Runtime;
 using BuildBot.CloudFormation.Configuration;
+using BuildBot.CloudFormation.Services.LoggingExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace BuildBot.CloudFormation.Services;
@@ -65,7 +66,7 @@ public sealed class AwsCloudFormation : IAwsCloudFormation
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, message: "Failed to get cloudformation stack: {Message}", exception.Message);
+            this._logger.FailedToGetCloudFormationStack(message: exception.Message, exception: exception);
 
             return null;
         }

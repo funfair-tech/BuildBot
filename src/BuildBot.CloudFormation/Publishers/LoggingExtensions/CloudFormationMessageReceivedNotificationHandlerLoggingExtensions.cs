@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.CloudFormation.Publishers.LoggingExtensions;
 
-public static partial class CloudFormationMessageReceivedNotificationHandlerLoggingExtensions
+internal static partial class CloudFormationMessageReceivedNotificationHandlerLoggingExtensions
 {
     [LoggerMessage(eventId: 0, level: LogLevel.Warning, message: "CLOUDFORMATION: Received Invalid ARN {arn}")]
     public static partial void ReceivedInvalidArn(this ILogger<CloudFormationMessageReceivedNotificationHandler> logger, string arn);
