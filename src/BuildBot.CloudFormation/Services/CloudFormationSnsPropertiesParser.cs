@@ -9,10 +9,15 @@ public sealed class CloudFormationSnsPropertiesParser : ICloudFormationSnsProper
 {
     public Dictionary<string, string> SplitMessageToDictionary(SnsMessage message)
     {
-        return message.Message.Split("\n")
-                      .Where(line => !string.IsNullOrWhiteSpace(line))
+        return message.Message.Split('\n')
+                      .Where(ExcludeEmptyLines)
                       .Select(SplitLineToKeyAndValue)
                       .ToDictionary(keySelector: key => key.key, elementSelector: value => value.value, comparer: StringComparer.Ordinal);
+    }
+
+    private static bool ExcludeEmptyLines(string line)
+    {
+        return !string.IsNullOrWhiteSpace(line);
     }
 
     private static (string key, string value) SplitLineToKeyAndValue(string m)
