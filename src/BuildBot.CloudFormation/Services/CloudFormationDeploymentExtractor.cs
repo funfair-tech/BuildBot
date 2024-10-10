@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using BuildBot.CloudFormation.Models;
 using BuildBot.CloudFormation.Services.LoggingExtensions;
 using Microsoft.Extensions.Logging;
@@ -106,6 +107,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger.ResourceStatus(status: status, success: success);
     }
 
+    [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make the method static", Justification = "Logging method needs to be an instance method")]
     [Conditional("DEBUG")]
     private void DumpAllProperties(CloudFormationMessageReceived notification)
     {

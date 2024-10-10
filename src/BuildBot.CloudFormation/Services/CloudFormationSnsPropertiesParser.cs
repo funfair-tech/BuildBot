@@ -27,7 +27,7 @@ public sealed class CloudFormationSnsPropertiesParser : ICloudFormationSnsProper
             return (key: m, string.Empty);
         }
 
-        string key = m.Substring(startIndex: 0, length: i);
+        string key = m[..i];
         int start = i + resourceValueStart.Length;
         int length = m.Length - start - resourceValueEnd.Length;
 
