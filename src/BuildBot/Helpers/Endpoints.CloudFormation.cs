@@ -35,7 +35,10 @@ internal static partial class Endpoints
         return app;
     }
 
-    private static async ValueTask<IResult> HandleDeployMessageAsync(SnsMessage message, ICloudFormationSnsPropertiesParser parser, IMediator mediator, CancellationToken cancellationToken)
+    private static async ValueTask<IResult> HandleDeployMessageAsync(SnsMessage message,
+                                                                     ICloudFormationSnsPropertiesParser parser,
+                                                                     IMediator mediator,
+                                                                     CancellationToken cancellationToken)
     {
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "SubscriptionConfirmation"))
         {
@@ -50,7 +53,10 @@ internal static partial class Endpoints
         return Results.NotFound();
     }
 
-    private static async ValueTask<IResult> HandleNotiifcationMessageAsync(SnsMessage message, ICloudFormationSnsPropertiesParser parser, IMediator mediator, CancellationToken cancellationToken)
+    private static async ValueTask<IResult> HandleNotiifcationMessageAsync(SnsMessage message,
+                                                                           ICloudFormationSnsPropertiesParser parser,
+                                                                           IMediator mediator,
+                                                                           CancellationToken cancellationToken)
     {
         Dictionary<string, string> properties = parser.SplitMessageToDictionary(message);
 

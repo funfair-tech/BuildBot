@@ -28,7 +28,8 @@ public static class CloudformationSetup
     private static IServiceCollection AddSubscriptionConfirmationHttpClient(this IServiceCollection services)
     {
         return services.AddHttpClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler))
-                       .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.WaitAndRetryAsync(retryCount: MAX_RETRIES, sleepDurationProvider: HandleRetry, onRetryAsync: OnRetryAsync))
+                       .AddTransientHttpErrorPolicy(
+                           policyBuilder => policyBuilder.WaitAndRetryAsync(retryCount: MAX_RETRIES, sleepDurationProvider: HandleRetry, onRetryAsync: OnRetryAsync))
                        .Services;
     }
 
