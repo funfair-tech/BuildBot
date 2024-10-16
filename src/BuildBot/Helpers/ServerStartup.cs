@@ -68,11 +68,7 @@ internal static class ServerStartup
 
         builder.Host.UseWindowsService()
                .UseSystemd();
-        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options,
-                                                                         httpPort: httpPort,
-                                                                         httpsPort: httpsPort,
-                                                                         h2Port: h2Port,
-                                                                         configurationFiledPath: configPath))
+        builder.WebHost.UseKestrel(options: options => SetKestrelOptions(options: options, httpPort: httpPort, httpsPort: httpsPort, h2Port: h2Port, configurationFiledPath: configPath))
                .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
                .ConfigureLogging((_, logger) => ConfigureLogging(logger));
 
@@ -111,8 +107,8 @@ internal static class ServerStartup
                                         .Enrich.WithMachineName()
                                         .Enrich.WithProcessId()
                                         .Enrich.WithThreadId()
-                                        .Enrich.WithProperty(name: "ServerVersion", value: VersionDetection.ProgramVersion)
-                                        .Enrich.WithProperty(name: "ProcessName", value: VersionDetection.Product)
+                                        .Enrich.WithProperty(name: "ServerVersion", value: VersionInformation.FileVersion)
+                                        .Enrich.WithProperty(name: "ProcessName", value: VersionInformation.Product)
                                         .WriteToDebuggerAwareOutput()
                                         .CreateLogger();
     }
