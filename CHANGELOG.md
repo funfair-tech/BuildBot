@@ -33,6 +33,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 - Dependencies - Updated AWSSDK to 3.7.400.31
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.1.11
 ### Removed
 ### Deployment Changes
 

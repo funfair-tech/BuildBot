@@ -20,7 +20,6 @@ o888bood8P'   `V88V""V8P' o888o o888o `Y8bod88P"" o888bood8P'  `Y8bod8P'   ""888
 
         Console.WriteLine(banner);
 
-        const string version = VersionInformation.FileVersion;
-        Console.WriteLine(value: "Starting version " + version + "...");
+        Console.WriteLine(value: "Starting version " + VersionInformation.Version + "...");
     }
 }
