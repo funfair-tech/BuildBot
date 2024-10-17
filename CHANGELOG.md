@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.23.533
 - Dependencies - Updated FunFair.Test.Common to 6.1.69.630
 - Dependencies - Updated Discord.Net to 3.16.0
-- Dependencies - Updated Octopus.Client to 14.3.1646
 - SDK - Updated DotNet SDK to 8.0.402
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated Serilog to 4.0.2
@@ -33,6 +32,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 - Dependencies - Updated AWSSDK to 3.7.400.31
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
+- Dependencies - Updated Octopus.Client to 14.3.1692
 ### Removed
 ### Deployment Changes
 
