@@ -107,7 +107,7 @@ internal static class ServerStartup
                                         .Enrich.WithMachineName()
                                         .Enrich.WithProcessId()
                                         .Enrich.WithThreadId()
-                                        .Enrich.WithProperty(name: "ServerVersion", value: VersionInformation.FileVersion)
+                                        .Enrich.WithProperty(name: "ServerVersion", value: VersionInformation.Version)
                                         .Enrich.WithProperty(name: "ProcessName", value: VersionInformation.Product)
                                         .WriteToDebuggerAwareOutput()
                                         .CreateLogger();
