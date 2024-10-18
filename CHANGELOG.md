@@ -22,7 +22,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.16.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.23.533
-- Dependencies - Updated FunFair.Test.Common to 6.1.69.630
 - Dependencies - Updated Discord.Net to 3.16.0
 - SDK - Updated DotNet SDK to 8.0.402
 - Dependencies - Updated xunit to 2.9.2
@@ -34,6 +33,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Octopus.Client to 14.3.1692
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.2.16
 - Dependencies - Updated Meziantou.Analyzer to 2.0.172
+- Dependencies - Updated FunFair.Test.Common to 6.1.71.731
 ### Removed
 ### Deployment Changes
 
