@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.16.0
 - SDK - Updated DotNet SDK to 8.0.402
 - Dependencies - Updated xunit to 2.9.2
-- Dependencies - Updated Serilog to 4.0.2
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
 - Dependencies - Updated Roslynator.Analyzers to 4.12.8
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.1.14.596
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.24.635
 - Dependencies - Updated FunFair.Test.Common to 6.1.228.895
+- Dependencies - Updated Serilog to 4.1.0
 ### Removed
 ### Deployment Changes
 
