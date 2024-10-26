@@ -33,8 +33,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
 - Dependencies - Updated AWSSDK to 3.7.400.40
 - Dependencies - Updated Credfeto.Enumeration to 1.1.16.631
-- Dependencies - Updated FunFair.Test.Common to 6.1.230.918
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.26.665
+- Dependencies - Updated FunFair.Test.Common to 6.1.231.921
 ### Removed
 ### Deployment Changes
 
