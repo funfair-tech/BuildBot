@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
-- Dependencies - Updated Octopus.Client to 14.3.1692
 - Dependencies - Updated Serilog to 4.1.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.176
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.1.17.637
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.27.668
 - Dependencies - Updated FunFair.Test.Common to 6.1.232.927
+- Dependencies - Updated Octopus.Client to 14.3.1715
 ### Removed
 ### Deployment Changes
 
