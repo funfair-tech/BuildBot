@@ -33,9 +33,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.233.936
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.6.72
-- Dependencies - Updated AWSSDK to 3.7.400.41
 - Dependencies - Updated Credfeto.Enumeration to 1.1.18.647
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.28.680
+- Dependencies - Updated AWSSDK to 3.7.400.42
 ### Removed
 ### Deployment Changes
 
