@@ -31,12 +31,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Octopus.Client to 14.3.1715
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.177
-- Dependencies - Updated Credfeto.Enumeration to 1.1.19.652
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.29.685
 - Dependencies - Updated FunFair.Test.Common to 6.1.235.945
 - Dependencies - Updated AWSSDK to 3.7.400.43
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.8.85
+- Dependencies - Updated Credfeto.Enumeration to 1.1.20.657
 ### Removed
 ### Deployment Changes
 
