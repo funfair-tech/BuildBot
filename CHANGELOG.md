@@ -32,11 +32,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.177
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
-- Dependencies - Updated Credfeto.Enumeration to 1.1.20.657
 - Dependencies - Updated AWSSDK to 3.7.400.44
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.30.688
 - Dependencies - Updated FunFair.Test.Common to 6.1.236.948
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.9.87
+- Dependencies - Updated Credfeto.Enumeration to 1.1.21.661
 ### Removed
 ### Deployment Changes
 
