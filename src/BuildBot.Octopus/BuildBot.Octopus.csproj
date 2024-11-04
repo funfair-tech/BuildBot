@@ -43,7 +43,7 @@
     <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Octopus.Client" Version="14.3.1715" />
+    <PackageReference Include="Octopus.Client" Version="14.3.1729" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
