@@ -26,15 +26,19 @@ echo "Clear $OUTFOLDER" \
           "-r:$PLATFORM" \
           --self-contained \
           -nodeReuse:False \
-          -p:NoWarn=NETSDK1179 \
-          -p:SuppressNETCoreSdkPreviewMessage=true \
-          -p:PublishSingleFile=true \
-          -p:PublishAot=false \
-          -p:PublishReadyToRun=False \
-          -p:PublishReadyToRunShowWarnings=True \
-          -p:DisableSwagger=False \
-          -p:TreatWarningsAsErrors=True \
-          -p:IncludeNativeLibrariesForSelfExtract=false \
+          "-p:DisableSwagger=False" \
+          "-p:FFPublishing=True" \
+          "-p:IncludeNativeLibrariesForSelfExtract=false" \
+          "-p:IsProduction=True" \
+          "-p:NoWarn=NETSDK1179" \
+          "-p:Optimize=true" \
+          "-p:PublishAot=false" \
+          "-p:PublishReadyToRun=False" \
+          "-p:PublishReadyToRunShowWarnings=True" \
+          "-p:PublishSingleFile=true" \
+          "-p:SolutionDir=..\\" \
+          "-p:SuppressNETCoreSdkPreviewMessage=true" \
+          "-p:TreatWarningsAsErrors=True" \
           "-p:Version=2.0.1.179-main" \
           "-p:FFPublishing=True" \
           "-p:SolutionDir=..\\" \
