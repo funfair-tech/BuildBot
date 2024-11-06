@@ -71,7 +71,6 @@
     <ProjectReference Include="..\BuildBot.CloudFormation\BuildBot.CloudFormation.csproj" />
     <ProjectReference Include="..\BuildBot.GitHub\BuildBot.GitHub.csproj" />
     <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
-    <ProjectReference Include="..\BuildBot.Octopus\BuildBot.Octopus.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.1" />

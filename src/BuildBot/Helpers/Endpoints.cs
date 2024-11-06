@@ -8,7 +8,6 @@ internal static partial class Endpoints
     {
         return app.ConfigureTestEndpoints()
                   .ConfigureCloudformationEndpoints()
-                  .ConfigureGitHubEndpoints()
-                  .ConfigureOctopusEndpoints();
+                  .ConfigureGitHubEndpoints();
     }
 }

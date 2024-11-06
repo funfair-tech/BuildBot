@@ -9,7 +9,6 @@ using BuildBot.CloudFormation.Configuration;
 using BuildBot.Discord;
 using BuildBot.GitHub;
 using BuildBot.Json;
-using BuildBot.Octopus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -17,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Octopus.Client;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
@@ -63,7 +61,6 @@ internal static class ServerStartup
         IConfigurationRoot config = LoadConfiguration(configPath);
 
         DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
-        OctopusServerEndpoint octopusServerEndpoint = LoadOctopusServerEndpoint(config);
         SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
 
         builder.Host.UseWindowsService()
@@ -76,7 +73,6 @@ internal static class ServerStartup
                .AddDiscord(discordConfig)
                .AddCloudFormation(snsConfiguration)
                .AddGitHub()
-               .AddOctopus(octopusServerEndpoint)
                .AddMediator();
 
         return builder.Build();
@@ -129,14 +125,6 @@ internal static class ServerStartup
                                          .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
                                          .AddEnvironmentVariables()
                                          .Build();
-    }
-
-    private static OctopusServerEndpoint LoadOctopusServerEndpoint(IConfigurationRoot configuration)
-    {
-        string uri = configuration["ServerOctopus:Url"] ?? string.Empty;
-        string apiKey = configuration["ServerOctopus:ApiKey"] ?? string.Empty;
-
-        return new(octopusServerAddress: uri, apiKey: apiKey);
     }
 
     private static DiscordBotConfiguration LoadDiscordConfig(IConfigurationRoot configuration)
