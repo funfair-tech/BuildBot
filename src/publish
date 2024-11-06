@@ -26,9 +26,10 @@ echo "Clear $OUTFOLDER" \
           "-r:$PLATFORM" \
           --self-contained \
           -nodeReuse:False \
-          "-p:DisableSwagger=False" \
+          "-p:Deterministic=True" \
+          "-p:DisableSwagger=True" \
           "-p:FFPublishing=True" \
-          "-p:IncludeNativeLibrariesForSelfExtract=false" \
+          "-p:IncludeNativeLibrariesForSelfExtract=True" \
           "-p:IsProduction=True" \
           "-p:NoWarn=NETSDK1179" \
           "-p:Optimize=true" \
@@ -48,9 +49,8 @@ echo "Clear $OUTFOLDER" \
   && cp "$HOME/work/funfair/BuildBot/Dockerfile" . \
   && cp "$HOME/work/funfair/BuildBot/healthcheck" . \
   && ls -lar \
-  && sudo docker buildx build  . -t "funfair/buildbot:latest"         
-          
-sudo docker run \
+  && sudo docker buildx build  . -t "funfair/buildbot:latest" \
+  && sudo docker run \
       --name buildbot \
       -p 8080:8080 \
       -e "DISCORD__TOKEN=$DISCORDTOKEN" \
