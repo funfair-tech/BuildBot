@@ -10,6 +10,8 @@ die() {
 PLATFORM=linux-x64
 OUTFOLDER="$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM"
 
+[ -z "$DISCORDTOKEN" ] && die "DISCORDTOKEN not set"
+
 echo "Clear $OUTFOLDER" \
   && rm -fr "$HOME/work/funfair/BuildBot/src/server-dist" \
   && cd "$HOME/work/funfair/BuildBot/src" \
