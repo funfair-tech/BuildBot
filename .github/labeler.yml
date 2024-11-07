@@ -10,10 +10,10 @@
  - any: [ 'src/$BuildBot.Discord/**/*' ]
 "buildbot-github":
  - any: [ 'src/$BuildBot.GitHub/**/*' ]
+"buildbot-health":
+ - any: [ 'src/$BuildBot.Health/**/*' ]
 "buildbot-json":
  - any: [ 'src/$BuildBot.Json/**/*' ]
-"buildbot-octopus":
- - any: [ 'src/$BuildBot.Octopus/**/*' ]
 "buildbot-servicemodel":
  - any: [ 'src/$BuildBot.ServiceModel/**/*' ]
 "buildbot-tests":

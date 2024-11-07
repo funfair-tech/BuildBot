@@ -46,13 +46,13 @@
    color: "96f7d2"
    description: "Changes in $BuildBot.GitHub project"
 
+ - name: "buildbot-health"
+   color: "96f7d2"
+   description: "Changes in $BuildBot.Health project"
+
  - name: "buildbot-json"
    color: "96f7d2"
    description: "Changes in $BuildBot.Json project"
-
- - name: "buildbot-octopus"
-   color: "96f7d2"
-   description: "Changes in $BuildBot.Octopus project"
 
  - name: "buildbot-servicemodel"
    color: "96f7d2"
