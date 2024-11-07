@@ -16,6 +16,7 @@ internal static partial class Endpoints
         app.MapGet(pattern: "/ping",
                    handler: static ([FromQuery] string? source, ILogger<TestEndpointContext> logger) =>
                             {
+                                // TODO - check if discord is connected
                                 LogPing(source: source, logger: logger);
 
                                 return Results.Ok(PingPong.Model);

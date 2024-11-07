@@ -42,6 +42,13 @@
     <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
     <WarningsAsErrors />
   </PropertyGroup>
+  <PropertyGroup>
+    <Description>BuildBot</Description>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>FunFair BuildBot</PackageTags>
+    <RepositoryUrl>https://github.com/funfair-tech/BuildBot</RepositoryUrl>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)FunFair.props" />
   <ItemGroup>
     <Content Update="appsettings-local.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
