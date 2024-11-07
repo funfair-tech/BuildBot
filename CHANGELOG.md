@@ -25,7 +25,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 8.0.402
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
-- Dependencies - Updated Microsoft.Extensions to 8.0.10
 - Dependencies - Updated Serilog to 4.1.0
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
 - Dependencies - Updated NSubstitute to 5.3.0
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.237.951
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.10.91
 - Dependencies - Updated Octopus.Client to 14.3.1732
+- Dependencies - Updated Microsoft.Extensions to 8.0.2
 ### Removed
 ### Deployment Changes
 
