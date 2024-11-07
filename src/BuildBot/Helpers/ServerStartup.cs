@@ -9,6 +9,7 @@ using BuildBot.CloudFormation.Configuration;
 using BuildBot.Discord;
 using BuildBot.GitHub;
 using BuildBot.Json;
+using BuildBot.Health;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -73,6 +74,7 @@ internal static class ServerStartup
                .AddDiscord(discordConfig)
                .AddCloudFormation(snsConfiguration)
                .AddGitHub()
+               .AddStatus()
                .AddMediator();
 
         return builder.Build();

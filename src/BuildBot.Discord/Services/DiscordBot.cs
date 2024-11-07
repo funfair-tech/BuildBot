@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Services.LoggingExtensions;
+using BuildBot.ServiceModel.ComponentStatus;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Discord.Services;
 
-public sealed class DiscordBot : IDiscordBot
+public sealed class DiscordBot : IDiscordBot, IComponentStatus
 {
     private static readonly TimeSpan TypingDelay = TimeSpan.FromSeconds(2);
     private readonly DiscordBotConfiguration _botConfiguration;
@@ -29,6 +30,11 @@ public sealed class DiscordBot : IDiscordBot
     private static EmbedAuthorBuilder Author { get; } = new EmbedAuthorBuilder().WithName("FunFair BuildBot")
                                                                                 .WithUrl("https://funfair.io")
                                                                                 .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
+
+    public ServiceStatus GetStatus()
+    {
+        return new ServiceStatus(Name: "Discord", Ok: this._client.LoginState == LoginState.LoggedIn);
+    }
 
     public async ValueTask PublishAsync(EmbedBuilder builder, CancellationToken cancellationToken)
     {

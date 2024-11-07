@@ -1,5 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using BuildBot.Health;
 using BuildBot.Helpers.LoggingExtensions;
+using BuildBot.ServiceModel.ComponentStatus;
+using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +20,15 @@ internal static partial class Endpoints
         Console.WriteLine("Configuring Test/Ping Endpoint");
 
         app.MapGet(pattern: "/ping",
-                   handler: static ([FromQuery] string? source, ILogger<TestEndpointContext> logger) =>
+                   handler: static async ([FromQuery] string? source, IMediator mediator, ILogger<TestEndpointContext> logger, CancellationToken cancellationToken) =>
                             {
-                                // TODO - check if discord is connected
                                 LogPing(source: source, logger: logger);
 
-                                return Results.Ok(PingPong.Model);
+                                IReadOnlyList<ServiceStatus> status = await mediator.Send(new CheckStatus(source), cancellationToken);
+
+                                return status.All(s => s.Ok)
+                                    ? Results.Ok(PingPong.Model)
+                                    : Results.Conflict(status);
                             });
 
         return app;

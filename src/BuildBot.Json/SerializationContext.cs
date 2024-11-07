@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using BuildBot.Json.Models;
 using BuildBot.ServiceModel.CloudFormation;
+using BuildBot.ServiceModel.ComponentStatus;
 using BuildBot.ServiceModel.GitHub;
 
 namespace BuildBot.Json;
@@ -25,6 +27,8 @@ namespace BuildBot.Json;
 [JsonSerializable(typeof(StatusCommit))]
 [JsonSerializable(typeof(PongDto))]
 [JsonSerializable(typeof(SnsMessage))]
+[JsonSerializable(typeof(ServiceStatus))]
+[JsonSerializable(typeof(IReadOnlyList<ServiceStatus>))]
 internal sealed partial class SerializationContext : JsonSerializerContext
 {
     // Code generated
