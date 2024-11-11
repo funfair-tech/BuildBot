@@ -36,7 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 8.0.2
 - Dependencies - Updated xunit.analyzers to 1.17.0
 - Dependencies - Updated Credfeto.Enumeration to 1.1.22.677
-- Dependencies - Updated AWSSDK to 3.7.400.47
+- Dependencies - Updated AWSSDK to 3.7.400.48
 ### Removed
 ### Deployment Changes
 
