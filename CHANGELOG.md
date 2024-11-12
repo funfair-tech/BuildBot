@@ -28,7 +28,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
-- Dependencies - Updated FunFair.Test.Common to 6.1.237.951
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.10.91
 - Dependencies - Updated Octopus.Client to 14.3.1732
 - Dependencies - Updated Microsoft.Extensions to 8.0.2
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 3.7.400.48
 - Dependencies - Updated Meziantou.Analyzer to 2.0.178
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.32.711
+- Dependencies - Updated FunFair.Test.Common to 6.1.238.970
 ### Removed
 ### Deployment Changes
 
