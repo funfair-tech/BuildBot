@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated Discord.Net to 3.16.0
-- SDK - Updated DotNet SDK to 8.0.402
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
 - Dependencies - Updated Serilog to 4.1.0
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
 - Dependencies - Updated AWSSDK to 3.7.400.49
 - Dependencies - Updated Meziantou.Analyzer to 2.0.179
+- SDK - Updated DotNet SDK to 9.0.100
 ### Removed
 ### Deployment Changes
 
