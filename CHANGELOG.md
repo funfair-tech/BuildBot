@@ -33,10 +33,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 9.0.0
 - Dependencies - Updated Credfeto.Enumeration to 1.1.23.685
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
-- Dependencies - Updated AWSSDK to 3.7.400.49
 - Dependencies - Updated Meziantou.Analyzer to 2.0.179
 - SDK - Updated DotNet SDK to 9.0.100
 - Dependencies - Updated FunFair.Test.Common to 6.1.239.979
+- Dependencies - Updated AWSSDK to 3.7.400.50
 ### Removed
 ### Deployment Changes
 
