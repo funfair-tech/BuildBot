@@ -33,10 +33,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.239.979
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
 - Dependencies - Updated AWSSDK to 3.7.401.4
-- Dependencies - Updated Credfeto.Enumeration to 1.2.32.723
 - Dependencies - Updated Meziantou.Analyzer to 2.0.181
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.20.155
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.3.0.106239
+- Dependencies - Updated Credfeto.Enumeration to 1.2.33.729
 ### Removed
 ### Deployment Changes
 
