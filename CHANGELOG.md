@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.1.593
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.2
-- Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
 - Dependencies - Updated Discord.Net to 3.16.0
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.32.723
 - Dependencies - Updated Meziantou.Analyzer to 2.0.181
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.20.155
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.3.0.106239
 ### Removed
 ### Deployment Changes
 
