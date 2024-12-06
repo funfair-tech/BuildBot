@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.16.0
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
-- Dependencies - Updated Serilog to 4.1.0
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.40.746
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.28.176
 - SDK - Updated DotNet SDK to 9.0.101
+- Dependencies - Updated Serilog to 4.2.0
 ### Removed
 ### Deployment Changes
 
