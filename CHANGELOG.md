@@ -8,7 +8,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6169
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.32.207
 - Dependencies - Updated Meziantou.Analyzer to 2.0.183
+- Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
 ### Removed
 ### Deployment Changes
 
