@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.32.711
 - Dependencies - Updated Microsoft.Extensions to 9.0.0
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
-- Dependencies - Updated FunFair.Test.Common to 6.1.239.979
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
 - Dependencies - Updated Credfeto.Enumeration to 1.2.40.746
 - SDK - Updated DotNet SDK to 9.0.101
@@ -37,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.0
 - Dependencies - Updated AWSSDK to 3.7.401.16
 - Dependencies - Updated Discord.Net to 3.17.0
+- Dependencies - Updated FunFair.Test.Common to 6.1.241.1032
 ### Removed
 ### Deployment Changes
 
