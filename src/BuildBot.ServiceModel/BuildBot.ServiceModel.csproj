@@ -25,13 +25,12 @@
     <NoWarn>1591</NoWarn>
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditLevel>low</NuGetAuditLevel>
-    <!-- TODO - change to all when possible -->
     <NuGetAuditMode>all</NuGetAuditMode>
     <Nullable>enable</Nullable>
     <OptimizationPreference>speed</OptimizationPreference>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
-    <TargetFrameworks>net9.0</TargetFrameworks>
+    <TargetFramework>net9.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
     <TreatSpecificWarningsAsErrors />
@@ -40,6 +39,13 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
+    <!-- error NU1903: Warning As Error: Package 'System.Private.Uri' 4.3.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5f2m-466j-3848"/>
+    <!-- error NU1902: Warning As Error: Package 'System.Private.Uri' 4.3.0 has a known moderate severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x5qj-9vmx-7g6g"/>
+    <!-- error NU1903: Warning As Error: Package 'System.Private.Uri' 4.3.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhfc-gr8f-ffwc"/>
+  </ItemGroup>  <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="1.2.40.746" PrivateAssets="All" ExcludeAssets="runtime" />
