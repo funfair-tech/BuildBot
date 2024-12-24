@@ -37,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 3.7.401.16
 - Dependencies - Updated Discord.Net to 3.17.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.241.1032
+- Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 ### Removed
 ### Deployment Changes
 
