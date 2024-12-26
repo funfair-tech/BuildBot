@@ -33,11 +33,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.4.0.108396
 - Dependencies - Updated xunit.analyzers to 1.18.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.0
-- Dependencies - Updated AWSSDK to 3.7.401.16
 - Dependencies - Updated Discord.Net to 3.17.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.241.1032
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.184
+- Dependencies - Updated AWSSDK to 3.7.401.17
 ### Removed
 ### Deployment Changes
 
