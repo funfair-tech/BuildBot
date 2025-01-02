@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 9.0.0
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
-- Dependencies - Updated Credfeto.Enumeration to 1.2.40.746
 - SDK - Updated DotNet SDK to 9.0.101
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.32.207
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.184
 - Dependencies - Updated AWSSDK to 3.7.401.17
+- Dependencies - Updated Credfeto.Enumeration to 1.2.45.800
 ### Removed
 ### Deployment Changes
 
