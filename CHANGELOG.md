@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated Octopus.Client to 14.3.1732
-- Dependencies - Updated FunFair.CodeAnalysis to 7.0.32.711
 - Dependencies - Updated Microsoft.Extensions to 9.0.0
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 3.7.401.17
 - Dependencies - Updated Credfeto.Enumeration to 1.2.45.800
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.34.227
+- Dependencies - Updated FunFair.CodeAnalysis to 7.0.52.823
 ### Removed
 ### Deployment Changes
 
