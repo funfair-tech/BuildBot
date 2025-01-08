@@ -37,7 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.40.246
 - Dependencies - Updated Meziantou.Analyzer to 2.0.185
 - Dependencies - Updated xunit to 2.9.3
-- Dependencies - Updated AWSSDK to 3.7.401.21
+- Dependencies - Updated AWSSDK to 3.7.401.22
 ### Removed
 ### Deployment Changes
 
