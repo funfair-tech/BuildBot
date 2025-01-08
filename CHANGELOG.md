@@ -32,12 +32,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.0
 - Dependencies - Updated Discord.Net to 3.17.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.184
 - Dependencies - Updated FunFair.Test.Common to 6.1.242.1044
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.53.833
 - Dependencies - Updated AWSSDK to 3.7.401.20
 - Dependencies - Updated Credfeto.Enumeration to 1.2.52.820
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.40.246
+- Dependencies - Updated Meziantou.Analyzer to 2.0.185
 ### Removed
 ### Deployment Changes
 
