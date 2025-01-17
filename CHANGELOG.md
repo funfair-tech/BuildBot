@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated Octopus.Client to 14.3.1732
-- Dependencies - Updated Microsoft.Extensions to 9.0.0
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
 - Dependencies - Updated Serilog to 4.2.0
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.1
 - Dependencies - Updated AWSSDK to 3.7.401.28
 - Dependencies - Updated FunFair.Test.Common to 6.1.245.1069
+- Dependencies - Updated Microsoft.Extensions to 9.0.1
 ### Removed
 ### Deployment Changes
 
