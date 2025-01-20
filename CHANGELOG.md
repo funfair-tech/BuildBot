@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
 - Dependencies - Updated Roslynator.Analyzers to 4.12.10
-- Dependencies - Updated Discord.Net to 3.17.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.41.250
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.54.847
 - Dependencies - Updated FunFair.Test.Common to 6.1.246.1079
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.57.858
+- Dependencies - Updated Discord.Net to 3.17.1
 ### Removed
 ### Deployment Changes
 
