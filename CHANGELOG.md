@@ -35,9 +35,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 9.0.1
 - Dependencies - Updated AWSSDK to 3.7.401.29
 - Dependencies - Updated Credfeto.Enumeration to 1.2.54.847
-- Dependencies - Updated FunFair.Test.Common to 6.1.246.1079
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.57.858
 - Dependencies - Updated Discord.Net to 3.17.1
+- Dependencies - Updated FunFair.Test.Common to 6.1.247.1082
 ### Removed
 ### Deployment Changes
 
