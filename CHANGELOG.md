@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.10
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated xunit to 2.9.3
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.41.250
 - SDK - Updated DotNet SDK to 9.0.102
 - Dependencies - Updated Meziantou.Analyzer to 2.0.186
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.5.0.109200
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.17.1
 - Dependencies - Updated FunFair.Test.Common to 6.1.247.1082
 - Dependencies - Updated Credfeto.Enumeration to 1.2.55.854
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.43.281
 ### Removed
 ### Deployment Changes
 
