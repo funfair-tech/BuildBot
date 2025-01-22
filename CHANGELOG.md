@@ -32,12 +32,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.19.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.1
 - Dependencies - Updated Microsoft.Extensions to 9.0.1
-- Dependencies - Updated AWSSDK to 3.7.401.29
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.57.858
 - Dependencies - Updated Discord.Net to 3.17.1
 - Dependencies - Updated FunFair.Test.Common to 6.1.247.1082
 - Dependencies - Updated Credfeto.Enumeration to 1.2.57.857
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.44.283
+- Dependencies - Updated AWSSDK to 3.7.401.30
 ### Removed
 ### Deployment Changes
 
