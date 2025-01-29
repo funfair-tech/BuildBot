@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
-- Dependencies - Updated Roslynator.Analyzers to 4.12.10
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated xunit to 2.9.3
 - SDK - Updated DotNet SDK to 9.0.102
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.253.1102
 - Dependencies - Updated Credfeto.Enumeration to 1.2.64.889
 - Dependencies - Updated AWSSDK to 3.7.401.32
+- Dependencies - Updated Roslynator.Analyzers to 4.12.11
 ### Removed
 ### Deployment Changes
 
