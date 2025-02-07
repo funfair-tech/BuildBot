@@ -27,7 +27,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.3
 - SDK - Updated DotNet SDK to 9.0.102
 - Dependencies - Updated Meziantou.Analyzer to 2.0.186
-- Dependencies - Updated xunit.analyzers to 1.19.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.1
 - Dependencies - Updated Microsoft.Extensions to 9.0.1
 - Dependencies - Updated Discord.Net to 3.17.1
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.256.1131
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.53.337
 - Dependencies - Updated AWSSDK to 3.7.402
+- Dependencies - Updated xunit.analyzers to 1.20.0
 ### Removed
 ### Deployment Changes
 
