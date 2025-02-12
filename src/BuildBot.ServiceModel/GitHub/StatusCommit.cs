@@ -15,14 +15,11 @@ public readonly record struct StatusCommit
     }
 
     [JsonPropertyName(name: "commit")]
-
     public Commit Commit { get; }
 
     [JsonPropertyName(name: "sha")]
-
     public string Sha { get; }
 
     [JsonPropertyName(name: "author")]
-
     public Author Author { get; }
 }

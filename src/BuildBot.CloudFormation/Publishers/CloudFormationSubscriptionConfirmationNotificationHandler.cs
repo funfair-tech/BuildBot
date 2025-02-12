@@ -17,9 +17,11 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
     private readonly ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> _logger;
     private readonly SnsNotificationOptions _options;
 
-    public CloudFormationSubscriptionConfirmationNotificationHandler(IHttpClientFactory httpClientFactory,
-                                                                     SnsNotificationOptions options,
-                                                                     ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> logger)
+    public CloudFormationSubscriptionConfirmationNotificationHandler(
+        IHttpClientFactory httpClientFactory,
+        SnsNotificationOptions options,
+        ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> logger
+    )
     {
         this._httpClientFactory = httpClientFactory;
         this._options = options;

@@ -21,18 +21,20 @@ namespace BuildBot.ServiceModel.CloudFormation;
 public sealed class SnsMessage
 {
     [JsonConstructor]
-    public SnsMessage(string type,
-                      string messageId,
-                      string? token,
-                      string topicArn,
-                      string subject,
-                      string message,
-                      DateTime timestamp,
-                      string signatureVersion,
-                      string signature,
-                      string? signingCertUrl,
-                      string? subscribeUrl,
-                      string? unsubscribeUrl)
+    public SnsMessage(
+        string type,
+        string messageId,
+        string? token,
+        string topicArn,
+        string subject,
+        string message,
+        DateTime timestamp,
+        string signatureVersion,
+        string signature,
+        string? signingCertUrl,
+        string? subscribeUrl,
+        string? unsubscribeUrl
+    )
     {
         this.Type = type;
         this.MessageId = messageId;

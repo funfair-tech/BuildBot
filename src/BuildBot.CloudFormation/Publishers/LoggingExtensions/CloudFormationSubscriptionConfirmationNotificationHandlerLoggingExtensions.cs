@@ -9,8 +9,5 @@ internal static partial class CloudFormationSubscriptionConfirmationNotification
     public static partial void ReceivedInvalidArn(this ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> logger, string arn);
 
     [LoggerMessage(eventId: 1, level: LogLevel.Error, message: "CLOUDFORMATION: Failed to subscribe to topic {subscribeUrl} : {message}")]
-    public static partial void FailedToSubscribeToTopic(this ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> logger,
-                                                        Uri subscribeUrl,
-                                                        string message,
-                                                        Exception exception);
+    public static partial void FailedToSubscribeToTopic(this ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> logger, Uri subscribeUrl, string message, Exception exception);
 }

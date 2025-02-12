@@ -21,11 +21,13 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
     private readonly IMediator _mediator;
     private readonly SnsNotificationOptions _options;
 
-    public CloudFormationMessageReceivedNotificationHandler(SnsNotificationOptions options,
-                                                            ICloudFormationDeploymentExtractor cloudFormationDeploymentExtractor,
-                                                            IAwsCloudFormation awsCloudFormation,
-                                                            IMediator mediator,
-                                                            ILogger<CloudFormationMessageReceivedNotificationHandler> logger)
+    public CloudFormationMessageReceivedNotificationHandler(
+        SnsNotificationOptions options,
+        ICloudFormationDeploymentExtractor cloudFormationDeploymentExtractor,
+        IAwsCloudFormation awsCloudFormation,
+        IMediator mediator,
+        ILogger<CloudFormationMessageReceivedNotificationHandler> logger
+    )
     {
         this._options = options;
         this._cloudFormationDeploymentExtractor = cloudFormationDeploymentExtractor;
@@ -64,18 +66,15 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
     private static EmbedBuilder BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
     {
-        EmbedBuilder builder = new EmbedBuilder().WithTitle(BuildTitle(deployment: deployment, stackDetails: stackDetails))
-                                                 .WithUrl(BuildStackUrl(deployment)
-                                                              .ToString())
-                                                 .WithColor(deployment.Success
-                                                                ? Color.Green
-                                                                : Color.Red)
-                                                 .WithFields(GetFields(deployment));
+        EmbedBuilder builder = new EmbedBuilder()
+            .WithTitle(BuildTitle(deployment: deployment, stackDetails: stackDetails))
+            .WithUrl(BuildStackUrl(deployment).ToString())
+            .WithColor(deployment.Success ? Color.Green : Color.Red)
+            .WithFields(GetFields(deployment));
 
         if (stackDetails is not null)
         {
-            builder.WithDescription(stackDetails.Value.Description)
-                   .AddField(name: "Version", value: stackDetails.Value.Version);
+            builder.WithDescription(stackDetails.Value.Description).AddField(name: "Version", value: stackDetails.Value.Version);
         }
 
         return builder;
@@ -85,14 +84,10 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
     {
         if (stackDetails is not null && !string.IsNullOrWhiteSpace(stackDetails.Value.Version))
         {
-            return deployment.Success
-                ? $"{deployment.Project} ({stackDetails.Value.Version}) was deployed "
-                : $"{deployment.Project} ({stackDetails.Value.Version}) failed to deploy";
+            return deployment.Success ? $"{deployment.Project} ({stackDetails.Value.Version}) was deployed " : $"{deployment.Project} ({stackDetails.Value.Version}) failed to deploy";
         }
 
-        return deployment.Success
-            ? $"{deployment.Project} was deployed "
-            : $"{deployment.Project} failed to deploy";
+        return deployment.Success ? $"{deployment.Project} was deployed " : $"{deployment.Project} failed to deploy";
     }
 
     private static Uri BuildStackUrl(in Deployment deployment)
@@ -103,22 +98,16 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
     private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Deployment deployment)
     {
-        return
-        [
-            AddArnEmbed(deployment),
-            AddStatusEmbed(deployment)
-        ];
+        return [AddArnEmbed(deployment), AddStatusEmbed(deployment)];
     }
 
     private static EmbedFieldBuilder AddArnEmbed(in Deployment deployment)
     {
-        return new EmbedFieldBuilder().WithName("ARN")
-                                      .WithValue(deployment.Arn);
+        return new EmbedFieldBuilder().WithName("ARN").WithValue(deployment.Arn);
     }
 
     private static EmbedFieldBuilder AddStatusEmbed(in Deployment deployment)
     {
-        return new EmbedFieldBuilder().WithName("Status")
-                                      .WithValue(deployment.Status);
+        return new EmbedFieldBuilder().WithName("Status").WithValue(deployment.Status);
     }
 }

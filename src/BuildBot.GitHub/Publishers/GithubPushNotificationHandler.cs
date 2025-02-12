@@ -15,19 +15,9 @@ namespace BuildBot.GitHub.Publishers;
 
 public sealed class GithubPushNotificationHandler : INotificationHandler<GithubPush>
 {
-    private static readonly IReadOnlyList<string> MainBranches =
-    [
-        "main",
-        "master"
-    ];
+    private static readonly IReadOnlyList<string> MainBranches = ["main", "master"];
 
-    private static readonly IReadOnlyList<string> PackageUpdatePrefixes =
-    [
-        "FF-1429",
-        "[FF-1429]",
-        "Dependencies",
-        "[Dependencies]"
-    ];
+    private static readonly IReadOnlyList<string> PackageUpdatePrefixes = ["FF-1429", "[FF-1429]", "Dependencies", "[Dependencies]"];
 
     private readonly ILogger<GithubPushNotificationHandler> _logger;
     private readonly IMediator _mediator;
@@ -108,8 +98,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
         string commitString = GetCommitString(message);
         string title = GetCommitTitle(message: message, commitString: commitString);
 
-        return new EmbedBuilder().WithTitle(title)
-                                 .WithUrl(message.CompareUrl);
+        return new EmbedBuilder().WithTitle(title).WithUrl(message.CompareUrl);
     }
 
     private static EmbedBuilder AddCommit(EmbedBuilder current, Commit commit)
@@ -119,8 +108,9 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static EmbedFieldBuilder CreateCommitEmbed(Commit commit)
     {
-        return new EmbedFieldBuilder().WithName($"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}")
-                                      .WithValue($"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed");
+        return new EmbedFieldBuilder()
+            .WithName($"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}")
+            .WithValue($"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed");
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
@@ -137,8 +127,6 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static string GetCommitString(in Push message)
     {
-        return message.Commits.Count > 1
-            ? $"{message.Commits.Count} commits"
-            : $"{message.Commits.Count} commit";
+        return message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
     }
 }

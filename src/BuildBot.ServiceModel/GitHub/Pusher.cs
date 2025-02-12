@@ -14,10 +14,8 @@ public readonly record struct Pusher
     }
 
     [JsonPropertyName(name: "name")]
-
     public string Name { get; }
 
     [JsonPropertyName(name: "email")]
-
     public string Email { get; }
 }

@@ -9,7 +9,8 @@ namespace BuildBot.Tests;
 
 public sealed class DecodesGithubPush : TestBase
 {
-    private const string GITHUB_PUSH = @"{
+    private const string GITHUB_PUSH =
+        @"{
   ""ref"": ""refs/heads/main"",
   ""before"": ""1c46b424863be722f3bffa6ffd17545f94fd726e"",
   ""after"": ""07138d7ed444df3063e112183ad665cc0bc28e9a"",

@@ -16,11 +16,7 @@ namespace BuildBot.GitHub.Publishers;
 
 public sealed class GithubStatusNotificationHandler : INotificationHandler<GithubStatus>
 {
-    private static readonly IReadOnlyList<ColourMapping> ColourMappings =
-    [
-        new(State: "success", Colour: Color.Green),
-        new(State: "failure", Colour: Color.Red)
-    ];
+    private static readonly IReadOnlyList<ColourMapping> ColourMappings = [new(State: "success", Colour: Color.Green), new(State: "failure", Colour: Color.Red)];
 
     private readonly ILogger<GithubStatusNotificationHandler> _logger;
     private readonly IMediator _mediator;
@@ -41,9 +37,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
     private ValueTask PublishAsync(Status message, CancellationToken cancellationToken)
     {
         // don't output messages for pending builds
-        return IsPendingBuild(message)
-            ? ValueTask.CompletedTask
-            : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)), cancellationToken: cancellationToken);
+        return IsPendingBuild(message) ? ValueTask.CompletedTask : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)), cancellationToken: cancellationToken);
     }
 
     private static bool IsPendingBuild(Status message)
@@ -55,40 +49,32 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
     {
         Branch lastBranch = message.Branches[^1];
 
-        return new EmbedBuilder().WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch.Name})")
-                                 .WithUrl(message.TargetUrl)
-                                 .WithDescription($"Built at {message.StatusCommit.Sha}")
-                                 .WithColor(GetEmbedColor(message))
-                                 .WithFields(GetFields(message));
+        return new EmbedBuilder()
+            .WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch.Name})")
+            .WithUrl(message.TargetUrl)
+            .WithDescription($"Built at {message.StatusCommit.Sha}")
+            .WithColor(GetEmbedColor(message))
+            .WithFields(GetFields(message));
     }
 
     private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Status message)
     {
-        return
-        [
-            AddHeadCommitEmbed(message.StatusCommit),
-            AddBranchEmbed(message)
-        ];
+        return [AddHeadCommitEmbed(message.StatusCommit), AddBranchEmbed(message)];
     }
 
     private static EmbedFieldBuilder AddBranchEmbed(Status message)
     {
-        return new EmbedFieldBuilder().WithName("Branch")
-                                      .WithValue(message.Branches.Select(static b => b.Name)
-                                                        .FirstOrDefault());
+        return new EmbedFieldBuilder().WithName("Branch").WithValue(message.Branches.Select(static b => b.Name).FirstOrDefault());
     }
 
     private static EmbedFieldBuilder AddHeadCommitEmbed(StatusCommit statusCommit)
     {
-        return new EmbedFieldBuilder().WithName("Head commit")
-                                      .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
+        return new EmbedFieldBuilder().WithName("Head commit").WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
     }
 
     private static Color GetEmbedColor(Status message)
     {
-        return ColourMappings.Where(mapping => mapping.IsMatch(message))
-                             .Select(mapping => mapping.Colour)
-                             .FirstOrDefault(Color.Default);
+        return ColourMappings.Where(mapping => mapping.IsMatch(message)).Select(mapping => mapping.Colour).FirstOrDefault(Color.Default);
     }
 
     [DebuggerDisplay("{State} => {Colour}")]

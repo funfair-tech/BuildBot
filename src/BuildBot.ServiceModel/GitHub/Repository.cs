@@ -19,14 +19,11 @@ public readonly record struct Repository
     public int Id { get; }
 
     [JsonPropertyName(name: "name")]
-
     public string Name { get; }
 
     [JsonPropertyName(name: "full_name")]
-
     public string FullName { get; }
 
     [JsonPropertyName(name: "owner")]
-
     public Owner Owner { get; }
 }

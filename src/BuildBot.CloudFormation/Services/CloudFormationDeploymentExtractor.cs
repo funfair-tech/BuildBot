@@ -18,19 +18,19 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
     private const string RESOURCE_STATUS = "ResourceStatus";
 
     private static readonly Dictionary<string, bool> Statuses = new(StringComparer.Ordinal)
-                                                                {
-                                                                    ["CREATE_COMPLETE"] = true,
-                                                                    ["CREATE_FAILED"] = false,
-                                                                    ["DELETE_COMPLETE"] = true,
-                                                                    ["DELETE_FAILED"] = false,
-                                                                    ["ROLLBACK_COMPLETE"] = false,
-                                                                    ["ROLLBACK_IN_PROGRESS"] = false,
-                                                                    ["ROLLBACK_FAILED"] = false,
-                                                                    ["UPDATE_COMPLETE"] = true,
-                                                                    ["UPDATE_ROLLBACK_COMPLETE"] = false,
-                                                                    ["UPDATE_ROLLBACK_FAILED"] = false,
-                                                                    ["UPDATE_ROLLBACK_IN_PROGRESS"] = false
-                                                                };
+    {
+        ["CREATE_COMPLETE"] = true,
+        ["CREATE_FAILED"] = false,
+        ["DELETE_COMPLETE"] = true,
+        ["DELETE_FAILED"] = false,
+        ["ROLLBACK_COMPLETE"] = false,
+        ["ROLLBACK_IN_PROGRESS"] = false,
+        ["ROLLBACK_FAILED"] = false,
+        ["UPDATE_COMPLETE"] = true,
+        ["UPDATE_ROLLBACK_COMPLETE"] = false,
+        ["UPDATE_ROLLBACK_FAILED"] = false,
+        ["UPDATE_ROLLBACK_IN_PROGRESS"] = false,
+    };
 
     private readonly ILogger<CloudFormationDeploymentExtractor> _logger;
 

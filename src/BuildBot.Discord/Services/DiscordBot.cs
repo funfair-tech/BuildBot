@@ -27,9 +27,8 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         this._client.Log += this.LogAsync;
     }
 
-    private static EmbedAuthorBuilder Author { get; } = new EmbedAuthorBuilder().WithName("FunFair BuildBot")
-                                                                                .WithUrl("https://funfair.io")
-                                                                                .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
+    private static EmbedAuthorBuilder Author { get; } =
+        new EmbedAuthorBuilder().WithName("FunFair BuildBot").WithUrl("https://funfair.io").WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
 
     public ServiceStatus GetStatus()
     {
@@ -85,8 +84,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     private static Embed IncludeStandardParameters(EmbedBuilder builder)
     {
-        return builder.WithAuthor(Author)
-                      .Build();
+        return builder.WithAuthor(Author).Build();
     }
 
     private SocketTextChannel? GetChannel(string channelName)
@@ -106,7 +104,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             LogSeverity.Warning => this.LogWarningAsync(arg),
             LogSeverity.Error => this.LogErrorAsync(arg),
             LogSeverity.Critical => this.LogCriticalAsync(arg),
-            _ => this.LogCriticalAsync(arg)
+            _ => this.LogCriticalAsync(arg),
         };
     }
 

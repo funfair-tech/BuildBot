@@ -23,21 +23,21 @@ public sealed class BotService : IHostedService, IDisposable
         this._botMessageChannel = botMessageChannel;
         this._botReleaseMessageChannel = botReleaseMessageChannel;
 
-        this._messageSubscription = this._botMessageChannel.ReadAllAsync(CancellationToken.None)
-                                        .ToObservable()
-                                        .Delay(InterMessageDelay)
-                                        .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct)
-                                                                                          .AsTask()))
-                                        .Concat()
-                                        .Subscribe();
+        this._messageSubscription = this
+            ._botMessageChannel.ReadAllAsync(CancellationToken.None)
+            .ToObservable()
+            .Delay(InterMessageDelay)
+            .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()))
+            .Concat()
+            .Subscribe();
 
-        this._releaseMessageSubscription = this._botReleaseMessageChannel.ReadAllAsync(CancellationToken.None)
-                                               .ToObservable()
-                                               .Delay(InterMessageDelay)
-                                               .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct)
-                                                                                                 .AsTask()))
-                                               .Concat()
-                                               .Subscribe();
+        this._releaseMessageSubscription = this
+            ._botReleaseMessageChannel.ReadAllAsync(CancellationToken.None)
+            .ToObservable()
+            .Delay(InterMessageDelay)
+            .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()))
+            .Concat()
+            .Subscribe();
     }
 
     public void Dispose()

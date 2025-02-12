@@ -11,18 +11,20 @@ public readonly record struct Commit
 {
     [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]
-    public Commit(string id,
-                  string sha,
-                  string treeId,
-                  bool distinct,
-                  string message,
-                  DateTime timeStamp,
-                  string url,
-                  IReadOnlyList<string> added,
-                  IReadOnlyList<string> removed,
-                  IReadOnlyList<string> modified,
-                  CommitUser author,
-                  CommitUser committer)
+    public Commit(
+        string id,
+        string sha,
+        string treeId,
+        bool distinct,
+        string message,
+        DateTime timeStamp,
+        string url,
+        IReadOnlyList<string> added,
+        IReadOnlyList<string> removed,
+        IReadOnlyList<string> modified,
+        CommitUser author,
+        CommitUser committer
+    )
     {
         this.Id = id;
         this.Sha = sha;
@@ -73,6 +75,5 @@ public readonly record struct Commit
     public CommitUser Author { get; }
 
     [JsonPropertyName(name: "committer")]
-
     public CommitUser Committer { get; }
 }

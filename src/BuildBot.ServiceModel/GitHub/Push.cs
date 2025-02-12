@@ -22,35 +22,27 @@ public readonly record struct Push
     }
 
     [JsonPropertyName(name: "ref")]
-
     public string Ref { get; }
 
     [JsonPropertyName(name: "before")]
-
     public string Before { get; }
 
     [JsonPropertyName(name: "after")]
-
     public string After { get; }
 
     [JsonPropertyName(name: "head_commit")]
-
     public Commit HeadCommit { get; }
 
     [JsonPropertyName(name: "commits")]
-
     public IReadOnlyList<Commit> Commits { get; }
 
     [JsonPropertyName(name: "repository")]
-
     public Repository Repository { get; }
 
     [JsonPropertyName(name: "pusher")]
-
     public Pusher Pusher { get; }
 
     [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
     [JsonPropertyName(name: "compare")]
-
     public string CompareUrl { get; }
 }
