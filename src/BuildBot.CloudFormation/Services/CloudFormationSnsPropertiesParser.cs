@@ -13,7 +13,11 @@ public sealed class CloudFormationSnsPropertiesParser : ICloudFormationSnsProper
             .Message.Split('\n')
             .Where(ExcludeEmptyLines)
             .Select(SplitLineToKeyAndValue)
-            .ToDictionary(keySelector: key => key.key, elementSelector: value => value.value, comparer: StringComparer.Ordinal);
+            .ToDictionary(
+                keySelector: key => key.key,
+                elementSelector: value => value.value,
+                comparer: StringComparer.Ordinal
+            );
     }
 
     private static bool ExcludeEmptyLines(string line)

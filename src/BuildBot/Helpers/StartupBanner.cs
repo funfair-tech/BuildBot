@@ -6,7 +6,8 @@ internal static class StartupBanner
 {
     public static void Show()
     {
-        const string banner = @"
+        const string banner =
+            @"
 oooooooooo.               o8o  oooo        .o8  oooooooooo.                .
 `888'   `Y8b              `""'  `888       ""888  `888'   `Y8b             .o8
  888     888 oooo  oooo  oooo   888   .oooo888   888     888  .ooooo.  .o888oo

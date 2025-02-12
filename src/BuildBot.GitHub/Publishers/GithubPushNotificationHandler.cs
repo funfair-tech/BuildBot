@@ -17,12 +17,21 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 {
     private static readonly IReadOnlyList<string> MainBranches = ["main", "master"];
 
-    private static readonly IReadOnlyList<string> PackageUpdatePrefixes = ["FF-1429", "[FF-1429]", "Dependencies", "[Dependencies]"];
+    private static readonly IReadOnlyList<string> PackageUpdatePrefixes =
+    [
+        "FF-1429",
+        "[FF-1429]",
+        "Dependencies",
+        "[Dependencies]",
+    ];
 
     private readonly ILogger<GithubPushNotificationHandler> _logger;
     private readonly IMediator _mediator;
 
-    public GithubPushNotificationHandler(IMediator mediator, ILogger<GithubPushNotificationHandler> logger)
+    public GithubPushNotificationHandler(
+        IMediator mediator,
+        ILogger<GithubPushNotificationHandler> logger
+    )
     {
         this._mediator = mediator;
         this._logger = logger;
@@ -68,7 +77,11 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static bool IsIgnoredCommit(in Push message)
     {
-        if (message.Commits.Any(predicate: static c => c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)))
+        if (
+            message.Commits.Any(predicate: static c =>
+                c.Message.StartsWith(value: "chore", comparisonType: StringComparison.Ordinal)
+            )
+        )
         {
             return true;
         }
@@ -80,7 +93,9 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static bool IsPackageUpdate(Commit c)
     {
-        return PackageUpdatePrefixes.Any(prefix => c.Message.StartsWith(value: prefix, comparisonType: StringComparison.Ordinal));
+        return PackageUpdatePrefixes.Any(prefix =>
+            c.Message.StartsWith(value: prefix, comparisonType: StringComparison.Ordinal)
+        );
     }
 
     private static bool IsRepoMainBranch(string branch)
@@ -110,7 +125,9 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
     {
         return new EmbedFieldBuilder()
             .WithName($"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}")
-            .WithValue($"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed");
+            .WithValue(
+                $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
+            );
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
@@ -127,6 +144,8 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static string GetCommitString(in Push message)
     {
-        return message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
+        return message.Commits.Count > 1
+            ? $"{message.Commits.Count} commits"
+            : $"{message.Commits.Count} commit";
     }
 }

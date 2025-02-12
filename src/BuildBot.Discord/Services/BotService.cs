@@ -17,7 +17,11 @@ public sealed class BotService : IHostedService, IDisposable
     private readonly IDisposable _messageSubscription;
     private readonly IDisposable _releaseMessageSubscription;
 
-    public BotService(DiscordBot bot, IMessageChannel<BotMessage> botMessageChannel, IMessageChannel<BotReleaseMessage> botReleaseMessageChannel)
+    public BotService(
+        DiscordBot bot,
+        IMessageChannel<BotMessage> botMessageChannel,
+        IMessageChannel<BotReleaseMessage> botReleaseMessageChannel
+    )
     {
         this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
         this._botMessageChannel = botMessageChannel;
@@ -27,7 +31,11 @@ public sealed class BotService : IHostedService, IDisposable
             ._botMessageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
             .Delay(InterMessageDelay)
-            .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()))
+            .Select(message =>
+                Observable.FromAsync(ct =>
+                    this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()
+                )
+            )
             .Concat()
             .Subscribe();
 
@@ -35,7 +43,11 @@ public sealed class BotService : IHostedService, IDisposable
             ._botReleaseMessageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
             .Delay(InterMessageDelay)
-            .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()))
+            .Select(message =>
+                Observable.FromAsync(ct =>
+                    this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()
+                )
+            )
             .Concat()
             .Subscribe();
     }
@@ -58,11 +70,20 @@ public sealed class BotService : IHostedService, IDisposable
 
     private ValueTask PublishMessageAsync(BotMessage message, CancellationToken cancellationToken)
     {
-        return this._bot.PublishAsync(builder: message.Message, cancellationToken: cancellationToken);
+        return this._bot.PublishAsync(
+            builder: message.Message,
+            cancellationToken: cancellationToken
+        );
     }
 
-    private ValueTask PublishMessageAsync(BotReleaseMessage message, CancellationToken cancellationToken)
+    private ValueTask PublishMessageAsync(
+        BotReleaseMessage message,
+        CancellationToken cancellationToken
+    )
     {
-        return this._bot.PublishToReleaseChannelAsync(builder: message.Message, cancellationToken: cancellationToken);
+        return this._bot.PublishToReleaseChannelAsync(
+            builder: message.Message,
+            cancellationToken: cancellationToken
+        );
     }
 }

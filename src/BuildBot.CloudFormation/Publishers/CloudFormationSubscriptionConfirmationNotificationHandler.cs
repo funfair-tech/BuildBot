@@ -11,7 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.CloudFormation.Publishers;
 
-public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : INotificationHandler<CloudFormationSubscriptionConfirmation>
+public sealed class CloudFormationSubscriptionConfirmationNotificationHandler
+    : INotificationHandler<CloudFormationSubscriptionConfirmation>
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<CloudFormationSubscriptionConfirmationNotificationHandler> _logger;
@@ -28,8 +29,15 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
         this._logger = logger;
     }
 
-    [SuppressMessage(category: "", checkId: "CSE007: Handle dispose correctly.", Justification = "HttpClient is managed by the HttpClientFactory.")]
-    public async ValueTask Handle(CloudFormationSubscriptionConfirmation notification, CancellationToken cancellationToken)
+    [SuppressMessage(
+        category: "",
+        checkId: "CSE007: Handle dispose correctly.",
+        Justification = "HttpClient is managed by the HttpClientFactory."
+    )]
+    public async ValueTask Handle(
+        CloudFormationSubscriptionConfirmation notification,
+        CancellationToken cancellationToken
+    )
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
@@ -40,14 +48,23 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandler : 
 
         try
         {
-            HttpClient client = this._httpClientFactory.CreateClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler));
+            HttpClient client = this._httpClientFactory.CreateClient(
+                nameof(CloudFormationSubscriptionConfirmationNotificationHandler)
+            );
 
-            HttpResponseMessage responseMessage = await client.GetAsync(requestUri: notification.SubscribeUrl, cancellationToken: cancellationToken);
+            HttpResponseMessage responseMessage = await client.GetAsync(
+                requestUri: notification.SubscribeUrl,
+                cancellationToken: cancellationToken
+            );
             responseMessage.EnsureSuccessStatusCode();
         }
         catch (Exception exception)
         {
-            this._logger.FailedToSubscribeToTopic(subscribeUrl: notification.SubscribeUrl, message: exception.Message, exception: exception);
+            this._logger.FailedToSubscribeToTopic(
+                subscribeUrl: notification.SubscribeUrl,
+                message: exception.Message,
+                exception: exception
+            );
         }
     }
 }

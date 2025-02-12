@@ -9,7 +9,16 @@ namespace BuildBot.ServiceModel.GitHub;
 public readonly record struct Push
 {
     [JsonConstructor]
-    public Push(string @ref, string before, string after, in Commit headCommit, IReadOnlyList<Commit> commits, in Repository repository, in Pusher pusher, string compareUrl)
+    public Push(
+        string @ref,
+        string before,
+        string after,
+        in Commit headCommit,
+        IReadOnlyList<Commit> commits,
+        in Repository repository,
+        in Pusher pusher,
+        string compareUrl
+    )
     {
         this.Ref = @ref;
         this.Before = before;
@@ -42,7 +51,11 @@ public readonly record struct Push
     [JsonPropertyName(name: "pusher")]
     public Pusher Pusher { get; }
 
-    [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
+    [SuppressMessage(
+        category: "Microsoft.Design",
+        checkId: "CA1056:UriPropertiesShouldNotBeStrings",
+        Justification = "Model for serialization"
+    )]
     [JsonPropertyName(name: "compare")]
     public string CompareUrl { get; }
 }

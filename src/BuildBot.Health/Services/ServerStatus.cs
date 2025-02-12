@@ -16,6 +16,11 @@ public sealed class ServerStatus : IServerStatus
 
     public IReadOnlyList<ServiceStatus> CurrentStatus()
     {
-        return [.. this._componentStatusChecks.Select(x => x.GetStatus()).OrderBy(keySelector: s => s.Name, comparer: StringComparer.Ordinal)];
+        return
+        [
+            .. this
+                ._componentStatusChecks.Select(x => x.GetStatus())
+                .OrderBy(keySelector: s => s.Name, comparer: StringComparer.Ordinal),
+        ];
     }
 }

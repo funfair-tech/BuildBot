@@ -19,17 +19,27 @@ internal static partial class Endpoints
     {
         Console.WriteLine("Configuring Test/Ping Endpoint");
 
-        app.MapGet(pattern: "/ping",
-                   handler: static async ([FromQuery] string? source, IMediator mediator, ILogger<TestEndpointContext> logger, CancellationToken cancellationToken) =>
-                            {
-                                LogPing(source: source, logger: logger);
+        app.MapGet(
+            pattern: "/ping",
+            handler: static async (
+                [FromQuery] string? source,
+                IMediator mediator,
+                ILogger<TestEndpointContext> logger,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                LogPing(source: source, logger: logger);
 
-                                IReadOnlyList<ServiceStatus> status = await mediator.Send(new CheckStatus(source), cancellationToken);
+                IReadOnlyList<ServiceStatus> status = await mediator.Send(
+                    new CheckStatus(source),
+                    cancellationToken
+                );
 
-                                return status.All(s => s.Ok)
-                                    ? Results.Ok(PingPong.Model)
-                                    : Results.Conflict(status);
-                            });
+                return status.All(s => s.Ok)
+                    ? Results.Ok(PingPong.Model)
+                    : Results.Conflict(status);
+            }
+        );
 
         return app;
     }

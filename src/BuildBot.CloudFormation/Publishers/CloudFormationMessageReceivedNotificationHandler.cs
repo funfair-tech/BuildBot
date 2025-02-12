@@ -12,7 +12,8 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildBot.CloudFormation.Publishers;
 
-public sealed class CloudFormationMessageReceivedNotificationHandler : INotificationHandler<CloudFormationMessageReceived>
+public sealed class CloudFormationMessageReceivedNotificationHandler
+    : INotificationHandler<CloudFormationMessageReceived>
 {
     private readonly IAwsCloudFormation _awsCloudFormation;
     private readonly ICloudFormationDeploymentExtractor _cloudFormationDeploymentExtractor;
@@ -36,7 +37,10 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
         this._logger = logger;
     }
 
-    public async ValueTask Handle(CloudFormationMessageReceived notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(
+        CloudFormationMessageReceived notification,
+        CancellationToken cancellationToken
+    )
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
@@ -47,24 +51,34 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
         this._logger.RecievedMessage(notification);
 
-        Deployment? deployment = this._cloudFormationDeploymentExtractor.ExtractDeploymentProperties(notification);
+        Deployment? deployment =
+            this._cloudFormationDeploymentExtractor.ExtractDeploymentProperties(notification);
 
         if (deployment is null)
         {
             return;
         }
 
-        StackDetails? stackDetails = await this._awsCloudFormation.GetStackDetailsAsync(deployment: deployment.Value, cancellationToken: cancellationToken);
+        StackDetails? stackDetails = await this._awsCloudFormation.GetStackDetailsAsync(
+            deployment: deployment.Value,
+            cancellationToken: cancellationToken
+        );
 
         this._logger.BuildingMessage(deployment.Value);
-        EmbedBuilder embed = BuildStatusMessage(deployment: deployment.Value, stackDetails: stackDetails);
+        EmbedBuilder embed = BuildStatusMessage(
+            deployment: deployment.Value,
+            stackDetails: stackDetails
+        );
 
         this._logger.PublishingMessage(deployment.Value);
 
         await this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
     }
 
-    private static EmbedBuilder BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
+    private static EmbedBuilder BuildStatusMessage(
+        in Deployment deployment,
+        StackDetails? stackDetails
+    )
     {
         EmbedBuilder builder = new EmbedBuilder()
             .WithTitle(BuildTitle(deployment: deployment, stackDetails: stackDetails))
@@ -74,7 +88,9 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
 
         if (stackDetails is not null)
         {
-            builder.WithDescription(stackDetails.Value.Description).AddField(name: "Version", value: stackDetails.Value.Version);
+            builder
+                .WithDescription(stackDetails.Value.Description)
+                .AddField(name: "Version", value: stackDetails.Value.Version);
         }
 
         return builder;
@@ -84,16 +100,23 @@ public sealed class CloudFormationMessageReceivedNotificationHandler : INotifica
     {
         if (stackDetails is not null && !string.IsNullOrWhiteSpace(stackDetails.Value.Version))
         {
-            return deployment.Success ? $"{deployment.Project} ({stackDetails.Value.Version}) was deployed " : $"{deployment.Project} ({stackDetails.Value.Version}) failed to deploy";
+            return deployment.Success
+                ? $"{deployment.Project} ({stackDetails.Value.Version}) was deployed "
+                : $"{deployment.Project} ({stackDetails.Value.Version}) failed to deploy";
         }
 
-        return deployment.Success ? $"{deployment.Project} was deployed " : $"{deployment.Project} failed to deploy";
+        return deployment.Success
+            ? $"{deployment.Project} was deployed "
+            : $"{deployment.Project} failed to deploy";
     }
 
     private static Uri BuildStackUrl(in Deployment deployment)
     {
         // arn%3Aaws%3Acloudformation%3Aeu-west-1%3A117769150821%3Astack%2FBuildBot%2Ff57a70c0-74cb-11ef-8f69-0aa7e4ea5f05
-        return new("https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/stackinfo?stackId=" + deployment.StackId);
+        return new(
+            "https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/stackinfo?stackId="
+                + deployment.StackId
+        );
     }
 
     private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Deployment deployment)

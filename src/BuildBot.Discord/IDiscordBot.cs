@@ -8,5 +8,8 @@ public interface IDiscordBot
 {
     ValueTask PublishAsync(EmbedBuilder builder, CancellationToken cancellationToken);
 
-    ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken);
+    ValueTask PublishToReleaseChannelAsync(
+        EmbedBuilder builder,
+        CancellationToken cancellationToken
+    );
 }

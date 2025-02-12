@@ -8,7 +8,11 @@ using BuildBot.ServiceModel.GitHub;
 
 namespace BuildBot.Json;
 
-[SuppressMessage(category: "ReSharper", checkId: "PartialTypeWithSinglePart", Justification = "Required for JsonSerializerContext")]
+[SuppressMessage(
+    category: "ReSharper",
+    checkId: "PartialTypeWithSinglePart",
+    Justification = "Required for JsonSerializerContext"
+)]
 [JsonSourceGenerationOptions(
     GenerationMode = JsonSourceGenerationMode.Serialization | JsonSourceGenerationMode.Metadata,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,

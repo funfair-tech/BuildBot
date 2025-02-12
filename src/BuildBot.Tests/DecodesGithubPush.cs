@@ -232,7 +232,9 @@ public sealed class DecodesGithubPush : TestBase
     [Fact]
     public void DecodeOpt()
     {
-        JsonTypeInfo<Push> pushTypeInfo = AssertReallyNotNull(AppSerializationContext.Default.GetTypeInfo(typeof(Push)) as JsonTypeInfo<Push>);
+        JsonTypeInfo<Push> pushTypeInfo = AssertReallyNotNull(
+            AppSerializationContext.Default.GetTypeInfo(typeof(Push)) as JsonTypeInfo<Push>
+        );
 
         Push packet = JsonSerializer.Deserialize(json: GITHUB_PUSH, jsonTypeInfo: pushTypeInfo);
 

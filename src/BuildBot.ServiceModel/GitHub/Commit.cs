@@ -9,7 +9,11 @@ namespace BuildBot.ServiceModel.GitHub;
 [DebuggerDisplay("{Id}: {Sha}: {Message}")]
 public readonly record struct Commit
 {
-    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
+    [SuppressMessage(
+        category: "Roslynator.Analyzers",
+        checkId: "RCS1231: Make parameter ref read-only.",
+        Justification = "Serialisation model"
+    )]
     [JsonConstructor]
     public Commit(
         string id,
@@ -58,7 +62,11 @@ public readonly record struct Commit
     [JsonPropertyName(name: "timestamp")]
     public DateTime TimeStamp { get; }
 
-    [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
+    [SuppressMessage(
+        category: "Microsoft.Design",
+        checkId: "CA1056:UriPropertiesShouldNotBeStrings",
+        Justification = "Model for serialization"
+    )]
     [JsonPropertyName(name: "url")]
     public string Url { get; }
 

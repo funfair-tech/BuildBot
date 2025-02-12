@@ -9,7 +9,15 @@ namespace BuildBot.ServiceModel.GitHub;
 public readonly record struct Status
 {
     [JsonConstructor]
-    public Status(string targetUrl, in Repository repository, string context, string state, IReadOnlyList<Branch> branches, string description, in StatusCommit statusCommit)
+    public Status(
+        string targetUrl,
+        in Repository repository,
+        string context,
+        string state,
+        IReadOnlyList<Branch> branches,
+        string description,
+        in StatusCommit statusCommit
+    )
     {
         this.TargetUrl = targetUrl;
         this.Repository = repository;
@@ -20,7 +28,11 @@ public readonly record struct Status
         this.StatusCommit = statusCommit;
     }
 
-    [SuppressMessage(category: "Microsoft.Design", checkId: "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Model for serialization")]
+    [SuppressMessage(
+        category: "Microsoft.Design",
+        checkId: "CA1056:UriPropertiesShouldNotBeStrings",
+        Justification = "Model for serialization"
+    )]
     [JsonPropertyName(name: "target_url")]
     public string TargetUrl { get; }
 

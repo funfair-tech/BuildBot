@@ -28,11 +28,17 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     }
 
     private static EmbedAuthorBuilder Author { get; } =
-        new EmbedAuthorBuilder().WithName("FunFair BuildBot").WithUrl("https://funfair.io").WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
+        new EmbedAuthorBuilder()
+            .WithName("FunFair BuildBot")
+            .WithUrl("https://funfair.io")
+            .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
 
     public ServiceStatus GetStatus()
     {
-        return new ServiceStatus(Name: "Discord", Ok: this._client.LoginState == LoginState.LoggedIn);
+        return new ServiceStatus(
+            Name: "Discord",
+            Ok: this._client.LoginState == LoginState.LoggedIn
+        );
     }
 
     public async ValueTask PublishAsync(EmbedBuilder builder, CancellationToken cancellationToken)
@@ -41,29 +47,52 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
         if (socketTextChannel is null)
         {
-            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
+            this._logger.LogDiscordChannelNotFound(
+                channelName: this._botConfiguration.Channel,
+                serverName: this._botConfiguration.Server
+            );
 
             return;
         }
 
-        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
+        await this.PublishCommonAsync(
+            builder: builder,
+            socketTextChannel: socketTextChannel,
+            cancellationToken: cancellationToken
+        );
     }
 
-    public async ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken)
+    public async ValueTask PublishToReleaseChannelAsync(
+        EmbedBuilder builder,
+        CancellationToken cancellationToken
+    )
     {
-        SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.ReleaseChannel);
+        SocketTextChannel? socketTextChannel = this.GetChannel(
+            this._botConfiguration.ReleaseChannel
+        );
 
         if (socketTextChannel is null)
         {
-            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
+            this._logger.LogDiscordChannelNotFound(
+                channelName: this._botConfiguration.Channel,
+                serverName: this._botConfiguration.Server
+            );
 
             return;
         }
 
-        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
+        await this.PublishCommonAsync(
+            builder: builder,
+            socketTextChannel: socketTextChannel,
+            cancellationToken: cancellationToken
+        );
     }
 
-    private async ValueTask PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel, CancellationToken cancellationToken)
+    private async ValueTask PublishCommonAsync(
+        EmbedBuilder builder,
+        SocketTextChannel socketTextChannel,
+        CancellationToken cancellationToken
+    )
     {
         this._logger.LogSendingMessage(channelName: socketTextChannel.Name, message: builder.Title);
 
@@ -71,7 +100,10 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         {
             Embed embed = IncludeStandardParameters(builder);
 
-            RestUserMessage msg = await socketTextChannel.SendMessageAsync(text: string.Empty, embed: embed);
+            RestUserMessage msg = await socketTextChannel.SendMessageAsync(
+                text: string.Empty,
+                embed: embed
+            );
             this.LogSent(msg);
             await Task.Delay(delay: TypingDelay, cancellationToken: cancellationToken);
         }
@@ -89,9 +121,13 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     private SocketTextChannel? GetChannel(string channelName)
     {
-        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g => StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server));
+        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g =>
+            StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server)
+        );
 
-        return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Name, y: channelName));
+        return guild?.TextChannels.FirstOrDefault(predicate: c =>
+            StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Name, y: channelName)
+        );
     }
 
     private Task LogAsync(LogMessage arg)
@@ -119,7 +155,11 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     {
         if (arg.Exception is not null)
         {
-            this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
+            this._logger.LogError(
+                new(arg.Exception.HResult),
+                exception: arg.Exception,
+                message: arg.Message
+            );
         }
         else
         {
@@ -153,12 +193,19 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     public async Task StartAsync()
     {
         // login
-        await this._client.LoginAsync(tokenType: TokenType.Bot, token: this._botConfiguration.Token);
+        await this._client.LoginAsync(
+            tokenType: TokenType.Bot,
+            token: this._botConfiguration.Token
+        );
 
         // and start
         await this._client.StartAsync();
 
-        await this._client.SetGameAsync(name: "GitHub", streamUrl: null, type: ActivityType.Watching);
+        await this._client.SetGameAsync(
+            name: "GitHub",
+            streamUrl: null,
+            type: ActivityType.Watching
+        );
     }
 
     public Task StopAsync()

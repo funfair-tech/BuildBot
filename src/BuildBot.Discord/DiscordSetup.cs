@@ -6,7 +6,10 @@ namespace BuildBot.Discord;
 
 public static class DiscordSetup
 {
-    public static IServiceCollection AddDiscord(this IServiceCollection services, DiscordBotConfiguration discordConfig)
+    public static IServiceCollection AddDiscord(
+        this IServiceCollection services,
+        DiscordBotConfiguration discordConfig
+    )
     {
         return services
             .AddSingleton(discordConfig)

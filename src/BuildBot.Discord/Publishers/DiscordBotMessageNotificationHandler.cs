@@ -16,6 +16,9 @@ public sealed class DiscordBotMessageNotificationHandler : INotificationHandler<
 
     public ValueTask Handle(BotMessage notification, CancellationToken cancellationToken)
     {
-        return this._messageChannel.PublishAsync(message: notification, cancellationToken: cancellationToken);
+        return this._messageChannel.PublishAsync(
+            message: notification,
+            cancellationToken: cancellationToken
+        );
     }
 }
