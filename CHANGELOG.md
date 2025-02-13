@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated Microsoft.Extensions to 9.0.1
 - Dependencies - Updated Discord.Net to 3.17.1
-- Dependencies - Updated Roslynator.Analyzers to 4.12.11
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.6.0.109712
 - Dependencies - Updated Credfeto.Enumeration to 1.2.66.909
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.67.907
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 9.0.200
 - Dependencies - Updated Meziantou.Analyzer to 2.0.187
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.2
+- Dependencies - Updated Roslynator.Analyzers to 4.13.0
 ### Removed
 ### Deployment Changes
 
