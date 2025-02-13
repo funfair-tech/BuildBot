@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated Octopus.Client to 14.3.1732
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.13.0
 - Dependencies - Updated AWSSDK to 3.7.402.4
 - Dependencies - Updated Microsoft.Extensions to 9.0.2
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 ### Removed
 ### Deployment Changes
 
