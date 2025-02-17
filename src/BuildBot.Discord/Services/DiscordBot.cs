@@ -81,13 +81,37 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             return;
         }
 
+        await this.PublishCommonAsync(
+            builder: builder,
+            socketTextChannel: socketTextChannel,
+            cancellationToken: cancellationToken
+        );
+    }
+
+    private async ValueTask PublishCommonAsync(
+        EmbedBuilder builder,
+        SocketTextChannel socketTextChannel,
+        CancellationToken cancellationToken
+    )
+    {
         try
         {
-            await this.PublishCommonAsync(
-                builder: builder,
-                socketTextChannel: socketTextChannel,
-                cancellationToken: cancellationToken
+            this._logger.LogSendingMessage(
+                channelName: socketTextChannel.Name,
+                message: builder.Title
             );
+
+            using (socketTextChannel.EnterTypingState())
+            {
+                Embed embed = IncludeStandardParameters(builder);
+
+                RestUserMessage msg = await socketTextChannel.SendMessageAsync(
+                    text: string.Empty,
+                    embed: embed
+                );
+                this.LogSent(msg);
+                await Task.Delay(delay: TypingDelay, cancellationToken: cancellationToken);
+            }
         }
         catch (Exception exception)
         {
@@ -99,27 +123,6 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             );
 
             throw;
-        }
-    }
-
-    private async ValueTask PublishCommonAsync(
-        EmbedBuilder builder,
-        SocketTextChannel socketTextChannel,
-        CancellationToken cancellationToken
-    )
-    {
-        this._logger.LogSendingMessage(channelName: socketTextChannel.Name, message: builder.Title);
-
-        using (socketTextChannel.EnterTypingState())
-        {
-            Embed embed = IncludeStandardParameters(builder);
-
-            RestUserMessage msg = await socketTextChannel.SendMessageAsync(
-                text: string.Empty,
-                embed: embed
-            );
-            this.LogSent(msg);
-            await Task.Delay(delay: TypingDelay, cancellationToken: cancellationToken);
         }
     }
 
