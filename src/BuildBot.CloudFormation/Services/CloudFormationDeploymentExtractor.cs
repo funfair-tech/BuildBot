@@ -17,7 +17,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
     private const string PHYSICAL_RESOURCE_ID = "PhysicalResourceId";
     private const string RESOURCE_STATUS = "ResourceStatus";
 
-    private static readonly Dictionary<string, bool> Statuses = new(StringComparer.Ordinal)
+    private static readonly Dictionary<string, bool?> Statuses = new(StringComparer.Ordinal)
     {
         ["CREATE_COMPLETE"] = true,
         ["CREATE_FAILED"] = false,
@@ -27,8 +27,8 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         ["ROLLBACK_IN_PROGRESS"] = false,
         ["ROLLBACK_FAILED"] = false,
         ["UPDATE_COMPLETE"] = true,
-        ["UPDATE_IN_PROGRESS"] = false,
-        ["UPDATE_COMPLETE_CLEANUP_IN_PROGRESS"] = false,
+        ["UPDATE_IN_PROGRESS"] = null,
+        ["UPDATE_COMPLETE_CLEANUP_IN_PROGRESS"] = null,
         ["UPDATE_ROLLBACK_COMPLETE"] = false,
         ["UPDATE_ROLLBACK_FAILED"] = false,
         ["UPDATE_ROLLBACK_IN_PROGRESS"] = false,
@@ -41,6 +41,11 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger = logger;
     }
 
+    [SuppressMessage(
+        "Meziantou.Analyzer",
+        "MA0051: Method is too long",
+        Justification = "To Refactor"
+    )]
     public Deployment? ExtractDeploymentProperties(in CloudFormationMessageReceived notification)
     {
         this.DumpAllProperties(notification);
@@ -85,21 +90,25 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
             return this.DeploymentNoResourceStatusId();
         }
 
-        if (Statuses.TryGetValue(key: status, out bool success))
+        if (!Statuses.TryGetValue(key: status, out bool? success))
         {
-            return this.CreateDeployment(
-                stackName: stackName,
-                project: project,
-                arn: arn,
-                status: status,
-                success: success,
-                stackId: stackId
-            );
+            this._logger.UnknownStatus(status);
+            return null;
         }
 
-        this._logger.UnknownStatus(status);
+        if (!success.HasValue)
+        {
+            return null;
+        }
 
-        return null;
+        return this.CreateDeployment(
+            stackName: stackName,
+            project: project,
+            arn: arn,
+            status: status,
+            success: success.Value,
+            stackId: stackId
+        );
     }
 
     private Deployment? DeploymentNoResourceStatusId()

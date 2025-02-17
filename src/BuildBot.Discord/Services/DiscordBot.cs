@@ -81,11 +81,25 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             return;
         }
 
-        await this.PublishCommonAsync(
-            builder: builder,
-            socketTextChannel: socketTextChannel,
-            cancellationToken: cancellationToken
-        );
+        try
+        {
+            await this.PublishCommonAsync(
+                builder: builder,
+                socketTextChannel: socketTextChannel,
+                cancellationToken: cancellationToken
+            );
+        }
+        catch (Exception exception)
+        {
+            this._logger.FailedToPublishMessage(
+                channelName: this._botConfiguration.Channel,
+                builder.Title,
+                exception.Message,
+                exception
+            );
+
+            throw;
+        }
     }
 
     private async ValueTask PublishCommonAsync(

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Discord.Services.LoggingExtensions;
@@ -35,5 +36,18 @@ internal static partial class DiscordBotLoggingExtensions
         this ILogger<DiscordBot> logger,
         string channelName,
         string message
+    );
+
+    [LoggerMessage(
+        EventId = 4,
+        Level = LogLevel.Error,
+        Message = "DISCORD: {channelName}: Failed to send message {title}: {message}"
+    )]
+    public static partial void FailedToPublishMessage(
+        this ILogger<DiscordBot> logger,
+        string channelName,
+        string title,
+        string message,
+        Exception exception
     );
 }
