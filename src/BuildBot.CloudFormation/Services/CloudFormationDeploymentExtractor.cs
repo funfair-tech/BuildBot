@@ -27,6 +27,8 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         ["ROLLBACK_IN_PROGRESS"] = false,
         ["ROLLBACK_FAILED"] = false,
         ["UPDATE_COMPLETE"] = true,
+        ["UPDATE_IN_PROGRESS"] = false,
+        ["UPDATE_COMPLETE_CLEANUP_IN_PROGRESS"] = false,
         ["UPDATE_ROLLBACK_COMPLETE"] = false,
         ["UPDATE_ROLLBACK_FAILED"] = false,
         ["UPDATE_ROLLBACK_IN_PROGRESS"] = false,
