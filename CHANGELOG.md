@@ -36,8 +36,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.54.350
 - Dependencies - Updated Meziantou.Analyzer to 2.0.188
-- Dependencies - Updated AWSSDK to 3.7.402.8
 - Dependencies - Updated FunFair.Test.Common to 6.1.259.1162
+- Dependencies - Updated AWSSDK to 3.7.402.9
 ### Removed
 ### Deployment Changes
 
