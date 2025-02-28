@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated Discord.Net to 3.17.1
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.6.0.109712
 - Dependencies - Updated Credfeto.Enumeration to 1.2.66.909
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.67.907
 - Dependencies - Updated xunit.analyzers to 1.20.0
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.55.367
 - Dependencies - Updated FunFair.Test.Common to 6.1.260.1166
 - Dependencies - Updated AWSSDK to 3.7.402.13
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.7.0.110445
 ### Removed
 ### Deployment Changes
 
