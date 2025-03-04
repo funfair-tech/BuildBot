@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated Discord.Net to 3.17.1
-- Dependencies - Updated FunFair.CodeAnalysis to 7.0.67.907
 - Dependencies - Updated xunit.analyzers to 1.20.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - SDK - Updated DotNet SDK to 9.0.200
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.261.1171
 - Dependencies - Updated Credfeto.Enumeration to 1.2.67.955
 - Dependencies - Updated AWSSDK to 3.7.402.15
+- Dependencies - Updated FunFair.CodeAnalysis to 7.0.69.956
 ### Removed
 ### Deployment Changes
 
