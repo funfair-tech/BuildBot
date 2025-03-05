@@ -51,7 +51,7 @@
     <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.CloudFormation" Version="3.7.402.16" />
+    <PackageReference Include="AWSSDK.CloudFormation" Version="3.7.402.17" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.2" />
   </ItemGroup>
   <ItemGroup>
