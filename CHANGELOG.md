@@ -35,9 +35,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.55.367
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.7.0.110445
 - Dependencies - Updated Credfeto.Enumeration to 1.2.67.955
-- Dependencies - Updated AWSSDK to 3.7.402.15
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.69.956
 - Dependencies - Updated FunFair.Test.Common to 6.1.262.1177
+- Dependencies - Updated AWSSDK to 3.7.402.16
 ### Removed
 ### Deployment Changes
 
