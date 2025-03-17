@@ -25,7 +25,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated xunit.analyzers to 1.20.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
-- SDK - Updated DotNet SDK to 9.0.200
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.188
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 3.7.402.23
 - Dependencies - Updated Discord.Net to 3.17.2
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
+- SDK - Updated DotNet SDK to 9.0.201
 ### Removed
 ### Deployment Changes
 
