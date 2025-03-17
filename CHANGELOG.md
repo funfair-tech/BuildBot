@@ -36,8 +36,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.69.956
 - Dependencies - Updated FunFair.Test.Common to 6.1.262.1177
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.56.380
-- Dependencies - Updated AWSSDK to 3.7.402.19
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
+- Dependencies - Updated AWSSDK to 3.7.402.23
 ### Removed
 ### Deployment Changes
 
