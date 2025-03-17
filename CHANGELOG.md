@@ -29,7 +29,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.188
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.7.0.110445
-- Dependencies - Updated Credfeto.Enumeration to 1.2.67.955
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.69.956
 - Dependencies - Updated FunFair.Test.Common to 6.1.262.1177
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.56.380
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.17.2
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
 - SDK - Updated DotNet SDK to 9.0.201
+- Dependencies - Updated Credfeto.Enumeration to 1.2.68.969
 ### Removed
 ### Deployment Changes
 
