@@ -34,10 +34,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.17.2
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
 - SDK - Updated DotNet SDK to 9.0.201
-- Dependencies - Updated Credfeto.Enumeration to 1.2.68.969
 - Dependencies - Updated AWSSDK to 3.7.402.24
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.70.968
 - Dependencies - Updated FunFair.Test.Common to 6.1.263.1191
+- Dependencies - Updated Credfeto.Enumeration to 1.2.69.973
 ### Removed
 ### Deployment Changes
 
