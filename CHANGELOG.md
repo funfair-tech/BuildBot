@@ -33,11 +33,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Discord.Net to 3.17.2
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
-- SDK - Updated DotNet SDK to 9.0.201
 - Dependencies - Updated FunFair.Test.Common to 6.1.263.1191
 - Dependencies - Updated AWSSDK to 3.7.402.25
 - Dependencies - Updated Credfeto.Enumeration to 1.2.70.976
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.72.974
+- SDK - Updated DotNet SDK to 9.0.202
 ### Removed
 ### Deployment Changes
 
