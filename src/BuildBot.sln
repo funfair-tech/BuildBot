@@ -17,7 +17,6 @@ ProjectSection(SolutionItems) = preProject
 	..\README.md = ..\README.md
 	..\cloudformation.json = ..\cloudformation.json
 	..\Dockerfile = ..\Dockerfile
-	..\healthcheck = ..\healthcheck
 	publish = publish
 	FunFair.props = FunFair.props
 EndProjectSection

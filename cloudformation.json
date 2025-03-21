@@ -257,7 +257,7 @@
             "HealthCheck": {
               "Command": [
                 "CMD-SHELL",
-                "/bin/sh /usr/src/app/healthcheck"
+                "/usr/src/app/BuildBot --health-check http://127.0.0.1:8080/ping?source=docker"
               ],
               "Interval": "5",
               "Retries": "3",

@@ -47,7 +47,6 @@ echo "Clear $OUTFOLDER" \
           --output "$OUTFOLDER" \
   && cd "$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM" \
   && cp "$HOME/work/funfair/BuildBot/Dockerfile" . \
-  && cp "$HOME/work/funfair/BuildBot/healthcheck" . \
   && ls -lar \
   && sudo docker buildx build  . -t "funfair/buildbot:latest" \
   && sudo docker run \
