@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Helpers;
+using Credfeto.Docker.HealthCheck.Http.Client;
 using Microsoft.AspNetCore.Builder;
 
 namespace BuildBot;
@@ -16,6 +18,16 @@ public static class Program
         Justification = "Won't work here"
     )]
     public static async Task<int> Main(string[] args)
+    {
+        return HealthCheckClient.IsHealthCheck(args: args, out string? checkUrl)
+            ? await HealthCheckClient.ExecuteAsync(
+                targetUrl: checkUrl,
+                cancellationToken: CancellationToken.None
+            )
+            : await RunServerAsync(args);
+    }
+
+    private static async ValueTask<int> RunServerAsync(string[] args)
     {
         StartupBanner.Show();
 
