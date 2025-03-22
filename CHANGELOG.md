@@ -37,7 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.189
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.73.978
 - Dependencies - Updated FunFair.Test.Common to 6.1.264.1201
-- Dependencies - Updated AWSSDK to 3.7.402.27
+- Dependencies - Updated AWSSDK to 3.7.402.28
 ### Removed
 ### Deployment Changes
 
