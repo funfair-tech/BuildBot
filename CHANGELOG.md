@@ -28,7 +28,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.7.0.110445
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.56.380
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Discord.Net to 3.17.2
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.264.1201
 - Dependencies - Updated AWSSDK to 3.7.402.28
 - Dependencies - Updated Credfeto.Enumeration to 1.2.71.984
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.57.416
 ### Removed
 ### Deployment Changes
 
