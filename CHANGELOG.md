@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Octopus.Client to 14.3.1732
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
-- Dependencies - Updated Serilog.Extensions.Logging to 9.0.0
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated xunit.analyzers to 1.20.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.74.984
 - Dependencies - Updated FunFair.Test.Common to 6.1.265.1215
 - Dependencies - Updated AWSSDK to 3.7.402.29
+- Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 ### Removed
 ### Deployment Changes
 
