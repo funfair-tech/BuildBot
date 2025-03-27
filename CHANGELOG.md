@@ -37,7 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.74.984
 - Dependencies - Updated FunFair.Test.Common to 6.1.265.1215
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
-- Dependencies - Updated AWSSDK to 3.7.402.31
+- Dependencies - Updated AWSSDK to 3.7.403
 ### Removed
 ### Deployment Changes
 
