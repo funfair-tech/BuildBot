@@ -22,7 +22,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
 - Dependencies - Updated xunit to 2.9.3
-- Dependencies - Updated xunit.analyzers to 1.20.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
@@ -38,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated AWSSDK to 3.7.403.7
 - Dependencies - Updated Meziantou.Analyzer to 2.0.193
+- Dependencies - Updated xunit.analyzers to 1.21.0
 ### Removed
 ### Deployment Changes
 
