@@ -36,9 +36,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.265.1215
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated AWSSDK to 3.7.403.7
-- Dependencies - Updated Meziantou.Analyzer to 2.0.193
 - Dependencies - Updated xunit.analyzers to 1.21.0
 - Dependencies - Updated xunit.v3 to 2.0.1
+- Dependencies - Updated Meziantou.Analyzer to 2.0.194
 ### Removed
 ### Deployment Changes
 
