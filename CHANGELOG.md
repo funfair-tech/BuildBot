@@ -27,7 +27,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Discord.Net to 3.17.2
-- Dependencies - Updated Microsoft.Extensions to 9.0.3
 - SDK - Updated DotNet SDK to 9.0.202
 - Dependencies - Updated Credfeto.Enumeration to 1.2.71.984
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.57.416
@@ -39,6 +38,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.194
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.8.0.113526
 - Dependencies - Updated AWSSDK to 3.7.403.8
+- Dependencies - Updated Microsoft.Extensions to 9.0.4
 ### Removed
 ### Deployment Changes
 
