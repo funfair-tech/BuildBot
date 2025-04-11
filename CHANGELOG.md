@@ -27,7 +27,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Discord.Net to 3.17.2
-- Dependencies - Updated Credfeto.Enumeration to 1.2.71.984
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated xunit.analyzers to 1.21.0
 - Dependencies - Updated xunit.v3 to 2.0.1
@@ -40,6 +39,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.58.459
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.2.41
 - Dependencies - Updated AWSSDK to 3.7.403.11
+- Dependencies - Updated Credfeto.Enumeration to 1.2.72.1035
 ### Removed
 ### Deployment Changes
 
