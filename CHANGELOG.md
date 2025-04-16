@@ -35,11 +35,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 9.0.203
 - Dependencies - Updated Meziantou.Analyzer to 2.0.196
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.3.44
-- Dependencies - Updated AWSSDK to 3.7.403.12
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.79.1041
 - Dependencies - Updated FunFair.Test.Common to 6.1.268.1269
 - Dependencies - Updated Credfeto.Enumeration to 1.2.75.1045
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.61.476
+- Dependencies - Updated AWSSDK to 3.7.403.13
 ### Removed
 ### Deployment Changes
 
