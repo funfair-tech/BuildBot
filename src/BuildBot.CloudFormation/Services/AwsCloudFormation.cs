@@ -25,10 +25,7 @@ public sealed class AwsCloudFormation : IAwsCloudFormation
         this._logger = logger;
 
         this._endpoint = RegionEndpoint.GetBySystemName(this._options.Region);
-        this._credentials = new(
-            accessKey: this._options.AccessKey,
-            secretKey: this._options.SecretKey
-        );
+        this._credentials = new(accessKey: this._options.AccessKey, secretKey: this._options.SecretKey);
     }
 
     public async ValueTask<StackDetails?> GetStackDetailsAsync(
@@ -66,21 +63,13 @@ public sealed class AwsCloudFormation : IAwsCloudFormation
 
                 string projectDescription = stack.Description;
 
-                Tag? versionTag = stack.Tags.Find(t =>
-                    StringComparer.Ordinal.Equals(x: t.Key, y: "Version")
-                );
+                Tag? versionTag = stack.Tags.Find(t => StringComparer.Ordinal.Equals(x: t.Key, y: "Version"));
 
                 string? projectVersion = versionTag?.Value;
 
-                if (
-                    !string.IsNullOrWhiteSpace(projectDescription)
-                    || !string.IsNullOrWhiteSpace(projectVersion)
-                )
+                if (!string.IsNullOrWhiteSpace(projectDescription) || !string.IsNullOrWhiteSpace(projectVersion))
                 {
-                    return new StackDetails(
-                        Description: projectDescription,
-                        Version: projectVersion
-                    );
+                    return new StackDetails(Description: projectDescription, Version: projectVersion);
                 }
 
                 return null;
@@ -88,10 +77,7 @@ public sealed class AwsCloudFormation : IAwsCloudFormation
         }
         catch (Exception exception)
         {
-            this._logger.FailedToGetCloudFormationStack(
-                message: exception.Message,
-                exception: exception
-            );
+            this._logger.FailedToGetCloudFormationStack(message: exception.Message, exception: exception);
 
             return null;
         }
