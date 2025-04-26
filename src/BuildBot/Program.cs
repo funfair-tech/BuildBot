@@ -20,10 +20,7 @@ public static class Program
     public static async Task<int> Main(string[] args)
     {
         return HealthCheckClient.IsHealthCheck(args: args, out string? checkUrl)
-            ? await HealthCheckClient.ExecuteAsync(
-                targetUrl: checkUrl,
-                cancellationToken: CancellationToken.None
-            )
+            ? await HealthCheckClient.ExecuteAsync(targetUrl: checkUrl, cancellationToken: CancellationToken.None)
             : await RunServerAsync(args);
     }
 
