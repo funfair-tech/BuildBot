@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -29,9 +29,7 @@ public static class CloudformationSetup
             .AddSubscriptionConfirmationHttpClient();
     }
 
-    private static IServiceCollection AddSubscriptionConfirmationHttpClient(
-        this IServiceCollection services
-    )
+    private static IServiceCollection AddSubscriptionConfirmationHttpClient(this IServiceCollection services)
     {
         return services
             .AddHttpClient(nameof(CloudFormationSubscriptionConfirmationNotificationHandler))
@@ -55,18 +53,11 @@ public static class CloudformationSetup
         return Task.CompletedTask;
     }
 
-    private static TimeSpan HandleRetry(
-        int retryCount,
-        DelegateResult<HttpResponseMessage> response,
-        Context context
-    )
+    private static TimeSpan HandleRetry(int retryCount, DelegateResult<HttpResponseMessage> response, Context context)
     {
         if (
             response.Result is not null
-            && response.Result.Headers.TryGetValues(
-                name: "Retry-After",
-                out IEnumerable<string>? result
-            )
+            && response.Result.Headers.TryGetValues(name: "Retry-After", out IEnumerable<string>? result)
             && int.TryParse(
                 result.First(),
                 style: NumberStyles.Integer,
