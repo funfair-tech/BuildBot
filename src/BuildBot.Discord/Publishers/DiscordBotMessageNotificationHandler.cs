@@ -25,9 +25,6 @@ public sealed class DiscordBotMessageNotificationHandler : INotificationHandler<
     {
         this._logger.QueueingDiscordMessage(notification.Message.Title);
 
-        return this._messageChannel.PublishAsync(
-            message: notification,
-            cancellationToken: cancellationToken
-        );
+        return this._messageChannel.PublishAsync(message: notification, cancellationToken: cancellationToken);
     }
 }
