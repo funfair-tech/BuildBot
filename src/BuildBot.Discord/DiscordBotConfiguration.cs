@@ -1,13 +1,8 @@
-﻿namespace BuildBot.Discord;
+namespace BuildBot.Discord;
 
 public sealed class DiscordBotConfiguration
 {
-    public DiscordBotConfiguration(
-        string token,
-        string server,
-        string channel,
-        string releaseChannel
-    )
+    public DiscordBotConfiguration(string token, string server, string channel, string releaseChannel)
     {
         this.Token = token;
         this.Server = server;
