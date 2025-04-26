@@ -41,22 +41,12 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger = logger;
     }
 
-    [SuppressMessage(
-        "Meziantou.Analyzer",
-        "MA0051: Method is too long",
-        Justification = "To Refactor"
-    )]
+    [SuppressMessage("Meziantou.Analyzer", "MA0051: Method is too long", Justification = "To Refactor")]
     public Deployment? ExtractDeploymentProperties(in CloudFormationMessageReceived notification)
     {
         this.DumpAllProperties(notification);
 
-        if (
-            !IsMatching(
-                properties: notification.Properties,
-                key: RESOURCE_TYPE,
-                value: "AWS::CloudFormation::Stack"
-            )
-        )
+        if (!IsMatching(properties: notification.Properties, key: RESOURCE_TYPE, value: "AWS::CloudFormation::Stack"))
         {
             this._logger.NotACloudFormationStack();
 
@@ -155,13 +145,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         string stackId
     )
     {
-        this.LogConfiguration(
-            stackName: stackName,
-            project: project,
-            arn: arn,
-            status: status,
-            success: success
-        );
+        this.LogConfiguration(stackName: stackName, project: project, arn: arn, status: status, success: success);
 
         return new Deployment(
             StackName: stackName,
@@ -173,13 +157,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         );
     }
 
-    private void LogConfiguration(
-        string stackName,
-        string project,
-        string arn,
-        string status,
-        bool success
-    )
+    private void LogConfiguration(string stackName, string project, string arn, string status, bool success)
     {
         this._logger.StackName(stackName);
         this._logger.Project(project);
