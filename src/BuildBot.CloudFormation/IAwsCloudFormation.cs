@@ -5,8 +5,5 @@ namespace BuildBot.CloudFormation;
 
 public interface IAwsCloudFormation
 {
-    ValueTask<StackDetails?> GetStackDetailsAsync(
-        Deployment deployment,
-        CancellationToken cancellationToken
-    );
+    ValueTask<StackDetails?> GetStackDetailsAsync(Deployment deployment, CancellationToken cancellationToken);
 }
