@@ -37,10 +37,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
         this._logger = logger;
     }
 
-    public async ValueTask Handle(
-        CloudFormationMessageReceived notification,
-        CancellationToken cancellationToken
-    )
+    public async ValueTask Handle(CloudFormationMessageReceived notification, CancellationToken cancellationToken)
     {
         if (!this._options.IsValidArn(notification.TopicArn))
         {
@@ -51,8 +48,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
 
         this._logger.RecievedMessage(notification);
 
-        Deployment? deployment =
-            this._cloudFormationDeploymentExtractor.ExtractDeploymentProperties(notification);
+        Deployment? deployment = this._cloudFormationDeploymentExtractor.ExtractDeploymentProperties(notification);
 
         if (deployment is null)
         {
@@ -65,20 +61,14 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
         );
 
         this._logger.BuildingMessage(deployment.Value);
-        EmbedBuilder embed = BuildStatusMessage(
-            deployment: deployment.Value,
-            stackDetails: stackDetails
-        );
+        EmbedBuilder embed = BuildStatusMessage(deployment: deployment.Value, stackDetails: stackDetails);
 
         this._logger.PublishingMessage(deployment.Value);
 
         await this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
     }
 
-    private static EmbedBuilder BuildStatusMessage(
-        in Deployment deployment,
-        StackDetails? stackDetails
-    )
+    private static EmbedBuilder BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
     {
         EmbedBuilder builder = new EmbedBuilder()
             .WithTitle(BuildTitle(deployment: deployment, stackDetails: stackDetails))
@@ -105,9 +95,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
                 : $"{deployment.Project} ({stackDetails.Value.Version}) failed to deploy";
         }
 
-        return deployment.Success
-            ? $"{deployment.Project} was deployed "
-            : $"{deployment.Project} failed to deploy";
+        return deployment.Success ? $"{deployment.Project} was deployed " : $"{deployment.Project} failed to deploy";
     }
 
     private static Uri BuildStackUrl(in Deployment deployment)
