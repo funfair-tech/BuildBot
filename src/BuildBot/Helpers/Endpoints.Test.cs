@@ -30,14 +30,9 @@ internal static partial class Endpoints
             {
                 LogPing(source: source, logger: logger);
 
-                IReadOnlyList<ServiceStatus> status = await mediator.Send(
-                    new CheckStatus(source),
-                    cancellationToken
-                );
+                IReadOnlyList<ServiceStatus> status = await mediator.Send(new CheckStatus(source), cancellationToken);
 
-                return status.All(s => s.Ok)
-                    ? Results.Ok(PingPong.Model)
-                    : Results.Conflict(status);
+                return status.All(s => s.Ok) ? Results.Ok(PingPong.Model) : Results.Conflict(status);
             }
         );
 
