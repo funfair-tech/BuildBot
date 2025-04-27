@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
@@ -32,9 +32,7 @@ public sealed class BotService : IHostedService, IDisposable
             .ToObservable()
             .Delay(InterMessageDelay)
             .Select(message =>
-                Observable.FromAsync(ct =>
-                    this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()
-                )
+                Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
             )
             .Concat()
             .Subscribe();
@@ -44,9 +42,7 @@ public sealed class BotService : IHostedService, IDisposable
             .ToObservable()
             .Delay(InterMessageDelay)
             .Select(message =>
-                Observable.FromAsync(ct =>
-                    this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask()
-                )
+                Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
             )
             .Concat()
             .Subscribe();
@@ -70,20 +66,11 @@ public sealed class BotService : IHostedService, IDisposable
 
     private ValueTask PublishMessageAsync(BotMessage message, CancellationToken cancellationToken)
     {
-        return this._bot.PublishAsync(
-            builder: message.Message,
-            cancellationToken: cancellationToken
-        );
+        return this._bot.PublishAsync(builder: message.Message, cancellationToken: cancellationToken);
     }
 
-    private ValueTask PublishMessageAsync(
-        BotReleaseMessage message,
-        CancellationToken cancellationToken
-    )
+    private ValueTask PublishMessageAsync(BotReleaseMessage message, CancellationToken cancellationToken)
     {
-        return this._bot.PublishToReleaseChannelAsync(
-            builder: message.Message,
-            cancellationToken: cancellationToken
-        );
+        return this._bot.PublishToReleaseChannelAsync(builder: message.Message, cancellationToken: cancellationToken);
     }
 }
