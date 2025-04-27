@@ -32,9 +32,7 @@ internal static class ServerStartup
 
         if (minWorker < minThreads && minIoc < minThreads)
         {
-            Console.WriteLine(
-                $"Setting min worker threads {minThreads}, Min IOC threads {minThreads}"
-            );
+            Console.WriteLine($"Setting min worker threads {minThreads}, Min IOC threads {minThreads}");
             ThreadPool.SetMinThreads(workerThreads: minThreads, completionPortThreads: minThreads);
         }
         else if (minWorker < minThreads)
@@ -44,9 +42,7 @@ internal static class ServerStartup
         }
         else if (minIoc < minThreads)
         {
-            Console.WriteLine(
-                $"Setting min worker threads {minWorker}, Min IOC threads {minThreads}"
-            );
+            Console.WriteLine($"Setting min worker threads {minWorker}, Min IOC threads {minThreads}");
             ThreadPool.SetMinThreads(workerThreads: minWorker, completionPortThreads: minThreads);
         }
 
@@ -84,10 +80,7 @@ internal static class ServerStartup
 
         builder
             .Services.ConfigureHttpJsonOptions(options =>
-                options.SerializerOptions.TypeInfoResolverChain.Insert(
-                    index: 0,
-                    item: AppSerializationContext.Default
-                )
+                options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default)
             )
             .AddDiscord(discordConfig)
             .AddCloudFormation(snsConfiguration)
@@ -98,21 +91,14 @@ internal static class ServerStartup
         return builder.Build();
     }
 
-    private static SnsNotificationOptions LoadSnsNotificationConfig(
-        IConfigurationRoot configuration
-    )
+    private static SnsNotificationOptions LoadSnsNotificationConfig(IConfigurationRoot configuration)
     {
         string topicArn = configuration["CloudFormation:TopicArn"] ?? string.Empty;
         string region = configuration["CloudFormation:Aws:Region"] ?? string.Empty;
         string accessKeyId = configuration["CloudFormation:Aws:AccessKeyId"] ?? string.Empty;
         string secretKey = configuration["CloudFormation:Aws:SecretKey"] ?? string.Empty;
 
-        return new(
-            TopicArn: topicArn,
-            Region: region,
-            AccessKey: accessKeyId,
-            SecretKey: secretKey
-        );
+        return new(TopicArn: topicArn, Region: region, AccessKey: accessKeyId, SecretKey: secretKey);
     }
 
     [SuppressMessage(
@@ -144,9 +130,7 @@ internal static class ServerStartup
             .CreateLogger();
     }
 
-    private static LoggerConfiguration WriteToDebuggerAwareOutput(
-        this LoggerConfiguration configuration
-    )
+    private static LoggerConfiguration WriteToDebuggerAwareOutput(this LoggerConfiguration configuration)
     {
         LoggerSinkConfiguration writeTo = configuration.WriteTo;
 
@@ -183,10 +167,7 @@ internal static class ServerStartup
         listenOptions.Protocols = HttpProtocols.Http2;
     }
 
-    private static void SetHttpsListenOptions(
-        ListenOptions listenOptions,
-        string configurationFiledPath
-    )
+    private static void SetHttpsListenOptions(ListenOptions listenOptions, string configurationFiledPath)
     {
         string certFile = Path.Combine(path1: configurationFiledPath, path2: "server.pfx");
 
@@ -223,11 +204,7 @@ internal static class ServerStartup
             options.Listen(
                 address: IPAddress.Any,
                 port: httpsPort,
-                configure: o =>
-                    SetHttpsListenOptions(
-                        listenOptions: o,
-                        configurationFiledPath: configurationFiledPath
-                    )
+                configure: o => SetHttpsListenOptions(listenOptions: o, configurationFiledPath: configurationFiledPath)
             );
         }
 
