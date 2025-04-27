@@ -18,11 +18,7 @@ internal static partial class Endpoints
         RouteGroupBuilder group = app.MapGroup("/github");
         group.MapPost(
             pattern: "ping",
-            handler: static async (
-                PingModel model,
-                IMediator mediator,
-                CancellationToken cancellationToken
-            ) =>
+            handler: static async (PingModel model, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 await mediator.Publish(new GithubPing(model), cancellationToken: cancellationToken);
 
@@ -32,11 +28,7 @@ internal static partial class Endpoints
 
         group.MapPost(
             pattern: "push",
-            handler: static async (
-                Push model,
-                IMediator mediator,
-                CancellationToken cancellationToken
-            ) =>
+            handler: static async (Push model, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 await mediator.Publish(new GithubPush(model), cancellationToken: cancellationToken);
 
@@ -46,16 +38,9 @@ internal static partial class Endpoints
 
         group.MapPost(
             pattern: "status",
-            handler: static async (
-                Status model,
-                IMediator mediator,
-                CancellationToken cancellationToken
-            ) =>
+            handler: static async (Status model, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                await mediator.Publish(
-                    new GithubStatus(model),
-                    cancellationToken: cancellationToken
-                );
+                await mediator.Publish(new GithubStatus(model), cancellationToken: cancellationToken);
 
                 return Results.NoContent();
             }
