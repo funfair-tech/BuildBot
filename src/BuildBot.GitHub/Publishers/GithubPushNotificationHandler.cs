@@ -28,10 +28,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
     private readonly ILogger<GithubPushNotificationHandler> _logger;
     private readonly IMediator _mediator;
 
-    public GithubPushNotificationHandler(
-        IMediator mediator,
-        ILogger<GithubPushNotificationHandler> logger
-    )
+    public GithubPushNotificationHandler(IMediator mediator, ILogger<GithubPushNotificationHandler> logger)
     {
         this._mediator = mediator;
         this._logger = logger;
@@ -125,9 +122,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
     {
         return new EmbedFieldBuilder()
             .WithName($"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}")
-            .WithValue(
-                $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
-            );
+            .WithValue($"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed");
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
@@ -144,8 +139,6 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
 
     private static string GetCommitString(in Push message)
     {
-        return message.Commits.Count > 1
-            ? $"{message.Commits.Count} commits"
-            : $"{message.Commits.Count} commit";
+        return message.Commits.Count > 1 ? $"{message.Commits.Count} commits" : $"{message.Commits.Count} commit";
     }
 }
