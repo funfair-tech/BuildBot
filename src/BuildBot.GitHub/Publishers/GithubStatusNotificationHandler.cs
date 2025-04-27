@@ -25,10 +25,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
     private readonly ILogger<GithubStatusNotificationHandler> _logger;
     private readonly IMediator _mediator;
 
-    public GithubStatusNotificationHandler(
-        IMediator mediator,
-        ILogger<GithubStatusNotificationHandler> logger
-    )
+    public GithubStatusNotificationHandler(IMediator mediator, ILogger<GithubStatusNotificationHandler> logger)
     {
         this._mediator = mediator;
         this._logger = logger;
@@ -46,10 +43,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
         // don't output messages for pending builds
         return IsPendingBuild(message)
             ? ValueTask.CompletedTask
-            : this._mediator.Publish(
-                new BotMessage(BuildStatusMessage(message)),
-                cancellationToken: cancellationToken
-            );
+            : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)), cancellationToken: cancellationToken);
     }
 
     private static bool IsPendingBuild(Status message)
