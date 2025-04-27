@@ -37,10 +37,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.199
 - Dependencies - Updated AWSSDK to 3.7.403.18
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.67.507
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.8.84
 - Dependencies - Updated Discord.Net to 3.17.4
 - Dependencies - Updated Credfeto.Enumeration to 1.2.80.1084
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.68.513
 ### Removed
 ### Deployment Changes
 
