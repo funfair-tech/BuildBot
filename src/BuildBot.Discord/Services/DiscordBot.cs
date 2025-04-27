@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,10 +35,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     public ServiceStatus GetStatus()
     {
-        return new ServiceStatus(
-            Name: "Discord",
-            Ok: this._client.LoginState == LoginState.LoggedIn
-        );
+        return new ServiceStatus(Name: "Discord", Ok: this._client.LoginState == LoginState.LoggedIn);
     }
 
     public async ValueTask PublishAsync(EmbedBuilder builder, CancellationToken cancellationToken)
@@ -62,14 +59,9 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         );
     }
 
-    public async ValueTask PublishToReleaseChannelAsync(
-        EmbedBuilder builder,
-        CancellationToken cancellationToken
-    )
+    public async ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken)
     {
-        SocketTextChannel? socketTextChannel = this.GetChannel(
-            this._botConfiguration.ReleaseChannel
-        );
+        SocketTextChannel? socketTextChannel = this.GetChannel(this._botConfiguration.ReleaseChannel);
 
         if (socketTextChannel is null)
         {
@@ -96,19 +88,13 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     {
         try
         {
-            this._logger.LogSendingMessage(
-                channelName: socketTextChannel.Name,
-                message: builder.Title
-            );
+            this._logger.LogSendingMessage(channelName: socketTextChannel.Name, message: builder.Title);
 
             using (socketTextChannel.EnterTypingState())
             {
                 Embed embed = IncludeStandardParameters(builder);
 
-                RestUserMessage msg = await socketTextChannel.SendMessageAsync(
-                    text: string.Empty,
-                    embed: embed
-                );
+                RestUserMessage msg = await socketTextChannel.SendMessageAsync(text: string.Empty, embed: embed);
                 this.LogSent(msg);
                 await Task.Delay(delay: TypingDelay, cancellationToken: cancellationToken);
             }
@@ -172,11 +158,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     {
         if (arg.Exception is not null)
         {
-            this._logger.LogError(
-                new(arg.Exception.HResult),
-                exception: arg.Exception,
-                message: arg.Message
-            );
+            this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
         }
         else
         {
@@ -210,19 +192,12 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     public async Task StartAsync()
     {
         // login
-        await this._client.LoginAsync(
-            tokenType: TokenType.Bot,
-            token: this._botConfiguration.Token
-        );
+        await this._client.LoginAsync(tokenType: TokenType.Bot, token: this._botConfiguration.Token);
 
         // and start
         await this._client.StartAsync();
 
-        await this._client.SetGameAsync(
-            name: "GitHub",
-            streamUrl: null,
-            type: ActivityType.Watching
-        );
+        await this._client.SetGameAsync(name: "GitHub", streamUrl: null, type: ActivityType.Watching);
     }
 
     public Task StopAsync()
