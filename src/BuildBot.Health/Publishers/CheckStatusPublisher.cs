@@ -6,8 +6,7 @@ using Mediator;
 
 namespace BuildBot.Health.Publishers;
 
-public sealed class CheckStatusPublisher
-    : ICommandHandler<CheckStatus, IReadOnlyList<ServiceStatus>>
+public sealed class CheckStatusPublisher : ICommandHandler<CheckStatus, IReadOnlyList<ServiceStatus>>
 {
     private readonly IServerStatus _serverStatus;
 
@@ -16,10 +15,7 @@ public sealed class CheckStatusPublisher
         this._serverStatus = serverStatus;
     }
 
-    public ValueTask<IReadOnlyList<ServiceStatus>> Handle(
-        CheckStatus command,
-        CancellationToken cancellationToken
-    )
+    public ValueTask<IReadOnlyList<ServiceStatus>> Handle(CheckStatus command, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(this._serverStatus.CurrentStatus());
     }
