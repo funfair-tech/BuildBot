@@ -114,20 +114,14 @@ internal static partial class Endpoints
         }
 
         await mediator.Publish(
-            new CloudFormationSubscriptionConfirmation(
-                TopicArn: message.TopicArn,
-                new(message.SubscribeUrl)
-            ),
+            new CloudFormationSubscriptionConfirmation(TopicArn: message.TopicArn, new(message.SubscribeUrl)),
             cancellationToken: cancellationToken
         );
 
         return Results.Accepted();
     }
 
-    private static async ValueTask<T> ReadJsonAsync<T>(
-        HttpRequest request,
-        CancellationToken cancellationToken
-    )
+    private static async ValueTask<T> ReadJsonAsync<T>(HttpRequest request, CancellationToken cancellationToken)
     {
         if (AppSerializationContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> typeInfo)
         {
