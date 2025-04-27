@@ -21,22 +21,10 @@ internal static partial class DiscordBotLoggingExtensions
         Level = LogLevel.Warning,
         Message = "DISCORD: {channelName}: Sending message {message}"
     )]
-    public static partial void LogSendingMessage(
-        this ILogger<DiscordBot> logger,
-        string channelName,
-        string message
-    );
+    public static partial void LogSendingMessage(this ILogger<DiscordBot> logger, string channelName, string message);
 
-    [LoggerMessage(
-        EventId = 3,
-        Level = LogLevel.Warning,
-        Message = "DISCORD: {channelName}: Sent message {message}"
-    )]
-    public static partial void LogSentMessage(
-        this ILogger<DiscordBot> logger,
-        string channelName,
-        string message
-    );
+    [LoggerMessage(EventId = 3, Level = LogLevel.Warning, Message = "DISCORD: {channelName}: Sent message {message}")]
+    public static partial void LogSentMessage(this ILogger<DiscordBot> logger, string channelName, string message);
 
     [LoggerMessage(
         EventId = 4,
