@@ -39,8 +39,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.68.513
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.9.88
 - Dependencies - Updated Credfeto.Enumeration to 1.2.81.1087
-- Dependencies - Updated AWSSDK to 4.0.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
+- Dependencies - Updated AWSSDK to 4.0.0.1
 ### Removed
 ### Deployment Changes
 
