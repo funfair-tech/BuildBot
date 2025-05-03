@@ -40,7 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated AWSSDK to 4.0.0.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.9.0.115408
-- Dependencies - Updated Meziantou.Analyzer to 2.0.200
+- Dependencies - Updated Meziantou.Analyzer to 2.0.201
 ### Removed
 ### Deployment Changes
 
