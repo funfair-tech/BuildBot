@@ -27,7 +27,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated xunit.analyzers to 1.21.0
-- Dependencies - Updated xunit.v3 to 2.0.1
 - Dependencies - Updated Microsoft.Extensions to 9.0.4
 - SDK - Updated DotNet SDK to 9.0.203
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.79.1041
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.0.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.9.0.115408
 - Dependencies - Updated Meziantou.Analyzer to 2.0.201
+- Dependencies - Updated xunit.v3 to 2.0.2
 ### Removed
 ### Deployment Changes
 
