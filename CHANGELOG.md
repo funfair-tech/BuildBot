@@ -37,10 +37,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.9.88
 - Dependencies - Updated Credfeto.Enumeration to 1.2.81.1087
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
-- Dependencies - Updated AWSSDK to 4.0.0.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.9.0.115408
 - Dependencies - Updated Meziantou.Analyzer to 2.0.201
 - Dependencies - Updated xunit.v3 to 2.0.2
+- Dependencies - Updated AWSSDK to 4.0.0.2
 ### Removed
 ### Deployment Changes
 
