@@ -27,9 +27,11 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         this._client.Log += this.LogAsync;
     }
 
-    private static EmbedAuthorBuilder Author { get; } = new EmbedAuthorBuilder().WithName("FunFair BuildBot")
-                                                                                .WithUrl("https://funfair.io")
-                                                                                .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
+    private static EmbedAuthorBuilder Author { get; } =
+        new EmbedAuthorBuilder()
+            .WithName("FunFair BuildBot")
+            .WithUrl("https://funfair.io")
+            .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
 
     public ServiceStatus GetStatus()
     {
@@ -42,12 +44,19 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
         if (socketTextChannel is null)
         {
-            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
+            this._logger.LogDiscordChannelNotFound(
+                channelName: this._botConfiguration.Channel,
+                serverName: this._botConfiguration.Server
+            );
 
             return;
         }
 
-        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
+        await this.PublishCommonAsync(
+            builder: builder,
+            socketTextChannel: socketTextChannel,
+            cancellationToken: cancellationToken
+        );
     }
 
     public async ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken)
@@ -56,15 +65,26 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
         if (socketTextChannel is null)
         {
-            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
+            this._logger.LogDiscordChannelNotFound(
+                channelName: this._botConfiguration.Channel,
+                serverName: this._botConfiguration.Server
+            );
 
             return;
         }
 
-        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
+        await this.PublishCommonAsync(
+            builder: builder,
+            socketTextChannel: socketTextChannel,
+            cancellationToken: cancellationToken
+        );
     }
 
-    private async ValueTask PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel, CancellationToken cancellationToken)
+    private async ValueTask PublishCommonAsync(
+        EmbedBuilder builder,
+        SocketTextChannel socketTextChannel,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -81,7 +101,12 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         }
         catch (Exception exception)
         {
-            this._logger.FailedToPublishMessage(channelName: this._botConfiguration.Channel, title: builder.Title, message: exception.Message, exception: exception);
+            this._logger.FailedToPublishMessage(
+                channelName: this._botConfiguration.Channel,
+                title: builder.Title,
+                message: exception.Message,
+                exception: exception
+            );
 
             throw;
         }
@@ -94,15 +119,18 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     private static Embed IncludeStandardParameters(EmbedBuilder builder)
     {
-        return builder.WithAuthor(Author)
-                      .Build();
+        return builder.WithAuthor(Author).Build();
     }
 
     private SocketTextChannel? GetChannel(string channelName)
     {
-        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g => StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server));
+        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g =>
+            StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server)
+        );
 
-        return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.OrdinalIgnoreCase.Equals(x: c.Name, y: channelName));
+        return guild?.TextChannels.FirstOrDefault(predicate: c =>
+            StringComparer.OrdinalIgnoreCase.Equals(x: c.Name, y: channelName)
+        );
     }
 
     private Task LogAsync(LogMessage arg)
