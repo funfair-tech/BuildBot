@@ -27,7 +27,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated xunit.analyzers to 1.21.0
-- SDK - Updated DotNet SDK to 9.0.203
 - Dependencies - Updated FunFair.Test.Common to 6.1.268.1269
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Discord.Net to 3.17.4
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.0.2
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.0.1124
 - Dependencies - Updated Microsoft.Extensions to 9.0.5
+- SDK - Updated DotNet SDK to 9.0.300
 ### Removed
 ### Deployment Changes
 
