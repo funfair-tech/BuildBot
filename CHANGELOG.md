@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
-- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated xunit.analyzers to 1.21.0
 - SDK - Updated DotNet SDK to 9.0.203
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.0.2
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.0.1124
 - Dependencies - Updated Microsoft.Extensions to 9.0.5
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 ### Removed
 ### Deployment Changes
 
