@@ -38,9 +38,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 9.0.300
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.12.123
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.71.550
 - Dependencies - Updated Credfeto.Enumeration to 1.2.84.1127
 - Dependencies - Updated AWSSDK to 4.0.0.4
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.72.553
 ### Removed
 ### Deployment Changes
 
