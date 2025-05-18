@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated Octopus.Client to 14.3.1732
-- Dependencies - Updated Serilog to 4.2.0
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.86.1132
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.74.557
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.15.130
+- Dependencies - Updated Serilog to 4.3.0
 ### Removed
 ### Deployment Changes
 
