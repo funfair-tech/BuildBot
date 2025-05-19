@@ -21,27 +21,19 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     public DiscordBot(DiscordBotConfiguration botConfiguration, ILogger<DiscordBot> logger)
     {
         this._logger = logger;
-        this._client = new(
-            new()
-            {
-                GatewayIntents =
-                    GatewayIntents.Guilds | GatewayIntents.GuildMessageTyping | GatewayIntents.GuildMessages,
-            }
-        );
+        this._client = new(new() { GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildMessageTyping | GatewayIntents.GuildMessages });
         this._botConfiguration = botConfiguration;
 
         this._client.Log += this.LogAsync;
     }
 
-    private static EmbedAuthorBuilder Author { get; } =
-        new EmbedAuthorBuilder()
-            .WithName("FunFair BuildBot")
-            .WithUrl("https://funfair.io")
-            .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
+    private static EmbedAuthorBuilder Author { get; } = new EmbedAuthorBuilder().WithName("FunFair BuildBot")
+                                                                                .WithUrl("https://funfair.io")
+                                                                                .WithIconUrl("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png");
 
     public ServiceStatus GetStatus()
     {
-        return new ServiceStatus(Name: "Discord", Ok: this._client.LoginState == LoginState.LoggedIn);
+        return new(Name: "Discord", this._client.LoginState == LoginState.LoggedIn);
     }
 
     public async ValueTask PublishAsync(EmbedBuilder builder, CancellationToken cancellationToken)
@@ -50,19 +42,12 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
         if (socketTextChannel is null)
         {
-            this._logger.LogDiscordChannelNotFound(
-                channelName: this._botConfiguration.Channel,
-                serverName: this._botConfiguration.Server
-            );
+            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
 
             return;
         }
 
-        await this.PublishCommonAsync(
-            builder: builder,
-            socketTextChannel: socketTextChannel,
-            cancellationToken: cancellationToken
-        );
+        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
     }
 
     public async ValueTask PublishToReleaseChannelAsync(EmbedBuilder builder, CancellationToken cancellationToken)
@@ -71,26 +56,15 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
         if (socketTextChannel is null)
         {
-            this._logger.LogDiscordChannelNotFound(
-                channelName: this._botConfiguration.Channel,
-                serverName: this._botConfiguration.Server
-            );
+            this._logger.LogDiscordChannelNotFound(channelName: this._botConfiguration.Channel, serverName: this._botConfiguration.Server);
 
             return;
         }
 
-        await this.PublishCommonAsync(
-            builder: builder,
-            socketTextChannel: socketTextChannel,
-            cancellationToken: cancellationToken
-        );
+        await this.PublishCommonAsync(builder: builder, socketTextChannel: socketTextChannel, cancellationToken: cancellationToken);
     }
 
-    private async ValueTask PublishCommonAsync(
-        EmbedBuilder builder,
-        SocketTextChannel socketTextChannel,
-        CancellationToken cancellationToken
-    )
+    private async ValueTask PublishCommonAsync(EmbedBuilder builder, SocketTextChannel socketTextChannel, CancellationToken cancellationToken)
     {
         try
         {
@@ -107,12 +81,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         }
         catch (Exception exception)
         {
-            this._logger.FailedToPublishMessage(
-                channelName: this._botConfiguration.Channel,
-                title: builder.Title,
-                message: exception.Message,
-                exception: exception
-            );
+            this._logger.FailedToPublishMessage(channelName: this._botConfiguration.Channel, title: builder.Title, message: exception.Message, exception: exception);
 
             throw;
         }
@@ -125,18 +94,15 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     private static Embed IncludeStandardParameters(EmbedBuilder builder)
     {
-        return builder.WithAuthor(Author).Build();
+        return builder.WithAuthor(Author)
+                      .Build();
     }
 
     private SocketTextChannel? GetChannel(string channelName)
     {
-        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g =>
-            StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server)
-        );
+        SocketGuild? guild = this._client.Guilds.FirstOrDefault(predicate: g => StringComparer.Ordinal.Equals(x: g.Name, y: this._botConfiguration.Server));
 
-        return guild?.TextChannels.FirstOrDefault(predicate: c =>
-            StringComparer.OrdinalIgnoreCase.Equals(x: c.Name, y: channelName)
-        );
+        return guild?.TextChannels.FirstOrDefault(predicate: c => StringComparer.OrdinalIgnoreCase.Equals(x: c.Name, y: channelName));
     }
 
     private Task LogAsync(LogMessage arg)
@@ -149,13 +115,20 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             LogSeverity.Warning => this.LogWarningAsync(arg),
             LogSeverity.Error => this.LogErrorAsync(arg),
             LogSeverity.Critical => this.LogCriticalAsync(arg),
-            _ => this.LogCriticalAsync(arg),
+            _ => this.LogCriticalAsync(arg)
         };
     }
 
     private Task LogCriticalAsync(LogMessage arg)
     {
-        this._logger.LogCritical(arg.Message);
+        if (arg.Exception is not null)
+        {
+            this._logger.DiscordCriticalError(message: arg.Message, exception: arg.Exception);
+        }
+        else
+        {
+            this._logger.DiscordCriticalError(arg.Message);
+        }
 
         return Task.CompletedTask;
     }
@@ -164,11 +137,11 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     {
         if (arg.Exception is not null)
         {
-            this._logger.LogError(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
+            this._logger.DiscordError(message: arg.Message, exception: arg.Exception);
         }
         else
         {
-            this._logger.LogError(arg.Message);
+            this._logger.DiscordError(arg.Message);
         }
 
         return Task.CompletedTask;
@@ -176,21 +149,21 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     private Task LogWarningAsync(LogMessage arg)
     {
-        this._logger.LogWarning(arg.Message);
+        this._logger.DiscordWarning(arg.Message);
 
         return Task.CompletedTask;
     }
 
     private Task LogInformationAsync(LogMessage arg)
     {
-        this._logger.LogInformation(arg.Message);
+        this._logger.DiscordInfo(arg.Message);
 
         return Task.CompletedTask;
     }
 
     private Task LogDebugAsync(LogMessage arg)
     {
-        this._logger.LogDebug(arg.Message);
+        this._logger.DiscordDebug(arg.Message);
 
         return Task.CompletedTask;
     }
