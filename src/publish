@@ -5,8 +5,6 @@ die() {
     exit 1
 }
 
-. dbenv
-
 PLATFORM=linux-x64
 OUTFOLDER="$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM"
 
