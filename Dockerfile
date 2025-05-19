@@ -1,3 +1,4 @@
+# chiseled-extra is needed over chiseled for Discord
 FROM mcr.microsoft.com/dotnet/runtime-deps:9.0-noble-chiseled-extra
 
 WORKDIR /usr/src/app
