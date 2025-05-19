@@ -464,7 +464,7 @@ runs:
         echo ">>Deploy Config Check<<"
         echo "CSPROJ_EXIST: ${{steps.check_files.outputs.CSPROJ_EXIST}}"
         echo "SLN_EXIST: ${{steps.check_files.outputs.SLN_EXIST}}"
-        echo "CLOUDFORMATION_EXIST: ${{check_files.outputs.CLOUDFORMATION_EXIST}}"
+        echo "CLOUDFORMATION_EXIST: ${{steps.check_files.outputs.CLOUDFORMATION_EXIST}}"
         echo "CLOUD_FORMATION_DEPLOY: ${{inputs.CLOUD_FORMATION_DEPLOY}}"
         echo "DOCKER_APP_NAME: ${{inputs.DOCKER_APP_NAME}}"
         echo "DEPLOY: ${{env.DEPLOY}}"
