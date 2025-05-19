@@ -453,6 +453,17 @@ runs:
         REDGATE_PAT: ${{inputs.REDGATE_PAT}}
         SQLCOMPARE_VERSION: ${{inputs.SQLCOMPARE_VERSION}}
 
+    - name: "Dotnet: Deploy Check"
+      shell: bash
+      run: |
+        echo ">>Deploy Config Check<<"
+        echo "CSPROJ_EXIST: ${{steps.check_files.outputs.CSPROJ_EXIST}}"
+        echo "SLN_EXIST: ${{steps.check_files.outputs.SLN_EXIST}}"
+        echo "CLOUDFORMATION_EXIST: ${{check_files.outputs.CLOUDFORMATION_EXIST}}"
+        echo "CLOUD_FORMATION_DEPLOY: ${{inputs.CLOUD_FORMATION_DEPLOY}}"
+        echo "DOCKER_APP_NAME: ${{inputs.DOCKER_APP_NAME}}"
+        echo "DEPLOY: ${{env.DEPLOY}}"
+
     - name: "Dotnet: Cloudformation Deploy"
       if: |-
         steps.check_files.outputs.CSPROJ_EXIST == 'true' &&
