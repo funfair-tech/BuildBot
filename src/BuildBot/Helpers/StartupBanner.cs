@@ -15,11 +15,11 @@ oooooooooo.               o8o  oooo        .o8  oooooooooo.                .
  888    `88b  888   888   888   888  888   888   888    `88b 888   888   888
  888    .88P  888   888   888   888  888   888   888    .88P 888   888   888 .
 o888bood8P'   `V88V""V8P' o888o o888o `Y8bod88P"" o888bood8P'  `Y8bod8P'   ""888""
-
-
 ";
 
         Console.WriteLine(banner);
+        Console.WriteLine();
+        Console.WriteLine();
 
         Console.WriteLine(value: "Starting version " + VersionInformation.Version + "...");
     }
