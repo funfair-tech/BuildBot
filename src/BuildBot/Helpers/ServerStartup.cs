@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -56,6 +57,10 @@ internal static class ServerStartup
         const int httpsPort = 0;
         const int h2Port = 0;
         WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
+
+        Console.WriteLine("Validating cultures are working....");
+        CultureInfo culture = CultureInfo.GetCultureInfo("en-US");
+        Console.WriteLine($"Test Culture: {culture.Name}");
 
         string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
 

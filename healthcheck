@@ -1,0 +1,11 @@
+#! /bin/sh
+
+# check if the node process is running
+CHECK_TASK_PID=$(pidof BuildBot)
+if [ -z "$CHECK_TASK_PID" ]; then
+  exit 1
+fi
+
+# /usr/src/app/BuildBot --health-check http://127.0.0.1:8080/ping?source=docker
+
+exit 0
