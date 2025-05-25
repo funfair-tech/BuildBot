@@ -88,7 +88,7 @@
     <ProjectReference Include="..\BuildBot.Health\BuildBot.Health.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.19.150" />
+    <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.20.152" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.5" />
     <PackageReference Include="Serilog" Version="4.3.0" />
