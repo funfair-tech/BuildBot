@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
-- Dependencies - Updated Serilog.Extensions.Logging to 9.0.1
 - Dependencies - Updated xunit.analyzers to 1.21.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.268.1269
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.100.1181
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.88.603
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.29.174
+- Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
 ### Removed
 ### Deployment Changes
 
