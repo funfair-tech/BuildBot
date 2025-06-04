@@ -38,9 +38,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.10.0.116381
 - Dependencies - Updated AWSSDK to 4.0.0.5
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.90.612
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.31.183
 - Dependencies - Updated Credfeto.Enumeration to 1.2.103.1193
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.91.615
 ### Removed
 ### Deployment Changes
 
