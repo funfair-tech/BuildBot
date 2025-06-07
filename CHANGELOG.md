@@ -28,7 +28,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.17.4
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Meziantou.Analyzer to 2.0.201
-- Dependencies - Updated xunit.v3 to 2.0.2
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.0.1124
 - Dependencies - Updated Microsoft.Extensions to 9.0.5
 - SDK - Updated DotNet SDK to 9.0.300
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.93.624
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.34.195
 - Dependencies - Updated xunit.analyzers to 1.22.0
+- Dependencies - Updated xunit.v3 to 2.0.3
 ### Removed
 ### Deployment Changes
 
