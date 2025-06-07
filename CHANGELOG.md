@@ -36,11 +36,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.33.188
 - Dependencies - Updated AWSSDK to 4.0.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.11.0.117924
 - Dependencies - Updated Credfeto.Enumeration to 1.2.105.1202
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.93.624
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.34.195
 ### Removed
 ### Deployment Changes
 
