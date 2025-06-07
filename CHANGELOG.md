@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
-- Dependencies - Updated xunit.analyzers to 1.21.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.268.1269
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Discord.Net to 3.17.4
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.105.1202
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.93.624
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.34.195
+- Dependencies - Updated xunit.analyzers to 1.22.0
 ### Removed
 ### Deployment Changes
 
