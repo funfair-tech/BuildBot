@@ -34,13 +34,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
-- Dependencies - Updated AWSSDK to 4.0.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.11.0.117924
 - Dependencies - Updated xunit.analyzers to 1.22.0
 - Dependencies - Updated xunit.v3 to 2.0.3
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.97.634
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.38.205
 - Dependencies - Updated Credfeto.Enumeration to 1.2.110.1215
+- Dependencies - Updated AWSSDK to 4.0.1.1
 ### Removed
 ### Deployment Changes
 
