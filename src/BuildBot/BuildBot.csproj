@@ -86,6 +86,7 @@
     <ProjectReference Include="..\BuildBot.GitHub\BuildBot.GitHub.csproj" />
     <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
     <ProjectReference Include="..\BuildBot.Health\BuildBot.Health.csproj" />
+    <ProjectReference Include="..\BuildBot.Watchtower\BuildBot.Watchtower.csproj"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.42.223" />
