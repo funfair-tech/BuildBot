@@ -62,6 +62,10 @@
    color: "0e8a16"
    description: "Changes in $BuildBot.Tests project"
 
+ - name: "buildbot-watchtower"
+   color: "96f7d2"
+   description: "Changes in $BuildBot.Watchtower project"
+
  - name: "C#"
    color: "db6baa"
    description: "C# Source Files"
