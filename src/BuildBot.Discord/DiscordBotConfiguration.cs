@@ -1,5 +1,8 @@
+using System.Diagnostics;
+
 namespace BuildBot.Discord;
 
+[DebuggerDisplay("Server: {Server}, Channel: {Channel}, Release Channel: {ReleaseChannel}")]
 public sealed class DiscordBotConfiguration
 {
     public DiscordBotConfiguration(string token, string server, string channel, string releaseChannel)
