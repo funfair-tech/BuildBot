@@ -16,13 +16,15 @@ internal static partial class Endpoints
         Console.WriteLine("Configuring Watchtower Endpoint");
 
         RouteGroupBuilder group = app.MapGroup("/watchtower");
-        group.MapPost(pattern: "deploy",
-                      handler: static async (WatchTowerMessage model, IMediator mediator, CancellationToken cancellationToken) =>
-                               {
-                                   await mediator.Publish(new WatchTowerPublishMessage(model), cancellationToken: cancellationToken);
+        group.MapPost(
+            pattern: "deploy",
+            handler: static async (WatchTowerMessage model, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Publish(new WatchTowerPublishMessage(model), cancellationToken: cancellationToken);
 
-                                   return Results.NoContent();
-                               });
+                return Results.NoContent();
+            }
+        );
 
         return app;
     }
