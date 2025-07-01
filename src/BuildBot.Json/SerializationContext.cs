@@ -9,12 +9,18 @@ using BuildBot.ServiceModel.Watchtower;
 
 namespace BuildBot.Json;
 
-[SuppressMessage(category: "ReSharper", checkId: "PartialTypeWithSinglePart", Justification = "Required for JsonSerializerContext")]
-[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization | JsonSourceGenerationMode.Metadata,
-                             PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-                             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                             WriteIndented = false,
-                             IncludeFields = false)]
+[SuppressMessage(
+    category: "ReSharper",
+    checkId: "PartialTypeWithSinglePart",
+    Justification = "Required for JsonSerializerContext"
+)]
+[JsonSourceGenerationOptions(
+    GenerationMode = JsonSourceGenerationMode.Serialization | JsonSourceGenerationMode.Metadata,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    WriteIndented = false,
+    IncludeFields = false
+)]
 [JsonSerializable(typeof(Author))]
 [JsonSerializable(typeof(Branch))]
 [JsonSerializable(typeof(Commit))]
