@@ -23,7 +23,6 @@ public sealed class WatchTowerPublishMessageNotificationHandler : INotificationH
 
     private static EmbedBuilder BuildMessage(WatchTowerPublishMessage notification)
     {
-        return new EmbedBuilder().WithTitle(notification.Model.Title)
-                                 .WithDescription(notification.Model.Message);
+        return new EmbedBuilder().WithTitle(notification.Model.Title).WithDescription(notification.Model.Message);
     }
 }
