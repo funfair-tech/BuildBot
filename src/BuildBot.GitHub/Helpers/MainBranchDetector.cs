@@ -5,7 +5,10 @@ namespace BuildBot.GitHub.Helpers;
 
 public static class MainBranchDetector
 {
-    private static readonly SearchValues<string> MainBranches = SearchValues.Create(["main", "master"], comparisonType: StringComparison.Ordinal);
+    private static readonly SearchValues<string> MainBranches = SearchValues.Create(
+        ["main", "master"],
+        comparisonType: StringComparison.Ordinal
+    );
 
     public static bool IsRepoMainBranch(string branch)
     {
