@@ -26,6 +26,9 @@ public sealed class PackageUpdateDetectorTests : TestBase
     [InlineData("Identifying [Dependencies] too")]
     public void ShouldNotBeConsideredAPackageUpdate(string commitMessage)
     {
-        Assert.False(PackageUpdateDetector.IsPackageUpdate(commitMessage), userMessage: "Should not be a package update");
+        Assert.False(
+            PackageUpdateDetector.IsPackageUpdate(commitMessage),
+            userMessage: "Should not be a package update"
+        );
     }
 }
