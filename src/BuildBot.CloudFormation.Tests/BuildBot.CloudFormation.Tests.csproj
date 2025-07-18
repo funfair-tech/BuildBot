@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BuildBot.CloudFormation\BuildBot.CloudFormation.csproj" />
-    <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FunFair.Test.Common" Version="6.1.268.1269" />
