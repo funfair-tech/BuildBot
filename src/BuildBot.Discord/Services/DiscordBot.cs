@@ -82,6 +82,8 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         catch (Exception exception)
         {
             this._logger.FailedToPublishMessage(channelName: this._botConfiguration.Channel, title: builder.Title, message: exception.Message, exception: exception);
+
+            throw;
         }
     }
 
