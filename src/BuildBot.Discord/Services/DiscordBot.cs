@@ -18,6 +18,8 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     private readonly DiscordSocketClient _client;
     private readonly ILogger<DiscordBot> _logger;
 
+    private readonly SemaphoreSlim _semaphore = new(1);
+
     public DiscordBot(DiscordBotConfiguration botConfiguration, ILogger<DiscordBot> logger)
     {
         this._logger = logger;
@@ -83,7 +85,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         {
             this._logger.FailedToPublishMessage(channelName: this._botConfiguration.Channel, title: builder.Title, message: exception.Message, exception: exception);
 
-            throw;
+            await this.ReconnectAsync(CancellationToken.None);
         }
     }
 
@@ -115,7 +117,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             LogSeverity.Warning => this.LogWarningAsync(arg),
             LogSeverity.Error => this.LogErrorAsync(arg),
             LogSeverity.Critical => this.LogCriticalAsync(arg),
-            _ => this.LogCriticalAsync(arg),
+            _ => this.LogCriticalAsync(arg)
         };
     }
 
@@ -183,5 +185,33 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
     {
         // and logout
         return this._client.LogoutAsync();
+    }
+
+    private async ValueTask ReconnectAsync(CancellationToken cancellationToken)
+    {
+        await this._semaphore.WaitAsync(cancellationToken);
+
+        try
+        {
+            if (this._client.LoginState == LoginState.LoggedIn)
+            {
+                await this._client.LogoutAsync();
+                await this._client.StopAsync();
+            }
+
+            await this._client.LoginAsync(tokenType: TokenType.Bot, token: this._botConfiguration.Token);
+
+            await this._client.StartAsync();
+
+            await this._client.SetGameAsync(name: "GitHub", streamUrl: null, type: ActivityType.Watching);
+        }
+        catch (Exception exception)
+        {
+            this._logger.DiscordError(message: "Failed to reconnect", exception: exception);
+        }
+        finally
+        {
+            this._semaphore.Release();
+        }
     }
 }
