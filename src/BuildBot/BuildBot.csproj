@@ -18,7 +18,6 @@
     <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
     <ImplicitUsings>disable</ImplicitUsings>
-    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
     <InvariantGlobalization>false</InvariantGlobalization>
     <IsPackable>false</IsPackable>
     <IsPublishable>true</IsPublishable>
