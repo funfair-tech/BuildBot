@@ -20,21 +20,20 @@ namespace BuildBot.ServiceModel.CloudFormation;
  */
 public sealed class SnsMessage
 {
+    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "Serialisation model")]
     [JsonConstructor]
-    public SnsMessage(
-        string type,
-        string messageId,
-        string? token,
-        string topicArn,
-        string subject,
-        string message,
-        DateTime timestamp,
-        string signatureVersion,
-        string signature,
-        string? signingCertUrl,
-        string? subscribeUrl,
-        string? unsubscribeUrl
-    )
+    public SnsMessage(string type,
+                      string messageId,
+                      string? token,
+                      string topicArn,
+                      string subject,
+                      string message,
+                      DateTime timestamp,
+                      string signatureVersion,
+                      string signature,
+                      string? signingCertUrl,
+                      string? subscribeUrl,
+                      string? unsubscribeUrl)
     {
         this.Type = type;
         this.MessageId = messageId;
@@ -76,27 +75,15 @@ public sealed class SnsMessage
     [JsonPropertyName("Signature")]
     public string Signature { get; }
 
-    [SuppressMessage(
-        category: "Microsoft.Naming",
-        checkId: "CA1056: Uri properties should not be strings",
-        Justification = "AWS SNS URL"
-    )]
+    [SuppressMessage(category: "Microsoft.Naming", checkId: "CA1056: Uri properties should not be strings", Justification = "AWS SNS URL")]
     [JsonPropertyName("SigningCertURL")]
     public string? SigningCertUrl { get; }
 
-    [SuppressMessage(
-        category: "Microsoft.Naming",
-        checkId: "CA1056: Uri properties should not be strings",
-        Justification = "AWS SNS URL"
-    )]
+    [SuppressMessage(category: "Microsoft.Naming", checkId: "CA1056: Uri properties should not be strings", Justification = "AWS SNS URL")]
     [JsonPropertyName("SubscribeURL")]
     public string? SubscribeUrl { get; }
 
-    [SuppressMessage(
-        category: "Microsoft.Naming",
-        checkId: "CA1056: Uri properties should not be strings",
-        Justification = "AWS SNS URL"
-    )]
+    [SuppressMessage(category: "Microsoft.Naming", checkId: "CA1056: Uri properties should not be strings", Justification = "AWS SNS URL")]
     [JsonPropertyName("UnsubscribeURL")]
     public string? UnsubscribeUrl { get; }
 }

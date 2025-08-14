@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ public sealed class AwsCloudFormation : IAwsCloudFormation
     private readonly ILogger<AwsCloudFormation> _logger;
     private readonly SnsNotificationOptions _options;
 
+    [SuppressMessage(category: "Roslynator.Analyzers", checkId: "RCS1231: Make parameter ref read-only.", Justification = "DI")]
     public AwsCloudFormation(SnsNotificationOptions options, ILogger<AwsCloudFormation> logger)
     {
         this._options = options;
@@ -28,26 +30,15 @@ public sealed class AwsCloudFormation : IAwsCloudFormation
         this._credentials = new(accessKey: this._options.AccessKey, secretKey: this._options.SecretKey);
     }
 
-    public async ValueTask<StackDetails?> GetStackDetailsAsync(
-        Deployment deployment,
-        CancellationToken cancellationToken
-    )
+    public async ValueTask<StackDetails?> GetStackDetailsAsync(Deployment deployment, CancellationToken cancellationToken)
     {
         try
         {
-            using (
-                AmazonCloudFormationClient cloudFormationClient = new(
-                    credentials: this._credentials,
-                    region: this._endpoint
-                )
-            )
+            using (AmazonCloudFormationClient cloudFormationClient = new(credentials: this._credentials, region: this._endpoint))
             {
                 DescribeStacksRequest request = new() { StackName = deployment.StackName };
 
-                DescribeStacksResponse? result = await cloudFormationClient.DescribeStacksAsync(
-                    request: request,
-                    cancellationToken: cancellationToken
-                );
+                DescribeStacksResponse? result = await cloudFormationClient.DescribeStacksAsync(request: request, cancellationToken: cancellationToken);
 
                 if (result is null)
                 {

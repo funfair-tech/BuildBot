@@ -17,35 +17,27 @@ public sealed class BotService : IHostedService, IDisposable
     private readonly IDisposable _messageSubscription;
     private readonly IDisposable _releaseMessageSubscription;
 
-    public BotService(
-        DiscordBot bot,
-        IMessageChannel<BotMessage> botMessageChannel,
-        IMessageChannel<BotReleaseMessage> botReleaseMessageChannel
-    )
+    public BotService(DiscordBot bot, IMessageChannel<BotMessage> botMessageChannel, IMessageChannel<BotReleaseMessage> botReleaseMessageChannel)
     {
         this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
         this._botMessageChannel = botMessageChannel;
         this._botReleaseMessageChannel = botReleaseMessageChannel;
 
-        this._messageSubscription = this
-            ._botMessageChannel.ReadAllAsync(CancellationToken.None)
-            .ToObservable()
-            .Delay(InterMessageDelay)
-            .Select(message =>
-                Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
-            )
-            .Concat()
-            .Subscribe();
+        this._messageSubscription = this._botMessageChannel.ReadAllAsync(CancellationToken.None)
+                                        .ToObservable()
+                                        .Delay(InterMessageDelay)
+                                        .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct)
+                                                                                          .AsTask()))
+                                        .Concat()
+                                        .Subscribe();
 
-        this._releaseMessageSubscription = this
-            ._botReleaseMessageChannel.ReadAllAsync(CancellationToken.None)
-            .ToObservable()
-            .Delay(InterMessageDelay)
-            .Select(message =>
-                Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
-            )
-            .Concat()
-            .Subscribe();
+        this._releaseMessageSubscription = this._botReleaseMessageChannel.ReadAllAsync(CancellationToken.None)
+                                               .ToObservable()
+                                               .Delay(InterMessageDelay)
+                                               .Select(message => Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct)
+                                                                                                 .AsTask()))
+                                               .Concat()
+                                               .Subscribe();
     }
 
     public void Dispose()
@@ -64,12 +56,12 @@ public sealed class BotService : IHostedService, IDisposable
         return this._bot.StopAsync();
     }
 
-    private ValueTask PublishMessageAsync(BotMessage message, CancellationToken cancellationToken)
+    private ValueTask PublishMessageAsync(BotMessage message, in CancellationToken cancellationToken)
     {
         return this._bot.PublishAsync(builder: message.Message, cancellationToken: cancellationToken);
     }
 
-    private ValueTask PublishMessageAsync(BotReleaseMessage message, CancellationToken cancellationToken)
+    private ValueTask PublishMessageAsync(BotReleaseMessage message, in CancellationToken cancellationToken)
     {
         return this._bot.PublishToReleaseChannelAsync(builder: message.Message, cancellationToken: cancellationToken);
     }

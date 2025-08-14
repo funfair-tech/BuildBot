@@ -38,7 +38,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
         return this.PublishAsync(message: notification.Model, cancellationToken: cancellationToken);
     }
 
-    private ValueTask PublishAsync(Status message, CancellationToken cancellationToken)
+    private ValueTask PublishAsync(in Status message, in CancellationToken cancellationToken)
     {
         // don't output messages for pending builds
         return IsPendingBuild(message)
@@ -46,7 +46,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
             : this._mediator.Publish(new BotMessage(BuildStatusMessage(message)), cancellationToken: cancellationToken);
     }
 
-    private static bool IsPendingBuild(Status message)
+    private static bool IsPendingBuild(in Status message)
     {
         return StringComparer.OrdinalIgnoreCase.Equals(x: message.State, y: "pending");
     }
@@ -55,14 +55,11 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
     {
         Branch lastBranch = message.Branches[^1];
 
-        return new EmbedBuilder()
-            .WithTitle(
-                $"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch.Name})"
-            )
-            .WithUrl(message.TargetUrl)
-            .WithDescription($"Built at {message.StatusCommit.Sha}")
-            .WithColor(GetEmbedColor(message))
-            .WithFields(GetFields(message));
+        return new EmbedBuilder().WithTitle($"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch.Name})")
+                                 .WithUrl(message.TargetUrl)
+                                 .WithDescription($"Built at {message.StatusCommit.Sha}")
+                                 .WithColor(GetEmbedColor(message))
+                                 .WithFields(GetFields(message));
     }
 
     private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Status message)
@@ -70,26 +67,24 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
         return [AddHeadCommitEmbed(message.StatusCommit), AddBranchEmbed(message)];
     }
 
-    private static EmbedFieldBuilder AddBranchEmbed(Status message)
+    private static EmbedFieldBuilder AddBranchEmbed(in Status message)
     {
-        return new EmbedFieldBuilder()
-            .WithName("Branch")
-            .WithValue(message.Branches.Select(static b => b.Name).FirstOrDefault());
+        return new EmbedFieldBuilder().WithName("Branch")
+                                      .WithValue(message.Branches.Select(static b => b.Name)
+                                                        .FirstOrDefault());
     }
 
-    private static EmbedFieldBuilder AddHeadCommitEmbed(StatusCommit statusCommit)
+    private static EmbedFieldBuilder AddHeadCommitEmbed(in StatusCommit statusCommit)
     {
-        return new EmbedFieldBuilder()
-            .WithName("Head commit")
-            .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
+        return new EmbedFieldBuilder().WithName("Head commit")
+                                      .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
     }
 
     private static Color GetEmbedColor(Status message)
     {
-        return ColourMappings
-            .Where(mapping => mapping.IsMatch(message))
-            .Select(mapping => mapping.Colour)
-            .FirstOrDefault(Color.Default);
+        return ColourMappings.Where(mapping => mapping.IsMatch(message))
+                             .Select(mapping => mapping.Colour)
+                             .FirstOrDefault(Color.Default);
     }
 
     [DebuggerDisplay("{State} => {Colour}")]
