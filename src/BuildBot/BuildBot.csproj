@@ -44,8 +44,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseSystemResourceKeys>true</UseSystemResourceKeys>
     <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
-    <WarningsAsErrors />
     <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+    <WarningsAsErrors />
   </PropertyGroup>
   <Import Project="$(SolutionDir)FunFair.props" />
   <ItemGroup>
@@ -86,7 +86,7 @@
     <ProjectReference Include="..\BuildBot.GitHub\BuildBot.GitHub.csproj" />
     <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
     <ProjectReference Include="..\BuildBot.Health\BuildBot.Health.csproj" />
-    <ProjectReference Include="..\BuildBot.Watchtower\BuildBot.Watchtower.csproj"/>
+    <ProjectReference Include="..\BuildBot.Watchtower\BuildBot.Watchtower.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.42.223" />
@@ -109,12 +109,12 @@
     <PackageReference Include="FunFair.CodeAnalysis" Version="7.1.0.1124" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Mediator.SourceGenerator" Version="2.1.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Meziantou.Analyzer" Version="2.0.202" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.0" PrivateAssets="All" ExcludeAssets="runtime" Condition="$(EnableSbom)=='True'"/>
+    <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.0" PrivateAssets="All" ExcludeAssets="runtime" Condition="$(EnableSbom)=='True'" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6581" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Philips.CodeAnalysis.MaintainabilityAnalyzers" Version="1.5.0" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1" PrivateAssets="All" ExcludeAssets="runtime"/>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.11" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="10.11.0.117924" PrivateAssets="All" ExcludeAssets="runtime" />
