@@ -6,7 +6,10 @@ namespace BuildBot.GitHub.Helpers;
 
 public static class PackageUpdateDetector
 {
-    private static readonly SearchValues<string> PackageUpdatePrefixes = SearchValues.Create(["FF-1429", "[FF-1429]", "Dependencies", "[Dependencies]"], comparisonType: StringComparison.Ordinal);
+    private static readonly SearchValues<string> PackageUpdatePrefixes = SearchValues.Create(
+        ["FF-1429", "[FF-1429]", "Dependencies", "[Dependencies]"],
+        comparisonType: StringComparison.Ordinal
+    );
 
     public static bool IsPackageUpdate(in Commit c)
     {
