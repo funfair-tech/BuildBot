@@ -18,21 +18,21 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
     private const string RESOURCE_STATUS = "ResourceStatus";
 
     private static readonly Dictionary<string, bool?> Statuses = new(StringComparer.Ordinal)
-                                                                 {
-                                                                     ["CREATE_COMPLETE"] = true,
-                                                                     ["CREATE_FAILED"] = false,
-                                                                     ["DELETE_COMPLETE"] = true,
-                                                                     ["DELETE_FAILED"] = false,
-                                                                     ["ROLLBACK_COMPLETE"] = false,
-                                                                     ["ROLLBACK_IN_PROGRESS"] = false,
-                                                                     ["ROLLBACK_FAILED"] = false,
-                                                                     ["UPDATE_COMPLETE"] = true,
-                                                                     ["UPDATE_IN_PROGRESS"] = null,
-                                                                     ["UPDATE_COMPLETE_CLEANUP_IN_PROGRESS"] = null,
-                                                                     ["UPDATE_ROLLBACK_COMPLETE"] = false,
-                                                                     ["UPDATE_ROLLBACK_FAILED"] = false,
-                                                                     ["UPDATE_ROLLBACK_IN_PROGRESS"] = false
-                                                                 };
+    {
+        ["CREATE_COMPLETE"] = true,
+        ["CREATE_FAILED"] = false,
+        ["DELETE_COMPLETE"] = true,
+        ["DELETE_FAILED"] = false,
+        ["ROLLBACK_COMPLETE"] = false,
+        ["ROLLBACK_IN_PROGRESS"] = false,
+        ["ROLLBACK_FAILED"] = false,
+        ["UPDATE_COMPLETE"] = true,
+        ["UPDATE_IN_PROGRESS"] = null,
+        ["UPDATE_COMPLETE_CLEANUP_IN_PROGRESS"] = null,
+        ["UPDATE_ROLLBACK_COMPLETE"] = false,
+        ["UPDATE_ROLLBACK_FAILED"] = false,
+        ["UPDATE_ROLLBACK_IN_PROGRESS"] = false,
+    };
 
     private readonly ILogger<CloudFormationDeploymentExtractor> _logger;
 
@@ -92,7 +92,14 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
             return null;
         }
 
-        return this.CreateDeployment(stackName: stackName, project: project, arn: arn, status: status, success: success.Value, stackId: stackId);
+        return this.CreateDeployment(
+            stackName: stackName,
+            project: project,
+            arn: arn,
+            status: status,
+            success: success.Value,
+            stackId: stackId
+        );
     }
 
     private Deployment? DeploymentNoResourceStatusId()
@@ -130,11 +137,25 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         return null;
     }
 
-    private Deployment? CreateDeployment(string stackName, string project, string arn, string status, bool success, string stackId)
+    private Deployment? CreateDeployment(
+        string stackName,
+        string project,
+        string arn,
+        string status,
+        bool success,
+        string stackId
+    )
     {
         this.LogConfiguration(stackName: stackName, project: project, arn: arn, status: status, success: success);
 
-        return new Deployment(StackName: stackName, Project: project, Arn: arn, Status: status, Success: success, StackId: stackId);
+        return new Deployment(
+            StackName: stackName,
+            Project: project,
+            Arn: arn,
+            Status: status,
+            Success: success,
+            StackId: stackId
+        );
     }
 
     private void LogConfiguration(string stackName, string project, string arn, string status, bool success)
@@ -145,7 +166,11 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger.ResourceStatus(status: status, success: success);
     }
 
-    [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make the method static", Justification = "Logging method needs to be an instance method")]
+    [SuppressMessage(
+        category: "codecracker.CSharp",
+        checkId: "CC0091: Make the method static",
+        Justification = "Logging method needs to be an instance method"
+    )]
     [Conditional("DEBUG")]
     private void DumpAllProperties(in CloudFormationMessageReceived notification)
     {
@@ -157,6 +182,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
 
     private static bool IsMatching(Dictionary<string, string> properties, string key, string value)
     {
-        return properties.TryGetValue(key: key, out string? propertyValue) && StringComparer.Ordinal.Equals(x: propertyValue, y: value);
+        return properties.TryGetValue(key: key, out string? propertyValue)
+            && StringComparer.Ordinal.Equals(x: propertyValue, y: value);
     }
 }
