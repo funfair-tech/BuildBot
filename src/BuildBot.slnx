@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Config/">
+    <File Path="../CHANGELOG.md" />
+    <File Path="../cloudformation.json" />
+    <File Path="../Dockerfile" />
+    <File Path="../healthcheck" />
+    <File Path="../README.md" />
+    <File Path="CodeAnalysis.ruleset" />
+    <File Path="FunFair.props" />
+    <File Path="global.json" />
+    <File Path="publish" />
+  </Folder>
+  <Project Path="BuildBot.CloudFormation.Tests/BuildBot.CloudFormation.Tests.csproj" />
+  <Project Path="BuildBot.CloudFormation/BuildBot.CloudFormation.csproj" />
+  <Project Path="BuildBot.Discord/BuildBot.Discord.csproj" />
+  <Project Path="BuildBot.GitHub.Tests/BuildBot.GitHub.Tests.csproj" />
+  <Project Path="BuildBot.GitHub/BuildBot.GitHub.csproj" />
+  <Project Path="BuildBot.Health/BuildBot.Health.csproj" />
+  <Project Path="BuildBot.Json/BuildBot.Json.csproj" />
+  <Project Path="BuildBot.ServiceModel/BuildBot.ServiceModel.csproj" />
+  <Project Path="BuildBot.Tests/BuildBot.Tests.csproj" />
+  <Project Path="BuildBot.Watchtower/BuildBot.Watchtower.csproj" />
+  <Project Path="BuildBot/BuildBot.csproj" />
+</Solution>
