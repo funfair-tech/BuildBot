@@ -22,7 +22,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
-- Dependencies - Updated Roslynator.Analyzers to 4.13.1
 - Dependencies - Updated FunFair.Test.Common to 6.1.268.1269
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Discord.Net to 3.17.4
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.224
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.2
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
+- Dependencies - Updated Roslynator.Analyzers to 4.14.1
 ### Removed
 ### Deployment Changes
 
