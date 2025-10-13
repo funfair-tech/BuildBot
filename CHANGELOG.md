@@ -29,7 +29,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
-- Dependencies - Updated xunit.v3 to 2.0.3
 - Dependencies - Updated Microsoft.Extensions to 9.0.6
 - SDK - Updated DotNet SDK to 9.0.301
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.42.223
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.15.0.120848
 - Dependencies - Updated xunit.analyzers to 1.24.0
+- Dependencies - Updated xunit.v3 to 3.1.0
 ### Removed
 ### Deployment Changes
 
