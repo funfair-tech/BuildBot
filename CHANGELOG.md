@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.24.1452
-- Dependencies - Updated Meziantou.Analyzer to 2.0.224
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.2
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.4.2
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.53.355
 - Dependencies - Updated Discord.Net to 3.18.0
+- Dependencies - Updated Meziantou.Analyzer to 2.0.225
 ### Removed
 ### Deployment Changes
 
