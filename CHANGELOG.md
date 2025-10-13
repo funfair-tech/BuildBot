@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.268.1269
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
-- Dependencies - Updated Discord.Net to 3.17.4
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.1.0
 - Dependencies - Updated AWSSDK to 4.0.4.2
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.53.355
+- Dependencies - Updated Discord.Net to 3.18.0
 ### Removed
 ### Deployment Changes
 
