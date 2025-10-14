@@ -43,6 +43,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.225
 - Dependencies - Updated FunFair.Test.Common to 6.2.0.1690
+- Dependencies - Updated Mediator to 3.0.1
 ### Removed
 ### Deployment Changes
 
