@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Octopus.Client to 14.3.1732
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.13.0
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
@@ -44,6 +43,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.0.1690
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Microsoft.Extensions to 9.0.9
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.0
 ### Removed
 ### Deployment Changes
 
