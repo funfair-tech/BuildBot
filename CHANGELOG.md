@@ -39,11 +39,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.53.355
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
-- Dependencies - Updated Microsoft.Extensions to 9.0.9
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.227
 - Dependencies - Updated AWSSDK to 4.0.4.3
 - Dependencies - Updated FunFair.Test.Common to 6.2.1.1768
+- Dependencies - Updated Microsoft.Extensions to 9.0.10
 ### Removed
 ### Deployment Changes
 
