@@ -43,7 +43,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Microsoft.Extensions to 9.0.9
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.226
+- Dependencies - Updated Meziantou.Analyzer to 2.0.227
 ### Removed
 ### Deployment Changes
 
