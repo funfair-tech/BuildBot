@@ -29,7 +29,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 9.0.301
 - Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
-- Dependencies - Updated FunFair.CodeAnalysis to 7.1.24.1452
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.2
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
@@ -44,6 +43,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.4.3
 - Dependencies - Updated FunFair.Test.Common to 6.2.1.1768
 - Dependencies - Updated Microsoft.Extensions to 9.0.10
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.25.1545
 ### Removed
 ### Deployment Changes
 
