@@ -35,7 +35,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.15.0.120848
 - Dependencies - Updated xunit.analyzers to 1.24.0
 - Dependencies - Updated xunit.v3 to 3.1.0
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.53.355
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.0
@@ -44,6 +43,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.2.1777
 - Dependencies - Updated AWSSDK to 4.0.5.1
 - Dependencies - Updated Meziantou.Analyzer to 2.0.238
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.55.463
 ### Removed
 ### Deployment Changes
 
