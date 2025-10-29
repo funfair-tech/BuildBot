@@ -41,7 +41,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger = logger;
     }
 
-    [SuppressMessage("Meziantou.Analyzer", "MA0051: Method is too long", Justification = "To Refactor")]
+    
     public Deployment? ExtractDeploymentProperties(in CloudFormationMessageReceived notification)
     {
         this.DumpAllProperties(notification);
