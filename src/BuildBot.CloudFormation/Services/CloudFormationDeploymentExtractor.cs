@@ -41,7 +41,6 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger = logger;
     }
 
-    
     public Deployment? ExtractDeploymentProperties(in CloudFormationMessageReceived notification)
     {
         this.DumpAllProperties(notification);
