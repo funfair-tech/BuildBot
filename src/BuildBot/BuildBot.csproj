@@ -47,7 +47,7 @@
     <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
     <WarningsAsErrors />
   </PropertyGroup>
-  <Import Project="$(SolutionDir)FunFair.props" />
+  <Import Project="$(SolutionDir)FunFair.props" Condition="Exists('$(SolutionDir)FunFair.props')"/>
   <ItemGroup>
     <Content Update="appsettings-local.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
