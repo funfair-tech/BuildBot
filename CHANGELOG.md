@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
-- SDK - Updated DotNet SDK to 9.0.301
 - Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.2
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.0
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Meziantou.Analyzer to 2.0.250
+- SDK - Updated DotNet SDK to 10.0.100
 ### Removed
 ### Deployment Changes
 
