@@ -28,7 +28,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
 - Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
-- Dependencies - Updated Microsoft.Sbom.Targets to 4.1.2
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.15.0.120848
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - SDK - Updated DotNet SDK to 10.0.100
 - Dependencies - Updated Meziantou.Analyzer to 2.0.252
+- Dependencies - Updated Microsoft.Sbom.Targets to 4.1.3
 ### Removed
 ### Deployment Changes
 
