@@ -43,8 +43,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.25.0
 - Dependencies - Updated xunit.v3 to 3.2.0
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
-- Dependencies - Updated Meziantou.Analyzer to 2.0.250
 - SDK - Updated DotNet SDK to 10.0.100
+- Dependencies - Updated Meziantou.Analyzer to 2.0.252
 ### Removed
 ### Deployment Changes
 
