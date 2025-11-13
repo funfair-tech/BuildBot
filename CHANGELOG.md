@@ -34,7 +34,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.0
-- Dependencies - Updated Microsoft.Extensions to 9.0.10
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.25.1550
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.55.463
 - Dependencies - Updated FunFair.Test.Common to 6.2.3.1786
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.252
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.3
 - Dependencies - Updated AWSSDK to 4.0.5.4
+- Dependencies - Updated Microsoft.Extensions to 10.0.0
 ### Removed
 ### Deployment Changes
 
