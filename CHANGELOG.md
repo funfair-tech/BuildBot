@@ -43,8 +43,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.252
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.3
 - Dependencies - Updated AWSSDK to 4.0.5.4
-- Dependencies - Updated Microsoft.Extensions to 10.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
+- Dependencies - Updated Microsoft.Extensions to 10.0.0
 ### Removed
 ### Deployment Changes
 
