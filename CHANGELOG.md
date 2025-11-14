@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
-- Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.5.4
 - Dependencies - Updated Microsoft.Extensions to 10.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
+- Dependencies - Updated Credfeto.Enumeration to 1.2.131.1523
 ### Removed
 ### Deployment Changes
 
