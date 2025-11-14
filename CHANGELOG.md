@@ -37,7 +37,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.0
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - SDK - Updated DotNet SDK to 10.0.100
-- Dependencies - Updated Meziantou.Analyzer to 2.0.252
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.3
 - Dependencies - Updated AWSSDK to 4.0.5.4
 - Dependencies - Updated Microsoft.Extensions to 10.0.0
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.131.1523
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.116.900
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.26.1607
+- Dependencies - Updated Meziantou.Analyzer to 2.0.253
 ### Removed
 ### Deployment Changes
 
