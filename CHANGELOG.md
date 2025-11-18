@@ -44,7 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.6
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.56.476
 - Dependencies - Updated Credfeto.Enumeration to 1.2.132.1532
-- Dependencies - Updated FunFair.Test.Common to 6.2.6.1860
+- Dependencies - Updated FunFair.Test.Common to 6.2.7.1862
 ### Removed
 ### Deployment Changes
 
