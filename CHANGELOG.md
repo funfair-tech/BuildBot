@@ -38,13 +38,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.3
 - Dependencies - Updated Microsoft.Extensions to 10.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.116.900
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.26.1607
 - Dependencies - Updated Meziantou.Analyzer to 2.0.253
 - Dependencies - Updated AWSSDK to 4.0.6
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.56.476
 - Dependencies - Updated Credfeto.Enumeration to 1.2.132.1532
 - Dependencies - Updated FunFair.Test.Common to 6.2.7.1862
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.117.912
 ### Removed
 ### Deployment Changes
 
