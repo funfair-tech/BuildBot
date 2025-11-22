@@ -41,10 +41,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.132.1532
 - Dependencies - Updated FunFair.Test.Common to 6.2.7.1862
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.117.912
-- Dependencies - Updated AWSSDK to 4.0.7.1
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.27.1625
 - Dependencies - Updated Meziantou.Analyzer to 2.0.256
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.4
+- Dependencies - Updated AWSSDK to 4.0.8
 ### Removed
 ### Deployment Changes
 
