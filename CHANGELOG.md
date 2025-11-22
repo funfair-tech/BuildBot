@@ -25,7 +25,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
-- Dependencies - Updated Serilog.Extensions.Logging to 9.0.2
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.15.0.120848
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.8
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.57.485
 - Dependencies - Updated FunFair.Test.Common to 6.2.8.1869
+- Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 ### Removed
 ### Deployment Changes
 
