@@ -37,7 +37,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.117.912
-- Dependencies - Updated FunFair.CodeAnalysis to 7.1.27.1625
 - Dependencies - Updated Meziantou.Analyzer to 2.0.256
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.4
 - Dependencies - Updated AWSSDK to 4.0.8
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.8.1869
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Credfeto.Enumeration to 1.2.133.1545
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.28.1637
 ### Removed
 ### Deployment Changes
 
