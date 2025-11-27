@@ -40,11 +40,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.4
 - Dependencies - Updated AWSSDK to 4.0.8
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.57.485
-- Dependencies - Updated FunFair.Test.Common to 6.2.8.1869
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Credfeto.Enumeration to 1.2.133.1545
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.28.1637
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.16.0.128591
+- Dependencies - Updated FunFair.Test.Common to 6.2.9.1881
 ### Removed
 ### Deployment Changes
 
