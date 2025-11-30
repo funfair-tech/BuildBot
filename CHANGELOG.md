@@ -29,7 +29,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.14.1
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
-- Dependencies - Updated xunit.analyzers to 1.25.0
 - Dependencies - Updated xunit.v3 to 3.2.0
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - SDK - Updated DotNet SDK to 10.0.100
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.9.1881
 - Dependencies - Updated Meziantou.Analyzer to 2.0.257
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.58.495
+- Dependencies - Updated xunit.analyzers to 1.26.0
 ### Removed
 ### Deployment Changes
 
