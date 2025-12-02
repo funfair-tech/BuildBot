@@ -40,11 +40,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.133.1545
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.28.1637
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.16.0.128591
-- Dependencies - Updated FunFair.Test.Common to 6.2.9.1881
 - Dependencies - Updated Meziantou.Analyzer to 2.0.257
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.58.495
 - Dependencies - Updated xunit.analyzers to 1.26.0
 - Dependencies - Updated xunit.v3 to 3.2.1
+- Dependencies - Updated FunFair.Test.Common to 6.2.10.1890
 ### Removed
 ### Deployment Changes
 
