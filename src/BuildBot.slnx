@@ -5,7 +5,8 @@
     <File Path="../Dockerfile" />
     <File Path="../healthcheck" />
     <File Path="../README.md" />
-    <File Path="CodeAnalysis.ruleset" />
+    <File Path="../.editorconfig" />
+    <File Path="../.globalconfig" />
     <File Path="FunFair.props" />
     <File Path="global.json" />
     <File Path="publish" />
