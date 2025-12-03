@@ -44,7 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.58.495
 - Dependencies - Updated xunit.analyzers to 1.26.0
 - Dependencies - Updated xunit.v3 to 3.2.1
-- Dependencies - Updated FunFair.Test.Common to 6.2.10.1890
+- Dependencies - Updated FunFair.Test.Common to 6.2.11.1925
 ### Removed
 ### Deployment Changes
 
