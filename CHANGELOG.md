@@ -45,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.1
 - Dependencies - Updated FunFair.Test.Common to 6.2.11.1925
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.16.1.129956
+- Dependencies - Updated FunFair.Test.Source.Generator to 6.2.11.1925
 ### Removed
 ### Deployment Changes
 
