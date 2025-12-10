@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - SDK - Updated DotNet SDK to 10.0.100
-- Dependencies - Updated Microsoft.Extensions to 10.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.117.912
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.4
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.8.1
 - Dependencies - Updated FunFair.Test.Common to 6.2.12.1929
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.12.1929
+- Dependencies - Updated Microsoft.Extensions to 10.0.1
 ### Removed
 ### Deployment Changes
 
