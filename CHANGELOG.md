@@ -34,7 +34,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.58.495
 - Dependencies - Updated xunit.analyzers to 1.26.0
 - Dependencies - Updated xunit.v3 to 3.2.1
-- Dependencies - Updated AWSSDK to 4.0.8.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.1
 - SDK - Updated DotNet SDK to 10.0.101
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.29.1663
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.17.0.131074
+- Dependencies - Updated AWSSDK to 4.0.8.3
 ### Removed
 ### Deployment Changes
 
