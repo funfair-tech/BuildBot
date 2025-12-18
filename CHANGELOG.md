@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.4
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.257
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.58.495
 - Dependencies - Updated xunit.analyzers to 1.26.0
 - Dependencies - Updated xunit.v3 to 3.2.1
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.13.1931
 - Dependencies - Updated Credfeto.Enumeration to 1.2.134.1689
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.118.1062
+- Dependencies - Updated Meziantou.Analyzer to 2.0.261
 ### Removed
 ### Deployment Changes
 
