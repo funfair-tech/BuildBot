@@ -80,7 +80,7 @@
     <ProjectReference Include="..\BuildBot.Watchtower\BuildBot.Watchtower.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.58.495" />
+    <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.59.633" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.1" />
     <PackageReference Include="Serilog" Version="4.3.0" />
