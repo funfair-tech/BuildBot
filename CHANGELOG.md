@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.117.912
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.4
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.257
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.13.1931
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.13.1931
 - Dependencies - Updated Credfeto.Enumeration to 1.2.134.1689
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.118.1062
 ### Removed
 ### Deployment Changes
 
