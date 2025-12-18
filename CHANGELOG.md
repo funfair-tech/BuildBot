@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
-- Dependencies - Updated Roslynator.Analyzers to 4.14.1
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.118.1062
 - Dependencies - Updated Meziantou.Analyzer to 2.0.261
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
+- Dependencies - Updated Roslynator.Analyzers to 4.15.0
 ### Removed
 ### Deployment Changes
 
