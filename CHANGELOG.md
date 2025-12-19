@@ -39,13 +39,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.13.1931
 - Dependencies - Updated Credfeto.Enumeration to 1.2.134.1689
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.118.1062
-- Dependencies - Updated Meziantou.Analyzer to 2.0.261
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.17.0.131074
 - Dependencies - Updated AWSSDK to 4.0.8.3
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.59.633
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.30.1674
+- Dependencies - Updated Meziantou.Analyzer to 2.0.263
 ### Removed
 ### Deployment Changes
 
