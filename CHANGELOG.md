@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated xunit.analyzers to 1.26.0
 - Dependencies - Updated xunit.v3 to 3.2.1
-- SDK - Updated DotNet SDK to 10.0.101
 - Dependencies - Updated Credfeto.Enumeration to 1.2.134.1689
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.118.1062
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.18.0.131500
 - Dependencies - Updated AWSSDK to 4.0.8.5
 - Dependencies - Updated Microsoft.Extensions to 10.0.2
+- SDK - Updated DotNet SDK to 10.0.102
 ### Removed
 ### Deployment Changes
 
