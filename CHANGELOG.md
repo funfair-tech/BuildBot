@@ -39,7 +39,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.14.1940
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.14.1940
 - Dependencies - Updated AsyncFixer to 2.1.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.276
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.18.0.131500
 - Dependencies - Updated AWSSDK to 4.0.8.5
 - Dependencies - Updated Microsoft.Extensions to 10.0.2
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.135.1701
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.119.1070
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.31.1690
+- Dependencies - Updated Meziantou.Analyzer to 2.0.285
 ### Removed
 ### Deployment Changes
 
