@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
-- Dependencies - Updated xunit.v3 to 3.2.1
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.59.633
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.31.1690
 - Dependencies - Updated Meziantou.Analyzer to 2.0.285
 - Dependencies - Updated xunit.analyzers to 1.27.0
+- Dependencies - Updated xunit.v3 to 3.2.2
 ### Removed
 ### Deployment Changes
 
