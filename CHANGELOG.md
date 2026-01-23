@@ -38,7 +38,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.14.1940
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.18.0.131500
-- Dependencies - Updated AWSSDK to 4.0.8.5
 - Dependencies - Updated Microsoft.Extensions to 10.0.2
 - SDK - Updated DotNet SDK to 10.0.102
 - Dependencies - Updated Credfeto.Enumeration to 1.2.135.1701
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.285
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
+- Dependencies - Updated AWSSDK to 4.0.8.7
 ### Removed
 ### Deployment Changes
 
