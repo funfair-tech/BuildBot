@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.59.633
 - Dependencies - Updated FunFair.Test.Common to 6.2.14.1940
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.14.1940
 - Dependencies - Updated AsyncFixer to 2.1.0
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated AWSSDK to 4.0.8.7
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.60.641
 ### Removed
 ### Deployment Changes
 
