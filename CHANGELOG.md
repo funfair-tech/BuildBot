@@ -39,7 +39,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 10.0.102
 - Dependencies - Updated Credfeto.Enumeration to 1.2.135.1701
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.119.1070
-- Dependencies - Updated FunFair.CodeAnalysis to 7.1.31.1690
 - Dependencies - Updated Meziantou.Analyzer to 2.0.285
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.60.641
 - Dependencies - Updated FunFair.Test.Common to 6.2.15.1955
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.15.1955
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.32.1699
 ### Removed
 ### Deployment Changes
 
