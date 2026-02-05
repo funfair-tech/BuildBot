@@ -34,7 +34,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated AsyncFixer to 2.1.0
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.18.0.131500
 - Dependencies - Updated Microsoft.Extensions to 10.0.2
 - SDK - Updated DotNet SDK to 10.0.102
 - Dependencies - Updated Credfeto.Enumeration to 1.2.135.1701
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.16.1963
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.16.1963
 - Dependencies - Updated Meziantou.Analyzer to 2.0.297
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.19.0.132793
 ### Removed
 ### Deployment Changes
 
