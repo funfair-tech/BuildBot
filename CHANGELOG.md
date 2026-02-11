@@ -35,7 +35,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated Microsoft.Extensions to 10.0.2
-- SDK - Updated DotNet SDK to 10.0.102
 - Dependencies - Updated Credfeto.Enumeration to 1.2.135.1701
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.119.1070
 - Dependencies - Updated xunit.analyzers to 1.27.0
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.19.0.132793
 - Dependencies - Updated AWSSDK to 4.0.8.8
 - Dependencies - Updated Meziantou.Analyzer to 2.0.298
+- SDK - Updated DotNet SDK to 10.0.103
 ### Removed
 ### Deployment Changes
 
