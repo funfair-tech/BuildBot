@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
-- Dependencies - Updated Serilog to 4.3.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.33.1711
 - Dependencies - Updated Meziantou.Analyzer to 2.0.299
 - Dependencies - Updated Microsoft.Extensions to 10.0.3
+- Dependencies - Updated Serilog to 4.3.1
 ### Removed
 ### Deployment Changes
 
