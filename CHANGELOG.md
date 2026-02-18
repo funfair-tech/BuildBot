@@ -44,9 +44,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.8.8
 - SDK - Updated DotNet SDK to 10.0.103
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.33.1711
-- Dependencies - Updated Meziantou.Analyzer to 2.0.299
 - Dependencies - Updated Microsoft.Extensions to 10.0.3
 - Dependencies - Updated Serilog to 4.3.1
+- Dependencies - Updated Meziantou.Analyzer to 3.0.1
 ### Removed
 ### Deployment Changes
 
