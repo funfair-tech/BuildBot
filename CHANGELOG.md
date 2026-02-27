@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated AsyncFixer to 2.1.0
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.119.1070
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.60.641
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.17.1982
 - Dependencies - Updated Meziantou.Analyzer to 3.0.10
 - Dependencies - Updated Credfeto.Enumeration to 1.2.137.1722
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.120.1088
 ### Removed
 ### Deployment Changes
 
