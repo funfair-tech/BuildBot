@@ -36,7 +36,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.60.641
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.19.0.132793
 - Dependencies - Updated AWSSDK to 4.0.8.8
 - SDK - Updated DotNet SDK to 10.0.103
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.33.1711
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.137.1722
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.120.1088
 - Dependencies - Updated Meziantou.Analyzer to 3.0.18
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.20.0.135146
 ### Removed
 ### Deployment Changes
 
