@@ -28,7 +28,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.0.1
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated Roslynator.Analyzers to 4.15.0
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.20.0.135146
 - Dependencies - Updated AWSSDK to 4.0.8.9
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.3.0
 ### Removed
 ### Deployment Changes
 
