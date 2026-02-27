@@ -44,9 +44,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated FunFair.Test.Common to 6.2.17.1982
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.17.1982
-- Dependencies - Updated Meziantou.Analyzer to 3.0.10
 - Dependencies - Updated Credfeto.Enumeration to 1.2.137.1722
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.120.1088
+- Dependencies - Updated Meziantou.Analyzer to 3.0.18
 ### Removed
 ### Deployment Changes
 
