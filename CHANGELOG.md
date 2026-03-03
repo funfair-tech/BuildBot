@@ -25,7 +25,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
-- Dependencies - Updated Discord.Net to 3.18.0
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.3.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.34.1724
+- Dependencies - Updated Discord.Net to 3.19.0
 ### Removed
 ### Deployment Changes
 
