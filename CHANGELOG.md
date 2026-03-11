@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
-- SDK - Updated DotNet SDK to 10.0.103
 - Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated FunFair.Test.Common to 6.2.17.1982
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.20.0.135146
@@ -48,6 +47,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated AWSSDK to 4.0.8.10
 - Dependencies - Updated Microsoft.Extensions to 10.0.4
+- SDK - Updated DotNet SDK to 10.0.200
 ### Removed
 ### Deployment Changes
 
