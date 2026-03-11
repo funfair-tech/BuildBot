@@ -37,7 +37,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.3
 - Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated FunFair.Test.Common to 6.2.17.1982
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.120.1088
 - Dependencies - Updated Meziantou.Analyzer to 3.0.18
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.20.0.135146
 - Dependencies - Updated AWSSDK to 4.0.8.9
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.19.0
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
 - Dependencies - Updated Credfeto.Enumeration to 1.2.138.1737
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.121.1094
 ### Removed
 ### Deployment Changes
 
