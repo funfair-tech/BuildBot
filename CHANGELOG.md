@@ -47,6 +47,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
 - Dependencies - Updated Credfeto.Enumeration to 1.2.138.1737
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.121.1094
+- Dependencies - Updated Figgle to 0.6.6
 ### Removed
 ### Deployment Changes
 
