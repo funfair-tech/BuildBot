@@ -41,13 +41,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.34.1724
 - Dependencies - Updated Discord.Net to 3.19.0
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
-- Dependencies - Updated Credfeto.Enumeration to 1.2.138.1737
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.121.1094
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated AWSSDK to 4.0.8.10
 - Dependencies - Updated Microsoft.Extensions to 10.0.4
 - SDK - Updated DotNet SDK to 10.0.200
+- Dependencies - Updated Credfeto.Enumeration to 1.2.139.1741
 ### Removed
 ### Deployment Changes
 
