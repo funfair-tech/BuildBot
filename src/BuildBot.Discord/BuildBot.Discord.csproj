@@ -38,6 +38,14 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
+    <!-- error NU1902: Warning As Error: Package 'Scriban' 6.2.0 has a known moderate severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5rpf-x9jg-8j5p"/>
+    <!-- error NU1903: Warning As Error: Package 'Scriban' 6.2.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-grr9-747v-xvcp"/>
+    <!-- error NU1903: Warning As Error: Package 'Scriban' 6.2.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wgh7-7m3c-fx25"/>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
   </ItemGroup>
   <ItemGroup>
