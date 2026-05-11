@@ -10,6 +10,10 @@
    color: "0000aa"
    description: "Pull request created automatically"
 
+ - name: "Bug"
+   color: "d73a4a"
+   description: "Generic bug fix"
+
  - name: "buildbot"
    color: "96f7d2"
    description: "Changes in BuildBot project"
@@ -72,7 +76,7 @@
 
  - name: "Changelog Not Required"
    color: "08f5f8"
-   description: "Changelog Not Required"
+   description: "No changelog entry required for this pull request"
 
  - name: "Config Change"
    color: "d8bb50"
@@ -93,6 +97,10 @@
  - name: "Editorconfig"
    color: "00dead"
    description: "Editor config file change"
+
+ - name: "Enhancement"
+   color: "a2eeef"
+   description: "Enhancement to project"
 
  - name: "github-actions"
    color: "e09cf4"
@@ -130,6 +138,10 @@
    color: "ff0000"
    description: "Do not work on this"
 
+ - name: "Performance"
+   color: "0075ca"
+   description: "Performance enhancement or issue"
+
  - name: "Powershell"
    color: "23bc12"
    description: "Powershell Source Files"
@@ -137,6 +149,10 @@
  - name: "Read Me"
    color: "5319e7"
    description: "Repository readme file"
+
+ - name: "Security"
+   color: "ee0701"
+   description: "Security issue, e.g. use of insecure packages, or security fix"
 
  - name: "Setup"
    color: "5319e7"
