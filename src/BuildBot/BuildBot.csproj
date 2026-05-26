@@ -33,6 +33,7 @@
     <OptimizationPreference>speed</OptimizationPreference>
     <OutputType>Exe</OutputType>
     <PackageTags>FunFair BuildBot</PackageTags>
+    <PublishAot>false</PublishAot>
     <PublishTrimmed>false</PublishTrimmed>
     <RepositoryUrl>https://github.com/funfair-tech/BuildBot</RepositoryUrl>
     <RunAOTCompilation>false</RunAOTCompilation>
@@ -113,5 +114,21 @@
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Credfeto.Version.Information.Generator" Version="1.0.121.1094" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Scriban 6.2.0 known vulnerabilities - upgrade tracked in funfair-tech/BuildBot#352 -->
+    <!-- error NU1903: Package 'Scriban' 6.2.0 has known high/moderate/critical vulnerabilities -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-24c8-4792-22hx" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5rpf-x9jg-8j5p" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5wr9-m6jw-xx44" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-c875-h985-hvrc" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-grr9-747v-xvcp" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-m2p3-hwv5-xpqw" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-p6q4-fgr8-vx4p" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-v66j-x4hw-fv9g" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wgh7-7m3c-fx25" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x6m9-38vm-2xhf" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xcx6-vp38-8hr5" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xw6w-9jjh-p9cr" />
   </ItemGroup>
 </Project>

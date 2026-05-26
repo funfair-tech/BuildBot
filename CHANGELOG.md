@@ -5,8 +5,10 @@ All notable changes to this project will be documented in this file.
 Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
 ## [Unreleased]
+### Security
 ### Added
 ### Fixed
+- Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -42,15 +44,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.121.1094
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
-- SDK - Updated DotNet SDK to 10.0.200
 - Dependencies - Updated Credfeto.Enumeration to 1.2.139.1741
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
 - Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.5
+- SDK - Updated DotNet SDK to 10.0.300
 ### Removed
 ### Deployment Changes
-
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
