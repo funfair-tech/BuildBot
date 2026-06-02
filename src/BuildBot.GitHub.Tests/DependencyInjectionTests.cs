@@ -15,7 +15,7 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     }
 
     [Fact]
-    public static void ShouldUseGitHub()
+    public void ShouldUseGitHub()
     {
         Assert.True(condition: true, userMessage: "Placeholder");
     }

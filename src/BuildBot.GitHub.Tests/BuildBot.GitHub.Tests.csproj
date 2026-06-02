@@ -41,6 +41,7 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)UnitTests.props" Condition="Exists('$(SolutionDir)UnitTests.props')" />
   <ItemGroup>
+    <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
     <ProjectReference Include="..\BuildBot.GitHub\BuildBot.GitHub.csproj" />
   </ItemGroup>
   <ItemGroup>
