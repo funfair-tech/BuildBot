@@ -1,4 +1,6 @@
+﻿using BuildBot.GitHub.Publishers;
 using FunFair.Test.Common;
+using Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -11,12 +13,24 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
 
     private static IServiceCollection Configure(IServiceCollection services)
     {
-        return services.AddGitHub();
+        return services.AddMockedService<IMediator>().AddGitHub();
     }
 
     [Fact]
-    public static void ShouldUseGitHub()
+    public void GithubPingNotificationHandlerMustBeRegistered()
     {
-        Assert.True(condition: true, userMessage: "Placeholder");
+        this.RequireService<GithubPingNotificationHandler>();
+    }
+
+    [Fact]
+    public void GithubPushNotificationHandlerMustBeRegistered()
+    {
+        this.RequireService<GithubPushNotificationHandler>();
+    }
+
+    [Fact]
+    public void GithubStatusNotificationHandlerMustBeRegistered()
+    {
+        this.RequireService<GithubStatusNotificationHandler>();
     }
 }
