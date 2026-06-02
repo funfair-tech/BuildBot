@@ -20,15 +20,9 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
     private const string MAIN_REF = "refs/heads/main";
     private const string TEAMCITY_REPO = "TeamCity";
     private const string NORMAL_REPO = "BuildBot";
-    private static readonly DateTime COMMIT_TIMESTAMP = new(
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 0,
-        minute: 0,
-        second: 0,
-        kind: DateTimeKind.Utc
-    );
+    private static readonly DateTime COMMIT_TIMESTAMP = FunFair
+        .Test.Common.Mocks.MockDateTimeSources.Past.GetUtcNow()
+        .UtcDateTime;
 
     private static Commit MakeCommit(string message, string? username = "testuser")
     {
