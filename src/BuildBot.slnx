@@ -20,6 +20,7 @@
   <Project Path="BuildBot.Json/BuildBot.Json.csproj" />
   <Project Path="BuildBot.ServiceModel/BuildBot.ServiceModel.csproj" />
   <Project Path="BuildBot.Tests/BuildBot.Tests.csproj" />
+  <Project Path="BuildBot.Watchtower.Tests/BuildBot.Watchtower.Tests.csproj" />
   <Project Path="BuildBot.Watchtower/BuildBot.Watchtower.csproj" />
   <Project Path="BuildBot/BuildBot.csproj" />
 </Solution>
