@@ -22,6 +22,8 @@
  - any: [ 'src/$BuildBot.Tests/**/*' ]
 "buildbot-watchtower":
  - any: [ 'src/$BuildBot.Watchtower/**/*' ]
+"buildbot-watchtower-tests":
+ - any: [ 'src/$BuildBot.Watchtower.Tests/**/*' ]
 "C#":
  - any: [ './**/*.cs', './**/*.csproj' ]
 "C# Project":
