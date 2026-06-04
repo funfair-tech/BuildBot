@@ -8,6 +8,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
+- [BuildBot.CloudFormation] Increase code coverage to 100%
 ### Fixed
 - Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 ### Changed

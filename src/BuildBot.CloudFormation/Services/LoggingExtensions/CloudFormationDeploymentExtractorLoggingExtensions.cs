@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace BuildBot.CloudFormation.Services.LoggingExtensions;
@@ -60,7 +59,6 @@ internal static partial class CloudFormationDeploymentExtractorLoggingExtensions
         bool success
     );
 
-    [Conditional("DEBUG")]
     [LoggerMessage(eventId: 12, level: LogLevel.Debug, message: "CLOUDFORMATION: Property {key} = \"{value}\"")]
     public static partial void Property(
         this ILogger<CloudFormationDeploymentExtractor> logger,
