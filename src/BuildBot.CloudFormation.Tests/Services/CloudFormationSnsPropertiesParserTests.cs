@@ -17,6 +17,30 @@ public sealed class CloudFormationSnsPropertiesParserTests : TestBase
     }
 
     [Fact]
+    public void ParseLineWithoutKeyValueSeparator_ReturnsEntryWithEmptyValue()
+    {
+        SnsMessage message = new(
+            type: "Notification",
+            messageId: "arn:aws:sns:eu-west-1:1234:Test",
+            token: "Test",
+            topicArn: "Test",
+            subject: "Example",
+            message: "PlainValue\n",
+            new(year: 2024, month: 1, day: 1, hour: 1, minute: 1, second: 1, kind: DateTimeKind.Utc),
+            signatureVersion: "1",
+            signature: "sig",
+            signingCertUrl: null,
+            subscribeUrl: null,
+            unsubscribeUrl: null
+        );
+
+        Dictionary<string, string> result = this._cloudFormationSnsPropertiesParser.SplitMessageToDictionary(message);
+
+        Assert.Contains(expected: "PlainValue", collection: result.Keys);
+        Assert.Equal(expected: string.Empty, actual: result["PlainValue"]);
+    }
+
+    [Fact]
     public void Parse()
     {
         SnsMessage message = new(

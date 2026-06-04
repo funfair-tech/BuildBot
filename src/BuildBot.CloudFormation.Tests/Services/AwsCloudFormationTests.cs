@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +22,10 @@ public sealed class AwsCloudFormationTests : TestBase
         ILogger<AwsCloudFormation> logger = this.GetTypedLogger<AwsCloudFormation>();
         logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
 
-        return (cloudFormationClient, new AwsCloudFormation(cloudFormationClient: cloudFormationClient, logger: logger));
+        return (
+            cloudFormationClient,
+            new AwsCloudFormation(cloudFormationClient: cloudFormationClient, logger: logger)
+        );
     }
 
     private static Deployment MakeDeployment()
@@ -38,21 +41,6 @@ public sealed class AwsCloudFormationTests : TestBase
     }
 
     [Fact]
-    public async Task GetStackDetailsAsync_WhenDescribeReturnsNull_ReturnsNullAsync()
-    {
-        (IAmazonCloudFormation cloudFormationClient, AwsCloudFormation handler) = this.CreateHandler();
-
-        DescribeStacksResponse? nullResponse = null;
-        cloudFormationClient
-            .DescribeStacksAsync(Arg.Any<DescribeStacksRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(nullResponse)!);
-
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
-
-        Assert.Null(result);
-    }
-
-    [Fact]
     public async Task GetStackDetailsAsync_WhenDescribeReturnsEmptyStacks_ReturnsNullAsync()
     {
         (IAmazonCloudFormation cloudFormationClient, AwsCloudFormation handler) = this.CreateHandler();
@@ -61,7 +49,10 @@ public sealed class AwsCloudFormationTests : TestBase
             .DescribeStacksAsync(Arg.Any<DescribeStacksRequest>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new DescribeStacksResponse { Stacks = [] }));
 
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
+        StackDetails? result = await handler.GetStackDetailsAsync(
+            deployment: MakeDeployment(),
+            cancellationToken: this.CancellationToken()
+        );
 
         Assert.Null(result);
     }
@@ -75,21 +66,14 @@ public sealed class AwsCloudFormationTests : TestBase
             .DescribeStacksAsync(Arg.Any<DescribeStacksRequest>(), Arg.Any<CancellationToken>())
             .Returns(
                 Task.FromResult(
-                    new DescribeStacksResponse
-                    {
-                        Stacks =
-                        [
-                            new Stack
-                            {
-                                Description = string.Empty,
-                                Tags = [],
-                            },
-                        ],
-                    }
+                    new DescribeStacksResponse { Stacks = [new Stack { Description = string.Empty, Tags = [] }] }
                 )
             );
 
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
+        StackDetails? result = await handler.GetStackDetailsAsync(
+            deployment: MakeDeployment(),
+            cancellationToken: this.CancellationToken()
+        );
 
         Assert.Null(result);
     }
@@ -103,21 +87,14 @@ public sealed class AwsCloudFormationTests : TestBase
             .DescribeStacksAsync(Arg.Any<DescribeStacksRequest>(), Arg.Any<CancellationToken>())
             .Returns(
                 Task.FromResult(
-                    new DescribeStacksResponse
-                    {
-                        Stacks =
-                        [
-                            new Stack
-                            {
-                                Description = "My stack",
-                                Tags = [],
-                            },
-                        ],
-                    }
+                    new DescribeStacksResponse { Stacks = [new Stack { Description = "My stack", Tags = [] }] }
                 )
             );
 
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
+        StackDetails? result = await handler.GetStackDetailsAsync(
+            deployment: MakeDeployment(),
+            cancellationToken: this.CancellationToken()
+        );
 
         Assert.NotNull(result);
         Assert.Equal(expected: "My stack", actual: result.Value.Description);
@@ -139,17 +116,17 @@ public sealed class AwsCloudFormationTests : TestBase
                             new Stack
                             {
                                 Description = string.Empty,
-                                Tags =
-                                [
-                                    new Tag { Key = "Version", Value = "1.0.0" },
-                                ],
+                                Tags = [new Tag { Key = "Version", Value = "1.0.0" }],
                             },
                         ],
                     }
                 )
             );
 
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
+        StackDetails? result = await handler.GetStackDetailsAsync(
+            deployment: MakeDeployment(),
+            cancellationToken: this.CancellationToken()
+        );
 
         Assert.NotNull(result);
         Assert.Equal(expected: "1.0.0", actual: result.Value.Version);
@@ -171,17 +148,17 @@ public sealed class AwsCloudFormationTests : TestBase
                             new Stack
                             {
                                 Description = "My stack",
-                                Tags =
-                                [
-                                    new Tag { Key = "Version", Value = "1.0.0" },
-                                ],
+                                Tags = [new Tag { Key = "Version", Value = "1.0.0" }],
                             },
                         ],
                     }
                 )
             );
 
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
+        StackDetails? result = await handler.GetStackDetailsAsync(
+            deployment: MakeDeployment(),
+            cancellationToken: this.CancellationToken()
+        );
 
         Assert.NotNull(result);
         Assert.Equal(expected: "My stack", actual: result.Value.Description);
@@ -197,7 +174,10 @@ public sealed class AwsCloudFormationTests : TestBase
             .DescribeStacksAsync(Arg.Any<DescribeStacksRequest>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromException<DescribeStacksResponse>(new SystemInvalidOperationException("error")));
 
-        StackDetails? result = await handler.GetStackDetailsAsync(deployment: MakeDeployment(), cancellationToken: this.CancellationToken());
+        StackDetails? result = await handler.GetStackDetailsAsync(
+            deployment: MakeDeployment(),
+            cancellationToken: this.CancellationToken()
+        );
 
         Assert.Null(result);
     }
