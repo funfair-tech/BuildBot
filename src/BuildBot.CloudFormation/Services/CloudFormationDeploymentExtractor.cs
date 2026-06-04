@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using BuildBot.CloudFormation.Models;
 using BuildBot.CloudFormation.Services.LoggingExtensions;
@@ -170,7 +169,6 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         checkId: "CC0091: Make the method static",
         Justification = "Logging method needs to be an instance method"
     )]
-    [Conditional("DEBUG")]
     private void DumpAllProperties(in CloudFormationMessageReceived notification)
     {
         foreach ((string key, string value) in notification.Properties)

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using BuildBot.CloudFormation.Models;
 using Microsoft.Extensions.Logging;
 
@@ -32,7 +31,6 @@ internal static partial class CloudFormationMessageReceivedNotificationHandlerLo
         logger.BuildingMessage(project: deployment.Project, stackName: deployment.StackName);
     }
 
-    [Conditional("DEBUG")]
     [LoggerMessage(
         eventId: 2,
         level: LogLevel.Information,

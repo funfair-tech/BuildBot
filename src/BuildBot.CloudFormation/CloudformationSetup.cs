@@ -1,9 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Amazon;
+using Amazon.CloudFormation;
+using Amazon.Runtime;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Publishers;
 using BuildBot.CloudFormation.Services;
@@ -21,8 +24,18 @@ public static class CloudformationSetup
         in SnsNotificationOptions snsConfiguration
     )
     {
+        RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(snsConfiguration.Region);
+        BasicAWSCredentials credentials = new(
+            accessKey: snsConfiguration.AccessKey,
+            secretKey: snsConfiguration.SecretKey
+        );
+
         return services
             .AddSingleton(typeof(SnsNotificationOptions), implementationInstance: snsConfiguration)
+            .AddSingleton<IAmazonCloudFormation>(_ => new AmazonCloudFormationClient(
+                credentials: credentials,
+                region: endpoint
+            ))
             .AddSingleton<IAwsCloudFormation, AwsCloudFormation>()
             .AddSingleton<ICloudFormationSnsPropertiesParser, CloudFormationSnsPropertiesParser>()
             .AddSingleton<ICloudFormationDeploymentExtractor, CloudFormationDeploymentExtractor>()
@@ -43,7 +56,7 @@ public static class CloudformationSetup
             .Services;
     }
 
-    private static Task OnRetryAsync(
+    internal static Task OnRetryAsync(
         DelegateResult<HttpResponseMessage> delegateResult,
         TimeSpan timeSpan,
         int i,
@@ -53,7 +66,7 @@ public static class CloudformationSetup
         return Task.CompletedTask;
     }
 
-    private static TimeSpan HandleRetry(int retryCount, DelegateResult<HttpResponseMessage> response, Context context)
+    internal static TimeSpan HandleRetry(int retryCount, DelegateResult<HttpResponseMessage> response, Context context)
     {
         if (
             response.Result is not null
@@ -72,9 +85,8 @@ public static class CloudformationSetup
         return CalculateRetryDelay(retryCount);
     }
 
-    private static TimeSpan CalculateRetryDelay(int attempts)
+    internal static TimeSpan CalculateRetryDelay(int attempts)
     {
-        // do a fast first retry, then exponential backoff
         return attempts <= 1 ? TimeSpan.Zero : TimeSpan.FromSeconds(Math.Pow(x: 2, y: attempts));
     }
 }
