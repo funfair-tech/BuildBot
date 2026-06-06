@@ -18,6 +18,7 @@
   <Project Path="BuildBot.GitHub/BuildBot.GitHub.csproj" />
   <Project Path="BuildBot.Health.Tests/BuildBot.Health.Tests.csproj" />
   <Project Path="BuildBot.Health/BuildBot.Health.csproj" />
+  <Project Path="BuildBot.Json.Tests/BuildBot.Json.Tests.csproj" />
   <Project Path="BuildBot.Json/BuildBot.Json.csproj" />
   <Project Path="BuildBot.ServiceModel/BuildBot.ServiceModel.csproj" />
   <Project Path="BuildBot.Tests/BuildBot.Tests.csproj" />
