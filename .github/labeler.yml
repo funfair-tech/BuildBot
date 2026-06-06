@@ -14,6 +14,8 @@
  - any: [ 'src/$BuildBot.GitHub.Tests/**/*' ]
 "buildbot-health":
  - any: [ 'src/$BuildBot.Health/**/*' ]
+"buildbot-health-tests":
+ - any: [ 'src/$BuildBot.Health.Tests/**/*' ]
 "buildbot-json":
  - any: [ 'src/$BuildBot.Json/**/*' ]
 "buildbot-servicemodel":
