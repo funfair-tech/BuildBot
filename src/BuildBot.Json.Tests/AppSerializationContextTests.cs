@@ -1,4 +1,6 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
+using BuildBot.Json.Models;
 using FunFair.Test.Common;
 using Xunit;
 
@@ -7,10 +9,16 @@ namespace BuildBot.Json.Tests;
 public sealed class AppSerializationContextTests : TestBase
 {
     [Fact]
-    public void DefaultMustNotBeNull()
+    public void CanRoundTripPongDtoViaDefaultContext()
     {
-        JsonSerializerContext context = AppSerializationContext.Default;
+        PongDto original = new("pong");
+        JsonTypeInfo<PongDto> typeInfo = AssertReallyNotNull(
+            AppSerializationContext.Default.GetTypeInfo(typeof(PongDto)) as JsonTypeInfo<PongDto>
+        );
 
-        Assert.NotNull(context);
+        string json = JsonSerializer.Serialize(original, typeInfo);
+        PongDto deserialized = JsonSerializer.Deserialize(json, typeInfo);
+
+        Assert.Equal(expected: original, actual: deserialized);
     }
 }
