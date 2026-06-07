@@ -12,8 +12,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Tests for BuildBot.Watchtower to increase code coverage to 100%
 - BuildBot.Health.Tests: new test project covering BuildBot.Health at 100% line and branch coverage
 - BuildBot.Json.Tests: new test project covering BuildBot.Json at 100% line and branch coverage
+- BuildBot.ServiceModel.Tests: Added test coverage for all types in BuildBot.ServiceModel
 ### Fixed
 - Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
+- SnsMessage: Token property was never populated from the constructor argument
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
