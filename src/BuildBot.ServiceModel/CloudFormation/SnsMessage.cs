@@ -31,6 +31,7 @@ public sealed class SnsMessage
     {
         this.Type = type;
         this.MessageId = messageId;
+        this.Token = token;
         this.TopicArn = topicArn;
         this.Subject = subject;
         this.Message = message;
