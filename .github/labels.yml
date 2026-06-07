@@ -50,6 +50,10 @@
    color: "96f7d2"
    description: "Changes in BuildBot.Json project"
 
+ - name: "buildbot-json-tests"
+   color: "0e8a16"
+   description: "Changes in BuildBot.Json.Tests project"
+
  - name: "buildbot-servicemodel"
    color: "96f7d2"
    description: "Changes in BuildBot.ServiceModel project"

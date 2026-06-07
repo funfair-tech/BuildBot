@@ -18,6 +18,8 @@
  - any: [ 'src/$BuildBot.Health.Tests/**/*' ]
 "buildbot-json":
  - any: [ 'src/$BuildBot.Json/**/*' ]
+"buildbot-json-tests":
+ - any: [ 'src/$BuildBot.Json.Tests/**/*' ]
 "buildbot-servicemodel":
  - any: [ 'src/$BuildBot.ServiceModel/**/*' ]
 "buildbot-tests":
