@@ -56,7 +56,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.5
-- SDK - Updated DotNet SDK to 10.0.300
+- SDK - Updated DotNet SDK to 10.0.301
 ### Removed
 ### Deployment Changes
 <!--
