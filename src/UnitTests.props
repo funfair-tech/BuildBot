@@ -48,9 +48,26 @@
             <_CoverageSettingsLines Include="        &lt;Attribute&gt;^System%5C.CodeDom%5C.Compiler%5C.GeneratedCodeAttribute$&lt;/Attribute&gt;" />
             <_CoverageSettingsLines Include="      &lt;/Exclude&gt;" />
             <_CoverageSettingsLines Include="    &lt;/Attributes&gt;" />
+        </ItemGroup>
+
+        <!-- Add Functions exclude section if any function exclusions are defined -->
+        <ItemGroup Condition="'@(_CoverageExcludedFunctions)' != ''">
+            <_CoverageSettingsLines Include="    &lt;Functions&gt;" />
+            <_CoverageSettingsLines Include="      &lt;Exclude&gt;" />
+        </ItemGroup>
+        <ItemGroup Condition="'@(_CoverageExcludedFunctions)' != ''">
+            <_CoverageSettingsLines Include="        &lt;Function&gt;%(_CoverageExcludedFunctions.Identity)&lt;/Function&gt;" />
+        </ItemGroup>
+        <ItemGroup Condition="'@(_CoverageExcludedFunctions)' != ''">
+            <_CoverageSettingsLines Include="      &lt;/Exclude&gt;" />
+            <_CoverageSettingsLines Include="    &lt;/Functions&gt;" />
+        </ItemGroup>
+
+        <ItemGroup>
             <_CoverageSettingsLines Include="  &lt;/CodeCoverage&gt;" />
             <_CoverageSettingsLines Include="&lt;/Configuration&gt;" />
         </ItemGroup>
+
         <WriteLinesToFile
             File="$(_CoverageSettingsFile)"
             Lines="@(_CoverageSettingsLines)"
