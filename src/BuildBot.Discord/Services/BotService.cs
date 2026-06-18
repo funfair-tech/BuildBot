@@ -11,14 +11,14 @@ namespace BuildBot.Discord.Services;
 public sealed class BotService : IHostedService, IDisposable
 {
     private static readonly TimeSpan InterMessageDelay = TimeSpan.FromSeconds(1);
-    private readonly DiscordBot _bot;
+    private readonly IDiscordBot _bot;
     private readonly IMessageChannel<BotMessage> _botMessageChannel;
     private readonly IMessageChannel<BotReleaseMessage> _botReleaseMessageChannel;
     private readonly IDisposable _messageSubscription;
     private readonly IDisposable _releaseMessageSubscription;
 
     public BotService(
-        DiscordBot bot,
+        IDiscordBot bot,
         IMessageChannel<BotMessage> botMessageChannel,
         IMessageChannel<BotReleaseMessage> botReleaseMessageChannel
     )
@@ -56,12 +56,12 @@ public sealed class BotService : IHostedService, IDisposable
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        return this._bot.StartAsync();
+        return this._bot.StartAsync(cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        return this._bot.StopAsync();
+        return this._bot.StopAsync(cancellationToken);
     }
 
     private ValueTask PublishMessageAsync(BotMessage message, in CancellationToken cancellationToken)

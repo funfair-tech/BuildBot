@@ -10,6 +10,7 @@ public static class DiscordSetup
     {
         return services
             .AddSingleton(discordConfig)
+            .AddSingleton<IDiscordRawClient>(_ => new DiscordSocketClientAdapter())
             .AddSingleton<DiscordBot>()
             .AddSingleton<IDiscordBot>(s => s.GetRequiredService<DiscordBot>())
             .AddSingleton<IComponentStatus>(s => s.GetRequiredService<DiscordBot>())

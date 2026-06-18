@@ -13,6 +13,7 @@
   </Folder>
   <Project Path="BuildBot.CloudFormation.Tests/BuildBot.CloudFormation.Tests.csproj" />
   <Project Path="BuildBot.CloudFormation/BuildBot.CloudFormation.csproj" />
+  <Project Path="BuildBot.Discord.Tests/BuildBot.Discord.Tests.csproj" />
   <Project Path="BuildBot.Discord/BuildBot.Discord.csproj" />
   <Project Path="BuildBot.GitHub.Tests/BuildBot.GitHub.Tests.csproj" />
   <Project Path="BuildBot.GitHub/BuildBot.GitHub.csproj" />
