@@ -58,6 +58,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.19.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.5
 - SDK - Updated DotNet SDK to 10.0.301
+- BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 ### Removed
 ### Deployment Changes
 <!--
