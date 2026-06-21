@@ -378,4 +378,52 @@ public sealed class DiscordBotTests : TestBase
 
         logger.Received(1).IsEnabled(LogLevel.Critical);
     }
+
+    [Fact]
+    public async Task PublishAsync_WhenChannelFound_WithNullTitle_SendsMessage()
+    {
+        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
+
+        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
+        IDisposable mockTypingState = GetSubstitute<IDisposable>();
+
+        mockChannel.Name.Returns("test-channel");
+        mockChannel.EnterTypingState().Returns(mockTypingState);
+        mockChannel
+            .SendMessageAsync(Arg.Any<Embed>())
+            .Returns(Task.FromResult<(string SentToChannel, string MessageContent)>(("test-channel", string.Empty)));
+
+        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
+
+        await bot.PublishAsync(builder: new EmbedBuilder(), cancellationToken: this.CancellationToken());
+
+        await mockChannel.Received(1).SendMessageAsync(Arg.Any<Embed>());
+    }
+
+    [Fact]
+    public async Task PublishAsync_WhenSendFails_WithNullTitle_LogsErrorAndReconnects()
+    {
+        (IDiscordRawClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot();
+
+        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
+        IDisposable mockTypingState = GetSubstitute<IDisposable>();
+
+        mockChannel.Name.Returns("test-channel");
+        mockChannel.EnterTypingState().Returns(mockTypingState);
+        mockChannel
+            .SendMessageAsync(Arg.Any<Embed>())
+            .Returns(
+                Task.FromException<(string SentToChannel, string MessageContent)>(
+                    new InvalidOperationException("send failed")
+                )
+            );
+
+        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
+        client.LoginState.Returns(LoginState.LoggedOut);
+
+        await bot.PublishAsync(builder: new EmbedBuilder(), cancellationToken: this.CancellationToken());
+
+        logger.Received(1).IsEnabled(LogLevel.Error);
+        await client.DidNotReceive().LogoutAsync();
+    }
 }
