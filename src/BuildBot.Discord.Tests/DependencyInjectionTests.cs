@@ -1,6 +1,8 @@
 using BuildBot.Discord;
 using BuildBot.Discord.Models;
+using BuildBot.Discord.Services;
 using BuildBot.ServiceModel.ComponentStatus;
+using Discord;
 using FunFair.Test.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -53,5 +55,29 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     public void BotServiceMustBeRegisteredAsIHostedService()
     {
         this.RequireService<IHostedService>();
+    }
+
+    [Fact]
+    public void DiscordRawClientMustBeRegistered()
+    {
+        this.RequireService<IDiscordRawClient>();
+    }
+
+    [Fact]
+    public void DiscordRawClient_WhenDisconnected_LoginStateIsLoggedOut()
+    {
+        IDiscordRawClient client = this.GetService<IDiscordRawClient>();
+        Assert.Equal(expected: LoginState.LoggedOut, actual: client.LoginState);
+    }
+
+    [Fact]
+    public void FindChannel_WhenClientIsDisconnected_ReturnsNull()
+    {
+        IDiscordRawClient client = this.GetService<IDiscordRawClient>();
+        IDiscordChannel? channel = client.FindChannel(
+            serverName: "nonexistent-server",
+            channelName: "nonexistent-channel"
+        );
+        Assert.Null(channel);
     }
 }

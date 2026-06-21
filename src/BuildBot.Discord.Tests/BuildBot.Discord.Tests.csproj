@@ -40,11 +40,6 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <Import Project="$(SolutionDir)UnitTests.props" Condition="Exists('$(SolutionDir)UnitTests.props')" />
-  <!-- Exclude Discord.Net adapter classes from coverage — they wrap sealed Discord.Net types with no mockable interface -->
-  <ItemGroup>
-    <_CoverageExcludedFunctions Include=".*DiscordSocketClientAdapter.*" />
-    <_CoverageExcludedFunctions Include=".*DiscordChannelAdapter.*" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
   </ItemGroup>
