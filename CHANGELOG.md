@@ -47,7 +47,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
-- Dependencies - Updated Microsoft.Extensions to 10.0.5
 - SDK - Updated DotNet SDK to 10.0.301
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
@@ -60,6 +59,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.20.1
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.1.2342
 - Dependencies - Updated Mediator to 3.0.2
+- Dependencies - Updated Microsoft.Extensions to 10.0.9
 ### Removed
 ### Deployment Changes
 <!--
