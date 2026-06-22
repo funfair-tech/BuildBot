@@ -50,7 +50,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.3.0
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
 - Dependencies - Updated Figgle to 0.6.6
-- Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
 - Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
@@ -59,6 +58,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
+- Dependencies - Updated Meziantou.Analyzer to 3.0.108
 ### Removed
 ### Deployment Changes
 <!--
