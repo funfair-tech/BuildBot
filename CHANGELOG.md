@@ -45,7 +45,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.17.1982
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.3.0
-- Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
@@ -60,6 +59,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
 - Dependencies - Updated AWSSDK to 4.0.9.7
 - Dependencies - Updated Discord.Net to 3.20.1
+- Dependencies - Updated FunFair.Test.Source.Generator to 6.3.1.2342
 ### Removed
 ### Deployment Changes
 <!--
