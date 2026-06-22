@@ -59,6 +59,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
+- Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 ### Removed
 ### Deployment Changes
 <!--
