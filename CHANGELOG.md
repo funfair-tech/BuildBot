@@ -49,7 +49,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
-- Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.5
 - SDK - Updated DotNet SDK to 10.0.301
@@ -60,6 +59,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
+- Dependencies - Updated AWSSDK to 4.0.9.7
 ### Removed
 ### Deployment Changes
 <!--
