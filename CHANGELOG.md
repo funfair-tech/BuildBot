@@ -44,9 +44,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
+- Dependencies - Updated AWSSDK to 4.0.8.11
+- Dependencies - Updated Discord.Net to 3.19.1
+- Dependencies - Updated Microsoft.Extensions to 10.0.5
 - SDK - Updated DotNet SDK to 10.0.301
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.1.2035
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
