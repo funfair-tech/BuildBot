@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
-- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.14.15
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 - Dependencies - Updated Mediator to 3.0.1
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
@@ -59,6 +58,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 ### Removed
 ### Deployment Changes
 <!--
