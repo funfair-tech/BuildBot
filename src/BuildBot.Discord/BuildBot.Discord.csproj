@@ -39,11 +39,11 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- error NU1902: Warning As Error: Package 'Scriban' 6.2.0 has a known moderate severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5rpf-x9jg-8j5p"/>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5rpf-x9jg-8j5p" />
     <!-- error NU1903: Warning As Error: Package 'Scriban' 6.2.0 has a known high severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-grr9-747v-xvcp"/>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-grr9-747v-xvcp" />
     <!-- error NU1903: Warning As Error: Package 'Scriban' 6.2.0 has a known high severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wgh7-7m3c-fx25"/>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wgh7-7m3c-fx25" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BuildBot.ServiceModel\BuildBot.ServiceModel.csproj" />
@@ -56,7 +56,7 @@
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="1.2.139.1741" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="1.2.148.2012" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="CSharpIsNullAnalyzer" Version="0.1.593" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="FunFair.CodeAnalysis" Version="7.1.35.1745" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Meziantou.Analyzer" Version="3.0.22" PrivateAssets="All" ExcludeAssets="runtime" />
