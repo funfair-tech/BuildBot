@@ -43,7 +43,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated FunFair.Test.Common to 6.2.17.1982
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.20.0.135146
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.3.0
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
@@ -60,6 +59,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
 ### Removed
 ### Deployment Changes
 <!--
