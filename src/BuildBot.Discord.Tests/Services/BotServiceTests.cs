@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -104,5 +105,19 @@ public sealed class BotServiceTests : TestBase
                     cancellationToken: Arg.Any<CancellationToken>()
                 );
         }
+    }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentNullException_WhenBotIsNull()
+    {
+        MessageChannel<BotMessage> messageChannel = new();
+        MessageChannel<BotReleaseMessage> releaseChannel = new();
+
+        ConstructorInfo ctor = Assert.Single(typeof(BotService).GetConstructors());
+
+        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() =>
+            ctor.Invoke([null, messageChannel, releaseChannel])
+        );
+        Assert.IsType<ArgumentNullException>(ex.InnerException);
     }
 }
