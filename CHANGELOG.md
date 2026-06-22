@@ -60,6 +60,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated Microsoft.Extensions to 10.0.9
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.6.0
+- Dependencies - Updated System.Interactive.Async to 7.0.1
 ### Removed
 ### Deployment Changes
 <!--
