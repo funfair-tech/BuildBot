@@ -49,7 +49,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.3.0
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.18.1990
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.121.1094
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.22
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.35.1745
@@ -59,6 +58,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 10.0.301
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
 ### Removed
 ### Deployment Changes
 <!--
