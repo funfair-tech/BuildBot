@@ -110,14 +110,13 @@ public sealed class BotServiceTests : TestBase
     [Fact]
     public void Constructor_ThrowsArgumentNullException_WhenBotIsNull()
     {
-        MessageChannel<BotMessage> messageChannel = new();
-        MessageChannel<BotReleaseMessage> releaseChannel = new();
-
-        ConstructorInfo ctor = Assert.Single(typeof(BotService).GetConstructors());
-
-        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() =>
-            ctor.Invoke([null, messageChannel, releaseChannel])
+        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
+            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
         );
-        Assert.IsType<ArgumentNullException>(ex.InnerException);
+        Assert.NotNull(ctor);
+
+        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke([null, null, null]));
+        ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
+        Assert.Equal(expected: "bot", actual: ane.ParamName);
     }
 }
