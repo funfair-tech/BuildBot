@@ -17,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 - Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 - SnsMessage: Token property was never populated from the constructor argument
+- Pass ILogger to HealthCheckClient.ExecuteAsync to match new API in Credfeto.Docker.HealthCheck.Http.Client 0.0.72.928
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
