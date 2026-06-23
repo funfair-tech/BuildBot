@@ -8,7 +8,7 @@ using BuildBot.CloudFormation.Models;
 using BuildBot.CloudFormation.Publishers;
 using BuildBot.Discord.Models;
 using FunFair.Test.Common;
-using FunFair.Test.Common.Mocks;
+using FunFair.Test.Infrastructure.Mocks;
 using Mediator;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

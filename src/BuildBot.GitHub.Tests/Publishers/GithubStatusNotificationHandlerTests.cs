@@ -15,7 +15,7 @@ namespace BuildBot.GitHub.Tests.Publishers;
 public sealed class GithubStatusNotificationHandlerTests : TestBase
 {
     private static readonly DateTime COMMIT_TIMESTAMP = FunFair
-        .Test.Common.Mocks.MockDateTimeSources.Past.GetUtcNow()
+        .Test.Infrastructure.Mocks.MockDateTimeSources.Past.GetUtcNow()
         .UtcDateTime;
 
     private static Status MakeStatus(string state)

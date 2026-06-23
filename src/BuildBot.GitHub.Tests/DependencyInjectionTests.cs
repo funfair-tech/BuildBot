@@ -1,5 +1,6 @@
 ﻿using BuildBot.GitHub.Publishers;
 using FunFair.Test.Common;
+using FunFair.Test.Infrastructure;
 using Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
