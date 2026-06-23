@@ -56,7 +56,7 @@ public static class CloudformationSetup
             .Services;
     }
 
-    internal static Task OnRetryAsync(
+    public static Task OnRetryAsync(
         DelegateResult<HttpResponseMessage> delegateResult,
         TimeSpan timeSpan,
         int i,
@@ -66,7 +66,7 @@ public static class CloudformationSetup
         return Task.CompletedTask;
     }
 
-    internal static TimeSpan HandleRetry(int retryCount, DelegateResult<HttpResponseMessage> response, Context context)
+    public static TimeSpan HandleRetry(int retryCount, DelegateResult<HttpResponseMessage> response, Context context)
     {
         if (
             response.Result is not null
@@ -85,7 +85,7 @@ public static class CloudformationSetup
         return CalculateRetryDelay(retryCount);
     }
 
-    internal static TimeSpan CalculateRetryDelay(int attempts)
+    public static TimeSpan CalculateRetryDelay(int attempts)
     {
         return attempts <= 1 ? TimeSpan.Zero : TimeSpan.FromSeconds(Math.Pow(x: 2, y: attempts));
     }
