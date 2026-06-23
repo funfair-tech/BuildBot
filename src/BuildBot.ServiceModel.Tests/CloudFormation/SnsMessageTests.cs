@@ -1,7 +1,7 @@
 ﻿using System;
 using BuildBot.ServiceModel.CloudFormation;
 using FunFair.Test.Common;
-using FunFair.Test.Common.Mocks;
+using FunFair.Test.Infrastructure.Mocks;
 using Xunit;
 
 namespace BuildBot.ServiceModel.Tests.CloudFormation;
