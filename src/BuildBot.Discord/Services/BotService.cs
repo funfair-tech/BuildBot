@@ -14,8 +14,7 @@ public sealed class BotService : IHostedService, IDisposable
     private readonly IDiscordBot _bot;
     private readonly IMessageChannel<BotMessage> _botMessageChannel;
     private readonly IMessageChannel<BotReleaseMessage> _botReleaseMessageChannel;
-    private readonly IDisposable _messageSubscription;
-    private readonly IDisposable _releaseMessageSubscription;
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public BotService(
         IDiscordBot bot,
@@ -27,31 +26,29 @@ public sealed class BotService : IHostedService, IDisposable
         this._botMessageChannel = botMessageChannel;
         this._botReleaseMessageChannel = botReleaseMessageChannel;
 
-        this._messageSubscription = this
-            ._botMessageChannel.ReadAllAsync(CancellationToken.None)
+        this._botMessageChannel.ReadAllAsync(this._cancellationTokenSource.Token)
             .ToObservable()
             .Delay(InterMessageDelay)
             .Select(message =>
                 Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
             )
             .Concat()
-            .Subscribe();
+            .Subscribe(this._cancellationTokenSource.Token);
 
-        this._releaseMessageSubscription = this
-            ._botReleaseMessageChannel.ReadAllAsync(CancellationToken.None)
+        this._botReleaseMessageChannel.ReadAllAsync(this._cancellationTokenSource.Token)
             .ToObservable()
             .Delay(InterMessageDelay)
             .Select(message =>
                 Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
             )
             .Concat()
-            .Subscribe();
+            .Subscribe(this._cancellationTokenSource.Token);
     }
 
     public void Dispose()
     {
-        this._messageSubscription.Dispose();
-        this._releaseMessageSubscription.Dispose();
+        this._cancellationTokenSource.Cancel();
+        this._cancellationTokenSource.Dispose();
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -59,9 +56,10 @@ public sealed class BotService : IHostedService, IDisposable
         return this._bot.StartAsync(cancellationToken);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        return this._bot.StopAsync(cancellationToken);
+        await this._cancellationTokenSource.CancelAsync();
+        await this._bot.StopAsync(cancellationToken);
     }
 
     private ValueTask PublishMessageAsync(BotMessage message, in CancellationToken cancellationToken)
