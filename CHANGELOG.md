@@ -44,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
+- Dependencies - Updated FunFair.Test.Common to 6.2.17.1982
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
@@ -67,6 +68,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.3.1.2342
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.2.2066
 - Dependencies - Updated Meziantou.Analyzer to 3.0.115
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.72.928
 ### Removed
 ### Deployment Changes
 <!--
