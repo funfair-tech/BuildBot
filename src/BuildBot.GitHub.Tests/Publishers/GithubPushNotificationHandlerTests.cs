@@ -21,7 +21,7 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
     private const string TEAMCITY_REPO = "TeamCity";
     private const string NORMAL_REPO = "BuildBot";
     private static readonly DateTime COMMIT_TIMESTAMP = FunFair
-        .Test.Common.Mocks.MockDateTimeSources.Past.GetUtcNow()
+        .Test.Infrastructure.Mocks.MockDateTimeSources.Past.GetUtcNow()
         .UtcDateTime;
 
     private static Commit MakeCommit(string message, string? username = "testuser")

@@ -4,7 +4,7 @@ using BuildBot.CloudFormation;
 using BuildBot.CloudFormation.Models;
 using BuildBot.CloudFormation.Services;
 using FunFair.Test.Common;
-using FunFair.Test.Common.Mocks;
+using FunFair.Test.Infrastructure.Mocks;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;

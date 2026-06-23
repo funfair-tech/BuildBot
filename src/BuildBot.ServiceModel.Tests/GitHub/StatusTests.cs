@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using BuildBot.ServiceModel.GitHub;
 using FunFair.Test.Common;
-using FunFair.Test.Common.Mocks;
+using FunFair.Test.Infrastructure.Mocks;
 using Xunit;
 
 namespace BuildBot.ServiceModel.Tests.GitHub;
