@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BuildBot.Helpers;
 using Credfeto.Docker.HealthCheck.Http.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace BuildBot;
 
@@ -20,7 +21,11 @@ public static class Program
     public static async Task<int> Main(string[] args)
     {
         return HealthCheckClient.IsHealthCheck(args: args, out string? checkUrl)
-            ? await HealthCheckClient.ExecuteAsync(targetUrl: checkUrl, cancellationToken: CancellationToken.None)
+            ? await HealthCheckClient.ExecuteAsync(
+                targetUrl: checkUrl,
+                logger: NullLogger.Instance,
+                cancellationToken: CancellationToken.None
+            )
             : await RunServerAsync(args);
     }
 
