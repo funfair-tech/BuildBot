@@ -18,6 +18,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 - Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 - SnsMessage: Token property was never populated from the constructor argument
+- Added null guards for botMessageChannel and botReleaseMessageChannel parameters in BotService constructor
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
