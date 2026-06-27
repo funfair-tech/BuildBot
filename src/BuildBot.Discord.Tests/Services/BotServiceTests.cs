@@ -107,47 +107,36 @@ public sealed class BotServiceTests : TestBase
         }
     }
 
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenBotIsNull()
+    public static TheoryData<int, string> NullConstructorArguments =>
+        new()
+        {
+            { 0, "bot" },
+            { 1, "botMessageChannel" },
+            { 2, "botReleaseMessageChannel" },
+        };
+
+    [Theory]
+    [MemberData(nameof(NullConstructorArguments))]
+    public void Constructor_ThrowsArgumentNullException_WhenParameterIsNull(
+        int nullParameterIndex,
+        string expectedParamName
+    )
     {
         ConstructorInfo? ctor = typeof(BotService).GetConstructor(
             [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
         );
         Assert.NotNull(ctor);
 
-        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke([null, null, null]));
+        object?[] args =
+        [
+            GetSubstitute<IDiscordBot>(),
+            GetSubstitute<IMessageChannel<BotMessage>>(),
+            GetSubstitute<IMessageChannel<BotReleaseMessage>>(),
+        ];
+        args[nullParameterIndex] = null;
+
+        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke(args));
         ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
-        Assert.Equal(expected: "bot", actual: ane.ParamName);
-    }
-
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenBotMessageChannelIsNull()
-    {
-        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
-            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
-        );
-        Assert.NotNull(ctor);
-
-        IDiscordBot bot = GetSubstitute<IDiscordBot>();
-        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke([bot, null, null]));
-        ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
-        Assert.Equal(expected: "botMessageChannel", actual: ane.ParamName);
-    }
-
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenBotReleaseMessageChannelIsNull()
-    {
-        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
-            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
-        );
-        Assert.NotNull(ctor);
-
-        IDiscordBot bot = GetSubstitute<IDiscordBot>();
-        MessageChannel<BotMessage> messageChannel = new();
-        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() =>
-            ctor.Invoke([bot, messageChannel, null])
-        );
-        ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
-        Assert.Equal(expected: "botReleaseMessageChannel", actual: ane.ParamName);
+        Assert.Equal(expected: expectedParamName, actual: ane.ParamName);
     }
 }
