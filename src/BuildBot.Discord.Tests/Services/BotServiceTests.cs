@@ -119,4 +119,35 @@ public sealed class BotServiceTests : TestBase
         ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
         Assert.Equal(expected: "bot", actual: ane.ParamName);
     }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentNullException_WhenBotMessageChannelIsNull()
+    {
+        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
+            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
+        );
+        Assert.NotNull(ctor);
+
+        IDiscordBot bot = GetSubstitute<IDiscordBot>();
+        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke([bot, null, null]));
+        ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
+        Assert.Equal(expected: "botMessageChannel", actual: ane.ParamName);
+    }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentNullException_WhenBotReleaseMessageChannelIsNull()
+    {
+        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
+            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
+        );
+        Assert.NotNull(ctor);
+
+        IDiscordBot bot = GetSubstitute<IDiscordBot>();
+        MessageChannel<BotMessage> messageChannel = new();
+        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() =>
+            ctor.Invoke([bot, messageChannel, null])
+        );
+        ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
+        Assert.Equal(expected: "botReleaseMessageChannel", actual: ane.ParamName);
+    }
 }
