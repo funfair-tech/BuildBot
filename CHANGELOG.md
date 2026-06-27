@@ -64,7 +64,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
 - Dependencies - Updated FunFair.Test.Common to 6.3.1.2342
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.2.2066
-- Dependencies - Updated Meziantou.Analyzer to 3.0.114
+- Dependencies - Updated Meziantou.Analyzer to 3.0.115
 ### Removed
 ### Deployment Changes
 <!--
