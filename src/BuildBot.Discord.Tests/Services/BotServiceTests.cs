@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -104,5 +105,38 @@ public sealed class BotServiceTests : TestBase
                     cancellationToken: Arg.Any<CancellationToken>()
                 );
         }
+    }
+
+    public static TheoryData<int, string> NullConstructorArguments =>
+        new()
+        {
+            { 0, "bot" },
+            { 1, "botMessageChannel" },
+            { 2, "botReleaseMessageChannel" },
+        };
+
+    [Theory]
+    [MemberData(nameof(NullConstructorArguments))]
+    public void Constructor_ThrowsArgumentNullException_WhenParameterIsNull(
+        int nullParameterIndex,
+        string expectedParamName
+    )
+    {
+        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
+            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
+        );
+        Assert.NotNull(ctor);
+
+        object?[] args =
+        [
+            GetSubstitute<IDiscordBot>(),
+            GetSubstitute<IMessageChannel<BotMessage>>(),
+            GetSubstitute<IMessageChannel<BotReleaseMessage>>(),
+        ];
+        args[nullParameterIndex] = null;
+
+        TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke(args));
+        ArgumentNullException ane = Assert.IsType<ArgumentNullException>(ex.InnerException);
+        Assert.Equal(expected: expectedParamName, actual: ane.ParamName);
     }
 }

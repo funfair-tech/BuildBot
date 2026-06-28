@@ -23,8 +23,9 @@ public sealed class BotService : IHostedService, IDisposable
     )
     {
         this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
-        this._botMessageChannel = botMessageChannel;
-        this._botReleaseMessageChannel = botReleaseMessageChannel;
+        this._botMessageChannel = botMessageChannel ?? throw new ArgumentNullException(nameof(botMessageChannel));
+        this._botReleaseMessageChannel =
+            botReleaseMessageChannel ?? throw new ArgumentNullException(nameof(botReleaseMessageChannel));
 
         this._botMessageChannel.ReadAllAsync(this._cancellationTokenSource.Token)
             .ToObservable()

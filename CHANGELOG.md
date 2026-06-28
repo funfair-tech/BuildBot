@@ -14,9 +14,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - BuildBot.Json.Tests: new test project covering BuildBot.Json at 100% line and branch coverage
 - BuildBot.ServiceModel.Tests: Added test coverage for all types in BuildBot.ServiceModel
 - BuildBot.Discord.Tests: Added unit tests to increase code coverage to 100%
+- BotService null-guard branch coverage test
 ### Fixed
 - Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 - SnsMessage: Token property was never populated from the constructor argument
+- Added null guards for botMessageChannel and botReleaseMessageChannel parameters in BotService constructor
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
