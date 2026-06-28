@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 - SnsMessage: Token property was never populated from the constructor argument
 - Added null guards for botMessageChannel and botReleaseMessageChannel parameters in BotService constructor
+- Pass ILogger to HealthCheckClient.ExecuteAsync to match new API in Credfeto.Docker.HealthCheck.Http.Client 0.0.72.928
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -43,7 +44,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Serilog to 4.3.1
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.61.659
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
@@ -67,6 +67,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.3.1.2342
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.2.2066
 - Dependencies - Updated Meziantou.Analyzer to 3.0.115
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.72.928
 ### Removed
 ### Deployment Changes
 <!--

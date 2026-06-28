@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BuildBot.Helpers;
 using Credfeto.Docker.HealthCheck.Http.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
 
 namespace BuildBot;
 
@@ -19,9 +20,18 @@ public static class Program
     )]
     public static async Task<int> Main(string[] args)
     {
-        return HealthCheckClient.IsHealthCheck(args: args, out string? checkUrl)
-            ? await HealthCheckClient.ExecuteAsync(targetUrl: checkUrl, cancellationToken: CancellationToken.None)
-            : await RunServerAsync(args);
+        if (HealthCheckClient.IsHealthCheck(args: args, out string? checkUrl))
+        {
+            using ILoggerFactory loggerFactory = LoggerFactory.Create(static builder => builder.AddConsole());
+
+            return await HealthCheckClient.ExecuteAsync(
+                targetUrl: checkUrl,
+                logger: loggerFactory.CreateLogger(nameof(Program)),
+                cancellationToken: CancellationToken.None
+            );
+        }
+
+        return await RunServerAsync(args);
     }
 
     private static async ValueTask<int> RunServerAsync(string[] args)
