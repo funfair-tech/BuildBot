@@ -64,10 +64,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
 - Dependencies - Updated FunFair.Test.Common to 6.3.1.2342
-- Dependencies - Updated Meziantou.Analyzer to 3.0.115
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.72.928
 - Dependencies - Updated Credfeto.Enumeration to 1.2.149.2059
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.3.2091
+- Dependencies - Updated Meziantou.Analyzer to 3.0.117
 ### Removed
 ### Deployment Changes
 <!--
