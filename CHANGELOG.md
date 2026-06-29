@@ -56,7 +56,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
 - Dependencies - Updated Discord.Net to 3.20.1
-- Dependencies - Updated FunFair.Test.Source.Generator to 6.3.1.2342
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated Microsoft.Extensions to 10.0.9
 - Dependencies - Updated System.Interactive.Async to 7.0.1
@@ -68,6 +67,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.3.2091
 - Dependencies - Updated Meziantou.Analyzer to 3.0.117
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
+- Dependencies - Updated FunFair.Test.Source.Generator to 6.3.2.2390
 ### Removed
 ### Deployment Changes
 <!--
