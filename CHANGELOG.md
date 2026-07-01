@@ -45,7 +45,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated Figgle to 0.6.6
-- Dependencies - Updated AWSSDK to 4.0.8.11
 - Dependencies - Updated Discord.Net to 3.19.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.5
 - SDK - Updated DotNet SDK to 10.0.301
@@ -59,7 +58,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated Microsoft.Extensions to 10.0.9
 - Dependencies - Updated System.Interactive.Async to 7.0.1
-- Dependencies - Updated AWSSDK to 4.0.9.8
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.72.928
@@ -68,6 +66,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.117
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.2.2390
+- Dependencies - Updated AWSSDK to 4.0.101
 ### Removed
 ### Deployment Changes
 <!--
