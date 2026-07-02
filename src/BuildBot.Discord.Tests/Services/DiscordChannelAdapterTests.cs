@@ -54,5 +54,21 @@ public sealed class DiscordChannelAdapterTests : TestBase
 
         Assert.Equal(expected: "sent-channel", actual: sentToChannel);
         Assert.Equal(expected: "clean content", actual: messageContent);
+
+        await channel
+            .Received(1)
+            .SendMessageAsync(
+                text: string.Empty,
+                isTTS: Arg.Any<bool>(),
+                embed: embed,
+                options: Arg.Any<RequestOptions>(),
+                allowedMentions: Arg.Any<AllowedMentions>(),
+                messageReference: Arg.Any<MessageReference>(),
+                components: Arg.Any<MessageComponent>(),
+                stickers: Arg.Any<ISticker[]>(),
+                embeds: Arg.Any<Embed[]>(),
+                flags: Arg.Any<MessageFlags>(),
+                poll: Arg.Any<PollProperties>()
+            );
     }
 }
