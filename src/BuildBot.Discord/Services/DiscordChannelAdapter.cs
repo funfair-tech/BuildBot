@@ -10,7 +10,7 @@ public sealed class DiscordChannelAdapter : IDiscordChannel
 
     public DiscordChannelAdapter(ITextChannel channel)
     {
-        this._channel = channel;
+        this._channel = channel ?? throw new ArgumentNullException(nameof(channel));
     }
 
     public string Name => this._channel.Name;
