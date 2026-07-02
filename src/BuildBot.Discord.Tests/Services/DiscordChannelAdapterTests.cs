@@ -45,7 +45,6 @@ public sealed class DiscordChannelAdapterTests : TestBase
         message.Channel.Returns(channel);
 
         // In production CleanContent is always "" because the adapter sends text: string.Empty (embed-only).
-        // This stub verifies the adapter correctly passes through whatever CleanContent the message returns.
         message.CleanContent.Returns("clean content");
 
         channel.SendMessageAsync(text: string.Empty, embed: default).ReturnsForAnyArgs(Task.FromResult(message));
