@@ -45,21 +45,7 @@ public sealed class DiscordChannelAdapterTests : TestBase
         message.Channel.Returns(channel);
         message.CleanContent.Returns("clean content");
 
-        channel
-            .SendMessageAsync(
-                Arg.Any<string>(),
-                Arg.Any<bool>(),
-                Arg.Any<Embed>(),
-                Arg.Any<RequestOptions>(),
-                Arg.Any<AllowedMentions>(),
-                Arg.Any<MessageReference>(),
-                Arg.Any<MessageComponent>(),
-                Arg.Any<ISticker[]>(),
-                Arg.Any<Embed[]>(),
-                Arg.Any<MessageFlags>(),
-                Arg.Any<PollProperties>()
-            )
-            .Returns(Task.FromResult(message));
+        channel.SendMessageAsync(text: string.Empty, embed: default).ReturnsForAnyArgs(Task.FromResult(message));
 
         DiscordChannelAdapter adapter = new(channel);
 
