@@ -67,6 +67,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.28.0.143324
 - Dependencies - Updated AWSSDK to 4.0.101.1
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.73.967
+- Dependencies - Updated FunFair.Test to 6.3.3.2407
 ### Removed
 ### Deployment Changes
 <!--
