@@ -64,9 +64,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.117
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.2.2390
-- Dependencies - Updated AWSSDK to 4.0.101
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.4.2117
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.28.0.143324
+- Dependencies - Updated AWSSDK to 4.0.101.1
 ### Removed
 ### Deployment Changes
 <!--
