@@ -40,10 +40,9 @@ public sealed class DiscordChannelAdapterTests : TestBase
     {
         ITextChannel channel = GetSubstitute<ITextChannel>();
         IUserMessage message = GetSubstitute<IUserMessage>();
-        IMessageChannel messageChannel = GetSubstitute<IMessageChannel>();
 
-        messageChannel.Name.Returns("sent-channel");
-        message.Channel.Returns(messageChannel);
+        channel.Name.Returns("sent-channel");
+        message.Channel.Returns(channel);
         message.CleanContent.Returns("clean content");
 
         channel
