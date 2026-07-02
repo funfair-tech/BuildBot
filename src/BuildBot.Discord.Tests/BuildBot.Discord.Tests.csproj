@@ -44,6 +44,7 @@
     <ProjectReference Include="..\BuildBot.Discord\BuildBot.Discord.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="3.20.1" />
     <PackageReference Include="FunFair.Test.Common" Version="6.3.2.2390" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
     <PackageReference Include="NSubstitute" Version="5.3.0" />
