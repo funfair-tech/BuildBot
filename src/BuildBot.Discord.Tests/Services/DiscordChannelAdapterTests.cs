@@ -42,7 +42,6 @@ public sealed class DiscordChannelAdapterTests : TestBase
         IUserMessage message = GetSubstitute<IUserMessage>();
 
         channel.Name.Returns("sent-channel");
-        message.Channel.Returns(channel);
 
         // In production CleanContent is always "" because the adapter sends text: string.Empty (embed-only).
         message.CleanContent.Returns("clean content");
