@@ -59,7 +59,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.72.928
 - Dependencies - Updated Credfeto.Enumeration to 1.2.149.2059
 - Dependencies - Updated Meziantou.Analyzer to 3.0.117
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
@@ -67,6 +66,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.4.2117
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.28.0.143324
 - Dependencies - Updated AWSSDK to 4.0.101.1
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.73.967
 ### Removed
 ### Deployment Changes
 <!--
