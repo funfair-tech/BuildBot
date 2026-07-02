@@ -24,6 +24,6 @@ public sealed class DiscordChannelAdapter : IDiscordChannel
     {
         IUserMessage msg = await this._channel.SendMessageAsync(text: string.Empty, embed: embed);
 
-        return (msg.Channel.Name, msg.CleanContent);
+        return (this._channel.Name, msg.CleanContent);
     }
 }
