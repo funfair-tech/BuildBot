@@ -65,9 +65,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.73.967
 - Dependencies - Updated FunFair.Test to 6.3.3.2407
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.3.2407
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.5.2129
 - Dependencies - Updated Meziantou.Analyzer to 3.0.119
 - Dependencies - Updated AWSSDK to 4.0.101.2
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.6.2145
 ### Removed
 ### Deployment Changes
 <!--
