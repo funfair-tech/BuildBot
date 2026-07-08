@@ -20,6 +20,16 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
 
     private static Status MakeStatus(string state)
     {
+        return MakeStatusWithBranches(state: state, branches: [new Branch(name: "main")]);
+    }
+
+    private static Status MakeStatusWithNoBranches(string state)
+    {
+        return MakeStatusWithBranches(state: state, branches: []);
+    }
+
+    private static Status MakeStatusWithBranches(string state, Branch[] branches)
+    {
         Repository repository = new(
             id: 1,
             name: "BuildBot",
@@ -49,7 +59,7 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
             repository: repository,
             context: "ci/build",
             state: state,
-            branches: [new Branch(name: "main")],
+            branches: branches,
             description: "Build finished",
             statusCommit: statusCommit
         );
@@ -86,6 +96,22 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         (IMediator mediator, GithubStatusNotificationHandler handler) = this.CreateHandler();
 
         Status status = MakeStatus(state: state);
+        GithubStatus notification = new(status);
+
+        await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
+
+        await mediator.Received(1).Publish(Arg.Any<INotification>(), Arg.Any<CancellationToken>());
+    }
+
+    [Theory]
+    [InlineData("success")]
+    [InlineData("failure")]
+    [InlineData("error")]
+    public async Task NonPendingStateWithNoBranchesShouldPublishAsync(string state)
+    {
+        (IMediator mediator, GithubStatusNotificationHandler handler) = this.CreateHandler();
+
+        Status status = MakeStatusWithNoBranches(state: state);
         GithubStatus notification = new(status);
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
