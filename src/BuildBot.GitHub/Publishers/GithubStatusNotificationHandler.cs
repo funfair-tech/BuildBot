@@ -57,7 +57,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 
         return new EmbedBuilder()
             .WithTitle(
-                $"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch?.Name ?? string.Empty})"
+                $"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch?.Name ?? "(unknown)"})"
             )
             .WithUrl(message.TargetUrl)
             .WithDescription($"Built at {message.StatusCommit.Sha}")
