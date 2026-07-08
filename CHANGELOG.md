@@ -21,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Added null guards for botMessageChannel and botReleaseMessageChannel parameters in BotService constructor
 - Pass ILogger to HealthCheckClient.ExecuteAsync to match new API in Credfeto.Docker.HealthCheck.Http.Client 0.0.72.928
 - Made DiscordChannelAdapter testable by accepting ITextChannel instead of the sealed SocketTextChannel, and added unit tests
+- Guard against IndexOutOfRangeException when Branches list is empty in GithubStatusNotificationHandler
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
