@@ -1,18 +1,16 @@
 using System;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Rest;
-using Discord.WebSocket;
 
 namespace BuildBot.Discord.Services;
 
-internal sealed class DiscordChannelAdapter : IDiscordChannel
+public sealed class DiscordChannelAdapter : IDiscordChannel
 {
-    private readonly SocketTextChannel _channel;
+    private readonly ITextChannel _channel;
 
-    public DiscordChannelAdapter(SocketTextChannel channel)
+    public DiscordChannelAdapter(ITextChannel channel)
     {
-        this._channel = channel;
+        this._channel = channel ?? throw new ArgumentNullException(nameof(channel));
     }
 
     public string Name => this._channel.Name;
@@ -24,8 +22,8 @@ internal sealed class DiscordChannelAdapter : IDiscordChannel
 
     public async Task<(string SentToChannel, string MessageContent)> SendMessageAsync(Embed embed)
     {
-        RestUserMessage msg = await this._channel.SendMessageAsync(text: string.Empty, embed: embed);
+        IUserMessage msg = await this._channel.SendMessageAsync(text: string.Empty, embed: embed);
 
-        return (msg.Channel.Name, msg.CleanContent);
+        return (this._channel.Name, msg.CleanContent);
     }
 }
