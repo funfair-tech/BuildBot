@@ -65,10 +65,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.28.0.143324
 - Dependencies - Updated FunFair.Test to 6.3.3.2407
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.3.2407
-- Dependencies - Updated AWSSDK to 4.0.101.2
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.74.985
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.7.2152
 - Dependencies - Updated Meziantou.Analyzer to 3.0.122
+- Dependencies - Updated AWSSDK to 4.0.101.3
 ### Removed
 ### Deployment Changes
 <!--
