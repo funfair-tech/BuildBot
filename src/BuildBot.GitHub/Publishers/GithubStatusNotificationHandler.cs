@@ -53,11 +53,11 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 
     private static EmbedBuilder BuildStatusMessage(in Status message)
     {
-        Branch lastBranch = message.Branches[^1];
+        Branch? lastBranch = message.Branches.Count > 0 ? message.Branches[^1] : null;
 
         return new EmbedBuilder()
             .WithTitle(
-                $"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch.Name})"
+                $"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch?.Name ?? "(unknown)"})"
             )
             .WithUrl(message.TargetUrl)
             .WithDescription($"Built at {message.StatusCommit.Sha}")
@@ -74,7 +74,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
     {
         return new EmbedFieldBuilder()
             .WithName("Branch")
-            .WithValue(message.Branches.Select(static b => b.Name).FirstOrDefault());
+            .WithValue(message.Branches.Select(static b => b.Name).FirstOrDefault() ?? "(unknown)");
     }
 
     private static EmbedFieldBuilder AddHeadCommitEmbed(in StatusCommit statusCommit)
