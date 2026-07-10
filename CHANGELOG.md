@@ -45,7 +45,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
-- Dependencies - Updated Serilog to 4.3.1
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Discord.Net to 3.19.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.5
@@ -70,6 +69,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.101.3
 - Dependencies - Updated FunFair.Test to 6.3.4.2441
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.4.2441
+- Dependencies - Updated Serilog to 4.4.0
 ### Removed
 ### Deployment Changes
 <!--
