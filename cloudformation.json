@@ -69,10 +69,6 @@
       "Type": "Number",
       "Default": "200"
     },
-    "AwsContainerRegistry": {
-      "Type": "String",
-      "Default": "117769150821.dkr.ecr.eu-west-1.amazonaws.com"
-    },
     "SecretsManagerArn": {
       "Type": "String",
       "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
@@ -85,7 +81,7 @@
     "Version": {
       "Ref": "ApplicationVersion"
     }
-  }, 
+  },
   "Resources": {
     "TaskDefinition": {
       "Type": "AWS::ECS::TaskDefinition",
@@ -297,6 +293,8 @@
     },
     "LogGroup": {
       "Type": "AWS::Logs::LogGroup",
+      "DeletionPolicy": "Delete",
+      "UpdateReplacePolicy": "Delete",
       "Properties": {
         "LogGroupName": {
           "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
@@ -344,7 +342,7 @@
           }
         ]
       },
-      "DependsOn": ["TaskDefinition", "TargetGroup", "ListenerRule"]
+      "DependsOn": ["ListenerRule"]
     },
     "TargetGroup": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
@@ -398,8 +396,7 @@
         ],
         "ListenerArn": { "Ref": "LoadBalancerArn" },
         "Priority": { "Ref": "LoadBalancerPriority" }
-      },
-      "DependsOn": ["TargetGroup"]
+      }
     }
   }
 }
