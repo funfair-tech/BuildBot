@@ -58,4 +58,3 @@ echo "Clear $OUTFOLDER" \
       -e "SERVEROCTOPUS__APIKEY=example" \
       -it \
       --rm "funfair/buildbot:latest"
-      
