@@ -61,7 +61,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.28.0.143324
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.74.985
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.7.2152
 - Dependencies - Updated Meziantou.Analyzer to 3.0.122
@@ -70,6 +69,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.4.2441
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated Credfeto.Enumeration to 1.2.150.2166
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.29.0.143774
 ### Removed
 ### Deployment Changes
 <!--
