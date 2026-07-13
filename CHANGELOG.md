@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.1.593
 - Dependencies - Updated ThisAssembly.AssemblyInfo to 2.0.3
-- Dependencies - Updated NSubstitute to 5.3.0
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated Octopus.Client to 14.3.1732
 - Dependencies - Updated xunit to 2.9.3
@@ -70,6 +69,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated Credfeto.Enumeration to 1.2.150.2166
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.29.0.143774
+- Dependencies - Updated NSubstitute to 6.0.0
 ### Removed
 ### Deployment Changes
 <!--
