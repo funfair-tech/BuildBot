@@ -55,7 +55,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.74.985
 - Dependencies - Updated Serilog to 4.4.0
@@ -69,6 +68,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.3.5.2471
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.5.2471
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 ### Removed
 ### Deployment Changes
 <!--
