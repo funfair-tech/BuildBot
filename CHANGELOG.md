@@ -46,7 +46,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.2.2
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Discord.Net to 3.19.1
-- Dependencies - Updated Microsoft.Extensions to 10.0.5
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
@@ -54,7 +53,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
 - Dependencies - Updated Discord.Net to 3.20.1
 - Dependencies - Updated Mediator to 3.0.2
-- Dependencies - Updated Microsoft.Extensions to 10.0.9
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
@@ -70,6 +68,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.101.4
 - Dependencies - Updated FunFair.Test to 6.3.5.2471
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.5.2471
+- Dependencies - Updated Microsoft.Extensions to 10.0.10
 ### Removed
 ### Deployment Changes
 <!--
