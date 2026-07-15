@@ -60,7 +60,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.7.0
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.74.985
-- Dependencies - Updated AWSSDK to 4.0.101.3
 - Dependencies - Updated FunFair.Test to 6.3.4.2441
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.4.2441
 - Dependencies - Updated Serilog to 4.4.0
@@ -70,6 +69,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 10.0.302
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.8.2196
 - Dependencies - Updated Meziantou.Analyzer to 3.0.123
+- Dependencies - Updated AWSSDK to 4.0.101.4
 ### Removed
 ### Deployment Changes
 <!--
