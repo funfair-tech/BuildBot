@@ -47,14 +47,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Discord.Net to 3.19.1
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
 - Dependencies - Updated Discord.Net to 3.20.1
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated System.Interactive.Async to 7.0.1
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.131.1336
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.74.985
 - Dependencies - Updated Serilog to 4.4.0
@@ -69,6 +67,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
 ### Removed
 ### Deployment Changes
 <!--
