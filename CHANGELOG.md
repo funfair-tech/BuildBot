@@ -61,13 +61,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 10.0.302
 - Dependencies - Updated Meziantou.Analyzer to 3.0.123
 - Dependencies - Updated AWSSDK to 4.0.101.4
-- Dependencies - Updated FunFair.Test.Source.Generator to 6.3.5.2471
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.10.2209
 - Dependencies - Updated FunFair.Test to 6.3.6.2484
+- Dependencies - Updated FunFair.Test.Source.Generator to 6.3.6.2484
 ### Removed
 ### Deployment Changes
 <!--
