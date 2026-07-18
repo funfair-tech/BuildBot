@@ -54,7 +54,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.74.985
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.29.0.143774
 - Dependencies - Updated NSubstitute to 6.0.0
@@ -68,6 +67,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.6.2484
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.11.2216
 - Dependencies - Updated AWSSDK to 4.0.101.5
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 ### Removed
 ### Deployment Changes
 <!--
