@@ -65,9 +65,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.10.2209
 - Dependencies - Updated FunFair.Test to 6.3.6.2484
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.6.2484
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.11.2216
 ### Removed
 ### Deployment Changes
 <!--
