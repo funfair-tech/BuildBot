@@ -122,9 +122,11 @@ public sealed class BotServiceTests : TestBase
         string expectedParamName
     )
     {
-        ConstructorInfo? ctor = typeof(BotService).GetConstructor(
-            [typeof(IDiscordBot), typeof(IMessageChannel<BotMessage>), typeof(IMessageChannel<BotReleaseMessage>)]
-        );
+        ConstructorInfo? ctor = typeof(BotService).GetConstructor([
+            typeof(IDiscordBot),
+            typeof(IMessageChannel<BotMessage>),
+            typeof(IMessageChannel<BotReleaseMessage>),
+        ]);
         Assert.NotNull(ctor);
 
         object?[] args =
