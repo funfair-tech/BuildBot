@@ -58,7 +58,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.29.0.143774
 - Dependencies - Updated NSubstitute to 6.0.0
 - SDK - Updated DotNet SDK to 10.0.302
-- Dependencies - Updated Meziantou.Analyzer to 3.0.123
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
@@ -69,6 +68,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.101.5
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 - Dependencies - Updated System.Reactive to 7.0.0
+- Dependencies - Updated Meziantou.Analyzer to 3.0.124
 ### Removed
 ### Deployment Changes
 <!--
