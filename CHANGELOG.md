@@ -68,7 +68,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.101.5
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 - Dependencies - Updated System.Reactive to 7.0.0
-- Dependencies - Updated Meziantou.Analyzer to 3.0.124
+- Dependencies - Updated Meziantou.Analyzer to 3.0.125
 ### Removed
 ### Deployment Changes
 <!--
