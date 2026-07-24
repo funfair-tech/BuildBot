@@ -55,7 +55,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Serilog to 4.4.0
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.29.0.143774
 - Dependencies - Updated NSubstitute to 6.0.0
 - SDK - Updated DotNet SDK to 10.0.302
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
@@ -69,6 +68,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated Meziantou.Analyzer to 3.0.125
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.30.0.144632
 ### Removed
 ### Deployment Changes
 <!--
