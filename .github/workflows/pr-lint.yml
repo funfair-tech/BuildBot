@@ -59,7 +59,9 @@ jobs:
               .write();
   # @@required: merge
   include-changelog-entry:
-    if: github.event.pull_request.draft == false
+    if: |-
+      github.event.pull_request.draft == false &&
+      !contains(github.event.pull_request.labels.*.name, 'Changelog Not Required')
     runs-on: [self-hosted, linux, build]
     steps:
       - name: "Initialise Workspace"
