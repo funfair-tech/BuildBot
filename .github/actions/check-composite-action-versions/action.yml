@@ -247,16 +247,48 @@ runs:
                   { p: project.id, c: issue.node_id }
                 );
                 const itemId = addResult.addProjectV2ItemById.item.id;
-                await github.graphql(
-                  `mutation($p: ID!, $i: ID!, $f: ID!, $v: String!) {
-                    updateProjectV2ItemFieldValue(
-                      input: { projectId: $p, itemId: $i, fieldId: $f, value: { singleSelectOptionId: $v } }
-                    ) { projectV2Item { id } }
-                  }`,
-                  { p: project.id, i: itemId, f: statusField.id, v: approvedOption.id }
-                );
-                core.info('✅ Pre-approved on the Workflow board');
-                core.notice(`Pre-approved issue #${issue.number} on the Workflow board`);
+                const readBackQuery = `
+                  query($i: ID!) {
+                    node(id: $i) {
+                      ... on ProjectV2Item {
+                        fieldValueByName(name: "Workflow Status") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { optionId }
+                        }
+                      }
+                    }
+                  }`;
+
+                // The item was just added to the project, so the field write below can be
+                // accepted (no GraphQL error) without actually persisting yet - a known
+                // eventual-consistency race in the Projects v2 API on freshly-added items.
+                // Verify with a read-back and retry rather than trusting the mutation response.
+                let verified = false;
+                for (let attempt = 1; attempt <= 3 && !verified; attempt++) {
+                  await github.graphql(
+                    `mutation($p: ID!, $i: ID!, $f: ID!, $v: String!) {
+                      updateProjectV2ItemFieldValue(
+                        input: { projectId: $p, itemId: $i, fieldId: $f, value: { singleSelectOptionId: $v } }
+                      ) { projectV2Item { id } }
+                    }`,
+                    { p: project.id, i: itemId, f: statusField.id, v: approvedOption.id }
+                  );
+                  await new Promise(resolve => setTimeout(resolve, attempt * 1000));
+                  const readBack = await github.graphql(readBackQuery, { i: itemId });
+                  verified = readBack.node?.fieldValueByName?.optionId === approvedOption.id;
+                  if (!verified) {
+                    core.info(`⚠️ Pre-approval write not yet visible on attempt ${attempt} - retrying`);
+                  }
+                }
+
+                if (verified) {
+                  core.info('✅ Pre-approved on the Workflow board');
+                  core.notice(`Pre-approved issue #${issue.number} on the Workflow board`);
+                } else {
+                  core.warning(
+                    `⚠️ Pre-approval mutation returned no error but did not persist after 3 attempts ` +
+                    `- issue #${issue.number} left for manual/orchestrator review`
+                  );
+                }
               }
             }
           } catch (e) {
