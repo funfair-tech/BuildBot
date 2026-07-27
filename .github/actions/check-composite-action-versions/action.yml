@@ -163,7 +163,7 @@ runs:
             repo: context.repo.repo,
             title: issueTitle,
             body,
-            labels: ['AI-Work', 'github-actions', 'dependencies', 'Urgent'],
+            labels: ['AI-Work', 'github-actions', 'dependencies', 'Security'],
           });
           core.info(`✅ Created issue #${issue.number}`);
           core.notice(`New issue: ${issue.html_url}`);
@@ -175,7 +175,7 @@ runs:
             ].join('\n')
           );
           const planBody = [
-            '## Implementation plan (auto-generated)',
+            '## Implementation plan',
             '',
             'This issue is a mechanical, pin-only version bump - the same class of change Dependabot',
             'auto-merges everywhere it can reach. It exists only because Dependabot cannot update',
