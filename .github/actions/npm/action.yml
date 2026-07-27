@@ -230,3 +230,14 @@ runs:
             --wallet \"${{steps.store-signing-wallet.outputs.file}}\" \
             --wallet-password \"${{inputs.NPM_PACKAGE_STORE_SIGNING_WALLET_PASSWORD}}\" \
             --warnings-as-error"
+
+    - name: "NPM: Clean Up Store Signing Wallet"
+      if: |
+          always() &&
+          inputs.NPM_SIGNING == 'true' &&
+          inputs.PROJECT_TO_PUBLISH != ''
+      shell: bash
+      run: |
+        rm -f "${FILE}"
+      env:
+        FILE: "${{steps.store-signing-wallet.outputs.file}}"
