@@ -36,7 +36,7 @@ public sealed class CloudFormationSnsPropertiesParserTests : TestBase
 
         Dictionary<string, string> result = this._cloudFormationSnsPropertiesParser.SplitMessageToDictionary(message);
 
-        Assert.Contains(expected: "PlainValue", collection: result.Keys);
+        Assert.Contains(expected: "PlainValue", collection: result.Keys, comparer: StringComparer.Ordinal);
         Assert.Equal(expected: string.Empty, actual: result["PlainValue"]);
     }
 
@@ -60,8 +60,8 @@ public sealed class CloudFormationSnsPropertiesParserTests : TestBase
 
         Dictionary<string, string> result = this._cloudFormationSnsPropertiesParser.SplitMessageToDictionary(message);
 
-        Assert.Contains(expected: "StackId", collection: result.Keys);
-        Assert.Contains(expected: "Timestamp", collection: result.Keys);
-        Assert.Contains(expected: "EventId", collection: result.Keys);
+        Assert.Contains(expected: "StackId", collection: result.Keys, comparer: StringComparer.Ordinal);
+        Assert.Contains(expected: "Timestamp", collection: result.Keys, comparer: StringComparer.Ordinal);
+        Assert.Contains(expected: "EventId", collection: result.Keys, comparer: StringComparer.Ordinal);
     }
 }
