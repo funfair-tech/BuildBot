@@ -11,6 +11,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Install Dotnet Build Check tool"
+      uses: ./.github/actions/dotnet-tool
+      with:
+        TOOL_NAME: "FunFair.BuildCheck"
+        TOOL_VERSION: "latest"
+
     - name: "Dotnet: Find Solution"
       id: find_solution
       working-directory: ${{github.workspace}}/src
