@@ -324,6 +324,13 @@ runs:
         TOOL_NAME: "FunFair.Content.PackageSigner.Cmd"
         TOOL_VERSION: "${{inputs.NPM_PRODUCTION_PACKAGER_VERSION}}"
 
+    - name: "Install Changelog Tool"
+      if: steps.build_tools.outputs.BUILD_ENV == 'true'
+      uses: ./.github/actions/dotnet-tool
+      with:
+        TOOL_NAME: "Credfeto.Changelog.Cmd"
+        TOOL_VERSION: "latest"
+
     - name: "Create Release Notes"
       if: steps.build_tools.outputs.BUILD_ENV == 'true'
       uses: ./.github/actions/dotnet-tool-run
