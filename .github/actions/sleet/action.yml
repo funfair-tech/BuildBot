@@ -14,6 +14,17 @@ runs:
   using: "composite"
   steps:
 
+    - name: "Install Sleet package management tool"
+      if: env.SLEET_TOOL_INSTALLED != 'true'
+      uses: ./.github/actions/dotnet-tool
+      with:
+        TOOL_NAME: "sleet"
+        TOOL_VERSION: "latest"
+
+    - name: "Mark Sleet package management tool installed"
+      shell: bash
+      run: echo "SLEET_TOOL_INSTALLED=true" >> "$GITHUB_ENV"
+
     - name: "Sleet: Generate Sleet Config"
       id: sleet-config
       uses: ./.github/actions/save-secret-as-file
