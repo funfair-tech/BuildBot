@@ -1,6 +1,9 @@
 ﻿# Changelog
 All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 <!--
 Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
@@ -69,6 +72,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.30.0.144632
 - Dependencies - Updated AWSSDK to 4.0.101.7
 - Dependencies - Updated Meziantou.Analyzer to 3.0.136
+### Deprecated
 ### Removed
 ### Deployment Changes
 <!--
@@ -862,7 +866,7 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 ### Removed
 - Unused dependencies
 
-## [1.2.0] 2019-10-14
+## [1.2.0] - 2019-10-14
 ### Changed
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.14.0.22654
 - FF-1429 - Updated Octopus.Client to 8.9.2
@@ -878,7 +882,7 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.13.0.21683
 - FF-2930 - Updated to .net core 3.1.403
 
-## [1.1.0] 2019-09-10
+## [1.1.0] - 2019-09-10
 ### Added
 - Octopus Notifications including basic release notes formatting
 ### Changed
@@ -908,5 +912,4 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 - Updated to build with .NET Core SDK 3.1.101
 - FF-2652 - Update all the .NET components to .NET Core 3.1.302
 
-## [1.0.0] 2018-04-12
-- Initial Version
+## [1.0.0] - 2018-04-12
