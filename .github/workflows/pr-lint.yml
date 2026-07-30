@@ -129,12 +129,10 @@ jobs:
 
       - name: "Check Required Secrets"
         if: (github.actor != 'dependabot[bot]' && !endsWith(github.repository , '-template'))
-        shell: bash
-        run: |
-          if [ -z "${{secrets.SOURCE_PUSH_TOKEN}}" ]; then
-            echo "::error::SOURCE_PUSH_TOKEN is required but not set"
-            exit 1
-          fi
+        uses: ./.github/actions/check-required-secret
+        with:
+          secret-name: "SOURCE_PUSH_TOKEN"
+          secret-value: ${{secrets.SOURCE_PUSH_TOKEN}}
 
       - name: "Install dotnet"
         if: (github.actor != 'dependabot[bot]' && !endsWith(github.repository , '-template'))
@@ -309,8 +307,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           clean: true
-          fetch-depth: 0
-          fetch-tags: true
+          fetch-depth: 1
 
       - name: "Check repo visibility"
         uses: ./.github/actions/check-repo-visibility
@@ -427,12 +424,10 @@ jobs:
           fetch-depth: 0
 
       - name: "Check Required Secrets"
-        shell: bash
-        run: |
-          if [ -z "${{secrets.SOURCE_PUSH_TOKEN}}" ]; then
-            echo "::error::SOURCE_PUSH_TOKEN is required but not set"
-            exit 1
-          fi
+        uses: ./.github/actions/check-required-secret
+        with:
+          secret-name: "SOURCE_PUSH_TOKEN"
+          secret-value: ${{secrets.SOURCE_PUSH_TOKEN}}
 
       - name: "Run Linter"
         uses: super-linter/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
@@ -496,31 +491,10 @@ jobs:
           output: "${{github.workspace}}/results/poutine.sarif"
 
       - name: "Summarise Poutine findings"
-        working-directory: ${{github.workspace}}/results
-        shell: bash
-        run: |
-          {
-            echo "## Poutine findings"
-            echo
-            echo "| Rule | Level | File | Line | Message |"
-            echo "| --- | --- | --- | --- | --- |"
-            jq -r '
-              .runs[].results[] |
-              [
-                (.ruleId // "-"),
-                (.level // "-"),
-                (.locations[0].physicalLocation.artifactLocation.uri // "-"),
-                (.locations[0].physicalLocation.region.startLine // "-" | tostring),
-                (.message.text // "-" | gsub("\\r?\\n"; " ") | gsub("\\|"; "\\|"))
-              ] | "| " + join(" | ") + " |"
-            ' poutine.sarif
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          ERROR_COUNT=$(jq '[.runs[].results[] | select(.level == "error")] | length' poutine.sarif)
-          if [ "$ERROR_COUNT" -gt 0 ]; then
-            echo "::error::Poutine found ${ERROR_COUNT} error-level finding(s); see job summary for details."
-            exit 1
-          fi
+        uses: ./.github/actions/sarif-summary
+        with:
+          TITLE: "Poutine findings"
+          GLOB: "poutine.sarif"
 
       ############################################################################################################
       # Upload Sarif files to GitHub
