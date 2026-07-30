@@ -483,20 +483,50 @@ jobs:
         uses: ./.github/actions/check-repo-visibility
         id: visibility
 
-      - name: "Poutine"
-        uses: boostsecurityio/poutine-action@e240ebd3eff8b2db5a8e5f6b28f58739d7db2247 # v1.1.4
-
-      - name: "Move poutine SARIF file into results folder"
+      - name: "Ensure Results folder exists"
         working-directory: ${{github.workspace}}
         shell: bash
         run: |
           [ ! -d "${{github.workspace}}/results" ] && mkdir "${{github.workspace}}/results" || echo "Results created"
-          mv results.sarif "${{github.workspace}}/results/poutine.sarif"
+
+      - name: "Poutine"
+        uses: boostsecurityio/poutine-action@e240ebd3eff8b2db5a8e5f6b28f58739d7db2247 # v1.1.4
+        with:
+          format: 'sarif'
+          output: "${{github.workspace}}/results/poutine.sarif"
+
+      - name: "Summarise Poutine findings"
+        working-directory: ${{github.workspace}}/results
+        shell: bash
+        run: |
+          {
+            echo "## Poutine findings"
+            echo
+            echo "| Rule | Level | File | Line | Message |"
+            echo "| --- | --- | --- | --- | --- |"
+            jq -r '
+              .runs[].results[] |
+              [
+                (.ruleId // "-"),
+                (.level // "-"),
+                (.locations[0].physicalLocation.artifactLocation.uri // "-"),
+                (.locations[0].physicalLocation.region.startLine // "-" | tostring),
+                (.message.text // "-" | gsub("\\r?\\n"; " ") | gsub("\\|"; "\\|"))
+              ] | "| " + join(" | ") + " |"
+            ' poutine.sarif
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          ERROR_COUNT=$(jq '[.runs[].results[] | select(.level == "error")] | length' poutine.sarif)
+          if [ "$ERROR_COUNT" -gt 0 ]; then
+            echo "::error::Poutine found ${ERROR_COUNT} error-level finding(s); see job summary for details."
+            exit 1
+          fi
 
       ############################################################################################################
       # Upload Sarif files to GitHub
       ############################################################################################################
       - name: "Upload SARIF file for diagnostics"
+        if: always()
         uses: ./.github/actions/sarif
         with:
           REPO_VISIBILITY: ${{steps.visibility.outputs.is_public == 'true' && 'public' || 'private'}}
