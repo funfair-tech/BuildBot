@@ -113,8 +113,7 @@ runs:
         echo "Validated parameters:"
         jq . "${{github.workspace}}/TemplateParameters.json"
 
-    - if: inputs.CLOUDFORMATION_SNS_ARN != ''
-      name: "AWS Cloudformation Deploy (With Notifications)"
+    - name: "AWS Cloudformation Deploy"
       shell: bash
       env:
         CLOUD_FORMATION_TEMPLATE_FILE: ${{inputs.CLOUD_FORMATION_TEMPLATE_FILE}}
@@ -122,6 +121,8 @@ runs:
         CLOUDFORMATION_SNS_ARN: ${{inputs.CLOUDFORMATION_SNS_ARN}}
         BUILD_VERSION: ${{inputs.BUILD_VERSION}}
       run: |
+        NOTIFICATION_ARGS=()
+        [ -n "$CLOUDFORMATION_SNS_ARN" ] && NOTIFICATION_ARGS=(--notification-arns "$CLOUDFORMATION_SNS_ARN")
         /usr/local/aws-cli/v2/current/bin/aws \
                   cloudformation deploy \
                         --template-file \
@@ -130,28 +131,7 @@ runs:
                               "$CLOUD_FORMATION_STACK" \
                         --parameter-overrides \
                               file://TemplateParameters.json \
-                        --notification-arns \
-                              "$CLOUDFORMATION_SNS_ARN" \
-                        --tags \
-                              "App=$CLOUD_FORMATION_STACK" \
-                              "Version=$BUILD_VERSION"
-
-    - if: inputs.CLOUDFORMATION_SNS_ARN == ''
-      name: "AWS Cloudformation Deploy (No Notifications)"
-      shell: bash
-      env:
-        CLOUD_FORMATION_TEMPLATE_FILE: ${{inputs.CLOUD_FORMATION_TEMPLATE_FILE}}
-        CLOUD_FORMATION_STACK: ${{inputs.CLOUD_FORMATION_STACK}}
-        BUILD_VERSION: ${{inputs.BUILD_VERSION}}
-      run: |
-        /usr/local/aws-cli/v2/current/bin/aws \
-                  cloudformation deploy \
-                        --template-file \
-                              "$CLOUD_FORMATION_TEMPLATE_FILE" \
-                        --stack-name \
-                              "$CLOUD_FORMATION_STACK" \
-                        --parameter-overrides \
-                              file://TemplateParameters.json \
+                        "${NOTIFICATION_ARGS[@]}" \
                         --tags \
                               "App=$CLOUD_FORMATION_STACK" \
                               "Version=$BUILD_VERSION"
