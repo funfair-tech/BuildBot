@@ -41,8 +41,8 @@ runs:
   using: "composite"
   steps:
     - name: "Log parameters"
-      shell: bash
-      env:
+      uses: ./.github/actions/log-deploy-parameters
+      with:
         CLOUD_FORMATION_STACK: ${{inputs.CLOUD_FORMATION_STACK}}
         CLOUD_FORMATION_TEMPLATE_FILE: ${{inputs.CLOUD_FORMATION_TEMPLATE_FILE}}
         DOCKER_APP_OWNER: ${{inputs.DOCKER_APP_OWNER}}
@@ -53,17 +53,6 @@ runs:
         AWS_LOAD_BALANCER_HOSTNAME: ${{inputs.AWS_LOAD_BALANCER_HOSTNAME}}
         DOCKER_CONTAINER_REGISTRY: ${{inputs.DOCKER_CONTAINER_REGISTRY}}
         AWS_LOAD_BALANCER_PRIORITY: ${{inputs.AWS_LOAD_BALANCER_PRIORITY}}
-      run: |
-        echo "CLOUD_FORMATION_STACK: $CLOUD_FORMATION_STACK"
-        echo "CLOUD_FORMATION_TEMPLATE_FILE: $CLOUD_FORMATION_TEMPLATE_FILE"
-        echo "DOCKER_APP_OWNER: $DOCKER_APP_OWNER"
-        echo "DOCKER_APP_NAME: $DOCKER_APP_NAME"
-        echo "BUILD_VERSION: $BUILD_VERSION"
-        echo "API_HOST: $API_HOST"
-        echo "API_PREFIX: $API_PREFIX"
-        echo "AWS_LOAD_BALANCER_HOSTNAME: $AWS_LOAD_BALANCER_HOSTNAME"
-        echo "DOCKER_CONTAINER_REGISTRY: $DOCKER_CONTAINER_REGISTRY"
-        echo "AWS_LOAD_BALANCER_PRIORITY: $AWS_LOAD_BALANCER_PRIORITY"
 
     - name: "Create tag"
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
