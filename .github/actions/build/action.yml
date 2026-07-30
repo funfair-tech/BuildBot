@@ -362,6 +362,55 @@ runs:
         DOTNET_DOCKER_PLATFORM: ${{inputs.DOTNET_DOCKER_PLATFORM}}
 
     ############################################################################################################
+    # Summarise Roslyn analyzer SARIF files
+    ############################################################################################################
+    - name: "Summarise Roslyn analyzer findings"
+      if: |-
+        !cancelled() &&
+        steps.check_files.outputs.CSPROJ_EXIST == 'true' &&
+        steps.check_files.outputs.SLN_EXIST == 'true'
+      working-directory: ${{github.workspace}}/results
+      shell: bash
+      run: |
+        shopt -s nullglob
+        FILES=()
+        for f in *.sarif; do
+          [ "$f" = "poutine.sarif" ] && continue
+          FILES+=("$f")
+        done
+
+        {
+          echo "## Roslyn analyzer findings"
+          echo
+          echo "| Project | Rule | Level | File | Line | Message |"
+          echo "| --- | --- | --- | --- | --- | --- |"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        TOTAL_ERRORS=0
+        for f in "${FILES[@]}"; do
+          PROJECT="${f%.sarif}"
+          jq -r --arg project "$PROJECT" '
+            .runs[].results[] |
+            [
+              $project,
+              (.ruleId // "-"),
+              (.level // "-"),
+              (.locations[0].physicalLocation.artifactLocation.uri // "-"),
+              (.locations[0].physicalLocation.region.startLine // "-" | tostring),
+              (.message.text // "-" | gsub("\\r?\\n"; " ") | gsub("\\|"; "\\|"))
+            ] | "| " + join(" | ") + " |"
+          ' "$f" >> "$GITHUB_STEP_SUMMARY"
+
+          COUNT=$(jq '[.runs[].results[] | select(.level == "error")] | length' "$f")
+          TOTAL_ERRORS=$((TOTAL_ERRORS + COUNT))
+        done
+
+        if [ "$TOTAL_ERRORS" -gt 0 ]; then
+          echo "::error::Roslyn analyzers found ${TOTAL_ERRORS} error-level finding(s); see job summary for details."
+          exit 1
+        fi
+
+    ############################################################################################################
     # NPM BUILD
     ############################################################################################################
     - name: "Npm: Build"
