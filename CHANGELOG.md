@@ -71,7 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.31.0.145097
 - Dependencies - Updated AWSSDK to 4.0.102
-- Dependencies - Updated Meziantou.Analyzer to 3.0.139
+- Dependencies - Updated Meziantou.Analyzer to 3.0.140
 ### Deprecated
 ### Removed
 ### Deployment Changes
