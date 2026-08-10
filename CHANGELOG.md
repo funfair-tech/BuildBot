@@ -43,7 +43,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
-- Dependencies - Updated Roslynator.Analyzers to 4.15.0
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated xunit.analyzers to 1.27.0
 - Dependencies - Updated xunit.v3 to 3.2.2
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.31.0.145097
 - Dependencies - Updated AWSSDK to 4.0.102
 - Dependencies - Updated Meziantou.Analyzer to 3.0.141
+- Dependencies - Updated Roslynator.Analyzers to 4.16.0
 ### Deprecated
 ### Removed
 ### Deployment Changes
