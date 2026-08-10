@@ -57,7 +57,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Serilog to 4.4.0
-- Dependencies - Updated NSubstitute to 6.0.0
 - SDK - Updated DotNet SDK to 10.0.302
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.102
 - Dependencies - Updated Meziantou.Analyzer to 3.0.141
 - Dependencies - Updated Roslynator.Analyzers to 4.16.0
+- Dependencies - Updated NSubstitute to 6.1.0
 ### Deprecated
 ### Removed
 ### Deployment Changes
