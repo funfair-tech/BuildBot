@@ -67,11 +67,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.11.2216
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 - Dependencies - Updated System.Reactive to 7.0.0
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.31.0.145097
 - Dependencies - Updated AWSSDK to 4.0.102
 - Dependencies - Updated Roslynator.Analyzers to 4.16.0
 - Dependencies - Updated NSubstitute to 6.1.0
 - Dependencies - Updated Meziantou.Analyzer to 3.0.142
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.32.0.713
 ### Deprecated
 ### Removed
 ### Deployment Changes
