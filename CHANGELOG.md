@@ -66,12 +66,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated AWSSDK to 4.0.102
 - Dependencies - Updated Roslynator.Analyzers to 4.16.0
-- Dependencies - Updated Meziantou.Analyzer to 3.0.142
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.32.0.713
 - Dependencies - Updated FunFair.Test to 6.3.7.2568
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.7.2568
 - Dependencies - Updated NSubstitute to 6.2.0
 - SDK - Updated DotNet SDK to 10.0.400
+- Dependencies - Updated Meziantou.Analyzer to 3.0.147
 ### Deprecated
 ### Removed
 ### Deployment Changes
