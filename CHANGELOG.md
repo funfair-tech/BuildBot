@@ -57,7 +57,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Serilog to 4.4.0
-- SDK - Updated DotNet SDK to 10.0.302
 - Dependencies - Updated Microsoft.Extensions to 10.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.3.7.2568
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.7.2568
 - Dependencies - Updated NSubstitute to 6.2.0
+- SDK - Updated DotNet SDK to 10.0.400
 ### Deprecated
 ### Removed
 ### Deployment Changes
