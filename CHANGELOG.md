@@ -60,7 +60,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.11.2216
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated Roslynator.Analyzers to 4.16.0
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.147
 - Dependencies - Updated AWSSDK to 4.0.102.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.12.2288
 ### Deprecated
 ### Removed
 ### Deployment Changes
