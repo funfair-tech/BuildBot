@@ -68,10 +68,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.7.2568
 - Dependencies - Updated NSubstitute to 6.2.0
 - SDK - Updated DotNet SDK to 10.0.400
-- Dependencies - Updated Meziantou.Analyzer to 3.0.147
 - Dependencies - Updated AWSSDK to 4.0.102.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.12.2288
+- Dependencies - Updated Meziantou.Analyzer to 3.0.151
 ### Deprecated
 ### Removed
 ### Deployment Changes
