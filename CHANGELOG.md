@@ -55,7 +55,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Serilog to 4.4.0
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.8.1
 - Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.156
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
 ### Deprecated
 ### Removed
 ### Deployment Changes
