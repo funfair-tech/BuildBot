@@ -70,8 +70,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
-- Dependencies - Updated Meziantou.Analyzer to 3.0.159
 - Dependencies - Updated Roslynator.Analyzers to 4.16.1
+- Dependencies - Updated Meziantou.Analyzer to 3.0.165
 ### Deprecated
 ### Removed
 ### Deployment Changes
