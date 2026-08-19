@@ -19,7 +19,13 @@ inputs:
     description: 'Nuget feed to push packages symbols to'
     required: false
   nuget-api-key:
-    description: 'API key to authenticate when pushing packages'
+    description: >-
+      API key to authenticate when pushing packages, or one of the sentinel values 'SLEET'
+      (push via Sleet) or 'TRUSTED_PUBLISHING' (exchange a GitHub OIDC token for a short-lived
+      nuget.org API key instead of using a static key)
+    required: false
+  nuget-username:
+    description: 'nuget.org username (profile name) for trusted publishing'
     required: false
   sleet-config:
     description: 'Sleet config file'
@@ -211,28 +217,26 @@ runs:
         cp **/*.nupkg "${{github.workspace}}/dist"
       working-directory: ${{github.workspace}}/src
 
-    - name: "Dotnet: Publish Packages to Nuget (With integrated symbol feed)"
+    - name: "Dotnet: Publish Packages to Nuget"
       if: |-
         inputs.nuget-api-key != '' &&
         inputs.nuget-api-key != 'SLEET' &&
-        inputs.nuget-pack == 'true' &&
-        (inputs.nuget-symbol-feed == '' || inputs.nuget-symbol-feed == ' ')
-      uses: ./.github/actions/nuget-push-integrated-symbol-feed
-      with:
-        nuget-feed: ${{inputs.nuget-feed}}
-        nuget-api-key: ${{inputs.nuget-api-key}}
-
-    - name: "Dotnet: Publish Packages to Nuget (With separate symbol feed)"
-      if: |-
-        inputs.nuget-api-key != '' &&
-        inputs.nuget-api-key != 'SLEET' &&
-        inputs.nuget-pack == 'true' &&
-        !(inputs.nuget-symbol-feed == '' || inputs.nuget-symbol-feed == ' ')
-      uses: ./.github/actions/nuget-push-separate-symbol-feed
+        inputs.nuget-api-key != 'TRUSTED_PUBLISHING' &&
+        inputs.nuget-pack == 'true'
+      uses: ./.github/actions/nuget-push
       with:
         nuget-feed: ${{inputs.nuget-feed}}
         nuget-symbol-feed: ${{inputs.nuget-symbol-feed}}
         nuget-api-key: ${{inputs.nuget-api-key}}
+
+    - name: "Dotnet: Publish Packages to Nuget (Trusted Publishing)"
+      if: |-
+        inputs.nuget-api-key == 'TRUSTED_PUBLISHING' &&
+        inputs.nuget-pack == 'true'
+      uses: ./.github/actions/nuget-trusted-publish
+      with:
+        nuget-feed: ${{inputs.nuget-feed}}
+        nuget-username: ${{inputs.nuget-username}}
 
     - name: "Dotnet: Publish Packages using sleet"
       if: |-
