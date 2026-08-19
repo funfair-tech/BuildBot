@@ -1,14 +1,11 @@
 --- # Build and deploy packages
 # Maintain in repo: funfair-server-template
 name: 'Publish to nuget'
-description: 'Publishes Nuget packages, with or without a separate symbol feed'
+description: 'Publishes Nuget packages'
 inputs:
   nuget-feed:
     description: 'Nuget feed to push packages to'
     required: true
-  nuget-symbol-feed:
-    description: 'Nuget feed to push packages symbols to'
-    required: false
   nuget-api-key:
     description: 'API key to authenticate when pushing packages'
     required: true
@@ -17,27 +14,15 @@ runs:
   using: "composite"
   steps:
 
-    - name: "Determine symbol source argument"
-      id: symbol-source
-      shell: bash
-      env:
-        NUGET_SYMBOL_FEED: ${{inputs.nuget-symbol-feed}}
-      run: |
-        if [ -n "${NUGET_SYMBOL_FEED}" ] && [ "${NUGET_SYMBOL_FEED}" != " " ]; then
-          {
-            echo "arg<<NUGET_SYMBOL_SOURCE_EOF"
-            echo "--symbol-source \"${NUGET_SYMBOL_FEED}\""
-            echo "NUGET_SYMBOL_SOURCE_EOF"
-          } >> "$GITHUB_OUTPUT"
-        else
-          echo "arg=" >> "$GITHUB_OUTPUT"
-        fi
+    - name: "Check Required Secrets: nuget-api-key"
+      uses: ./.github/actions/check-required-secret
+      with:
+        secret-name: "nuget-api-key"
+        secret-value: ${{inputs.nuget-api-key}}
 
-# yamllint disable rule:line-length
     - name: "NuGet Push"
       uses: ./.github/actions/dotnet-tool-run
       with:
         working-directory: "${{github.workspace}}"
         tool-name: "pushpackages"
-        tool-arguments: "--folder dist --api-key \"${{inputs.nuget-api-key}}\" --source \"${{inputs.nuget-feed}}\" ${{steps.symbol-source.outputs.arg}}"
-# yamllint enable rule:line-length
+        tool-arguments: "--folder dist --api-key \"${{inputs.nuget-api-key}}\" --source \"${{inputs.nuget-feed}}\""
