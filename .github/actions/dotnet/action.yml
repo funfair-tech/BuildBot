@@ -15,17 +15,14 @@ inputs:
   nuget-feed:
     description: 'Nuget feed to push packages to'
     required: false
-  nuget-symbol-feed:
-    description: 'Nuget feed to push packages symbols to'
-    required: false
-  nuget-api-key:
+  nuget-feed-type:
     description: >-
-      API key to authenticate when pushing packages, or one of the sentinel values 'SLEET'
-      (push via Sleet) or 'TRUSTED_PUBLISHING' (exchange a GitHub OIDC token for a short-lived
-      nuget.org API key instead of using a static key)
+      Which feed to publish packages to: 'NUGET' publishes to nuget-feed via Trusted Publishing
+      (nuget.org is deprecating static API keys, so no key is used), 'SLEET' publishes via Sleet,
+      empty/unset skips publishing
     required: false
   nuget-username:
-    description: 'nuget.org username (profile name) for trusted publishing'
+    description: 'nuget.org username (profile name) the Trusted Publishing policy is registered against'
     required: false
   sleet-config:
     description: 'Sleet config file'
@@ -191,58 +188,15 @@ runs:
     ############################################################################################################
     # DOTNET PUSH TO NUGET
     ############################################################################################################
-    - name: "Dotnet: Pack tool"
+    - name: "Dotnet: Pack and publish nuget packages"
       if: inputs.nuget-pack == 'true'
-      working-directory: ${{github.workspace}}/src
-      shell: bash
-      run: |
-        dotnet pack \
-                  --warnaserror \
-                  --configuration Release \
-                  "-p:Version=${{inputs.build-version}}" \
-                  "-p:IsProduction=${{inputs.production-build}}" \
-                  "-p:IncludeSymbols=False" \
-                  --no-restore \
-                  -nodeReuse:False \
-                  "-p:NoWarn=MSB4241" \
-                  "-p:ContinuousIntegrationBuild=true"
-      env:
-        ReleaseNotes: ${{inputs.release-notes}}
-
-    - name: "Dotnet: Copy packed to dist"
-      if: inputs.nuget-pack == 'true'
-      shell: bash
-      run: |
-        shopt -s globstar
-        cp **/*.nupkg "${{github.workspace}}/dist"
-      working-directory: ${{github.workspace}}/src
-
-    - name: "Dotnet: Publish Packages to Nuget"
-      if: |-
-        inputs.nuget-api-key != '' &&
-        inputs.nuget-api-key != 'SLEET' &&
-        inputs.nuget-api-key != 'TRUSTED_PUBLISHING' &&
-        inputs.nuget-pack == 'true'
-      uses: ./.github/actions/nuget-push
+      uses: ./.github/actions/nuget-publish
       with:
+        build-version: ${{inputs.build-version}}
+        production-build: ${{inputs.production-build}}
+        release-notes: ${{inputs.release-notes}}
         nuget-feed: ${{inputs.nuget-feed}}
-        nuget-symbol-feed: ${{inputs.nuget-symbol-feed}}
-        nuget-api-key: ${{inputs.nuget-api-key}}
-
-    - name: "Dotnet: Publish Packages to Nuget (Trusted Publishing)"
-      if: |-
-        inputs.nuget-api-key == 'TRUSTED_PUBLISHING' &&
-        inputs.nuget-pack == 'true'
-      uses: ./.github/actions/nuget-trusted-publish
-      with:
-        nuget-feed: ${{inputs.nuget-feed}}
+        nuget-feed-type: ${{inputs.nuget-feed-type}}
         nuget-username: ${{inputs.nuget-username}}
-
-    - name: "Dotnet: Publish Packages using sleet"
-      if: |-
-        inputs.nuget-api-key == 'SLEET' &&
-        inputs.nuget-pack == 'true'
-      uses: ./.github/actions/sleet
-      with:
-        sleet-config: ${{ inputs.sleet-config }}
+        sleet-config: ${{inputs.sleet-config}}
         sleet-feed: ${{inputs.sleet-feed}}
