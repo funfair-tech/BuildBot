@@ -17,6 +17,7 @@ permissions:
   contents: write
   security-events: write
   pull-requests: write
+  id-token: write
 
 jobs:
   # @@required: main
@@ -96,6 +97,7 @@ jobs:
           nuget-feed: ${{secrets.NUGET_FEED}}
           nuget-symbol-feed: ${{secrets.NUGET_SYMBOL_FEED}}
           nuget-api-key: ${{secrets.NUGET_API_KEY}}
+          nuget-username: ${{secrets.NUGET_USER_NAME}}
           sleet-config: ${{secrets.SLEET_CONFIG}}
           sleet-feed: ${{vars.PRE_RELEASE_SLEET_FEED}}
           project-to-publish: ${{vars.PROJECT_TO_PUBLISH}}
