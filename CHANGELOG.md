@@ -62,7 +62,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.32.0.713
 - Dependencies - Updated NSubstitute to 6.2.0
 - SDK - Updated DotNet SDK to 10.0.400
-- Dependencies - Updated AWSSDK to 4.0.102.1
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.12.2288
 - Dependencies - Updated FunFair.Test to 6.3.8.2585
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
 - Dependencies - Updated Roslynator.Analyzers to 4.16.1
 - Dependencies - Updated Meziantou.Analyzer to 3.0.165
+- Dependencies - Updated AWSSDK to 4.0.102.2
 ### Deprecated
 ### Removed
 ### Deployment Changes
