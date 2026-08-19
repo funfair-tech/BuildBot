@@ -59,6 +59,9 @@ inputs:
   nuget-api-key:
     description: 'API key to authenticate when pushing packages'
     required: false
+  nuget-username:
+    description: 'nuget.org username (profile name) for trusted publishing'
+    required: false
   sleet-config:
     description: 'Sleet config file'
     required: false
@@ -358,6 +361,7 @@ runs:
         nuget-feed: ${{inputs.nuget-feed}}
         nuget-symbol-feed: ${{inputs.nuget-symbol-feed}}
         nuget-api-key: ${{inputs.nuget-api-key}}
+        nuget-username: ${{inputs.nuget-username}}
         sleet-config: ${{inputs.sleet-config}}
         sleet-feed: ${{inputs.sleet-feed}}
         github-token: ${{inputs.github-token}}
