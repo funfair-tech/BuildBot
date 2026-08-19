@@ -94,7 +94,7 @@ jobs:
           nuget-additional-restore-feed-prerelease-cache: ${{env.PRERELEASE_BAGET_CACHE}}
           nuget-additional-restore-feed-prerelease: ${{vars.NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE}}
           nuget-pack: ${{vars.NUGET_PACK}}
-          nuget-feed: ${{secrets.NUGET_FEED}}
+          nuget-feed: ${{secrets.NUGET_FEED || 'https://api.nuget.org/v3/index.json'}}
           nuget-feed-type: ${{vars.NUGET_FEED_TYPE}}
           nuget-username: ${{secrets.NUGET_USER_NAME}}
           sleet-config: ${{secrets.SLEET_CONFIG}}
