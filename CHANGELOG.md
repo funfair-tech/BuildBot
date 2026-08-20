@@ -61,7 +61,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 6.2.0
 - SDK - Updated DotNet SDK to 10.0.400
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.12.2288
 - Dependencies - Updated FunFair.Test to 6.3.8.2585
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.8.2585
 - Dependencies - Updated xunit.analyzers to 2.0.0
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.102.2
 - Dependencies - Updated Credfeto.Enumeration to 1.2.152.2216
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.136.1515
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 ### Deprecated
 ### Removed
 ### Deployment Changes
