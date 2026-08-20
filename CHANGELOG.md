@@ -55,7 +55,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Serilog to 4.4.0
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.76.1094
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.32.0.713
 - Dependencies - Updated NSubstitute to 6.2.0
@@ -72,6 +71,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.136.1515
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 - Dependencies - Updated Meziantou.Analyzer to 3.0.173
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.77.1109
 ### Deprecated
 ### Removed
 ### Deployment Changes
