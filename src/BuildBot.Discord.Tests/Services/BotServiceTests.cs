@@ -117,7 +117,7 @@ public sealed class BotServiceTests : TestBase
 
     [Theory]
     [MemberData(nameof(NullConstructorArguments))]
-    public void Constructor_ThrowsArgumentNullException_WhenParameterIsNull(
+    public static void Constructor_ThrowsArgumentNullException_WhenParameterIsNull(
         int nullParameterIndex,
         string expectedParamName
     )
