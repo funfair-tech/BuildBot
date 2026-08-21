@@ -11,7 +11,7 @@ public sealed class PackageUpdateDetectorTests : TestBase
     [InlineData("[FF-1429] - Updated something else")]
     [InlineData("Dependencies - Updated package")]
     [InlineData("[Dependencies]  - Updated something else")]
-    public void ShouldBeConsideredAPackageUpdate(string commitMessage)
+    public static void ShouldBeConsideredAPackageUpdate(string commitMessage)
     {
         Assert.True(PackageUpdateDetector.IsPackageUpdate(commitMessage), userMessage: "Should be a package update");
     }
@@ -24,7 +24,7 @@ public sealed class PackageUpdateDetectorTests : TestBase
     [InlineData("Validating Dependencies")]
     [InlineData("Validating Dependencies of packages")]
     [InlineData("Identifying [Dependencies] too")]
-    public void ShouldNotBeConsideredAPackageUpdate(string commitMessage)
+    public static void ShouldNotBeConsideredAPackageUpdate(string commitMessage)
     {
         Assert.False(
             PackageUpdateDetector.IsPackageUpdate(commitMessage),

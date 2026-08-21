@@ -17,7 +17,7 @@ public sealed class ServiceStatusTests : TestBase
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void OkPropertyMatchesConstructorArgument(bool ok)
+    public static void OkPropertyMatchesConstructorArgument(bool ok)
     {
         ServiceStatus status = new(Name: "database", Ok: ok);
 

@@ -44,9 +44,9 @@
     <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FunFair.Test.Common" Version="6.3.8.2585" />
+    <PackageReference Include="FunFair.Test.Common" Version="6.4.0.2617" />
     <PackageReference Include="NSubstitute" Version="6.2.0" />
-    <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0" />
+    <PackageReference Include="xunit.v3.aot.mtp-v2" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />

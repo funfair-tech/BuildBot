@@ -25,6 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Pass ILogger to HealthCheckClient.ExecuteAsync to match new API in Credfeto.Docker.HealthCheck.Http.Client 0.0.72.928
 - Made DiscordChannelAdapter testable by accepting ITextChannel instead of the sealed SocketTextChannel, and added unit tests
 - Guard against IndexOutOfRangeException when Branches list is empty in GithubStatusNotificationHandler
+- Fixed CS0433 ambiguous xunit type conflict in test projects caused by FunFair.Test.Common now depending on the AOT-flavoured xunit v3 packages, by switching test projects to the matching xunit.v3.aot.mtp-v2 runner package
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -60,7 +61,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 6.2.0
 - SDK - Updated DotNet SDK to 10.0.400
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
-- Dependencies - Updated FunFair.Test to 6.3.8.2585
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
@@ -72,6 +72,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.173
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.77.1109
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.0.2617
+- Dependencies - Updated FunFair.Test to 6.4.0.2617
 ### Deprecated
 ### Removed
 ### Deployment Changes
