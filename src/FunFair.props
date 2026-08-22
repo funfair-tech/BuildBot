@@ -46,7 +46,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="$(FFPacking) == 'True' AND Exists('$(_LicenseFile)')">
         <PackageLicense>LICENSE</PackageLicense>
-        <PackageLicenseUrl>$(RepositoryUrl)/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseUrl>$(RepositoryUrl)/blob/main/LICENSE.md</PackageLicenseUrl>
     </PropertyGroup>
     <ItemGroup Condition="$(FFPacking) == 'True' AND Exists('$(_LicenseFile)')">
         <None Include="$(_LicenseFile)" Pack="true" PackagePath="\" />
