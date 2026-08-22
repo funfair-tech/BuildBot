@@ -56,7 +56,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated System.Reactive to 7.0.0
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.32.0.713
 - Dependencies - Updated NSubstitute to 6.2.0
 - SDK - Updated DotNet SDK to 10.0.400
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
@@ -73,6 +72,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
 - Dependencies - Updated Meziantou.Analyzer to 3.0.177
 - Dependencies - Updated Roslynator.Analyzers to 5.0.0
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.33.0.1635
 ### Deprecated
 ### Removed
 ### Deployment Changes
