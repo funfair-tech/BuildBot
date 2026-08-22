@@ -63,7 +63,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
-- Dependencies - Updated Roslynator.Analyzers to 4.16.1
 - Dependencies - Updated AWSSDK to 4.0.102.2
 - Dependencies - Updated Credfeto.Enumeration to 1.2.152.2216
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.136.1515
@@ -73,6 +72,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.4.0.2617
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
 - Dependencies - Updated Meziantou.Analyzer to 3.0.177
+- Dependencies - Updated Roslynator.Analyzers to 5.0.0
 ### Deprecated
 ### Removed
 ### Deployment Changes
