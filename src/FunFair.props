@@ -79,8 +79,4 @@
         <ErrorLog>$(_SarifLogFile),version=2.1</ErrorLog>
         <ReportAnalyzer>true</ReportAnalyzer>
     </PropertyGroup>
-
-<!--     <ItemGroup> -->
-<!--       <GlobalAnalyzerConfigFiles Include="$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '.globalconfig'))" /> -->
-<!--     </ItemGroup> -->
 </Project>
