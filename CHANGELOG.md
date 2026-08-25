@@ -72,7 +72,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.177
 - Dependencies - Updated Roslynator.Analyzers to 5.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.33.0.1635
-- Dependencies - Updated AWSSDK to 4.0.102.3
+- Dependencies - Updated AWSSDK to 4.0.102.4
 ### Deprecated
 ### Removed
 ### Deployment Changes
