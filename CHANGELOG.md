@@ -69,10 +69,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.0.2617
 - Dependencies - Updated FunFair.Test to 6.4.0.2617
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
-- Dependencies - Updated Meziantou.Analyzer to 3.0.177
 - Dependencies - Updated Roslynator.Analyzers to 5.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.33.0.1635
 - Dependencies - Updated AWSSDK to 4.0.102.4
+- Dependencies - Updated Meziantou.Analyzer to 3.0.189
 ### Deprecated
 ### Removed
 ### Deployment Changes
