@@ -39,7 +39,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.9.3
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
-- Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6581
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
@@ -73,6 +72,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.4.3.2685
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.3.2685
 - Dependencies - Updated Meziantou.Analyzer to 3.0.200
+- Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 ### Deprecated
 ### Removed
 ### Deployment Changes
