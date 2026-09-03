@@ -74,6 +74,20 @@
       "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
     }
   },
+  "Conditions": {
+    "HasTaskRole": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "TaskRole"
+            },
+            ""
+          ]
+        }
+      ]
+    }
+  },
   "Metadata": {
     "Application": {
       "Ref": "ApplicationName"
@@ -279,7 +293,15 @@
           "Ref": "TaskExecutionRole"
         },
         "TaskRoleArn": {
-          "Ref": "TaskRole"
+          "Fn::If": [
+            "HasTaskRole",
+            {
+              "Ref": "TaskRole"
+            },
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
         },
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
