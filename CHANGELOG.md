@@ -26,6 +26,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Made DiscordChannelAdapter testable by accepting ITextChannel instead of the sealed SocketTextChannel, and added unit tests
 - Guard against IndexOutOfRangeException when Branches list is empty in GithubStatusNotificationHandler
 - Fixed CS0433 ambiguous xunit type conflict in test projects caused by FunFair.Test.Common now depending on the AOT-flavoured xunit v3 packages, by switching test projects to the matching xunit.v3.aot.mtp-v2 runner package
+- Added missing IncludeAssets on NuGet package references required by FunFair.BuildCheck
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -76,9 +77,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Deprecated
 ### Removed
 ### Deployment Changes
+
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
 ## [1.4.48] - 2023-12-22
 ### Changed
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
