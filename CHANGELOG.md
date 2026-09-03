@@ -71,8 +71,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.102.4
 - Dependencies - Updated FunFair.Test to 6.4.3.2685
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.3.2685
-- Dependencies - Updated Meziantou.Analyzer to 3.0.200
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
+- Dependencies - Updated Meziantou.Analyzer to 3.0.203
 ### Deprecated
 ### Removed
 ### Deployment Changes
