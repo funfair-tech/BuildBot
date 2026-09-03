@@ -19,13 +19,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - BuildBot.Discord.Tests: Added unit tests to increase code coverage to 100%
 - BotService null-guard branch coverage test
 ### Fixed
-- Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 - SnsMessage: Token property was never populated from the constructor argument
 - Added null guards for botMessageChannel and botReleaseMessageChannel parameters in BotService constructor
 - Pass ILogger to HealthCheckClient.ExecuteAsync to match new API in Credfeto.Docker.HealthCheck.Http.Client 0.0.72.928
 - Made DiscordChannelAdapter testable by accepting ITextChannel instead of the sealed SocketTextChannel, and added unit tests
 - Guard against IndexOutOfRangeException when Branches list is empty in GithubStatusNotificationHandler
 - Fixed CS0433 ambiguous xunit type conflict in test projects caused by FunFair.Test.Common now depending on the AOT-flavoured xunit v3 packages, by switching test projects to the matching xunit.v3.aot.mtp-v2 runner package
+- Added missing IncludeAssets on NuGet package references required by FunFair.BuildCheck
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -75,10 +75,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.203
 ### Deprecated
 ### Removed
+- Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
 ### Deployment Changes
+
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
 ## [1.4.48] - 2023-12-22
 ### Changed
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9

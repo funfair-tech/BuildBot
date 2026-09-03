@@ -38,8 +38,8 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Interactive.Async" Version="7.0.1" />
-    <PackageReference Include="System.Reactive" Version="7.0.0" />
+    <PackageReference Include="System.Interactive.Async" Version="7.0.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="System.Reactive" Version="7.0.0" IncludeAssets="compile;runtime;analyzers" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
