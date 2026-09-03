@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - BuildBot.Discord.Tests: Added unit tests to increase code coverage to 100%
 - BotService null-guard branch coverage test
 ### Fixed
-- Suppress known Scriban 6.2.0 vulnerabilities pending upgrade
 - SnsMessage: Token property was never populated from the constructor argument
 - Added null guards for botMessageChannel and botReleaseMessageChannel parameters in BotService constructor
 - Pass ILogger to HealthCheckClient.ExecuteAsync to match new API in Credfeto.Docker.HealthCheck.Http.Client 0.0.72.928
@@ -76,6 +75,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.203
 ### Deprecated
 ### Removed
+- Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
 ### Deployment Changes
 
 <!--
