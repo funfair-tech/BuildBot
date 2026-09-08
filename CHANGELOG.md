@@ -73,7 +73,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 - Dependencies - Updated Credfeto.Enumeration to 1.2.153.2254
 - Dependencies - Updated AWSSDK to 4.0.102.5
-- Dependencies - Updated Meziantou.Analyzer to 3.0.226
+- Dependencies - Updated Meziantou.Analyzer to 3.0.228
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
