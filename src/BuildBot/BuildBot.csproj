@@ -82,8 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.77.1109" IncludeAssets="compile;runtime" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="10.0.11" IncludeAssets="compile;runtime" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.11" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="10.0.12" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.12" IncludeAssets="compile;runtime" />
     <PackageReference Include="Serilog" Version="4.4.0" IncludeAssets="compile;runtime" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" IncludeAssets="compile;runtime" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" IncludeAssets="compile;runtime" />

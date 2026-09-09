@@ -57,7 +57,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated NSubstitute to 6.2.0
-- Dependencies - Updated Microsoft.Extensions to 10.0.11
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
@@ -74,6 +73,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated FunFair.Test to 6.4.5.2739
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.5.2739
+- Dependencies - Updated Microsoft.Extensions to 10.0.12
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped

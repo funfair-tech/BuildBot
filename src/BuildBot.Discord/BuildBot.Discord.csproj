@@ -43,7 +43,7 @@
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="3.20.1" IncludeAssets="compile;runtime" />
     <PackageReference Include="Mediator.Abstractions" Version="3.0.2" IncludeAssets="compile;runtime" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.11" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.12" IncludeAssets="compile;runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
