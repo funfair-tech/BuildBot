@@ -57,7 +57,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated NSubstitute to 6.2.0
-- SDK - Updated DotNet SDK to 10.0.400
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
@@ -74,6 +73,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.153.2254
 - Dependencies - Updated AWSSDK to 4.0.102.5
 - Dependencies - Updated Meziantou.Analyzer to 3.0.228
+- SDK - Updated DotNet SDK to 10.0.401
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
