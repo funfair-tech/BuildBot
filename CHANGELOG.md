@@ -59,7 +59,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 6.2.0
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.77.1109
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
@@ -74,6 +73,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.4.5.2739
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.5.2739
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.0
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
