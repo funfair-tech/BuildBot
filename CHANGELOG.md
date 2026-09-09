@@ -61,7 +61,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.0.0
 - Dependencies - Updated xunit.v3 to 4.0.0
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.9.0
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.136.1515
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.77.1109
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
@@ -74,6 +73,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.228
 - SDK - Updated DotNet SDK to 10.0.401
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.137.1543
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
