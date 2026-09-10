@@ -38,7 +38,7 @@
     <RepositoryUrl>https://github.com/funfair-tech/BuildBot</RepositoryUrl>
     <RunAOTCompilation>false</RunAOTCompilation>
     <RuntimeIdentifiers>win-x64;win-arm64;osx-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -65,7 +65,7 @@
     </Content>
   </ItemGroup>
   <Target Name="PrePublish" BeforeTargets="PrepareForPublish">
-    <Copy SourceFiles="appsettings.json" DestinationFiles="$(PublishDir)\appsettings.json" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="appsettings.json" DestinationFiles="$(PublishDir)/appsettings.json" SkipUnchangedFiles="true" />
   </Target>
   <ItemGroup>
     <TrimmerRootAssembly Include="System.Web.HttpUtility" />
@@ -74,11 +74,11 @@
     <TrimmerRootAssembly Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BuildBot.CloudFormation\BuildBot.CloudFormation.csproj" />
-    <ProjectReference Include="..\BuildBot.GitHub\BuildBot.GitHub.csproj" />
-    <ProjectReference Include="..\BuildBot.Json\BuildBot.Json.csproj" />
-    <ProjectReference Include="..\BuildBot.Health\BuildBot.Health.csproj" />
-    <ProjectReference Include="..\BuildBot.Watchtower\BuildBot.Watchtower.csproj" />
+    <ProjectReference Include="../BuildBot.CloudFormation/BuildBot.CloudFormation.csproj" />
+    <ProjectReference Include="../BuildBot.GitHub/BuildBot.GitHub.csproj" />
+    <ProjectReference Include="../BuildBot.Json/BuildBot.Json.csproj" />
+    <ProjectReference Include="../BuildBot.Health/BuildBot.Health.csproj" />
+    <ProjectReference Include="../BuildBot.Watchtower/BuildBot.Watchtower.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Docker.HealthCheck.Http.Client" Version="0.0.77.1109" IncludeAssets="compile;runtime" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.CloudFormation;
@@ -18,7 +19,7 @@ namespace BuildBot.CloudFormation.Tests.Publishers;
 
 public sealed class CloudFormationMessageReceivedNotificationHandlerTests : TestBase
 {
-    private const string ValidArn = "arn:aws:sns:eu-west-1:123:test";
+    private const string VALID_ARN = "arn:aws:sns:eu-west-1:123:test";
 
     private (
         SnsNotificationOptions options,
@@ -29,7 +30,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
     ) CreateHandler()
     {
         SnsNotificationOptions options = new(
-            TopicArn: ValidArn,
+            TopicArn: VALID_ARN,
             Region: "eu-west-1",
             AccessKey: "AKIAIOSFODNN7EXAMPLE",
             SecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
@@ -52,6 +53,11 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
         return (options, extractor, aws, mediator, handler);
     }
 
+    [SuppressMessage(
+        category: "Microsoft.IDE",
+        checkId: "IDE0028",
+        Justification = "Roslyn's IDE0028 codefix for Dictionary construction with an explicit IEqualityComparer<string> drops the comparer, which then violates MA0002; see https://github.com/dotnet/roslyn/issues/75894"
+    )]
     private static CloudFormationMessageReceived MakeNotification(string topicArn)
     {
         return new CloudFormationMessageReceived(
@@ -99,7 +105,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
 
         extractor.ExtractDeploymentProperties(Arg.Any<CloudFormationMessageReceived>()).Returns((Deployment?)null);
 
-        CloudFormationMessageReceived notification = MakeNotification(ValidArn);
+        CloudFormationMessageReceived notification = MakeNotification(VALID_ARN);
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
@@ -121,7 +127,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
         extractor.ExtractDeploymentProperties(Arg.Any<CloudFormationMessageReceived>()).Returns(deployment);
         aws.GetStackDetailsAsync(Arg.Any<Deployment>(), Arg.Any<CancellationToken>()).Returns((StackDetails?)null);
 
-        CloudFormationMessageReceived notification = MakeNotification(ValidArn);
+        CloudFormationMessageReceived notification = MakeNotification(VALID_ARN);
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
@@ -144,7 +150,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
         aws.GetStackDetailsAsync(Arg.Any<Deployment>(), Arg.Any<CancellationToken>())
             .Returns(new StackDetails(Description: "A deployment", Version: "1.0.0"));
 
-        CloudFormationMessageReceived notification = MakeNotification(ValidArn);
+        CloudFormationMessageReceived notification = MakeNotification(VALID_ARN);
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
@@ -173,7 +179,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
         extractor.ExtractDeploymentProperties(Arg.Any<CloudFormationMessageReceived>()).Returns(deployment);
         aws.GetStackDetailsAsync(Arg.Any<Deployment>(), Arg.Any<CancellationToken>()).Returns((StackDetails?)null);
 
-        CloudFormationMessageReceived notification = MakeNotification(ValidArn);
+        CloudFormationMessageReceived notification = MakeNotification(VALID_ARN);
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
@@ -203,7 +209,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
         aws.GetStackDetailsAsync(Arg.Any<Deployment>(), Arg.Any<CancellationToken>())
             .Returns(new StackDetails(Description: "A deployment", Version: "2.0.0"));
 
-        CloudFormationMessageReceived notification = MakeNotification(ValidArn);
+        CloudFormationMessageReceived notification = MakeNotification(VALID_ARN);
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
