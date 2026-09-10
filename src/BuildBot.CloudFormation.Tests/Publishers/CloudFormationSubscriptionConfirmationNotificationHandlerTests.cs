@@ -16,7 +16,7 @@ namespace BuildBot.CloudFormation.Tests.Publishers;
 
 public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTests : TestBase
 {
-    private const string ValidArn = "arn:aws:sns:eu-west-1:123:test";
+    private const string VALID_ARN = "arn:aws:sns:eu-west-1:123:test";
 
     private (
         SnsNotificationOptions options,
@@ -26,7 +26,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
     ) CreateHandler()
     {
         SnsNotificationOptions options = new(
-            TopicArn: ValidArn,
+            TopicArn: VALID_ARN,
             Region: "eu-west-1",
             AccessKey: "AKIAIOSFODNN7EXAMPLE",
             SecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
@@ -99,7 +99,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
             .Returns(httpClient);
 
         CloudFormationSubscriptionConfirmation notification = new(
-            TopicArn: ValidArn,
+            TopicArn: VALID_ARN,
             SubscribeUrl: new Uri("https://test.example.com/subscribe")
         );
 
@@ -137,7 +137,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
             .Returns(httpClient);
 
         CloudFormationSubscriptionConfirmation notification = new(
-            TopicArn: ValidArn,
+            TopicArn: VALID_ARN,
             SubscribeUrl: new Uri("https://test.example.com/subscribe")
         );
 

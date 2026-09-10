@@ -74,6 +74,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.0
 - Dependencies - Updated AWSSDK to 4.0.102.6
 - Dependencies - Updated Meziantou.Analyzer to 3.0.235
+- Upgrade all projects to net11.0
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
