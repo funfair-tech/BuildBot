@@ -75,7 +75,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Update Docker base image to net11.0 preview runtime-deps (fixes CVE-2026-45447)
 - Dependencies - Updated FunFair.Test to 6.4.6.2749
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
-- Dependencies - Updated Meziantou.Analyzer to 3.0.236
+- Dependencies - Updated Meziantou.Analyzer to 3.0.238
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
