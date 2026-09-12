@@ -57,7 +57,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated NSubstitute to 6.2.0
-- Dependencies - Updated xunit.v3 to 4.0.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.77.1109
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
@@ -76,6 +75,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated Meziantou.Analyzer to 3.0.255
 - Dependencies - Updated xunit.analyzers to 2.1.0
+- Dependencies - Updated xunit.v3 to 4.0.1
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
