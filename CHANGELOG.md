@@ -58,7 +58,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated NSubstitute to 6.2.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
-- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.77.1109
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
 - Dependencies - Updated Roslynator.Analyzers to 5.0.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
@@ -77,6 +76,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.257
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.138.1557
 - Switch Docker base image to the net11.0 GA runtime-deps tag
+- Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.79.1151
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
