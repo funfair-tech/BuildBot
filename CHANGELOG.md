@@ -65,7 +65,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.0
 - Upgrade all projects to net11.0
 - Update Docker base image to net11.0 preview runtime-deps (fixes CVE-2026-45447)
 - Dependencies - Updated FunFair.Test to 6.4.6.2749
@@ -77,6 +76,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.79.1151
 - Dependencies - Updated AWSSDK to 4.0.102.7
 - Dependencies - Updated Meziantou.Analyzer to 3.0.259
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.1
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
