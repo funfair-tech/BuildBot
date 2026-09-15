@@ -72,11 +72,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated xunit.analyzers to 2.1.0
 - Dependencies - Updated xunit.v3 to 4.0.1
-- Dependencies - Updated Meziantou.Analyzer to 3.0.257
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.138.1557
 - Switch Docker base image to the net11.0 GA runtime-deps tag
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.79.1151
 - Dependencies - Updated AWSSDK to 4.0.102.7
+- Dependencies - Updated Meziantou.Analyzer to 3.0.259
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
