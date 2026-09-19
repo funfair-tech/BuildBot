@@ -42,7 +42,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
-- Dependencies - Updated Microsoft.Sbom.Targets to 4.1.5
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated Discord.Net to 3.19.1
@@ -77,6 +76,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.102.7
 - Dependencies - Updated Meziantou.Analyzer to 3.0.259
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.1
+- Dependencies - Updated Microsoft.Sbom.Targets to 4.1.12
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
