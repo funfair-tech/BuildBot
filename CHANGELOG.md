@@ -27,6 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Fixed CS0433 ambiguous xunit type conflict in test projects caused by FunFair.Test.Common now depending on the AOT-flavoured xunit v3 packages, by switching test projects to the matching xunit.v3.aot.mtp-v2 runner package
 - Added missing IncludeAssets on NuGet package references required by FunFair.BuildCheck
 - Resolved cfn-lint W1030 warning on the TaskRoleArn CloudFormation property by only setting it when a TaskRole is provided
+- Added missing build;buildTransitive IncludeAssets on Serilog package reference required by FunFair.BuildCheck
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -75,8 +76,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Switch Docker base image to the net11.0 GA runtime-deps tag
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.79.1151
 - Dependencies - Updated AWSSDK to 4.0.102.7
-- Dependencies - Updated Meziantou.Analyzer to 3.0.259
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.1
+- Dependencies - Updated Meziantou.Analyzer to 3.0.264
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
