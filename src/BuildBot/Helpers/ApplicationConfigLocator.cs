@@ -4,18 +4,10 @@ using System.IO;
 
 namespace BuildBot.Helpers;
 
-[SuppressMessage(
-    category: "ReSharper",
-    checkId: "UnusedType.Global",
-    Justification = "Used in exe code. Not possible to unit test."
-)]
+
 internal static class ApplicationConfigLocator
 {
-    [SuppressMessage(
-        category: "ReSharper",
-        checkId: "UnusedMember.Global",
-        Justification = "Used in exe code. Not possible to unit test."
-    )]
+    
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
     private static string LookupConfigurationFilesPath()
