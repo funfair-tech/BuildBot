@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
@@ -71,11 +71,7 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
     }
 
     [Fact]
-    [SuppressMessage(
-        category: "Microsoft.Reliability",
-        checkId: "CA2000:DisposeObjectsBeforeLosingScope",
-        Justification = "Managed by test lifetime"
-    )]
+    
     [SuppressMessage(
         category: "SmartAnalyzers.CSharpExtensions.Annotations",
         checkId: "CSE007:DisposeObjectsBeforeLosingScope",
@@ -109,16 +105,8 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
     }
 
     [Fact]
-    [SuppressMessage(
-        category: "Microsoft.Reliability",
-        checkId: "CA2000:DisposeObjectsBeforeLosingScope",
-        Justification = "Managed by test lifetime"
-    )]
-    [SuppressMessage(
-        category: "SmartAnalyzers.CSharpExtensions.Annotations",
-        checkId: "CSE007:DisposeObjectsBeforeLosingScope",
-        Justification = "Managed by test lifetime"
-    )]
+    
+    
     public async Task Handle_WithValidArnAndFailedHttpResponse_LogsError()
     {
         (
