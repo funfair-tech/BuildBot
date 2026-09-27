@@ -164,11 +164,7 @@ public sealed class CloudFormationDeploymentExtractor : ICloudFormationDeploymen
         this._logger.ResourceStatus(status: status, success: success);
     }
 
-    [SuppressMessage(
-        category: "codecracker.CSharp",
-        checkId: "CC0091: Make the method static",
-        Justification = "Logging method needs to be an instance method"
-    )]
+    
     private void DumpAllProperties(in CloudFormationMessageReceived notification)
     {
         foreach ((string key, string value) in notification.Properties)
