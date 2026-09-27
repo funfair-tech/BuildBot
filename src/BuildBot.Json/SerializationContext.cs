@@ -9,7 +9,6 @@ using BuildBot.ServiceModel.Watchtower;
 
 namespace BuildBot.Json;
 
-
 [JsonSourceGenerationOptions(
     GenerationMode = JsonSourceGenerationMode.Serialization | JsonSourceGenerationMode.Metadata,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
