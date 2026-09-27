@@ -13,7 +13,6 @@ public static class Program
 {
     private const int MIN_THREADS = 32;
 
-    
     public static async Task<int> Main(string[] args)
     {
         if (HealthCheckClient.IsHealthCheck(args: args, out string? checkUrl))
