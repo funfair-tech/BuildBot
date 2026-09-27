@@ -4,10 +4,8 @@ using System.IO;
 
 namespace BuildBot.Helpers;
 
-
 internal static class ApplicationConfigLocator
 {
-    
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
     private static string LookupConfigurationFilesPath()
