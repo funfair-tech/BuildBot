@@ -71,7 +71,6 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
     }
 
     [Fact]
-    
     [SuppressMessage(
         category: "SmartAnalyzers.CSharpExtensions.Annotations",
         checkId: "CSE007:DisposeObjectsBeforeLosingScope",
@@ -105,8 +104,6 @@ public sealed class CloudFormationSubscriptionConfirmationNotificationHandlerTes
     }
 
     [Fact]
-    
-    
     public async Task Handle_WithValidArnAndFailedHttpResponse_LogsError()
     {
         (
