@@ -63,7 +63,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 - SDK - Updated DotNet SDK to 10.0.401
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
 - Upgrade all projects to net11.0
 - Update Docker base image to net11.0 preview runtime-deps (fixes CVE-2026-45447)
@@ -78,6 +77,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.1
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.13
 - Dependencies - Updated Meziantou.Analyzer to 3.0.290
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.35.0.4138
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
