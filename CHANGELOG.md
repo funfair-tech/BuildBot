@@ -59,7 +59,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 6.2.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
-- Dependencies - Updated Roslynator.Analyzers to 5.0.0
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 - SDK - Updated DotNet SDK to 10.0.401
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
@@ -78,6 +77,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.35.0.4138
 - Dependencies - Updated AWSSDK to 4.0.102.8
 - Dependencies - Updated Meziantou.Analyzer to 3.0.294
+- Dependencies - Updated Roslynator.Analyzers to 5.0.1
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
