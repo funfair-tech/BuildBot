@@ -45,12 +45,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated Figgle to 0.6.6
-- Dependencies - Updated Discord.Net to 3.19.1
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
-- Dependencies - Updated Discord.Net to 3.20.1
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated FunFair.Test.Common to 6.3.2.2390
@@ -78,6 +76,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 5.0.1
 - Dependencies - Updated Meziantou.Analyzer to 3.0.296
 - Dependencies - Updated AWSSDK to 4.0.103
+- Dependencies - Updated Discord.Net to 3.20.2
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
