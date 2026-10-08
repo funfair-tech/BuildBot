@@ -76,8 +76,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.13
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.35.0.4138
 - Dependencies - Updated AWSSDK to 4.0.102.8
-- Dependencies - Updated Meziantou.Analyzer to 3.0.294
 - Dependencies - Updated Roslynator.Analyzers to 5.0.1
+- Dependencies - Updated Meziantou.Analyzer to 3.0.296
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
