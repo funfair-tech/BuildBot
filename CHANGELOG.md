@@ -77,7 +77,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 3.0.299
-- TBD - to be finalized after review
+- Reduced BuildBot ECS task memory from 4 GB to 1 GB
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
