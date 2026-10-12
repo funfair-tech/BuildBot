@@ -11,7 +11,7 @@
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <Features>strict;flow-analysis</Features>
+    <Features>strict;flow-analysis;runtime-async=on</Features>
     <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
