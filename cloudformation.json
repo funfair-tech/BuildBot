@@ -45,7 +45,6 @@
       "Task": {
         "Cpu": "512",
         "Memory": "1024",
-        "Role": "",
         "ContainerPort": "8080",
         "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
       },
@@ -54,20 +53,6 @@
         "MinimumHealthPercent": "100",
         "MaximumHealthPercent": "200"
       }
-    }
-  },
-  "Conditions": {
-    "HasTaskRole": {
-      "Fn::Not": [
-        {
-          "Fn::Equals": [
-            {
-              "Fn::FindInMap": ["Deployment", "Task", "Role"]
-            },
-            ""
-          ]
-        }
-      ]
     }
   },
   "Metadata": {
@@ -291,17 +276,6 @@
         },
         "ExecutionRoleArn": {
           "Ref": "TaskExecutionRole"
-        },
-        "TaskRoleArn": {
-          "Fn::If": [
-            "HasTaskRole",
-            {
-              "Fn::FindInMap": ["Deployment", "Task", "Role"]
-            },
-            {
-              "Ref": "AWS::NoValue"
-            }
-          ]
         },
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
