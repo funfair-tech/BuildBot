@@ -11,10 +11,6 @@
     "ApplicationVersion": {
       "Type": "String"
     },
-    "ECSClusterName": {
-      "Type": "String",
-      "Default": "DiscordBots"
-    },
     "SecurityGroupIDs": {
       "Type": "CommaDelimitedList",
       "Default": "sg-e3e65a9a,sg-0272027302777cb4d"
@@ -27,51 +23,37 @@
       "Type": "String",
       "Default": "vpc-ad3bd9ca"
     },
-    "LoadBalancerArn": {
-      "Type": "String",
-      "Default": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/testing/c383c5dd580a74f5/e82083ed48688c7a"
-    },
     "LoadBalancerHostName": {
       "Type": "String"
     },
     "LoadBalancerPriority": {
       "Type": "Number"
     },
-    "ContainerPort": {
-      "Type": "Number",
-      "Default": "8080"
-    },
-    "TaskDefinitionCPU": {
-      "Type": "String",
-      "Default": "512"
-    },
-    "TaskDefinitionMemory": {
-      "Type": "String",
-      "Default": "1024"
-    },
-    "TaskRole": {
-      "Type": "String",
-      "Default": ""
-    },
     "TaskExecutionRole": {
       "Type": "String",
       "Default": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole"
-    },
-    "DesiredCount": {
-      "Type": "Number",
-      "Default": "1"
-    },
-    "MinimumHealthPercent": {
-      "Type": "Number",
-      "Default": "100"
-    },
-    "MaximumHealthPercent": {
-      "Type": "Number",
-      "Default": "200"
-    },
-    "SecretsManagerArn": {
-      "Type": "String",
-      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
+    }
+  },
+  "Mappings": {
+    "Deployment": {
+      "Cluster": {
+        "Name": "DiscordBots"
+      },
+      "LoadBalancer": {
+        "ListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/testing/c383c5dd580a74f5/e82083ed48688c7a"
+      },
+      "Task": {
+        "Cpu": "512",
+        "Memory": "1024",
+        "Role": "",
+        "ContainerPort": "8080",
+        "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
+      },
+      "Service": {
+        "DesiredCount": "1",
+        "MinimumHealthPercent": "100",
+        "MaximumHealthPercent": "200"
+      }
     }
   },
   "Conditions": {
@@ -80,7 +62,7 @@
         {
           "Fn::Equals": [
             {
-              "Ref": "TaskRole"
+              "Fn::FindInMap": ["Deployment", "Task", "Role"]
             },
             ""
           ]
@@ -125,7 +107,12 @@
                 "Value": {
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    { "SecretsManagerArn": { "Ref": "SecretsManagerArn" }, "Key": "DISCORD_TOKEN" }
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
+                      },
+                      "Key": "DISCORD_TOKEN"
+                    }
                   ]
                 }
               },
@@ -134,7 +121,12 @@
                 "Value": {
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    { "SecretsManagerArn": { "Ref": "SecretsManagerArn" }, "Key": "DISCORD_SERVER" }
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
+                      },
+                      "Key": "DISCORD_SERVER"
+                    }
                   ]
                 }
               },
@@ -144,7 +136,9 @@
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
-                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
+                      },
                       "Key": "DISCORD_CHANNEL"
                     }
                   ]
@@ -156,7 +150,9 @@
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
-                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
+                      },
                       "Key": "DISCORD_RELEASE_CHANNEL"
                     }
                   ]
@@ -168,7 +164,9 @@
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
-                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
+                      },
                       "Key": "OCTOPUS_URL"
                     }
                   ]
@@ -180,7 +178,9 @@
                   "Fn::Sub": [
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
-                      "SecretsManagerArn": { "Ref": "SecretsManagerArn" },
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
+                      },
                       "Key": "OCTOPUS_API_KEY"
                     }
                   ]
@@ -193,7 +193,7 @@
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
                       "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
                       },
                       "Key": "SNS_TOPIC_ARN"
                     }
@@ -207,7 +207,7 @@
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
                       "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
                       },
                       "Key": "AWS_REGION"
                     }
@@ -221,7 +221,7 @@
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
                       "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
                       },
                       "Key": "AWS_ACCESS_KEY_ID"
                     }
@@ -235,7 +235,7 @@
                     "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
                     {
                       "SecretsManagerArn": {
-                        "Ref": "SecretsManagerArn"
+                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
                       },
                       "Key": "AWS_SECRET_KEY"
                     }
@@ -259,8 +259,8 @@
             },
             "PortMappings": [
               {
-                "ContainerPort": { "Ref": "ContainerPort" },
-                "HostPort": { "Ref": "ContainerPort" },
+                "ContainerPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
+                "HostPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
                 "Protocol": "tcp"
               }
             ],
@@ -284,10 +284,10 @@
           "Ref": "ApplicationName"
         },
         "Cpu": {
-          "Ref": "TaskDefinitionCPU"
+          "Fn::FindInMap": ["Deployment", "Task", "Cpu"]
         },
         "Memory": {
-          "Ref": "TaskDefinitionMemory"
+          "Fn::FindInMap": ["Deployment", "Task", "Memory"]
         },
         "ExecutionRoleArn": {
           "Ref": "TaskExecutionRole"
@@ -296,7 +296,7 @@
           "Fn::If": [
             "HasTaskRole",
             {
-              "Ref": "TaskRole"
+              "Fn::FindInMap": ["Deployment", "Task", "Role"]
             },
             {
               "Ref": "AWS::NoValue"
@@ -330,13 +330,13 @@
           "Ref": "ApplicationName"
         },
         "Cluster": {
-          "Ref": "ECSClusterName"
+          "Fn::FindInMap": ["Deployment", "Cluster", "Name"]
         },
         "TaskDefinition": {
           "Ref": "TaskDefinition"
         },
         "DesiredCount": {
-          "Ref": "DesiredCount"
+          "Fn::FindInMap": ["Deployment", "Service", "DesiredCount"]
         },
         "EnableECSManagedTags": false,
         "Tags": [],
@@ -350,16 +350,16 @@
         },
         "DeploymentConfiguration": {
           "MaximumPercent": {
-            "Ref": "MaximumHealthPercent"
+            "Fn::FindInMap": ["Deployment", "Service", "MaximumHealthPercent"]
           },
           "MinimumHealthyPercent": {
-            "Ref": "MinimumHealthPercent"
+            "Fn::FindInMap": ["Deployment", "Service", "MinimumHealthPercent"]
           }
         },
         "LoadBalancers": [
           {
             "ContainerName": { "Ref": "ApplicationName" },
-            "ContainerPort": { "Ref": "ContainerPort" },
+            "ContainerPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
             "TargetGroupArn": { "Ref": "TargetGroup" }
           }
         ]
@@ -373,12 +373,12 @@
           "Ref": "ApplicationName"
         },
         "HealthCheckPath": "/ping?source=target-group",
-        "Port": { "Ref": "ContainerPort" },
+        "Port": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
         "Protocol": "HTTP",
         "TargetType": "ip",
         "HealthCheckEnabled": true,
         "HealthCheckProtocol": "HTTP",
-        "HealthCheckPort": { "Ref": "ContainerPort" },
+        "HealthCheckPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
         "HealthCheckTimeoutSeconds": 4,
         "HealthyThresholdCount": 5,
         "HealthCheckIntervalSeconds": 5,
@@ -416,7 +416,7 @@
                 "Values": [{ "Ref": "LoadBalancerHostName" }]
               }
         ],
-        "ListenerArn": { "Ref": "LoadBalancerArn" },
+        "ListenerArn": { "Fn::FindInMap": ["Deployment", "LoadBalancer", "ListenerArn"] },
         "Priority": { "Ref": "LoadBalancerPriority" }
       }
     }
