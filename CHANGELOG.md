@@ -28,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Added missing IncludeAssets on NuGet package references required by FunFair.BuildCheck
 - Resolved cfn-lint W1030 warning on the TaskRoleArn CloudFormation property by only setting it when a TaskRole is provided
 - Added missing build;buildTransitive IncludeAssets on Serilog package reference required by FunFair.BuildCheck
+- CloudFormation task settings now live in Mappings so every deploy applies them, reducing ECS task memory from 4 GB to 1 GB
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -77,7 +78,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 3.0.299
-- Reduced BuildBot ECS task memory from 4 GB to 1 GB
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
