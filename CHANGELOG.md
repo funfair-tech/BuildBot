@@ -26,8 +26,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Guard against IndexOutOfRangeException when Branches list is empty in GithubStatusNotificationHandler
 - Fixed CS0433 ambiguous xunit type conflict in test projects caused by FunFair.Test.Common now depending on the AOT-flavoured xunit v3 packages, by switching test projects to the matching xunit.v3.aot.mtp-v2 runner package
 - Added missing IncludeAssets on NuGet package references required by FunFair.BuildCheck
-- Resolved cfn-lint W1030 warning on the TaskRoleArn CloudFormation property by only setting it when a TaskRole is provided
 - Added missing build;buildTransitive IncludeAssets on Serilog package reference required by FunFair.BuildCheck
+- CloudFormation task settings now live in Mappings so every deploy applies them, reducing ECS task memory from 4 GB to 1 GB
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
