@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
 ## [Unreleased]
 ### Security
+- Moved ECS task secrets from plain Environment entries to the Secrets mechanism in cloudformation.json (#419)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
