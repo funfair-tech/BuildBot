@@ -118,9 +118,7 @@
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
-                "awslogs-group": {
-                  "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
-                },
+                "awslogs-group": { "Fn::Sub": "/ecs/${ApplicationName}/" },
                 "awslogs-region": { "Ref": "AWS::Region" },
                 "awslogs-stream-prefix": "ecs"
               }
@@ -171,9 +169,7 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Delete",
       "Properties": {
-        "LogGroupName": {
-          "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
-        }
+        "LogGroupName": { "Fn::Sub": "/ecs/${ApplicationName}/" }
       }
     },
     "ECSService": {
