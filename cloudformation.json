@@ -202,6 +202,10 @@
           },
           "MinimumHealthyPercent": {
             "Fn::FindInMap": ["Deployment", "Service", "MinimumHealthPercent"]
+          },
+          "DeploymentCircuitBreaker": {
+            "Enable": true,
+            "Rollback": true
           }
         },
         "LoadBalancers": [
