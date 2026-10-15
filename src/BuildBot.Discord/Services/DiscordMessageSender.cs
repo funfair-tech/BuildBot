@@ -8,13 +8,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace BuildBot.Discord.Services;
 
-public sealed class BotService : IHostedService, IDisposable
+public sealed class DiscordMessageSender : IHostedService, IDisposable
 {
     private readonly IDiscordBot _bot;
     private readonly IMessageChannel<BotMessage> _botMessageChannel;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
-    public BotService(IDiscordBot bot, IMessageChannel<BotMessage> botMessageChannel)
+    public DiscordMessageSender(IDiscordBot bot, IMessageChannel<BotMessage> botMessageChannel)
     {
         this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
         this._botMessageChannel = botMessageChannel ?? throw new ArgumentNullException(nameof(botMessageChannel));
