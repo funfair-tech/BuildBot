@@ -31,7 +31,7 @@
     },
     "TaskExecutionRole": {
       "Type": "String",
-      "Default": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole"
+      "Default": "arn:aws:iam::117769150821:role/ecsExecutionRole"
     }
   },
   "Mappings": {
@@ -279,38 +279,6 @@
         }
       }
     },
-    "TaskExecutionSecretsPolicy": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": {
-          "Fn::Sub": ["${Application}-secrets", { "Application": { "Ref": "ApplicationName" } }]
-        },
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": ["secretsmanager:GetSecretValue"],
-              "Resource": [
-                {
-                  "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                }
-              ]
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Fn::Select": [
-              1,
-              {
-                "Fn::Split": ["/", { "Ref": "TaskExecutionRole" }]
-              }
-            ]
-          }
-        ]
-      }
-    },
     "LogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "DeletionPolicy": "Delete",
@@ -362,7 +330,7 @@
           }
         ]
       },
-      "DependsOn": ["ListenerRule", "TaskExecutionSecretsPolicy"]
+      "DependsOn": ["ListenerRule"]
     },
     "TargetGroup": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
