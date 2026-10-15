@@ -6,12 +6,10 @@ namespace BuildBot.GitHub.Tests;
 
 public sealed class GitHubConfigurationTests : TestBase
 {
-    private const string SECRET = "It's a Secret to Everybody";
-
     [Fact]
     public static void HasWebhookSecretWhenSecretSet()
     {
-        GitHubConfiguration config = new(SECRET);
+        GitHubConfiguration config = new(GitHubWebhookTestVectors.Secret);
 
         Assert.True(config.HasWebhookSecret, userMessage: "Should have webhook secret");
     }
@@ -27,11 +25,15 @@ public sealed class GitHubConfigurationTests : TestBase
     [Fact]
     public static void ToStringDoesNotExposeSecret()
     {
-        GitHubConfiguration config = new(SECRET);
+        GitHubConfiguration config = new(GitHubWebhookTestVectors.Secret);
 
         string text = config.ToString();
 
-        Assert.DoesNotContain(expectedSubstring: SECRET, actualString: text, comparisonType: StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            expectedSubstring: GitHubWebhookTestVectors.Secret,
+            actualString: text,
+            comparisonType: StringComparison.Ordinal
+        );
         Assert.Equal(expected: "GitHubConfiguration { HasWebhookSecret = True }", actual: text);
     }
 }

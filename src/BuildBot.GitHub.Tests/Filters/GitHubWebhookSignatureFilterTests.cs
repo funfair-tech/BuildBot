@@ -25,8 +25,6 @@ namespace BuildBot.GitHub.Tests.Filters;
 
 public sealed class GitHubWebhookSignatureFilterTests : TestBase
 {
-    private const string SECRET = "It's a Secret to Everybody";
-    private const string VALID_SIGNATURE = "sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17";
     private const string SIGNATURE_HEADER = "X-Hub-Signature-256";
 
     private const string REMOTE_IP_ADDRESS = "10.0.0.5";
@@ -48,9 +46,12 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
     public async Task ValidSignaturePublishesAndReturnsNoContentAsync()
     {
         await using MemoryStream body = CreateConsumedBody();
-        DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: VALID_SIGNATURE);
+        DefaultHttpContext httpContext = CreateHttpContext(
+            body: body,
+            signature: GitHubWebhookTestVectors.ValidSignature
+        );
 
-        object? result = await this.InvokeAsync(secret: SECRET, httpContext: httpContext);
+        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
         Assert.IsType<NoContent>(result);
         await this.AssertPublishedAsync(1);
@@ -60,10 +61,7 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
     [Theory]
     [InlineData(null, WebhookSignatureVerificationResult.MISSING_HEADER)]
     [InlineData("sha256=not-a-signature", WebhookSignatureVerificationResult.MALFORMED_HEADER)]
-    [InlineData(
-        "sha256=057107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17",
-        WebhookSignatureVerificationResult.SIGNATURE_MISMATCH
-    )]
+    [InlineData(GitHubWebhookTestVectors.MismatchedSignature, WebhookSignatureVerificationResult.SIGNATURE_MISMATCH)]
     public async Task InvalidSignatureReturnsUnauthorisedWithoutPublishingAsync(
         string? signature,
         WebhookSignatureVerificationResult expectedReason
@@ -72,7 +70,7 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
         await using MemoryStream body = CreateConsumedBody();
         DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: signature);
 
-        object? result = await this.InvokeAsync(secret: SECRET, httpContext: httpContext);
+        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
         Assert.IsType<UnauthorizedHttpResult>(result);
         await this.AssertPublishedAsync(0);
@@ -93,9 +91,12 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
     {
         await using MemoryStream body = CreateConsumedBody();
         DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: null);
-        httpContext.Request.Headers[SIGNATURE_HEADER] = new StringValues([VALID_SIGNATURE, VALID_SIGNATURE]);
+        httpContext.Request.Headers[SIGNATURE_HEADER] = new StringValues([
+            GitHubWebhookTestVectors.ValidSignature,
+            GitHubWebhookTestVectors.ValidSignature,
+        ]);
 
-        object? result = await this.InvokeAsync(secret: SECRET, httpContext: httpContext);
+        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
         Assert.IsType<UnauthorizedHttpResult>(result);
         await this.AssertPublishedAsync(0);
@@ -117,14 +118,14 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
         await using MemoryStream body = CreateConsumedBody();
         DefaultHttpContext httpContext = CreateHttpContext(
             body: body,
-            signature: "sha256=057107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17"
+            signature: GitHubWebhookTestVectors.MismatchedSignature
         );
         httpContext.Request.Path = "/github";
         httpContext.Request.Headers["X-GitHub-Delivery"] = "72d3162e-cc78-11e3-81ab-4c9367dc0958";
         httpContext.Request.Headers["X-GitHub-Event"] = "push";
         httpContext.Request.Headers["X-Forwarded-For"] = "203.0.113.7, 198.51.100.2";
 
-        object? result = await this.InvokeAsync(secret: SECRET, httpContext: httpContext);
+        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
         Assert.IsType<UnauthorizedHttpResult>(result);
         this.AssertRejectionLogged(
@@ -153,7 +154,7 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
 
     private static MemoryStream CreateConsumedBody()
     {
-        MemoryStream body = new("Hello, World!"u8.ToArray());
+        MemoryStream body = new(GitHubWebhookTestVectors.Payload.ToArray());
 
         // Model binding leaves the buffered body at its end before the filter runs.
         body.Seek(offset: 0, loc: SeekOrigin.End);
