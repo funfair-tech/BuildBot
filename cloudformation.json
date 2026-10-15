@@ -79,20 +79,8 @@
             ],
             "Secrets": [
               {
-                "Name": "DISCORD__TOKEN",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_TOKEN::" }
-              },
-              {
-                "Name": "DISCORD__SERVER",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_SERVER::" }
-              },
-              {
-                "Name": "DISCORD__CHANNEL",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_CHANNEL::" }
-              },
-              {
-                "Name": "DISCORD__RELEASE_CHANNEL",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::" }
+                "Name": "DISCORD__WEBHOOKURL",
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_WEBHOOK::" }
               },
               {
                 "Name": "SERVEROCTOPUS__URL",

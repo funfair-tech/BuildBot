@@ -1,4 +1,4 @@
-# chiseled-extra is needed over chiseled for Discord
+# chiseled-extra is needed over chiseled for ICU, as globalization invariant mode is disabled
 #FROM mcr.microsoft.com/dotnet/runtime-deps:9.0-noble-chiseled-extra
 FROM mcr.microsoft.com/dotnet/runtime-deps:11.0-resolute-chiseled-extra
 

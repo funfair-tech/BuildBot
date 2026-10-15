@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
 using BuildBot.Discord.Publishers;
-using Discord;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -23,14 +22,13 @@ public sealed class DiscordBotMessageNotificationHandlerTests : TestBase
 
         DiscordBotMessageNotificationHandler handler = new(messageChannel: channel, logger: logger);
 
-        EmbedBuilder builder = new EmbedBuilder().WithTitle("Test Notification");
-        BotMessage notification = new(builder);
+        BotMessage notification = new(
+            new DiscordEmbed(Title: "Test Notification", Url: null, Description: null, Colour: null, Fields: [])
+        );
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
         logger.Received(1).IsEnabled(LogLevel.Information);
-        await channel
-            .Received(1)
-            .PublishAsync(message: Arg.Any<BotMessage>(), cancellationToken: Arg.Any<CancellationToken>());
+        await channel.Received(1).PublishAsync(message: notification, cancellationToken: Arg.Any<CancellationToken>());
     }
 }

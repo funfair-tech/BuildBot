@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,6 @@ using BuildBot.GitHub.Helpers;
 using BuildBot.GitHub.Models;
 using BuildBot.GitHub.Publishers.LoggingExtensions;
 using BuildBot.ServiceModel.GitHub;
-using Discord;
 using Mediator;
 using Microsoft.Extensions.Logging;
 
@@ -52,9 +52,9 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
             return;
         }
 
-        EmbedBuilder builder = BuildPushEmbed(message);
+        DiscordEmbed embed = BuildPushEmbed(message);
 
-        await this._mediator.Publish(new BotMessage(builder), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
     }
 
     private static bool IsIgnoredRepo(in Push message)
@@ -82,29 +82,31 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
         }
     }
 
-    private static EmbedBuilder BuildPushEmbed(in Push message)
-    {
-        return message.Commits.Aggregate(CreateBasicEmbed(message), func: AddCommit);
-    }
-
-    private static EmbedBuilder CreateBasicEmbed(in Push message)
+    private static DiscordEmbed BuildPushEmbed(in Push message)
     {
         string commitString = GetCommitString(message);
         string title = GetCommitTitle(message: message, commitString: commitString);
 
-        return new EmbedBuilder().WithTitle(title).WithUrl(message.CompareUrl);
+        return new(
+            Title: title,
+            Url: EmbedUrl.FromString(message.CompareUrl),
+            Description: null,
+            Colour: null,
+            Fields: CreateCommitFields(message.Commits)
+        );
     }
 
-    private static EmbedBuilder AddCommit(EmbedBuilder current, Commit commit)
+    private static IReadOnlyList<DiscordEmbedField> CreateCommitFields(IReadOnlyList<Commit> commits)
     {
-        return current.AddField(CreateCommitEmbed(commit));
+        return [.. commits.Select(CreateCommitEmbed)];
     }
 
-    private static EmbedFieldBuilder CreateCommitEmbed(in Commit commit)
+    private static DiscordEmbedField CreateCommitEmbed(Commit commit)
     {
-        return new EmbedFieldBuilder()
-            .WithName($"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}")
-            .WithValue($"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed");
+        return new(
+            Name: $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
+            Value: $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
+        );
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
