@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 
-namespace BuildBot.GitHub.Filters.LoggingExtensions;
+namespace BuildBot.GitHub.Middleware.LoggingExtensions;
 
-internal static partial class GitHubWebhookSignatureFilterLoggingExtensions
+internal static partial class GitHubWebhookSignatureMiddlewareLoggingExtensions
 {
     [LoggerMessage(
         EventId = 1,
@@ -10,7 +10,7 @@ internal static partial class GitHubWebhookSignatureFilterLoggingExtensions
         Message = "Github: Rejected webhook to {Path}: {Reason} (delivery: {Delivery}, event: {GitHubEvent}, remote address: {RemoteIpAddress}, forwarded for: {ForwardedFor})"
     )]
     public static partial void WebhookSignatureRejected(
-        this ILogger<GitHubWebhookSignatureFilter> logger,
+        this ILogger<GitHubWebhookSignatureMiddleware> logger,
         string path,
         WebhookSignatureVerificationResult reason,
         string delivery,

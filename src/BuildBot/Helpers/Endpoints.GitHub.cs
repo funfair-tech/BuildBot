@@ -1,8 +1,7 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using BuildBot.GitHub;
-using BuildBot.GitHub.Filters;
+using BuildBot.GitHub.Middleware;
 using BuildBot.GitHub.Models;
 using BuildBot.Helpers.LoggingExtensions;
 using BuildBot.ServiceModel.GitHub;
@@ -20,18 +19,17 @@ internal static partial class Endpoints
     {
         Console.WriteLine("Configuring Github Endpoint");
 
-        if (!app.Services.GetRequiredService<GitHubConfiguration>().HasWebhookSecret)
+        if (app.Services.GetRequiredService<GitHubConfiguration>().HasWebhookSecret)
+        {
+            // Runs after routing and before the endpoint, so unsigned requests are rejected before model binding.
+            app.Use(app.Services.GetRequiredService<GitHubWebhookSignatureMiddleware>().InvokeAsync);
+        }
+        else
         {
             app.Logger.GitHubWebhookSecretNotConfigured();
         }
 
-        // The filter is also endpoint metadata so the endpoints it guards are the ones whose body gets buffered.
-        app.Use(EnableRequestBufferingAsync);
-
-        GitHubWebhookSignatureFilter signatureFilter = app.Services.GetRequiredService<GitHubWebhookSignatureFilter>();
-        RouteGroupBuilder group = app.MapGroup("/github")
-            .AddEndpointFilter(signatureFilter)
-            .WithMetadata(signatureFilter);
+        RouteGroupBuilder group = app.MapGroup("/github").WithMetadata(new GitHubWebhookEndpointMetadata());
 
         group.MapPost(
             pattern: "ping",
@@ -64,16 +62,5 @@ internal static partial class Endpoints
         );
 
         return app;
-    }
-
-    private static Task EnableRequestBufferingAsync(HttpContext context, RequestDelegate next)
-    {
-        // The signature filter runs after model binding has read the body, so it must be buffered to be re-read.
-        if (context.GetEndpoint()?.Metadata.GetMetadata<GitHubWebhookSignatureFilter>() is not null)
-        {
-            context.Request.EnableBuffering();
-        }
-
-        return next(context);
     }
 }

@@ -4,76 +4,80 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
-using BuildBot.GitHub.Filters;
 using BuildBot.GitHub.Helpers;
-using BuildBot.GitHub.Models;
-using BuildBot.ServiceModel.GitHub;
+using BuildBot.GitHub.Middleware;
 using FunFair.Common.Web.Interfaces;
 using FunFair.Test.Common;
-using Mediator;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using NSubstitute;
 using NSubstitute.Core;
 using Xunit;
 
-namespace BuildBot.GitHub.Tests.Filters;
+namespace BuildBot.GitHub.Tests.Middleware;
 
-public sealed class GitHubWebhookSignatureFilterTests : TestBase
+public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
 {
     private const string SIGNATURE_HEADER = "X-Hub-Signature-256";
 
     private const string REMOTE_IP_ADDRESS = "10.0.0.5";
 
-    private readonly ILogger<GitHubWebhookSignatureFilter> _logger;
-    private readonly IMediator _mediator;
+    private readonly ILogger<GitHubWebhookSignatureMiddleware> _logger;
     private readonly IRemoteIpAddressRetriever _remoteIpAddressRetriever;
 
-    public GitHubWebhookSignatureFilterTests()
+    private readonly List<byte[]> _bodiesSeenByNext = [];
+
+    public GitHubWebhookSignatureMiddlewareTests()
     {
-        this._mediator = GetSubstitute<IMediator>();
         this._remoteIpAddressRetriever = GetSubstitute<IRemoteIpAddressRetriever>();
         this._remoteIpAddressRetriever.Get(Arg.Any<HttpContext>()).Returns(IPAddress.Parse(REMOTE_IP_ADDRESS));
-        this._logger = this.GetTypedLogger<GitHubWebhookSignatureFilter>();
+        this._logger = this.GetTypedLogger<GitHubWebhookSignatureMiddleware>();
         this._logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
     }
 
     [Fact]
-    public async Task ValidSignaturePublishesAndReturnsNoContentAsync()
+    public async Task ValidSignatureCallsNextWithTheWholeBodyAsync()
     {
-        await using MemoryStream body = CreateConsumedBody();
-        DefaultHttpContext httpContext = CreateHttpContext(
-            body: body,
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: CreateBody(),
             signature: GitHubWebhookTestVectors.ValidSignature
         );
 
-        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
-        Assert.IsType<NoContent>(result);
-        await this.AssertPublishedAsync(1);
-        Assert.Equal(expected: 0, actual: body.Position);
+        this.AssertNextReceivedPayload();
+        Assert.Equal(expected: StatusCodes.Status200OK, actual: httpContext.Response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ValidSignatureWithUnseekableBodyCallsNextWithTheWholeBodyAsync()
+    {
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: new UnseekableReadStream(CreateBody()),
+            signature: GitHubWebhookTestVectors.ValidSignature
+        );
+
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+
+        this.AssertNextReceivedPayload();
     }
 
     [Theory]
     [InlineData(null, WebhookSignatureVerificationResult.MISSING_HEADER)]
     [InlineData("sha256=not-a-signature", WebhookSignatureVerificationResult.MALFORMED_HEADER)]
     [InlineData(GitHubWebhookTestVectors.MismatchedSignature, WebhookSignatureVerificationResult.SIGNATURE_MISMATCH)]
-    public async Task InvalidSignatureReturnsUnauthorisedWithoutPublishingAsync(
+    public async Task InvalidSignatureReturnsUnauthorisedWithoutCallingNextAsync(
         string? signature,
         WebhookSignatureVerificationResult expectedReason
     )
     {
-        await using MemoryStream body = CreateConsumedBody();
-        DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: signature);
+        DefaultHttpContext httpContext = CreateWebhookContext(body: CreateBody(), signature: signature);
 
-        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
-        Assert.IsType<UnauthorizedHttpResult>(result);
-        await this.AssertPublishedAsync(0);
+        this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
             new(
                 Path: string.Empty,
@@ -87,19 +91,17 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
     }
 
     [Fact]
-    public async Task MultipleSignatureHeadersReturnUnauthorisedWithoutPublishingAsync()
+    public async Task MultipleSignatureHeadersReturnUnauthorisedWithoutCallingNextAsync()
     {
-        await using MemoryStream body = CreateConsumedBody();
-        DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: null);
+        DefaultHttpContext httpContext = CreateWebhookContext(body: CreateBody(), signature: null);
         httpContext.Request.Headers[SIGNATURE_HEADER] = new StringValues([
             GitHubWebhookTestVectors.ValidSignature,
             GitHubWebhookTestVectors.ValidSignature,
         ]);
 
-        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
-        Assert.IsType<UnauthorizedHttpResult>(result);
-        await this.AssertPublishedAsync(0);
+        this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
             new(
                 Path: string.Empty,
@@ -115,9 +117,8 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
     [Fact]
     public async Task RejectionLogsRequestOriginAsync()
     {
-        await using MemoryStream body = CreateConsumedBody();
-        DefaultHttpContext httpContext = CreateHttpContext(
-            body: body,
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: CreateBody(),
             signature: GitHubWebhookTestVectors.MismatchedSignature
         );
         httpContext.Request.Path = "/github";
@@ -125,9 +126,9 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
         httpContext.Request.Headers["X-GitHub-Event"] = "push";
         httpContext.Request.Headers["X-Forwarded-For"] = "203.0.113.7, 198.51.100.2";
 
-        object? result = await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
-        Assert.IsType<UnauthorizedHttpResult>(result);
+        this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
             new(
                 Path: "/github",
@@ -141,25 +142,55 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
     }
 
     [Fact]
-    public async Task NoSecretConfiguredPublishesWithoutSignatureAsync()
+    public async Task NoSecretConfiguredCallsNextWithoutSignatureAsync()
     {
-        await using MemoryStream body = CreateConsumedBody();
-        DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: null);
+        DefaultHttpContext httpContext = CreateWebhookContext(body: CreateBody(), signature: null);
 
-        object? result = await this.InvokeAsync(secret: string.Empty, httpContext: httpContext);
+        await this.InvokeAsync(secret: string.Empty, httpContext: httpContext);
 
-        Assert.IsType<NoContent>(result);
-        await this.AssertPublishedAsync(1);
+        this.AssertNextReceivedPayload();
     }
 
-    private static MemoryStream CreateConsumedBody()
+    [Fact]
+    public async Task EndpointWithoutWebhookMetadataCallsNextWithoutSignatureAsync()
     {
-        MemoryStream body = new(GitHubWebhookTestVectors.Payload.ToArray());
+        DefaultHttpContext httpContext = CreateHttpContext(body: CreateBody(), signature: null);
+        httpContext.SetEndpoint(
+            new Endpoint(requestDelegate: null, metadata: EndpointMetadataCollection.Empty, displayName: "other")
+        );
 
-        // Model binding leaves the buffered body at its end before the filter runs.
-        body.Seek(offset: 0, loc: SeekOrigin.End);
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
 
-        return body;
+        this.AssertNextReceivedPayload();
+    }
+
+    [Fact]
+    public async Task RequestWithoutEndpointCallsNextWithoutSignatureAsync()
+    {
+        DefaultHttpContext httpContext = CreateHttpContext(body: CreateBody(), signature: null);
+
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+
+        this.AssertNextReceivedPayload();
+    }
+
+    private static MemoryStream CreateBody()
+    {
+        return new(GitHubWebhookTestVectors.Payload.ToArray());
+    }
+
+    private static DefaultHttpContext CreateWebhookContext(Stream body, string? signature)
+    {
+        DefaultHttpContext httpContext = CreateHttpContext(body: body, signature: signature);
+        httpContext.SetEndpoint(
+            new Endpoint(
+                requestDelegate: null,
+                metadata: new EndpointMetadataCollection(new GitHubWebhookEndpointMetadata()),
+                displayName: "webhook"
+            )
+        );
+
+        return httpContext;
     }
 
     private static DefaultHttpContext CreateHttpContext(Stream body, string? signature)
@@ -175,30 +206,36 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
         return httpContext;
     }
 
-    private ValueTask<object?> InvokeAsync(string secret, HttpContext httpContext)
+    private Task InvokeAsync(string secret, HttpContext httpContext)
     {
         GitHubConfiguration configuration = new(secret);
-        GitHubWebhookSignatureFilter filter = new(
+        GitHubWebhookSignatureMiddleware middleware = new(
             configuration: configuration,
             verifier: new WebhookSignatureVerifier(configuration),
             remoteIpAddressRetriever: this._remoteIpAddressRetriever,
             logger: this._logger
         );
 
-        return filter.InvokeAsync(
-            context: EndpointFilterInvocationContext.Create(httpContext),
-            next: this.PublishAsync
-        );
+        return middleware.InvokeAsync(context: httpContext, next: this.ReadBodyAsync);
     }
 
-    private async ValueTask<object?> PublishAsync(EndpointFilterInvocationContext context)
+    private async Task ReadBodyAsync(HttpContext context)
     {
-        await this._mediator.Publish(
-            new GithubPing(new PingModel(zen: "Design for failure.", hookId: "123456789")),
-            cancellationToken: context.HttpContext.RequestAborted
-        );
+        await using MemoryStream copy = new();
+        await context.Request.Body.CopyToAsync(destination: copy, cancellationToken: context.RequestAborted);
+        this._bodiesSeenByNext.Add(copy.ToArray());
+    }
 
-        return Results.NoContent();
+    private void AssertNextReceivedPayload()
+    {
+        byte[] bodySeenByNext = Assert.Single(this._bodiesSeenByNext);
+        Assert.Equal(expected: GitHubWebhookTestVectors.Payload.ToArray(), actual: bodySeenByNext);
+    }
+
+    private void AssertUnauthorisedWithoutCallingNext(HttpContext httpContext)
+    {
+        Assert.Equal(expected: StatusCodes.Status401Unauthorized, actual: httpContext.Response.StatusCode);
+        Assert.Empty(this._bodiesSeenByNext);
     }
 
     private void AssertRejectionLogged(in ExpectedRejection expected)
@@ -237,9 +274,4 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
         string RemoteIpAddress,
         string ForwardedFor
     );
-
-    private ValueTask AssertPublishedAsync(int times)
-    {
-        return this._mediator.Received(times).Publish(Arg.Any<GithubPing>(), Arg.Any<CancellationToken>());
-    }
 }

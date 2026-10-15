@@ -1,5 +1,5 @@
-﻿using BuildBot.GitHub.Filters;
-using BuildBot.GitHub.Helpers;
+﻿using BuildBot.GitHub.Helpers;
+using BuildBot.GitHub.Middleware;
 using BuildBot.GitHub.Publishers;
 using FunFair.Common.Web;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,7 @@ public static class GitHubSetup
             .AddCommonWebServices()
             .AddSingleton(gitHubConfig)
             .AddSingleton<IWebhookSignatureVerifier, WebhookSignatureVerifier>()
-            .AddSingleton<GitHubWebhookSignatureFilter>()
+            .AddSingleton<GitHubWebhookSignatureMiddleware>()
             .AddSingleton<GithubPingNotificationHandler>()
             .AddSingleton<GithubPushNotificationHandler>()
             .AddSingleton<GithubStatusNotificationHandler>();

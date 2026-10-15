@@ -1,4 +1,4 @@
-﻿using BuildBot.GitHub.Filters;
+﻿using BuildBot.GitHub.Middleware;
 using BuildBot.GitHub.Publishers;
 using FunFair.Common.Web.Interfaces;
 using FunFair.Test.Common;
@@ -38,9 +38,9 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     }
 
     [Fact]
-    public void GitHubWebhookSignatureFilterMustBeRegistered()
+    public void GitHubWebhookSignatureMiddlewareMustBeRegistered()
     {
-        this.RequireService<GitHubWebhookSignatureFilter>();
+        this.RequireService<GitHubWebhookSignatureMiddleware>();
     }
 
     [Fact]
