@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Discord.Models;
 using BuildBot.GitHub.Models;
 using BuildBot.GitHub.Publishers;
 using BuildBot.ServiceModel.GitHub;
@@ -117,5 +119,62 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
         await mediator.Received(1).Publish(Arg.Any<INotification>(), Arg.Any<CancellationToken>());
+    }
+
+    private static DiscordEmbed PublishedEmbed(IMediator mediator)
+    {
+        return mediator
+            .ReceivedCalls()
+            .Select(static call => call.GetArguments()[0])
+            .OfType<BotMessage>()
+            .Single()
+            .Message;
+    }
+
+    public static TheoryData<string, uint?> StateColours =>
+        new()
+        {
+            { "success", 0x2ECC71 },
+            { "SUCCESS", 0x2ECC71 },
+            { "failure", 0xE74C3C },
+            { "error", null },
+        };
+
+    [Theory]
+    [MemberData(nameof(StateColours))]
+    public async Task PublishedEmbedHasExpectedContentAsync(string state, uint? expectedColour)
+    {
+        (IMediator mediator, GithubStatusNotificationHandler handler) = this.CreateHandler();
+
+        await handler.Handle(notification: new(MakeStatus(state: state)), cancellationToken: this.CancellationToken());
+
+        DiscordEmbed embed = PublishedEmbed(mediator);
+        Assert.Equal(expected: "Build finished for ci/build from BuildBot (main)", actual: embed.Title);
+        Assert.Equal(expected: new Uri("https://ci.example.com/builds/123"), actual: embed.Url);
+        Assert.Equal(expected: "Built at abc123", actual: embed.Description);
+        Assert.Equal(expected: expectedColour, actual: embed.Colour?.Value);
+        Assert.Equal(
+            expected:
+            [
+                new DiscordEmbedField(Name: "Head commit", Value: "testuser - Fix something"),
+                new DiscordEmbedField(Name: "Branch", Value: "main"),
+            ],
+            actual: embed.Fields
+        );
+    }
+
+    [Fact]
+    public async Task PublishedEmbedWithNoBranchesUsesUnknownAsync()
+    {
+        (IMediator mediator, GithubStatusNotificationHandler handler) = this.CreateHandler();
+
+        await handler.Handle(
+            notification: new(MakeStatusWithNoBranches(state: "success")),
+            cancellationToken: this.CancellationToken()
+        );
+
+        DiscordEmbed embed = PublishedEmbed(mediator);
+        Assert.Equal(expected: "Build finished for ci/build from BuildBot ((unknown))", actual: embed.Title);
+        Assert.Equal(expected: new DiscordEmbedField(Name: "Branch", Value: "(unknown)"), actual: embed.Fields[1]);
     }
 }

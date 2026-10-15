@@ -1,10 +1,12 @@
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
 using BuildBot.Discord.Services;
-using Discord;
+using BuildBot.Discord.Services.Models;
 using FunFair.Test.Common;
 using NSubstitute;
 using Xunit;
@@ -13,55 +15,61 @@ namespace BuildBot.Discord.Tests.Services;
 
 public sealed class BotServiceTests : TestBase
 {
-    private static (
-        BotService Service,
-        IDiscordBot Bot,
-        MessageChannel<BotMessage> MessageChannel,
-        MessageChannel<BotReleaseMessage> ReleaseChannel
-    ) CreateService()
+    private static readonly TimeSpan ForwardingWait = TimeSpan.FromSeconds(3);
+
+    private static DiscordEmbed CreateEmbed(string title)
+    {
+        return new(Title: title, Url: null, Description: null, Colour: null, Fields: []);
+    }
+
+    private static (BotService Service, IDiscordBot Bot, MessageChannel<BotMessage> MessageChannel) CreateService()
     {
         IDiscordBot bot = GetSubstitute<IDiscordBot>();
-        bot.StartAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
-        bot.StopAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
-
         MessageChannel<BotMessage> messageChannel = new();
-        MessageChannel<BotReleaseMessage> releaseChannel = new();
 
-        BotService service = new(bot: bot, botMessageChannel: messageChannel, botReleaseMessageChannel: releaseChannel);
+        BotService service = new(bot: bot, botMessageChannel: messageChannel);
 
-        return (service, bot, messageChannel, releaseChannel);
+        return (service, bot, messageChannel);
     }
 
     [Fact]
-    public async Task StartAsync_DelegatesToBot()
+    public async Task StartAsync_Completes()
     {
-        (BotService service, IDiscordBot bot, _, _) = CreateService();
+        (BotService service, IDiscordBot bot, _) = CreateService();
 
         using (service)
         {
             await service.StartAsync(this.CancellationToken());
 
-            await bot.Received(1).StartAsync(Arg.Any<CancellationToken>());
+            Assert.Empty(bot.ReceivedCalls());
         }
     }
 
     [Fact]
-    public async Task StopAsync_DelegatesToBot()
+    public async Task StopAsync_StopsForwardingMessages()
     {
-        (BotService service, IDiscordBot bot, _, _) = CreateService();
+        (BotService service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
 
         using (service)
         {
             await service.StopAsync(this.CancellationToken());
 
-            await bot.Received(1).StopAsync(Arg.Any<CancellationToken>());
+            await messageChannel.PublishAsync(
+                message: new(CreateEmbed("Test")),
+                cancellationToken: this.CancellationToken()
+            );
+
+            await Task.Delay(delay: ForwardingWait, cancellationToken: this.CancellationToken());
+
+            await bot.DidNotReceive()
+                .PublishAsync(embed: Arg.Any<DiscordEmbed>(), cancellationToken: Arg.Any<CancellationToken>());
         }
     }
 
     [Fact]
     public void Dispose_DisposesSubscriptions()
     {
-        (BotService service, _, _, _) = CreateService();
+        (BotService service, _, _) = CreateService();
 
         service.Dispose();
     }
@@ -69,51 +77,69 @@ public sealed class BotServiceTests : TestBase
     [Fact]
     public async Task BotMessage_IsForwardedToBot_AfterDelay()
     {
-        (BotService service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel, _) = CreateService();
+        (BotService service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
 
         using (service)
         {
-            EmbedBuilder builder = new EmbedBuilder().WithTitle("Test");
-            BotMessage message = new(builder);
+            DiscordEmbed embed = CreateEmbed("Test");
 
-            await messageChannel.PublishAsync(message: message, cancellationToken: this.CancellationToken());
+            await messageChannel.PublishAsync(message: new(embed), cancellationToken: this.CancellationToken());
 
-            await Task.Delay(TimeSpan.FromSeconds(2), this.CancellationToken());
+            await Task.Delay(delay: ForwardingWait, cancellationToken: this.CancellationToken());
 
-            await bot.Received(1)
-                .PublishAsync(builder: Arg.Any<EmbedBuilder>(), cancellationToken: Arg.Any<CancellationToken>());
+            await bot.Received(1).PublishAsync(embed: embed, cancellationToken: Arg.Any<CancellationToken>());
         }
     }
 
     [Fact]
-    public async Task BotReleaseMessage_IsForwardedToBot_AfterDelay()
+    public async Task FailedSend_DoesNotStopLaterMessagesBeingSent()
     {
-        (BotService service, IDiscordBot bot, _, MessageChannel<BotReleaseMessage> releaseChannel) = CreateService();
+        IDiscordWebhookClient client = GetSubstitute<IDiscordWebhookClient>();
+        int calls = 0;
+        client
+            .SendAsync(
+                webhookUrl: Arg.Any<Uri>(),
+                payload: Arg.Any<WebhookPayload>(),
+                cancellationToken: Arg.Any<CancellationToken>()
+            )
+            .Returns(_ =>
+                Interlocked.Increment(ref calls) == 1
+                    ? throw new HttpRequestException("connection failed")
+                    : new WebhookSendResult(Success: true, StatusCode: HttpStatusCode.NoContent)
+            );
 
-        using (service)
+        DiscordBot bot = new(
+            client: client,
+            botConfiguration: new(new Uri("https://example.com/webhook")),
+            logger: this.GetTypedLogger<DiscordBot>()
+        );
+        MessageChannel<BotMessage> messageChannel = new();
+
+        using (BotService service = new(bot: bot, botMessageChannel: messageChannel))
         {
-            EmbedBuilder builder = new EmbedBuilder().WithTitle("Release");
-            BotReleaseMessage message = new(builder);
+            await messageChannel.PublishAsync(
+                message: new(CreateEmbed("First")),
+                cancellationToken: this.CancellationToken()
+            );
+            await messageChannel.PublishAsync(
+                message: new(CreateEmbed("Second")),
+                cancellationToken: this.CancellationToken()
+            );
 
-            await releaseChannel.PublishAsync(message: message, cancellationToken: this.CancellationToken());
+            await Task.Delay(delay: ForwardingWait, cancellationToken: this.CancellationToken());
 
-            await Task.Delay(TimeSpan.FromSeconds(2), this.CancellationToken());
-
-            await bot.Received(1)
-                .PublishToReleaseChannelAsync(
-                    builder: Arg.Any<EmbedBuilder>(),
+            await client
+                .Received(2)
+                .SendAsync(
+                    webhookUrl: Arg.Any<Uri>(),
+                    payload: Arg.Any<WebhookPayload>(),
                     cancellationToken: Arg.Any<CancellationToken>()
                 );
         }
     }
 
     public static TheoryData<int, string> NullConstructorArguments =>
-        new()
-        {
-            { 0, "bot" },
-            { 1, "botMessageChannel" },
-            { 2, "botReleaseMessageChannel" },
-        };
+        new() { { 0, "bot" }, { 1, "botMessageChannel" } };
 
     [Theory]
     [MemberData(nameof(NullConstructorArguments))]
@@ -125,16 +151,10 @@ public sealed class BotServiceTests : TestBase
         ConstructorInfo? ctor = typeof(BotService).GetConstructor([
             typeof(IDiscordBot),
             typeof(IMessageChannel<BotMessage>),
-            typeof(IMessageChannel<BotReleaseMessage>),
         ]);
         Assert.NotNull(ctor);
 
-        object?[] args =
-        [
-            GetSubstitute<IDiscordBot>(),
-            GetSubstitute<IMessageChannel<BotMessage>>(),
-            GetSubstitute<IMessageChannel<BotReleaseMessage>>(),
-        ];
+        object?[] args = [GetSubstitute<IDiscordBot>(), GetSubstitute<IMessageChannel<BotMessage>>()];
         args[nullParameterIndex] = null;
 
         TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => ctor.Invoke(args));

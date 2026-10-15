@@ -1,429 +1,219 @@
 using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using BuildBot.Discord.Models;
 using BuildBot.Discord.Services;
+using BuildBot.Discord.Services.Models;
 using BuildBot.ServiceModel.ComponentStatus;
-using Discord;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NSubstitute.Core;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace BuildBot.Discord.Tests.Services;
 
 public sealed class DiscordBotTests : TestBase
 {
-    private static readonly DiscordBotConfiguration Config = new(
-        token: "test-token",
-        server: "test-server",
-        channel: "test-channel",
-        releaseChannel: "test-release-channel"
+    private const string SECRET = "secret-token";
+    private static readonly Uri WebhookUrl = new("https://example.com/webhook/" + SECRET);
+    private static readonly DiscordBotConfiguration Config = new(WebhookUrl);
+
+    private static readonly DiscordEmbed Embed = new(
+        Title: "Test Message",
+        Url: new("https://example.com/build"),
+        Description: "Description",
+        Colour: DiscordColour.Green,
+        Fields: [new(Name: "Name", Value: "Value")]
     );
 
-    private (IDiscordRawClient Client, ILogger<DiscordBot> Logger, DiscordBot Bot) CreateBot()
+    private (IDiscordWebhookClient Client, ILogger<DiscordBot> Logger, DiscordBot Bot) CreateBot(
+        DiscordBotConfiguration configuration
+    )
     {
-        IDiscordRawClient client = GetSubstitute<IDiscordRawClient>();
+        IDiscordWebhookClient client = GetSubstitute<IDiscordWebhookClient>();
         ILogger<DiscordBot> logger = this.GetTypedLogger<DiscordBot>();
         logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
 
-        DiscordBot bot = new(client: client, botConfiguration: Config, logger: logger);
+        DiscordBot bot = new(client: client, botConfiguration: configuration, logger: logger);
 
         return (client, logger, bot);
     }
 
-    private (ILogger<DiscordBot> Logger, Func<LogMessage, Task> Handler) CreateBotForLogTests()
+    private static void MockDiscordWebhookClientSend(IDiscordWebhookClient client, in WebhookSendResult result)
     {
-        IDiscordRawClient client = GetSubstitute<IDiscordRawClient>();
-        ILogger<DiscordBot> logger = this.GetTypedLogger<DiscordBot>();
-        logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
-
-        Func<LogMessage, Task>? capturedHandler = null;
         client
-            .When(x => x.RegisterLogHandler(Arg.Any<Func<LogMessage, Task>>()))
-            .Do(callInfo => capturedHandler = callInfo.Arg<Func<LogMessage, Task>>());
+            .SendAsync(
+                webhookUrl: Arg.Any<Uri>(),
+                payload: Arg.Any<WebhookPayload>(),
+                cancellationToken: Arg.Any<CancellationToken>()
+            )
+            .Returns(result);
+    }
 
-        _ = new DiscordBot(client: client, botConfiguration: Config, logger: logger);
+    private static void AssertSecretNeverLogged(ILogger<DiscordBot> logger)
+    {
+        string logged = string.Join(
+            separator: '\n',
+            values: logger
+                .ReceivedCalls()
+                .SelectMany(static call => call.GetArguments())
+                .Select(static arg => arg?.ToString())
+        );
 
-        return (
-            logger,
-            capturedHandler
-                ?? throw new InvalidOperationException("DiscordBot constructor did not call RegisterLogHandler")
+        Assert.DoesNotContain(
+            expectedSubstring: SECRET,
+            actualString: logged,
+            comparisonType: StringComparison.Ordinal
         );
     }
 
-    [Fact]
-    public void GetStatus_WhenLoggedOut_ReturnsDisconnectedStatus()
+    private static int LogCallsAt(LogLevel level, ILogger<DiscordBot> logger)
     {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
+        return logger
+            .ReceivedCalls()
+            .Count(call =>
+                StringComparer.Ordinal.Equals(x: call.GetMethodInfo().Name, y: nameof(ILogger.Log))
+                && Equals(call.GetArguments()[0], level)
+            );
+    }
 
-        client.LoginState.Returns(LoginState.LoggedOut);
+    [Theory]
+    [InlineData("https://example.com/webhook/secret-token", true)]
+    [InlineData("http://example.com/webhook/secret-token", false)]
+    public void GetStatus_ReflectsConfiguration(string webhookUrl, bool expectedOk)
+    {
+        (_, _, DiscordBot bot) = this.CreateBot(new(new Uri(webhookUrl)));
 
         ServiceStatus status = bot.GetStatus();
 
-        Assert.Equal(expected: "Discord", actual: status.Name);
-        Assert.False(condition: status.Ok, userMessage: "Discord should not be connected when logged out");
+        Assert.Equal(expected: new ServiceStatus(Name: "Discord", Ok: expectedOk), actual: status);
     }
 
     [Fact]
-    public void GetStatus_WhenLoggedIn_ReturnsConnectedStatus()
+    public void GetStatus_WithRelativeUrl_IsNotOk()
     {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
+        (_, _, DiscordBot bot) = this.CreateBot(new(new Uri(uriString: "webhook", uriKind: UriKind.Relative)));
 
-        client.LoginState.Returns(LoginState.LoggedIn);
-
-        ServiceStatus status = bot.GetStatus();
-
-        Assert.Equal(expected: "Discord", actual: status.Name);
-        Assert.True(condition: status.Ok, userMessage: "Discord should be connected when logged in");
+        Assert.False(condition: bot.GetStatus().Ok, userMessage: "Relative webhook URL should not be Ok");
     }
 
     [Fact]
-    public async Task PublishAsync_WhenChannelNotFound_LogsErrorAndReturns()
+    public async Task PublishAsync_SendsMappedEmbedToWebhookAndLogsSuccess()
     {
-        (IDiscordRawClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot();
-
+        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        WebhookPayload? captured = null;
         client
-            .FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>())
-            .Returns((IDiscordChannel?)null);
+            .SendAsync(
+                webhookUrl: WebhookUrl,
+                payload: Arg.Do<WebhookPayload>(p => captured = p),
+                cancellationToken: Arg.Any<CancellationToken>()
+            )
+            .Returns(new WebhookSendResult(Success: true, StatusCode: HttpStatusCode.NoContent));
 
-        await bot.PublishAsync(
-            builder: new EmbedBuilder().WithTitle("Test"),
-            cancellationToken: this.CancellationToken()
-        );
+        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
 
-        client.Received(1).FindChannel(serverName: Config.Server, channelName: Config.Channel);
-        logger.Received(1).IsEnabled(LogLevel.Error);
+        WebhookPayload payload = AssertReallyNotNull(captured);
+        WebhookEmbed sent = Assert.Single(payload.Embeds);
+        WebhookEmbed expected = EmbedMapper.ToWebhookEmbed(Embed);
+        Assert.Equal(expected: expected with { Fields = sent.Fields }, actual: sent);
+        Assert.Equal(expected: expected.Fields, actual: sent.Fields);
+        Assert.Equal(expected: 2, actual: LogCallsAt(level: LogLevel.Information, logger: logger));
+        Assert.Equal(expected: 0, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+        AssertSecretNeverLogged(logger);
     }
 
     [Fact]
-    public async Task PublishToReleaseChannelAsync_WhenChannelNotFound_LogsErrorAndReturns()
+    public async Task PublishAsync_WhenWebhookRejectsMessage_LogsError()
     {
-        (IDiscordRawClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot();
+        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        MockDiscordWebhookClientSend(
+            client: client,
+            result: new(Success: false, StatusCode: HttpStatusCode.BadRequest)
+        );
 
+        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
+
+        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+        AssertSecretNeverLogged(logger);
+    }
+
+    [Fact]
+    public async Task PublishAsync_WhenClientThrows_LogsErrorAndDoesNotThrow()
+    {
+        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
         client
-            .FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>())
-            .Returns((IDiscordChannel?)null);
-
-        await bot.PublishToReleaseChannelAsync(
-            builder: new EmbedBuilder().WithTitle("Test"),
-            cancellationToken: this.CancellationToken()
-        );
-
-        client.Received(1).FindChannel(serverName: Config.Server, channelName: Config.ReleaseChannel);
-        logger.Received(1).IsEnabled(LogLevel.Error);
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenChannelFound_SendsMessageAndLogsSuccess()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(Task.FromResult<(string SentToChannel, string MessageContent)>(("test-channel", string.Empty)));
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-
-        await bot.PublishAsync(
-            builder: new EmbedBuilder().WithTitle("Test Message"),
-            cancellationToken: this.CancellationToken()
-        );
-
-        await mockChannel.Received(1).SendMessageAsync(Arg.Any<Embed>());
-    }
-
-    [Fact]
-    public async Task PublishToReleaseChannelAsync_WhenChannelFound_SendsMessage()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-release-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(
-                Task.FromResult<(string SentToChannel, string MessageContent)>(("test-release-channel", string.Empty))
-            );
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-
-        await bot.PublishToReleaseChannelAsync(
-            builder: new EmbedBuilder().WithTitle("Release Test"),
-            cancellationToken: this.CancellationToken()
-        );
-
-        await mockChannel.Received(1).SendMessageAsync(Arg.Any<Embed>());
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenSendFails_WhileLoggedIn_ReconnectsAfterLogout()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(
-                Task.FromException<(string SentToChannel, string MessageContent)>(
-                    new InvalidOperationException("send failed")
-                )
-            );
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-        client.LoginState.Returns(LoginState.LoggedIn);
-
-        await bot.PublishAsync(
-            builder: new EmbedBuilder().WithTitle("Test"),
-            cancellationToken: this.CancellationToken()
-        );
-
-        await client.Received(1).LogoutAsync();
-        await client.Received(1).StopAsync();
-        await client.Received(1).LoginAsync(tokenType: TokenType.Bot, token: Config.Token);
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenSendFails_WhileNotLoggedIn_ReconnectsWithoutLogout()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(
-                Task.FromException<(string SentToChannel, string MessageContent)>(
-                    new InvalidOperationException("send failed")
-                )
-            );
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-        client.LoginState.Returns(LoginState.LoggedOut);
-
-        await bot.PublishAsync(
-            builder: new EmbedBuilder().WithTitle("Test"),
-            cancellationToken: this.CancellationToken()
-        );
-
-        await client.DidNotReceive().LogoutAsync();
-        await client.Received(1).LoginAsync(tokenType: TokenType.Bot, token: Config.Token);
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenReconnectFails_LogsError()
-    {
-        (IDiscordRawClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(
-                Task.FromException<(string SentToChannel, string MessageContent)>(
-                    new InvalidOperationException("send failed")
-                )
-            );
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-        client.LoginState.Returns(LoginState.LoggedIn);
-        client.LogoutAsync().Returns(Task.FromException(new InvalidOperationException("logout failed")));
-
-        await bot.PublishAsync(
-            builder: new EmbedBuilder().WithTitle("Test"),
-            cancellationToken: this.CancellationToken()
-        );
-
-        logger.Received(2).IsEnabled(LogLevel.Error);
-    }
-
-    [Fact]
-    public async Task StartAsync_CallsLoginStartAndSetGame()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        await bot.StartAsync(this.CancellationToken());
-
-        await client.Received(1).LoginAsync(tokenType: TokenType.Bot, token: Config.Token);
-        await client.Received(1).StartAsync();
-        await client.Received(1).SetGameAsync(name: "GitHub", streamUrl: null, type: ActivityType.Watching);
-    }
-
-    [Fact]
-    public async Task StopAsync_CallsLogout()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        await bot.StopAsync(this.CancellationToken());
-
-        await client.Received(1).LogoutAsync();
-    }
-
-    [Fact]
-    public async Task LogAsync_Debug_LogsAtDebugLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage(LogSeverity.Debug, source: "Test", message: "Debug message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Debug);
-    }
-
-    [Fact]
-    public async Task LogAsync_Verbose_LogsAtInformationLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage(LogSeverity.Verbose, source: "Test", message: "Verbose message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Information);
-    }
-
-    [Fact]
-    public async Task LogAsync_Info_LogsAtInformationLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage(LogSeverity.Info, source: "Test", message: "Info message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Information);
-    }
-
-    [Fact]
-    public async Task LogAsync_Warning_LogsAtWarningLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage(LogSeverity.Warning, source: "Test", message: "Warning message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Warning);
-    }
-
-    [Fact]
-    public async Task LogAsync_ErrorWithoutException_LogsAtErrorLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage(LogSeverity.Error, source: "Test", message: "Error message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Error);
-    }
-
-    [Fact]
-    public async Task LogAsync_ErrorWithException_LogsAtErrorLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(
-            new LogMessage(
-                LogSeverity.Error,
-                source: "Test",
-                message: "Error message",
-                exception: new InvalidOperationException("test error")
+            .SendAsync(
+                webhookUrl: Arg.Any<Uri>(),
+                payload: Arg.Any<WebhookPayload>(),
+                cancellationToken: Arg.Any<CancellationToken>()
             )
-        );
+            .ThrowsAsync(new HttpRequestException("connection failed"));
 
-        logger.Received(1).IsEnabled(LogLevel.Error);
+        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
+
+        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+        AssertSecretNeverLogged(logger);
     }
 
     [Fact]
-    public async Task LogAsync_CriticalWithoutException_LogsAtCriticalLevel()
+    public async Task PublishAsync_WhenCancelled_LogsWarningAndDoesNotThrow()
     {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage(LogSeverity.Critical, source: "Test", message: "Critical message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Critical);
-    }
-
-    [Fact]
-    public async Task LogAsync_CriticalWithException_LogsAtCriticalLevel()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(
-            new LogMessage(
-                LogSeverity.Critical,
-                source: "Test",
-                message: "Critical message",
-                exception: new InvalidOperationException("critical error")
+        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        using CancellationTokenSource cts = new();
+        await cts.CancelAsync();
+        client
+            .SendAsync(
+                webhookUrl: Arg.Any<Uri>(),
+                payload: Arg.Any<WebhookPayload>(),
+                cancellationToken: Arg.Any<CancellationToken>()
             )
+            .ThrowsAsync(new OperationCanceledException(cts.Token));
+
+        await bot.PublishAsync(embed: Embed, cancellationToken: cts.Token);
+
+        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Warning, logger: logger));
+        Assert.Equal(expected: 0, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+    }
+
+    [Fact]
+    public async Task PublishAsync_WhenClientCancelsWithoutCallerCancellation_LogsError()
+    {
+        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        client
+            .SendAsync(
+                webhookUrl: Arg.Any<Uri>(),
+                payload: Arg.Any<WebhookPayload>(),
+                cancellationToken: Arg.Any<CancellationToken>()
+            )
+            .ThrowsAsync(new TaskCanceledException("timed out"));
+
+        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
+
+        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+    }
+
+    [Fact]
+    public async Task PublishAsync_WhenNotConfigured_LogsErrorWithoutSending()
+    {
+        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(
+            new(new Uri("http://example.com/webhook/" + SECRET))
         );
 
-        logger.Received(1).IsEnabled(LogLevel.Critical);
-    }
+        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
 
-    [Fact]
-    public async Task LogAsync_UnknownSeverity_LogsAsCritical()
-    {
-        (ILogger<DiscordBot> logger, Func<LogMessage, Task> handler) = this.CreateBotForLogTests();
-
-        await handler(new LogMessage((LogSeverity)99, source: "Test", message: "Unknown severity message"));
-
-        logger.Received(1).IsEnabled(LogLevel.Critical);
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenChannelFound_WithNullTitle_SendsMessage()
-    {
-        (IDiscordRawClient client, _, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(Task.FromResult<(string SentToChannel, string MessageContent)>(("test-channel", string.Empty)));
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-
-        await bot.PublishAsync(builder: new EmbedBuilder(), cancellationToken: this.CancellationToken());
-
-        await mockChannel.Received(1).SendMessageAsync(Arg.Any<Embed>());
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenSendFails_WithNullTitle_LogsErrorAndReconnects()
-    {
-        (IDiscordRawClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot();
-
-        IDiscordChannel mockChannel = GetSubstitute<IDiscordChannel>();
-        IDisposable mockTypingState = GetSubstitute<IDisposable>();
-
-        mockChannel.Name.Returns("test-channel");
-        mockChannel.EnterTypingState().Returns(mockTypingState);
-        mockChannel
-            .SendMessageAsync(Arg.Any<Embed>())
-            .Returns(
-                Task.FromException<(string SentToChannel, string MessageContent)>(
-                    new InvalidOperationException("send failed")
-                )
+        await client
+            .DidNotReceive()
+            .SendAsync(
+                webhookUrl: Arg.Any<Uri>(),
+                payload: Arg.Any<WebhookPayload>(),
+                cancellationToken: Arg.Any<CancellationToken>()
             );
-
-        client.FindChannel(serverName: Arg.Any<string>(), channelName: Arg.Any<string>()).Returns(mockChannel);
-        client.LoginState.Returns(LoginState.LoggedOut);
-
-        await bot.PublishAsync(builder: new EmbedBuilder(), cancellationToken: this.CancellationToken());
-
-        logger.Received(1).IsEnabled(LogLevel.Error);
-        await client.DidNotReceive().LogoutAsync();
+        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+        AssertSecretNeverLogged(logger);
     }
 }
