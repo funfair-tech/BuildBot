@@ -44,6 +44,30 @@ public sealed class ReadCountingStream : Stream
         return this.Count(await this._inner.ReadAsync(buffer: buffer, cancellationToken: cancellationToken));
     }
 
+    // The base Stream routes these through BeginRead and the synchronous Read, which Kestrel request bodies reject.
+    public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+    {
+        return this.ReadAsync(
+                buffer: buffer.AsMemory(start: offset, length: count),
+                cancellationToken: cancellationToken
+            )
+            .AsTask();
+    }
+
+    public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback? callback, object? state)
+    {
+        return TaskToAsyncResult.Begin(
+            this.ReadAsync(buffer: buffer, offset: offset, count: count, cancellationToken: CancellationToken.None),
+            callback: callback,
+            state: state
+        );
+    }
+
+    public override int EndRead(IAsyncResult asyncResult)
+    {
+        return TaskToAsyncResult.End<int>(asyncResult);
+    }
+
     public override long Seek(long offset, SeekOrigin origin)
     {
         throw new NotSupportedException();
