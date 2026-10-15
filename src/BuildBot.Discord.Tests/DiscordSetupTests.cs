@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using BuildBot.Discord.Services;
 using BuildBot.Discord.Services.Models;
 using BuildBot.Discord.Tests.Services;
 using FunFair.Test.Common;
+using FunFair.Test.Infrastructure.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -35,8 +37,7 @@ public sealed class DiscordSetupTests : TestBase
     [Fact]
     public async Task WebhookHttpClient_DoesNotLogRequestUrl()
     {
-        ILogger httpLogger = GetSubstitute<ILogger>();
-        httpLogger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
+        CapturingLogger<DiscordSetupTests> httpLogger = new();
 
         ILoggerProvider loggerProvider = GetSubstitute<ILoggerProvider>();
         loggerProvider.CreateLogger(Arg.Any<string>()).Returns(httpLogger);
@@ -60,12 +61,8 @@ public sealed class DiscordSetupTests : TestBase
             );
         }
 
-        Assert.Contains(
-            expectedSubstring: SECRET,
-            actualString: httpLogger.LoggedText(),
-            comparisonType: StringComparison.Ordinal
-        );
-        httpLogger.ClearReceivedCalls();
+        Assert.Contains(collection: httpLogger.Entries, filter: static entry => ContainsSecret(entry));
+        int controlEntryCount = httpLogger.EntryCount;
 
         using (HttpClient client = factory.CreateClient(DiscordWebhookClient.HttpClientName))
         {
@@ -76,10 +73,14 @@ public sealed class DiscordSetupTests : TestBase
         }
 
         Assert.DoesNotContain(
-            expectedSubstring: SECRET,
-            actualString: httpLogger.LoggedText(),
-            comparisonType: StringComparison.Ordinal
+            collection: httpLogger.Entries.Skip(controlEntryCount),
+            filter: static entry => ContainsSecret(entry)
         );
+    }
+
+    private static bool ContainsSecret(in CapturedLogEntry entry)
+    {
+        return entry.Message.Contains(value: SECRET, comparisonType: StringComparison.Ordinal);
     }
 
     [Fact]
