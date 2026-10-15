@@ -28,10 +28,6 @@
     },
     "LoadBalancerPriority": {
       "Type": "Number"
-    },
-    "TaskExecutionRole": {
-      "Type": "String",
-      "Default": "arn:aws:iam::117769150821:role/ecsExecutionRole"
     }
   },
   "Mappings": {
@@ -45,8 +41,7 @@
       "Task": {
         "Cpu": "512",
         "Memory": "1024",
-        "ContainerPort": "8080",
-        "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
+        "ContainerPort": "8080"
       },
       "Service": {
         "DesiredCount": "1",
@@ -89,135 +84,45 @@
             "Environment": [
               {
                 "Name": "CLOUDFORMATION__AWS__REGION",
-                "Value": "eu-west-1"
+                "Value": {"Ref": "AWS::Region"}
               }
             ],
             "Secrets": [
               {
                 "Name": "DISCORD__TOKEN",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_TOKEN"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_TOKEN::"
               },
               {
                 "Name": "DISCORD__SERVER",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_SERVER"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_SERVER::"
               },
               {
                 "Name": "DISCORD__CHANNEL",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_CHANNEL"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_CHANNEL::"
               },
               {
                 "Name": "DISCORD__RELEASE_CHANNEL",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_RELEASE_CHANNEL"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_RELEASE_CHANNEL::"
               },
               {
                 "Name": "SERVEROCTOPUS__URL",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "OCTOPUS_URL"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:OCTOPUS_URL::"
               },
               {
                 "Name": "SERVEROCTOPUS__APIKEY",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "OCTOPUS_API_KEY"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:OCTOPUS_API_KEY::"
               },
               {
                 "Name": "CLOUDFORMATION__TOPICARN",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "SNS_TOPIC_ARN"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:SNS_TOPIC_ARN::"
               },
               {
                 "Name": "CLOUDFORMATION__AWS__ACCESSKEYID",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "AWS_ACCESS_KEY_ID"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:AWS_ACCESS_KEY_ID::"
               },
               {
                 "Name": "CLOUDFORMATION__AWS__SECRETKEY",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:${Key}::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "AWS_SECRET_KEY"
-                    }
-                  ]
-                }
+                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:AWS_SECRET_KEY::"
               }
             ],
             "DisableNetworking": false,
@@ -266,9 +171,7 @@
         "Memory": {
           "Fn::FindInMap": ["Deployment", "Task", "Memory"]
         },
-        "ExecutionRoleArn": {
-          "Ref": "TaskExecutionRole"
-        },
+        "ExecutionRoleArn": "arn:aws:iam::117769150821:role/ecsExecutionRole",
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
         "Volumes": [],
