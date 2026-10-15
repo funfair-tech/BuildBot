@@ -33,7 +33,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     public async ValueTask PublishAsync(DiscordEmbed embed, CancellationToken cancellationToken)
     {
-        // Nothing may escape: DiscordMessageSender sends from an Rx subscription which an exception would terminate.
+        // Failures are logged here with any webhook status; DiscordMessageSender also guards each send.
         try
         {
             this._logger.LogSendingMessage(embed.Title);
