@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -33,27 +32,15 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     public async ValueTask PublishAsync(DiscordEmbed embed, CancellationToken cancellationToken)
     {
-        // Failures are logged here with any webhook status; DiscordMessageSender also guards each send.
-        try
-        {
-            this._logger.LogSendingMessage(embed.Title);
+        this._logger.LogSendingMessage(embed.Title);
 
-            WebhookSendResult result = await this._client.SendAsync(
-                webhookUrl: this._botConfiguration.WebhookUrl,
-                payload: EmbedMapper.ToPayload(embed),
-                cancellationToken: cancellationToken
-            );
+        WebhookSendResult result = await this._client.SendAsync(
+            webhookUrl: this._botConfiguration.WebhookUrl,
+            payload: EmbedMapper.ToPayload(embed),
+            cancellationToken: cancellationToken
+        );
 
-            this.LogResult(embed: embed, result: result);
-        }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-            this._logger.LogSendCancelled(embed.Title);
-        }
-        catch (Exception exception)
-        {
-            this._logger.LogSendFailed(title: embed.Title, exception: exception);
-        }
+        this.LogResult(embed: embed, result: result);
     }
 
     private void LogResult(DiscordEmbed embed, in WebhookSendResult result)
