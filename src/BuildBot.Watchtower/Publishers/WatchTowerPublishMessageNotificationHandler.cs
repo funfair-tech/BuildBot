@@ -26,7 +26,7 @@ public sealed class WatchTowerPublishMessageNotificationHandler : INotificationH
             Title: notification.Model.Title,
             Url: null,
             Description: notification.Model.Message,
-            Colour: null,
+            Color: null,
             Fields: []
         );
     }

@@ -91,7 +91,7 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
             Title: title,
             Url: EmbedUrl.FromString(message.CompareUrl),
             Description: null,
-            Colour: null,
+            Color: null,
             Fields: CreateCommitFields(message.Commits)
         );
     }
