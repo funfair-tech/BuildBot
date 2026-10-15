@@ -1,0 +1,29 @@
+# Discord webhook (consumed API).
+# The webhook URL contains its token, so it is a credential: supply DiscordWebhookUrl from an
+# uncommitted http-client.private.env.json, e.g. { "dev": { "DiscordWebhookUrl": "https://..." } }
+
+### Discord webhook - execute (expects 204 No Content)
+POST {{DiscordWebhookUrl}}
+Content-Type: application/json
+
+{
+  "embeds": [
+    {
+      "title": "BuildBot webhook test",
+      "description": "Test message from DiscordWebhook.http",
+      "color": 3066993,
+      "author": {
+        "name": "FunFair BuildBot",
+        "url": "https://funfair.io",
+        "icon_url": "https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"
+      },
+      "fields": [
+        {
+          "name": "Field",
+          "value": "Value",
+          "inline": false
+        }
+      ]
+    }
+  ]
+}
