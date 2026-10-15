@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.GitHub.Helpers;
 using BuildBot.GitHub.Middleware;
@@ -23,6 +24,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     private const string SIGNATURE_HEADER = "X-Hub-Signature-256";
 
     private const string REMOTE_IP_ADDRESS = "10.0.0.5";
+
+    private const long GITHUB_PAYLOAD_LIMIT = 25L * 1024 * 1024;
 
     private readonly ILogger<GitHubWebhookSignatureMiddleware> _logger;
     private readonly IRemoteIpAddressRetriever _remoteIpAddressRetriever;
@@ -112,6 +115,50 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 ForwardedFor: string.Empty
             )
         );
+    }
+
+    [Fact]
+    public async Task ContentLengthOverLimitReturnsPayloadTooLargeWithoutReadingBodyAsync()
+    {
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: CreateBody(),
+            signature: GitHubWebhookTestVectors.ValidSignature
+        );
+        httpContext.Request.ContentLength = GITHUB_PAYLOAD_LIMIT + 1;
+
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+
+        this.AssertPayloadTooLargeWithoutCallingNext(httpContext);
+    }
+
+    [Fact]
+    public async Task BodyWithoutContentLengthOverLimitReturnsPayloadTooLargeAsync()
+    {
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: new ZeroFilledReadStream(GITHUB_PAYLOAD_LIMIT + 1),
+            signature: GitHubWebhookTestVectors.ValidSignature
+        );
+
+        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+
+        this.AssertPayloadTooLargeWithoutCallingNext(httpContext);
+    }
+
+    [Fact]
+    public async Task BodyReadFailureAfterClientDisconnectIsNotReportedAsTooLargeAsync()
+    {
+        using CancellationTokenSource requestAborted = new();
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: new AbortingReadStream(requestAborted),
+            signature: GitHubWebhookTestVectors.ValidSignature
+        );
+        httpContext.RequestAborted = requestAborted.Token;
+
+        await Assert.ThrowsAsync<IOException>(() =>
+            this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext)
+        );
+
+        Assert.Empty(this._bodiesSeenByNext);
     }
 
     [Fact]
@@ -236,6 +283,22 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     {
         Assert.Equal(expected: StatusCodes.Status401Unauthorized, actual: httpContext.Response.StatusCode);
         Assert.Empty(this._bodiesSeenByNext);
+    }
+
+    private void AssertPayloadTooLargeWithoutCallingNext(HttpContext httpContext)
+    {
+        Assert.Equal(expected: StatusCodes.Status413PayloadTooLarge, actual: httpContext.Response.StatusCode);
+        Assert.Empty(this._bodiesSeenByNext);
+        this.AssertRejectionLogged(
+            new(
+                Path: string.Empty,
+                Reason: WebhookSignatureVerificationResult.BODY_TOO_LARGE,
+                Delivery: string.Empty,
+                GitHubEvent: string.Empty,
+                RemoteIpAddress: REMOTE_IP_ADDRESS,
+                ForwardedFor: string.Empty
+            )
+        );
     }
 
     private void AssertRejectionLogged(in ExpectedRejection expected)

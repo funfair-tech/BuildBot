@@ -16,6 +16,12 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
     private const string DELIVERY_HEADER = "X-GitHub-Delivery";
     private const string EVENT_HEADER = "X-GitHub-Event";
 
+    // Typical push payloads are well under this, so they stay in memory rather than spilling to a temp file.
+    private const int BUFFER_THRESHOLD = 1024 * 1024;
+
+    // GitHub caps webhook payloads at 25 MB, so anything larger cannot be a genuine delivery.
+    private const long BUFFER_LIMIT = 25L * 1024 * 1024;
+
     private readonly bool _isEnabled;
     private readonly ILogger<GitHubWebhookSignatureMiddleware> _logger;
     private readonly IRemoteIpAddressRetriever _remoteIpAddressRetriever;
@@ -78,7 +84,10 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
             forwardedFor: request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
         );
 
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        context.Response.StatusCode =
+            result == WebhookSignatureVerificationResult.BODY_TOO_LARGE
+                ? StatusCodes.Status413PayloadTooLarge
+                : StatusCodes.Status401Unauthorized;
     }
 
     private async ValueTask<WebhookSignatureVerificationResult> VerifyBodyAsync(
@@ -87,20 +96,34 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
         CancellationToken cancellationToken
     )
     {
+        // GitHub always sends Content-Length, so an oversized delivery is rejected before any of it is read.
+        if (request.ContentLength > BUFFER_LIMIT)
+        {
+            return WebhookSignatureVerificationResult.BODY_TOO_LARGE;
+        }
+
         // Model binding reads the body after this, so it must be buffered to be read twice.
-        request.EnableBuffering();
+        request.EnableBuffering(bufferThreshold: BUFFER_THRESHOLD, bufferLimit: BUFFER_LIMIT);
 
         // EnableBuffering replaces an unseekable body, so read it only after the call.
         Stream body = request.Body;
 
-        WebhookSignatureVerificationResult result = await this._verifier.VerifyAsync(
-            body: body,
-            signatureHeader: signatureHeader,
-            cancellationToken: cancellationToken
-        );
+        try
+        {
+            WebhookSignatureVerificationResult result = await this._verifier.VerifyAsync(
+                body: body,
+                signatureHeader: signatureHeader,
+                cancellationToken: cancellationToken
+            );
 
-        body.Position = 0;
+            body.Position = 0;
 
-        return result;
+            return result;
+        }
+        catch (IOException) when (!cancellationToken.IsCancellationRequested)
+        {
+            // The buffering stream throws a plain IOException once a body without Content-Length passes the limit.
+            return WebhookSignatureVerificationResult.BODY_TOO_LARGE;
+        }
     }
 }

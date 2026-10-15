@@ -7,4 +7,5 @@ public enum WebhookSignatureVerificationResult
     MALFORMED_HEADER,
     SIGNATURE_MISMATCH,
     MULTIPLE_HEADERS,
+    BODY_TOO_LARGE,
 }
