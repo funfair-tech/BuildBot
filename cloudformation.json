@@ -124,7 +124,6 @@
                 "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_SECRET_KEY::" }
               }
             ],
-            "DisableNetworking": false,
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
