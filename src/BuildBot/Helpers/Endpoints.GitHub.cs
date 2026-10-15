@@ -28,8 +28,10 @@ internal static partial class Endpoints
         }
 
         // The signature filter runs after model binding has read the body, so it must be buffered to be re-read.
+        // Routing matches literal segments case-insensitively, so this must too or the body is left unbuffered.
         app.UseWhen(
-            predicate: static context => context.Request.Path.StartsWithSegments(GITHUB_PATH, StringComparison.Ordinal),
+            predicate: static context =>
+                context.Request.Path.StartsWithSegments(GITHUB_PATH, StringComparison.OrdinalIgnoreCase),
             configuration: static branch => branch.Use(EnableRequestBufferingAsync)
         );
 
