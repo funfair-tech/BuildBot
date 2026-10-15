@@ -49,7 +49,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
             signature: GitHubWebhookTestVectors.ValidSignature
         );
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertNextReceivedPayload();
         Assert.Equal(expected: StatusCodes.Status200OK, actual: httpContext.Response.StatusCode);
@@ -63,7 +63,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
             signature: GitHubWebhookTestVectors.ValidSignature
         );
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertNextReceivedPayload();
     }
@@ -79,7 +79,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     {
         DefaultHttpContext httpContext = CreateWebhookContext(body: CreateBody(), signature: signature);
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
@@ -103,7 +103,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
             GitHubWebhookTestVectors.ValidSignature,
         ]);
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
@@ -127,7 +127,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         );
         httpContext.Request.ContentLength = GITHUB_PAYLOAD_LIMIT + 1;
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertPayloadTooLargeWithoutCallingNext(httpContext);
     }
@@ -140,7 +140,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
             signature: GitHubWebhookTestVectors.ValidSignature
         );
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertPayloadTooLargeWithoutCallingNext(httpContext);
     }
@@ -155,9 +155,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         );
         httpContext.RequestAborted = requestAborted.Token;
 
-        await Assert.ThrowsAsync<IOException>(() =>
-            this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext)
-        );
+        await Assert.ThrowsAsync<IOException>(() => this.InvokeAsync(httpContext: httpContext));
 
         Assert.Empty(this._bodiesSeenByNext);
     }
@@ -174,7 +172,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         httpContext.Request.Headers["X-GitHub-Event"] = "push";
         httpContext.Request.Headers["X-Forwarded-For"] = "203.0.113.7, 198.51.100.2";
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
@@ -198,11 +196,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
             signature: GitHubWebhookTestVectors.MismatchedSignature
         );
 
-        await this.InvokeAsync(
-            secret: GitHubWebhookTestVectors.Secret,
-            httpContext: httpContext,
-            remoteIpAddressRetriever: new RemoteIpAddressRetriever()
-        );
+        await this.InvokeAsync(httpContext: httpContext, remoteIpAddressRetriever: new RemoteIpAddressRetriever());
 
         this.AssertUnauthorisedWithoutCallingNext(httpContext);
         this.AssertRejectionLogged(
@@ -218,16 +212,6 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     }
 
     [Fact]
-    public async Task NoSecretConfiguredCallsNextWithoutSignatureAsync()
-    {
-        DefaultHttpContext httpContext = CreateWebhookContext(body: CreateBody(), signature: null);
-
-        await this.InvokeAsync(secret: string.Empty, httpContext: httpContext);
-
-        this.AssertNextReceivedPayload();
-    }
-
-    [Fact]
     public async Task EndpointWithoutWebhookMetadataCallsNextWithoutSignatureAsync()
     {
         DefaultHttpContext httpContext = CreateHttpContext(body: CreateBody(), signature: null);
@@ -235,7 +219,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
             new Endpoint(requestDelegate: null, metadata: EndpointMetadataCollection.Empty, displayName: "other")
         );
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertNextReceivedPayload();
     }
@@ -245,7 +229,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     {
         DefaultHttpContext httpContext = CreateHttpContext(body: CreateBody(), signature: null);
 
-        await this.InvokeAsync(secret: GitHubWebhookTestVectors.Secret, httpContext: httpContext);
+        await this.InvokeAsync(httpContext: httpContext);
 
         this.AssertNextReceivedPayload();
     }
@@ -282,20 +266,15 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         return httpContext;
     }
 
-    private Task InvokeAsync(string secret, HttpContext httpContext)
+    private Task InvokeAsync(HttpContext httpContext)
     {
-        return this.InvokeAsync(
-            secret: secret,
-            httpContext: httpContext,
-            remoteIpAddressRetriever: this._remoteIpAddressRetriever
-        );
+        return this.InvokeAsync(httpContext: httpContext, remoteIpAddressRetriever: this._remoteIpAddressRetriever);
     }
 
-    private Task InvokeAsync(string secret, HttpContext httpContext, IRemoteIpAddressRetriever remoteIpAddressRetriever)
+    private Task InvokeAsync(HttpContext httpContext, IRemoteIpAddressRetriever remoteIpAddressRetriever)
     {
-        GitHubConfiguration configuration = new(secret);
+        GitHubConfiguration configuration = new(GitHubWebhookTestVectors.Secret);
         GitHubWebhookSignatureMiddleware middleware = new(
-            configuration: configuration,
             verifier: new WebhookSignatureVerifier(configuration),
             remoteIpAddressRetriever: remoteIpAddressRetriever,
             logger: this._logger

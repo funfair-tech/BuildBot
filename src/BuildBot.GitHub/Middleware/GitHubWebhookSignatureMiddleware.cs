@@ -23,19 +23,16 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
     // GitHub caps webhook payloads at 25 MB, so anything larger cannot be a genuine delivery.
     private const long BUFFER_LIMIT = 25L * 1024 * 1024;
 
-    private readonly bool _isEnabled;
     private readonly ILogger<GitHubWebhookSignatureMiddleware> _logger;
     private readonly IRemoteIpAddressRetriever _remoteIpAddressRetriever;
     private readonly IWebhookSignatureVerifier _verifier;
 
     public GitHubWebhookSignatureMiddleware(
-        GitHubConfiguration configuration,
         IWebhookSignatureVerifier verifier,
         IRemoteIpAddressRetriever remoteIpAddressRetriever,
         ILogger<GitHubWebhookSignatureMiddleware> logger
     )
     {
-        this._isEnabled = configuration.HasWebhookSecret;
         this._verifier = verifier;
         this._remoteIpAddressRetriever = remoteIpAddressRetriever;
         this._logger = logger;
@@ -44,7 +41,7 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         // Runs for every request, so only endpoints the routes mark as GitHub webhooks pay for verification.
-        if (!this._isEnabled || context.GetEndpoint()?.Metadata.GetMetadata<GitHubWebhookEndpointMetadata>() is null)
+        if (context.GetEndpoint()?.Metadata.GetMetadata<GitHubWebhookEndpointMetadata>() is null)
         {
             return next(context);
         }
