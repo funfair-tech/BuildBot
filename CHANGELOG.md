@@ -87,6 +87,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - TaskExecutionRole CloudFormation parameter (#419)
 ### Deployment Changes
 - ECS tasks now read their secrets at start-up using the ecsExecutionRole execution role, which must have secretsmanager:GetSecretValue on the BuildBot secret (#419)
+- ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
