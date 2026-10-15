@@ -80,8 +80,6 @@
               ]
             },
             "Name": { "Ref": "ApplicationName" },
-            "ResourceRequirements": [],
-            "EnvironmentFiles": [],
             "Environment": [
               {
                 "Name": "CLOUDFORMATION__AWS__REGION",
