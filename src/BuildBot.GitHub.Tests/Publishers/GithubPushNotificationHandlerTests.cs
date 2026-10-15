@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -187,16 +186,6 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
         await mediator.Received(1).Publish(Arg.Any<BotMessage>(), Arg.Any<CancellationToken>());
     }
 
-    private static DiscordEmbed PublishedEmbed(IMediator mediator)
-    {
-        return mediator
-            .ReceivedCalls()
-            .Select(static call => call.GetArguments()[0])
-            .OfType<BotMessage>()
-            .Single()
-            .Message;
-    }
-
     [Fact]
     public async Task PublishedEmbedHasExpectedContentAsync()
     {
@@ -208,7 +197,7 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
 
         await handler.Handle(notification: new(push), cancellationToken: this.CancellationToken());
 
-        DiscordEmbed embed = PublishedEmbed(mediator);
+        DiscordEmbed embed = mediator.PublishedEmbed();
         Assert.Equal(expected: "testpusher pushed 2 commits to BuildBot (feature/my-feature)", actual: embed.Title);
         Assert.Equal(expected: new Uri("https://github.com/example/repo/compare/before...after"), actual: embed.Url);
         Assert.Null(embed.Description);
@@ -234,7 +223,7 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
 
         Assert.Equal(
             expected: "testpusher pushed 1 commit to BuildBot (feature/my-feature)",
-            actual: PublishedEmbed(mediator).Title
+            actual: mediator.PublishedEmbed().Title
         );
     }
 }
