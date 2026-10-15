@@ -5,10 +5,28 @@ GET {{MinimalApi_HostAddress}}/ping?source=test
 Accept: application/json
 
 ### Github Ping
+# The signature is computed over the body with the GitHub:WebhookSecret configured locally (e.g. in appsettings-local.json).
+< {%
+    const webhookSecret = "It's a Secret to Everybody";
+    request.variables.set("GitHubSignature", "sha256=" + crypto.hmac.sha256().withTextSecret(webhookSecret).updateWithText(request.body.tryGetSubstituted()).digest().toHex());
+%}
 POST {{MinimalApi_HostAddress}}/github/ping
 Content-Type: application/json
 Accept: application/json
 X-GitHub-Event: ping
+X-Hub-Signature-256: {{GitHubSignature}}
+
+{
+  "zen": "Design for failure.",
+  "hook_id": "123456789"
+}
+
+### Github Ping - invalid signature (expect 401 when GitHub:WebhookSecret is configured)
+POST {{MinimalApi_HostAddress}}/github/ping
+Content-Type: application/json
+Accept: application/json
+X-GitHub-Event: ping
+X-Hub-Signature-256: sha256=0000000000000000000000000000000000000000000000000000000000000000
 
 {
   "zen": "Design for failure.",
@@ -16,6 +34,10 @@ X-GitHub-Event: ping
 }
 
 ### Github Push
+< {%
+    const webhookSecret = "It's a Secret to Everybody";
+    request.variables.set("GitHubSignature", "sha256=" + crypto.hmac.sha256().withTextSecret(webhookSecret).updateWithText(request.body.tryGetSubstituted()).digest().toHex());
+%}
 POST {{MinimalApi_HostAddress}}/github/push
 Accept: */*
 Content-Type: application/json
@@ -25,6 +47,7 @@ X-GitHub-Event: push
 X-GitHub-Hook-ID: 15460912
 X-GitHub-Hook-Installation-Target-ID: 29401895
 X-GitHub-Hook-Installation-Target-Type: organization
+X-Hub-Signature-256: {{GitHubSignature}}
 
 {
   "ref": "refs/tags/github-build-number-623",
@@ -192,6 +215,10 @@ X-GitHub-Hook-Installation-Target-Type: organization
 }
 
 ### Github Status
+< {%
+    const webhookSecret = "It's a Secret to Everybody";
+    request.variables.set("GitHubSignature", "sha256=" + crypto.hmac.sha256().withTextSecret(webhookSecret).updateWithText(request.body.tryGetSubstituted()).digest().toHex());
+%}
 POST {{MinimalApi_HostAddress}}/github/status
 Accept: */*
 Content-Type: application/json
@@ -201,6 +228,7 @@ X-GitHub-Event: status
 X-GitHub-Hook-ID: 186607581
 X-GitHub-Hook-Installation-Target-ID: 29401895
 X-GitHub-Hook-Installation-Target-Type: organization
+X-Hub-Signature-256: {{GitHubSignature}}
 
 {
   "id": 27682796547,

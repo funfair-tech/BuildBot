@@ -1,4 +1,5 @@
-﻿using BuildBot.GitHub.Publishers;
+﻿using BuildBot.GitHub.Filters;
+using BuildBot.GitHub.Publishers;
 using FunFair.Test.Common;
 using FunFair.Test.Infrastructure;
 using Mediator;
@@ -14,7 +15,25 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
 
     private static IServiceCollection Configure(IServiceCollection services)
     {
-        return services.AddMockedService<IMediator>().AddGitHub();
+        return services.AddMockedService<IMediator>().AddGitHub(new GitHubConfiguration("secret"));
+    }
+
+    [Fact]
+    public void GitHubConfigurationMustBeRegistered()
+    {
+        this.RequireService<GitHubConfiguration>();
+    }
+
+    [Fact]
+    public void WebhookSignatureVerifierMustBeRegistered()
+    {
+        this.RequireService<IWebhookSignatureVerifier>();
+    }
+
+    [Fact]
+    public void GitHubWebhookSignatureFilterMustBeRegistered()
+    {
+        this.RequireService<GitHubWebhookSignatureFilter>();
     }
 
     [Fact]

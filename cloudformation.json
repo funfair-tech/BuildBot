@@ -113,6 +113,10 @@
               {
                 "Name": "CLOUDFORMATION__AWS__SECRETKEY",
                 "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_SECRET_KEY::" }
+              },
+              {
+                "Name": "GITHUB__WEBHOOKSECRET",
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:GITHUB_WEBHOOK_SECRET::" }
               }
             ],
             "LogConfiguration": {

@@ -74,6 +74,8 @@ internal static class ServerStartup
 
         SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
 
+        GitHubConfiguration gitHubConfig = LoadGitHubConfig(config);
+
         builder.Host.UseWindowsService().UseSystemd();
         builder
             .WebHost.UseKestrel(options: options =>
@@ -94,7 +96,7 @@ internal static class ServerStartup
             )
             .AddDiscord(discordConfig)
             .AddCloudFormation(snsConfiguration)
-            .AddGitHub()
+            .AddGitHub(gitHubConfig)
             .AddWatchtower()
             .AddStatus()
             .AddMediator();
@@ -161,6 +163,11 @@ internal static class ServerStartup
             configuration["Discord:Channel"] ?? string.Empty,
             configuration["Discord:ReleaseChannel"] ?? string.Empty
         );
+    }
+
+    private static GitHubConfiguration LoadGitHubConfig(IConfigurationRoot configuration)
+    {
+        return new(configuration["GitHub:WebhookSecret"] ?? string.Empty);
     }
 
     private static void SetH1ListenOptions(ListenOptions listenOptions)
