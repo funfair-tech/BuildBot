@@ -15,10 +15,10 @@ namespace BuildBot.GitHub.Publishers;
 
 public sealed class GithubStatusNotificationHandler : INotificationHandler<GithubStatus>
 {
-    private static readonly IReadOnlyList<ColourMapping> ColourMappings =
+    private static readonly IReadOnlyList<ColorMapping> ColorMappings =
     [
-        new(State: "success", Colour: DiscordColor.Green),
-        new(State: "failure", Colour: DiscordColor.Red),
+        new(State: "success", Color: DiscordColor.Green),
+        new(State: "failure", Color: DiscordColor.Red),
     ];
 
     private readonly ILogger<GithubStatusNotificationHandler> _logger;
@@ -81,14 +81,14 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 
     private static DiscordColor? GetEmbedColor(Status message)
     {
-        return ColourMappings
+        return ColorMappings
             .Where(mapping => mapping.IsMatch(message))
-            .Select(static DiscordColor? (mapping) => mapping.Colour)
+            .Select(static DiscordColor? (mapping) => mapping.Color)
             .FirstOrDefault();
     }
 
-    [DebuggerDisplay("{State} => {Colour}")]
-    private readonly record struct ColourMapping(string State, DiscordColor Colour)
+    [DebuggerDisplay("{State} => {Color}")]
+    private readonly record struct ColorMapping(string State, DiscordColor Color)
     {
         public bool IsMatch(in Status message)
         {
