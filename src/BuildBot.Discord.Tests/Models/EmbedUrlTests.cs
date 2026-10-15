@@ -7,19 +7,24 @@ namespace BuildBot.Discord.Tests.Models;
 
 public sealed class EmbedUrlTests : TestBase
 {
-    [Fact]
-    public void FromString_WithAbsoluteUrl_ReturnsUri()
+    [Theory]
+    [InlineData("https://example.com/build/1")]
+    [InlineData("http://example.com/build/1")]
+    public static void FromString_WithWebUrl_ReturnsUri(string value)
     {
-        Uri? uri = EmbedUrl.FromString("https://example.com/build/1");
+        Uri? uri = EmbedUrl.FromString(value);
 
-        Assert.Equal(expected: new Uri("https://example.com/build/1"), actual: uri);
+        Assert.Equal(expected: new Uri(value), actual: uri);
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("not a url")]
-    public static void FromString_WithMissingOrRelativeUrl_ReturnsNull(string? value)
+    [InlineData("/builds/123")]
+    [InlineData("ftp://example.com/build/1")]
+    [InlineData("file:///builds/123")]
+    public static void FromString_WithMissingRelativeOrNonWebUrl_ReturnsNull(string? value)
     {
         Assert.Null(EmbedUrl.FromString(value));
     }
