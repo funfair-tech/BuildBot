@@ -28,6 +28,10 @@
     },
     "LoadBalancerPriority": {
       "Type": "Number"
+    },
+    "SecretsManagerArn": {
+      "Type": "String",
+      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
     }
   },
   "Mappings": {
@@ -90,39 +94,39 @@
             "Secrets": [
               {
                 "Name": "DISCORD__TOKEN",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_TOKEN::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_TOKEN::" }
               },
               {
                 "Name": "DISCORD__SERVER",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_SERVER::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_SERVER::" }
               },
               {
                 "Name": "DISCORD__CHANNEL",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_CHANNEL::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_CHANNEL::" }
               },
               {
                 "Name": "DISCORD__RELEASE_CHANNEL",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:DISCORD_RELEASE_CHANNEL::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::" }
               },
               {
                 "Name": "SERVEROCTOPUS__URL",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:OCTOPUS_URL::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:OCTOPUS_URL::" }
               },
               {
                 "Name": "SERVEROCTOPUS__APIKEY",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:OCTOPUS_API_KEY::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:OCTOPUS_API_KEY::" }
               },
               {
                 "Name": "CLOUDFORMATION__TOPICARN",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:SNS_TOPIC_ARN::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:SNS_TOPIC_ARN::" }
               },
               {
                 "Name": "CLOUDFORMATION__AWS__ACCESSKEYID",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:AWS_ACCESS_KEY_ID::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_ACCESS_KEY_ID::" }
               },
               {
                 "Name": "CLOUDFORMATION__AWS__SECRETKEY",
-                "ValueFrom": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ:AWS_SECRET_KEY::"
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_SECRET_KEY::" }
               }
             ],
             "DisableNetworking": false,
