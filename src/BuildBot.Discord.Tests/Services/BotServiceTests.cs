@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -15,7 +16,7 @@ namespace BuildBot.Discord.Tests.Services;
 
 public sealed class BotServiceTests : TestBase
 {
-    private static readonly TimeSpan ForwardingWait = TimeSpan.FromSeconds(3);
+    private static readonly TimeSpan CompletionWait = TimeSpan.FromSeconds(10);
 
     private static (BotService Service, IDiscordBot Bot, MessageChannel<BotMessage> MessageChannel) CreateService()
     {
@@ -47,14 +48,24 @@ public sealed class BotServiceTests : TestBase
 
         using (service)
         {
-            await service.StopAsync(this.CancellationToken());
+            CancellationToken cancellationToken = this.CancellationToken();
+            await service.StopAsync(cancellationToken);
 
-            await messageChannel.PublishAsync(
-                message: new(TestEmbeds.WithTitle("Test")),
-                cancellationToken: this.CancellationToken()
+            BotMessage message = new(TestEmbeds.WithTitle("Test"));
+            await messageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
+
+            // The stopped service no longer reads the channel, so the message is still there for us to read.
+            await using IAsyncEnumerator<BotMessage> reader = messageChannel
+                .ReadAllAsync(cancellationToken)
+                .GetAsyncEnumerator(cancellationToken);
+            Assert.True(
+                await reader
+                    .MoveNextAsync()
+                    .AsTask()
+                    .WaitAsync(timeout: CompletionWait, cancellationToken: cancellationToken),
+                userMessage: "Message should remain unread in the channel"
             );
-
-            await Task.Delay(delay: ForwardingWait, cancellationToken: this.CancellationToken());
+            Assert.Same(expected: message, actual: reader.Current);
 
             await bot.DidNotReceive()
                 .PublishAsync(embed: Arg.Any<DiscordEmbed>(), cancellationToken: Arg.Any<CancellationToken>());
@@ -70,9 +81,14 @@ public sealed class BotServiceTests : TestBase
     }
 
     [Fact]
-    public async Task BotMessage_IsForwardedToBot_AfterDelay()
+    public async Task BotMessage_IsForwardedToBot()
     {
         (BotService service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
+        TaskCompletionSource published = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        bot.When(async x =>
+                await x.PublishAsync(embed: Arg.Any<DiscordEmbed>(), cancellationToken: Arg.Any<CancellationToken>())
+            )
+            .Do(_ => published.TrySetResult());
 
         using (service)
         {
@@ -80,7 +96,7 @@ public sealed class BotServiceTests : TestBase
 
             await messageChannel.PublishAsync(message: new(embed), cancellationToken: this.CancellationToken());
 
-            await Task.Delay(delay: ForwardingWait, cancellationToken: this.CancellationToken());
+            await published.Task.WaitAsync(timeout: CompletionWait, cancellationToken: this.CancellationToken());
 
             await bot.Received(1).PublishAsync(embed: embed, cancellationToken: Arg.Any<CancellationToken>());
         }
@@ -91,6 +107,7 @@ public sealed class BotServiceTests : TestBase
     {
         IDiscordWebhookClient client = GetSubstitute<IDiscordWebhookClient>();
         int calls = 0;
+        TaskCompletionSource secondSendAttempted = new(TaskCreationOptions.RunContinuationsAsynchronously);
         client
             .SendAsync(
                 webhookUrl: Arg.Any<Uri>(),
@@ -98,10 +115,21 @@ public sealed class BotServiceTests : TestBase
                 cancellationToken: Arg.Any<CancellationToken>()
             )
             .Returns(_ =>
-                Interlocked.Increment(ref calls) == 1
-                    ? throw new HttpRequestException("connection failed")
-                    : new WebhookSendResult(Success: true, StatusCode: HttpStatusCode.NoContent)
-            );
+            {
+                int call = Interlocked.Increment(ref calls);
+
+                if (call == 1)
+                {
+                    throw new HttpRequestException("connection failed");
+                }
+
+                if (call == 2)
+                {
+                    secondSendAttempted.TrySetResult();
+                }
+
+                return new WebhookSendResult(Success: true, StatusCode: HttpStatusCode.NoContent);
+            });
 
         DiscordBot bot = new(
             client: client,
@@ -121,7 +149,10 @@ public sealed class BotServiceTests : TestBase
                 cancellationToken: this.CancellationToken()
             );
 
-            await Task.Delay(delay: ForwardingWait, cancellationToken: this.CancellationToken());
+            await secondSendAttempted.Task.WaitAsync(
+                timeout: CompletionWait,
+                cancellationToken: this.CancellationToken()
+            );
 
             await client
                 .Received(2)
