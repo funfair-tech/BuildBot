@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
 using BuildBot.Discord.Services;
@@ -24,6 +25,15 @@ public sealed class DiscordSetupTests : TestBase
         "https://example.com/webhook/" + SECRET
     );
     private static readonly Uri WebhookUrl = Config.WebhookUrl;
+    private static readonly DateTimeOffset Now = new(
+        year: 2026,
+        month: 1,
+        day: 2,
+        hour: 3,
+        minute: 4,
+        second: 5,
+        offset: TimeSpan.Zero
+    );
 
     [Theory]
     [InlineData(1, 2)]
@@ -35,6 +45,57 @@ public sealed class DiscordSetupTests : TestBase
             expected: TimeSpan.FromSeconds(expectedSeconds),
             actual: DiscordSetup.CalculateRetryDelay(attempt)
         );
+    }
+
+    [Theory]
+    [InlineData(HttpStatusCode.TooManyRequests, 5, null, 5)]
+    [InlineData(HttpStatusCode.TooManyRequests, 0, null, 0)]
+    [InlineData(HttpStatusCode.TooManyRequests, 3600, null, 60)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, 5, 5)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, 120, 60)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, -5, 0)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, null, 2)]
+    [InlineData(HttpStatusCode.ServiceUnavailable, 5, null, 2)]
+    [InlineData(HttpStatusCode.InternalServerError, null, null, 2)]
+    public static void CalculateRetryDelay_ForResponse_ReturnsExpectedDelay(
+        HttpStatusCode statusCode,
+        int? retryAfterDeltaSeconds,
+        int? retryAfterDateOffsetSeconds,
+        int expectedSeconds
+    )
+    {
+        using HttpResponseMessage response = new(statusCode);
+        response.Headers.RetryAfter = CreateRetryAfter(
+            deltaSeconds: retryAfterDeltaSeconds,
+            dateOffsetSeconds: retryAfterDateOffsetSeconds
+        );
+
+        TimeSpan actual = DiscordSetup.CalculateRetryDelay(attempt: 1, response: response, now: Now);
+
+        Assert.Equal(expected: TimeSpan.FromSeconds(expectedSeconds), actual: actual);
+    }
+
+    [Fact]
+    public static void CalculateRetryDelay_WithoutResponse_UsesBackoff()
+    {
+        TimeSpan actual = DiscordSetup.CalculateRetryDelay(attempt: 2, response: null, now: Now);
+
+        Assert.Equal(expected: TimeSpan.FromSeconds(4), actual: actual);
+    }
+
+    private static RetryConditionHeaderValue? CreateRetryAfter(int? deltaSeconds, int? dateOffsetSeconds)
+    {
+        if (deltaSeconds is not null)
+        {
+            return new(TimeSpan.FromSeconds(deltaSeconds.Value));
+        }
+
+        if (dateOffsetSeconds is not null)
+        {
+            return new(Now.AddSeconds(dateOffsetSeconds.Value));
+        }
+
+        return null;
     }
 
     [Fact]
@@ -87,10 +148,14 @@ public sealed class DiscordSetupTests : TestBase
     }
 
     [Fact]
-    public async Task WebhookClient_RetriesTransientServerErrorsWithSamePayload()
+    public async Task WebhookClient_RetriesRateLimitedRequestsWithSamePayload()
     {
         using TestHttpMessageHandler handler = new(
-            static () => new HttpResponseMessage(HttpStatusCode.InternalServerError),
+            static () =>
+                new HttpResponseMessage(HttpStatusCode.TooManyRequests)
+                {
+                    Headers = { RetryAfter = new RetryConditionHeaderValue(TimeSpan.Zero) },
+                },
             static () => new HttpResponseMessage(HttpStatusCode.NoContent)
         );
 
