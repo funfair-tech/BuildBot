@@ -32,14 +32,12 @@ public sealed class DiscordBotTests : TestBase
         Fields: [new(Name: "Name", Value: "Value")]
     );
 
-    private static (IDiscordWebhookClient Client, CapturingLogger<DiscordBot> Logger, DiscordBot Bot) CreateBot(
-        DiscordBotConfiguration configuration
-    )
+    private static (IDiscordWebhookClient Client, CapturingLogger<DiscordBot> Logger, DiscordBot Bot) CreateBot()
     {
         IDiscordWebhookClient client = GetSubstitute<IDiscordWebhookClient>();
         CapturingLogger<DiscordBot> logger = new();
 
-        DiscordBot bot = new(client: client, botConfiguration: configuration, logger: logger);
+        DiscordBot bot = new(client: client, botConfiguration: Config, logger: logger);
 
         return (client, logger, bot);
     }
@@ -82,7 +80,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public static void GetStatus_IsOk()
     {
-        (_, _, DiscordBot bot) = CreateBot(Config);
+        (_, _, DiscordBot bot) = CreateBot();
 
         ServiceStatus status = bot.GetStatus();
 
@@ -92,7 +90,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_SendsMappedEmbedToWebhookAndLogsSuccess()
     {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
         WebhookPayload? captured = null;
         client
             .SendAsync(
@@ -117,7 +115,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenWebhookRejectsMessage_LogsError()
     {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
         MockDiscordWebhookClientSend(
             client: client,
             result: new(Success: false, StatusCode: HttpStatusCode.BadRequest)
@@ -132,7 +130,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenClientThrows_LogsErrorAndDoesNotThrow()
     {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
         MockDiscordWebhookClientSendThrows(client: client, exception: new HttpRequestException("connection failed"));
 
         await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
@@ -144,7 +142,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenCancelled_LogsWarningAndDoesNotThrow()
     {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
         using CancellationTokenSource cts = new();
         await cts.CancelAsync();
         MockDiscordWebhookClientSendThrows(client: client, exception: new OperationCanceledException(cts.Token));
@@ -158,7 +156,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenClientCancelsWithoutCallerCancellation_LogsError()
     {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
         MockDiscordWebhookClientSendThrows(client: client, exception: new TaskCanceledException("timed out"));
 
         await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
