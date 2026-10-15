@@ -7,7 +7,6 @@ using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Models;
 using BuildBot.CloudFormation.Publishers.LoggingExtensions;
 using BuildBot.Discord.Models;
-using Discord;
 using Mediator;
 using Microsoft.Extensions.Logging;
 
@@ -67,29 +66,22 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
         );
 
         this._logger.BuildingMessage(deployment.Value);
-        EmbedBuilder embed = BuildStatusMessage(deployment: deployment.Value, stackDetails: stackDetails);
+        DiscordEmbed embed = BuildStatusMessage(deployment: deployment.Value, stackDetails: stackDetails);
 
         this._logger.PublishingMessage(deployment.Value);
 
         await this._mediator.Publish(new BotMessage(embed), cancellationToken: cancellationToken);
     }
 
-    private static EmbedBuilder BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
+    private static DiscordEmbed BuildStatusMessage(in Deployment deployment, StackDetails? stackDetails)
     {
-        EmbedBuilder builder = new EmbedBuilder()
-            .WithTitle(BuildTitle(deployment: deployment, stackDetails: stackDetails))
-            .WithUrl(BuildStackUrl(deployment).ToString())
-            .WithColor(deployment.Success ? Color.Green : Color.Red)
-            .WithFields(GetFields(deployment));
-
-        if (stackDetails is not null)
-        {
-            builder
-                .WithDescription(stackDetails.Value.Description)
-                .AddField(name: "Version", value: stackDetails.Value.Version);
-        }
-
-        return builder;
+        return new(
+            Title: BuildTitle(deployment: deployment, stackDetails: stackDetails),
+            Url: BuildStackUrl(deployment),
+            Description: stackDetails?.Description,
+            Colour: deployment.Success ? DiscordColour.Green : DiscordColour.Red,
+            Fields: GetFields(deployment: deployment, stackDetails: stackDetails)
+        );
     }
 
     private static string BuildTitle(in Deployment deployment, StackDetails? stackDetails)
@@ -113,18 +105,27 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
         );
     }
 
-    private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Deployment deployment)
+    private static IReadOnlyList<DiscordEmbedField> GetFields(in Deployment deployment, StackDetails? stackDetails)
     {
-        return [AddArnEmbed(deployment), AddStatusEmbed(deployment)];
+        string? version = stackDetails?.Version;
+
+        return string.IsNullOrWhiteSpace(version)
+            ? [AddArnEmbed(deployment), AddStatusEmbed(deployment)]
+            : [AddArnEmbed(deployment), AddStatusEmbed(deployment), AddVersionEmbed(version)];
     }
 
-    private static EmbedFieldBuilder AddArnEmbed(in Deployment deployment)
+    private static DiscordEmbedField AddArnEmbed(in Deployment deployment)
     {
-        return new EmbedFieldBuilder().WithName("ARN").WithValue(deployment.Arn);
+        return new(Name: "ARN", Value: deployment.Arn);
     }
 
-    private static EmbedFieldBuilder AddStatusEmbed(in Deployment deployment)
+    private static DiscordEmbedField AddStatusEmbed(in Deployment deployment)
     {
-        return new EmbedFieldBuilder().WithName("Status").WithValue(deployment.Status);
+        return new(Name: "Status", Value: deployment.Status);
+    }
+
+    private static DiscordEmbedField AddVersionEmbed(string version)
+    {
+        return new(Name: "Version", Value: version);
     }
 }

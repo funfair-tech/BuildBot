@@ -8,7 +8,6 @@ using BuildBot.Discord.Models;
 using BuildBot.GitHub.Models;
 using BuildBot.GitHub.Publishers.LoggingExtensions;
 using BuildBot.ServiceModel.GitHub;
-using Discord;
 using Mediator;
 using Microsoft.Extensions.Logging;
 
@@ -18,8 +17,8 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 {
     private static readonly IReadOnlyList<ColourMapping> ColourMappings =
     [
-        new(State: "success", Colour: Color.Green),
-        new(State: "failure", Colour: Color.Red),
+        new(State: "success", Colour: DiscordColour.Green),
+        new(State: "failure", Colour: DiscordColour.Red),
     ];
 
     private readonly ILogger<GithubStatusNotificationHandler> _logger;
@@ -51,49 +50,45 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
         return StringComparer.OrdinalIgnoreCase.Equals(x: message.State, y: "pending");
     }
 
-    private static EmbedBuilder BuildStatusMessage(in Status message)
+    private static DiscordEmbed BuildStatusMessage(in Status message)
     {
         Branch? lastBranch = message.Branches.Count > 0 ? message.Branches[^1] : null;
+        string branchName = lastBranch?.Name ?? "(unknown)";
 
-        return new EmbedBuilder()
-            .WithTitle(
-                $"{message.Description} for {message.Context} from {message.Repository.Name} ({lastBranch?.Name ?? "(unknown)"})"
-            )
-            .WithUrl(message.TargetUrl)
-            .WithDescription($"Built at {message.StatusCommit.Sha}")
-            .WithColor(GetEmbedColor(message))
-            .WithFields(GetFields(message));
+        return new(
+            Title: $"{message.Description} for {message.Context} from {message.Repository.Name} ({branchName})",
+            Url: EmbedUrl.FromString(message.TargetUrl),
+            Description: $"Built at {message.StatusCommit.Sha}",
+            Colour: GetEmbedColour(message),
+            Fields: GetFields(message)
+        );
     }
 
-    private static IReadOnlyList<EmbedFieldBuilder> GetFields(in Status message)
+    private static IReadOnlyList<DiscordEmbedField> GetFields(in Status message)
     {
         return [AddHeadCommitEmbed(message.StatusCommit), AddBranchEmbed(message)];
     }
 
-    private static EmbedFieldBuilder AddBranchEmbed(in Status message)
+    private static DiscordEmbedField AddBranchEmbed(in Status message)
     {
-        return new EmbedFieldBuilder()
-            .WithName("Branch")
-            .WithValue(message.Branches.Select(static b => b.Name).FirstOrDefault() ?? "(unknown)");
+        return new(Name: "Branch", Value: message.Branches.Select(static b => b.Name).FirstOrDefault() ?? "(unknown)");
     }
 
-    private static EmbedFieldBuilder AddHeadCommitEmbed(in StatusCommit statusCommit)
+    private static DiscordEmbedField AddHeadCommitEmbed(in StatusCommit statusCommit)
     {
-        return new EmbedFieldBuilder()
-            .WithName("Head commit")
-            .WithValue($"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
+        return new(Name: "Head commit", Value: $"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
     }
 
-    private static Color GetEmbedColor(Status message)
+    private static DiscordColour? GetEmbedColour(Status message)
     {
         return ColourMappings
             .Where(mapping => mapping.IsMatch(message))
-            .Select(mapping => mapping.Colour)
-            .FirstOrDefault(Color.Default);
+            .Select(static DiscordColour? (mapping) => mapping.Colour)
+            .FirstOrDefault();
     }
 
     [DebuggerDisplay("{State} => {Colour}")]
-    private readonly record struct ColourMapping(string State, Color Colour)
+    private readonly record struct ColourMapping(string State, DiscordColour Colour)
     {
         public bool IsMatch(in Status message)
         {

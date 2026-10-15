@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -184,5 +185,56 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
         await mediator.Received(1).Publish(Arg.Any<BotMessage>(), Arg.Any<CancellationToken>());
+    }
+
+    private static DiscordEmbed PublishedEmbed(IMediator mediator)
+    {
+        return mediator
+            .ReceivedCalls()
+            .Select(static call => call.GetArguments()[0])
+            .OfType<BotMessage>()
+            .Single()
+            .Message;
+    }
+
+    [Fact]
+    public async Task PublishedEmbedHasExpectedContentAsync()
+    {
+        (IMediator mediator, GithubPushNotificationHandler handler) = this.CreateHandler();
+
+        Commit commit1 = MakeCommit(message: "First commit", username: "devuser");
+        Commit commit2 = MakeCommit(message: "Second commit", username: null);
+        Push push = MakePush(repoName: NORMAL_REPO, gitRef: NORMAL_REF, commits: [commit1, commit2]);
+
+        await handler.Handle(notification: new(push), cancellationToken: this.CancellationToken());
+
+        DiscordEmbed embed = PublishedEmbed(mediator);
+        Assert.Equal(expected: "testpusher pushed 2 commits to BuildBot (feature/my-feature)", actual: embed.Title);
+        Assert.Equal(expected: new Uri("https://github.com/example/repo/compare/before...after"), actual: embed.Url);
+        Assert.Null(embed.Description);
+        Assert.Null(embed.Colour);
+        Assert.Equal(
+            expected:
+            [
+                new DiscordEmbedField(Name: "**devuser** - First commit", Value: "0 added, 0 modified, 0 removed"),
+                new DiscordEmbedField(Name: "**Test User** - Second commit", Value: "0 added, 0 modified, 0 removed"),
+            ],
+            actual: embed.Fields
+        );
+    }
+
+    [Fact]
+    public async Task PublishedEmbedForSingleCommitUsesSingularTitleAsync()
+    {
+        (IMediator mediator, GithubPushNotificationHandler handler) = this.CreateHandler();
+
+        Push push = MakePush(repoName: NORMAL_REPO, gitRef: NORMAL_REF, commits: [MakeCommit("Only commit")]);
+
+        await handler.Handle(notification: new(push), cancellationToken: this.CancellationToken());
+
+        Assert.Equal(
+            expected: "testpusher pushed 1 commit to BuildBot (feature/my-feature)",
+            actual: PublishedEmbed(mediator).Title
+        );
     }
 }

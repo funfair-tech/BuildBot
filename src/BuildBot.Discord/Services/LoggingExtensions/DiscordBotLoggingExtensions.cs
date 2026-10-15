@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Discord.Services.LoggingExtensions;
@@ -8,59 +9,30 @@ internal static partial class DiscordBotLoggingExtensions
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Error,
-        Message = "DISCORD: {channelName}: Could not find channel on server {serverName}"
+        Message = "DISCORD: Webhook is not configured; dropping message {title}"
     )]
-    public static partial void LogDiscordChannelNotFound(
-        this ILogger<DiscordBot> logger,
-        string channelName,
-        string serverName
-    );
+    public static partial void LogWebhookNotConfigured(this ILogger<DiscordBot> logger, string title);
 
-    [LoggerMessage(
-        EventId = 2,
-        Level = LogLevel.Warning,
-        Message = "DISCORD: {channelName}: Sending message {message}"
-    )]
-    public static partial void LogSendingMessage(this ILogger<DiscordBot> logger, string channelName, string message);
+    [LoggerMessage(EventId = 2, Level = LogLevel.Information, Message = "DISCORD: Sending message {title}")]
+    public static partial void LogSendingMessage(this ILogger<DiscordBot> logger, string title);
 
-    [LoggerMessage(EventId = 3, Level = LogLevel.Warning, Message = "DISCORD: {channelName}: Sent message {message}")]
-    public static partial void LogSentMessage(this ILogger<DiscordBot> logger, string channelName, string message);
+    [LoggerMessage(EventId = 3, Level = LogLevel.Information, Message = "DISCORD: Sent message {title}")]
+    public static partial void LogSentMessage(this ILogger<DiscordBot> logger, string title);
 
     [LoggerMessage(
         EventId = 4,
         Level = LogLevel.Error,
-        Message = "DISCORD: {channelName}: Failed to send message {title}: {message}"
+        Message = "DISCORD: Failed to send message {title}: HTTP {statusCode}"
     )]
-    public static partial void FailedToPublishMessage(
+    public static partial void LogSendRejected(
         this ILogger<DiscordBot> logger,
-        string channelName,
         string title,
-        string message,
-        Exception exception
+        HttpStatusCode statusCode
     );
 
-    [LoggerMessage(EventId = 6, Level = LogLevel.Debug, Message = "DISCORD: DEBUG: {message}")]
-    public static partial void DiscordDebug(this ILogger<DiscordBot> logger, string message);
+    [LoggerMessage(EventId = 5, Level = LogLevel.Error, Message = "DISCORD: Failed to send message {title}")]
+    public static partial void LogSendFailed(this ILogger<DiscordBot> logger, string title, Exception exception);
 
-    [LoggerMessage(EventId = 7, Level = LogLevel.Information, Message = "DISCORD: INFO: {message}")]
-    public static partial void DiscordInfo(this ILogger<DiscordBot> logger, string message);
-
-    [LoggerMessage(EventId = 8, Level = LogLevel.Warning, Message = "DISCORD: WARNING: {message}")]
-    public static partial void DiscordWarning(this ILogger<DiscordBot> logger, string message);
-
-    [LoggerMessage(EventId = 9, Level = LogLevel.Error, Message = "DISCORD: ERROR: {message}")]
-    public static partial void DiscordError(this ILogger<DiscordBot> logger, string message);
-
-    [LoggerMessage(EventId = 9, Level = LogLevel.Error, Message = "DISCORD: ERROR: {message}")]
-    public static partial void DiscordError(this ILogger<DiscordBot> logger, string message, Exception exception);
-
-    [LoggerMessage(EventId = 10, Level = LogLevel.Critical, Message = "DISCORD: CRITICAL ERROR: {message}")]
-    public static partial void DiscordCriticalError(this ILogger<DiscordBot> logger, string message);
-
-    [LoggerMessage(EventId = 10, Level = LogLevel.Critical, Message = "DISCORD: CRITICAL ERROR: {message}")]
-    public static partial void DiscordCriticalError(
-        this ILogger<DiscordBot> logger,
-        string message,
-        Exception exception
-    );
+    [LoggerMessage(EventId = 6, Level = LogLevel.Warning, Message = "DISCORD: Sending message {title} was cancelled")]
+    public static partial void LogSendCancelled(this ILogger<DiscordBot> logger, string title);
 }

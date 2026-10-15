@@ -1,5 +1,4 @@
 using BuildBot.Discord.Models;
-using Discord;
 using FunFair.Test.Common;
 using Xunit;
 
@@ -7,30 +6,35 @@ namespace BuildBot.Discord.Tests.Models;
 
 public sealed class BotMessageTests : TestBase
 {
-    [Fact]
-    public void MessageProperty_ReturnsSuppliedBuilder()
+    private static DiscordEmbed CreateEmbed(string title)
     {
-        EmbedBuilder builder = new();
-        BotMessage msg = new(builder);
-
-        Assert.Same(expected: builder, actual: msg.Message);
+        return new(Title: title, Url: null, Description: null, Colour: null, Fields: []);
     }
 
     [Fact]
-    public void TwoInstances_WithSameBuilder_AreEqual()
+    public void MessageProperty_ReturnsSuppliedEmbed()
     {
-        EmbedBuilder builder = new();
-        BotMessage msg1 = new(builder);
-        BotMessage msg2 = new(builder);
+        DiscordEmbed embed = CreateEmbed("Message");
+        BotMessage msg = new(embed);
+
+        Assert.Same(expected: embed, actual: msg.Message);
+    }
+
+    [Fact]
+    public void TwoInstances_WithSameEmbed_AreEqual()
+    {
+        DiscordEmbed embed = CreateEmbed("Message");
+        BotMessage msg1 = new(embed);
+        BotMessage msg2 = new(embed);
 
         Assert.Equal(expected: msg1, actual: msg2);
     }
 
     [Fact]
-    public void TwoInstances_WithDifferentBuilders_AreNotEqual()
+    public void TwoInstances_WithDifferentEmbeds_AreNotEqual()
     {
-        BotMessage msg1 = new(new EmbedBuilder().WithTitle("First Message"));
-        BotMessage msg2 = new(new EmbedBuilder().WithTitle("Second Message"));
+        BotMessage msg1 = new(CreateEmbed("First Message"));
+        BotMessage msg2 = new(CreateEmbed("Second Message"));
 
         Assert.NotEqual(expected: msg1, actual: msg2);
     }
