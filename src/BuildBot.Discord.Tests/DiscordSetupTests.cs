@@ -103,9 +103,7 @@ public sealed class DiscordSetupTests : TestBase
 
         WebhookSendResult result = await client.SendAsync(
             webhookUrl: WebhookUrl,
-            payload: EmbedMapper.ToPayload(
-                new DiscordEmbed(Title: "Title", Url: null, Description: null, Colour: null, Fields: [])
-            ),
+            payload: EmbedMapper.ToPayload(TestEmbeds.WithTitle("Title")),
             cancellationToken: this.CancellationToken()
         );
 

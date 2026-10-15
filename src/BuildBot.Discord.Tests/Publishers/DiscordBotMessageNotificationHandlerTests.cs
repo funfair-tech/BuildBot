@@ -22,9 +22,7 @@ public sealed class DiscordBotMessageNotificationHandlerTests : TestBase
 
         DiscordBotMessageNotificationHandler handler = new(messageChannel: channel, logger: logger);
 
-        BotMessage notification = new(
-            new DiscordEmbed(Title: "Test Notification", Url: null, Description: null, Colour: null, Fields: [])
-        );
+        BotMessage notification = new(TestEmbeds.WithTitle("Test Notification"));
 
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
