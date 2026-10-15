@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 - ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
+- /github/* webhooks are verified against the X-Hub-Signature-256 HMAC-SHA256 signature (GitHub:WebhookSecret) before the body is parsed. Rejected requests get 401 (413 for bodies over 25 MB, 400 if the body cannot be read) and are logged with the reason, delivery id, event, remote address and X-Forwarded-For, with client-supplied values sanitised. When the secret is empty or whitespace, requests are accepted unverified and a startup warning is logged (#422)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
@@ -80,14 +81,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.299
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
-- ECS task execution role changed from ecsTaskExecutionRole to ecsExecutionRole (#419)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
 - TaskExecutionRole CloudFormation parameter (#419)
 ### Deployment Changes
 - ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
-- ECS tasks now run under the ecsExecutionRole execution role (previously ecsTaskExecutionRole), which must have the standard ECS execution permissions (ECR pull, CloudWatch Logs) and secretsmanager:GetSecretValue on the BuildBot secret, read at task start-up (#419)
+- ECS tasks now read their secrets at start-up using the ecsTaskExecutionRole execution role, which must have secretsmanager:GetSecretValue on the BuildBot secret (#419)
+- ECS task now gets GITHUB__WEBHOOKSECRET from the Secrets Manager key GITHUB_WEBHOOK_SECRET; the key must exist in the BuildBot secret (an empty value disables verification) or the task will not start (#422)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch

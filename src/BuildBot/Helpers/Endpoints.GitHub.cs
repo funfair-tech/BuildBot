@@ -1,11 +1,15 @@
 using System;
 using System.Threading;
+using BuildBot.GitHub;
+using BuildBot.GitHub.Middleware;
 using BuildBot.GitHub.Models;
+using BuildBot.Helpers.LoggingExtensions;
 using BuildBot.ServiceModel.GitHub;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildBot.Helpers;
 
@@ -15,7 +19,18 @@ internal static partial class Endpoints
     {
         Console.WriteLine("Configuring Github Endpoint");
 
-        RouteGroupBuilder group = app.MapGroup("/github");
+        if (app.Services.GetRequiredService<GitHubConfiguration>().HasWebhookSecret)
+        {
+            // Runs after routing and before the endpoint, so unsigned requests are rejected before model binding.
+            app.Use(app.Services.GetRequiredService<GitHubWebhookSignatureMiddleware>().InvokeAsync);
+        }
+        else
+        {
+            app.Logger.GitHubWebhookSecretNotConfigured();
+        }
+
+        RouteGroupBuilder group = app.MapGroup("/github").WithMetadata(new GitHubWebhookEndpointMetadata());
+
         group.MapPost(
             pattern: "ping",
             handler: static async (PingModel model, IMediator mediator, CancellationToken cancellationToken) =>
