@@ -42,7 +42,9 @@ public sealed class DiscordWebhookClient : IDiscordWebhookClient
     {
         HttpClient client = this._httpClientFactory.CreateClient(HttpClientName);
 
-        for (int attempt = 1; attempt < MAX_ATTEMPTS; ++attempt)
+        int attempt = 1;
+
+        while (true)
         {
             using HttpResponseMessage response = await PostAsync(
                 client: client,
@@ -51,7 +53,7 @@ public sealed class DiscordWebhookClient : IDiscordWebhookClient
                 cancellationToken: cancellationToken
             );
 
-            if (response.StatusCode != HttpStatusCode.TooManyRequests)
+            if (response.StatusCode != HttpStatusCode.TooManyRequests || attempt == MAX_ATTEMPTS)
             {
                 return ToResult(response);
             }
@@ -61,16 +63,9 @@ public sealed class DiscordWebhookClient : IDiscordWebhookClient
             this._logger.LogRateLimited(attempt: attempt, delaySeconds: delay.TotalSeconds);
 
             await Task.Delay(delay: delay, timeProvider: this._timeProvider, cancellationToken: cancellationToken);
+
+            ++attempt;
         }
-
-        using HttpResponseMessage finalResponse = await PostAsync(
-            client: client,
-            webhookUrl: webhookUrl,
-            payload: payload,
-            cancellationToken: cancellationToken
-        );
-
-        return ToResult(finalResponse);
     }
 
     public static TimeSpan CalculateRateLimitDelay(double? retryAfterSeconds, TimeSpan? retryAfterHeader)
