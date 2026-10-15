@@ -1,10 +1,14 @@
-using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BuildBot.GitHub;
 
 public interface IWebhookSignatureVerifier
 {
-    bool IsEnabled { get; }
-
-    WebhookSignatureVerificationResult Verify(ReadOnlySpan<byte> body, string? signatureHeader);
+    ValueTask<WebhookSignatureVerificationResult> VerifyAsync(
+        Stream body,
+        string signatureHeader,
+        CancellationToken cancellationToken
+    );
 }

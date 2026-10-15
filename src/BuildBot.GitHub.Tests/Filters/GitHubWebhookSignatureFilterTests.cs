@@ -177,8 +177,10 @@ public sealed class GitHubWebhookSignatureFilterTests : TestBase
 
     private ValueTask<object?> InvokeAsync(string secret, HttpContext httpContext)
     {
+        GitHubConfiguration configuration = new(secret);
         GitHubWebhookSignatureFilter filter = new(
-            verifier: new WebhookSignatureVerifier(new GitHubConfiguration(secret)),
+            configuration: configuration,
+            verifier: new WebhookSignatureVerifier(configuration),
             remoteIpAddressRetriever: this._remoteIpAddressRetriever,
             logger: this._logger
         );

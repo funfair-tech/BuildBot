@@ -1,3 +1,5 @@
+using System.IO;
+using System.Threading.Tasks;
 using BuildBot.GitHub.Helpers;
 using FunFair.Test.Common;
 using Xunit;
@@ -7,43 +9,15 @@ namespace BuildBot.GitHub.Tests.Helpers;
 public sealed class WebhookSignatureVerifierTests : TestBase
 {
     [Fact]
-    public static void IsEnabledWhenSecretConfigured()
+    public async Task ValidSignatureIsAcceptedAsync()
     {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(GitHubWebhookTestVectors.Secret));
-
-        Assert.True(verifier.IsEnabled, userMessage: "Should be enabled");
-    }
-
-    [Fact]
-    public static void IsNotEnabledWhenSecretEmpty()
-    {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(string.Empty));
-
-        Assert.False(verifier.IsEnabled, userMessage: "Should not be enabled");
-    }
-
-    [Fact]
-    public static void ValidSignatureIsAccepted()
-    {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(GitHubWebhookTestVectors.Secret));
-
         Assert.Equal(
             expected: WebhookSignatureVerificationResult.VALID,
-            actual: verifier.Verify(
-                body: GitHubWebhookTestVectors.Payload,
+            actual: await this.VerifyAsync(
+                secret: GitHubWebhookTestVectors.Secret,
+                body: GitHubWebhookTestVectors.Payload.ToArray(),
                 signatureHeader: GitHubWebhookTestVectors.ValidSignature
             )
-        );
-    }
-
-    [Fact]
-    public static void MissingSignatureIsRejected()
-    {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(GitHubWebhookTestVectors.Secret));
-
-        Assert.Equal(
-            expected: WebhookSignatureVerificationResult.MISSING_HEADER,
-            actual: verifier.Verify(body: GitHubWebhookTestVectors.Payload, signatureHeader: null)
         );
     }
 
@@ -56,66 +30,72 @@ public sealed class WebhookSignatureVerifierTests : TestBase
     [InlineData("sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e1")]
     [InlineData("sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e1700")]
     [InlineData("sha256=")]
-    public static void MalformedSignatureIsRejected(string signatureHeader)
+    public async Task MalformedSignatureIsRejectedAsync(string signatureHeader)
     {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(GitHubWebhookTestVectors.Secret));
-
         Assert.Equal(
             expected: WebhookSignatureVerificationResult.MALFORMED_HEADER,
-            actual: verifier.Verify(body: GitHubWebhookTestVectors.Payload, signatureHeader: signatureHeader)
+            actual: await this.VerifyAsync(
+                secret: GitHubWebhookTestVectors.Secret,
+                body: GitHubWebhookTestVectors.Payload.ToArray(),
+                signatureHeader: signatureHeader
+            )
         );
     }
 
     [Fact]
-    public static void MismatchedSignatureIsRejected()
+    public async Task MismatchedSignatureIsRejectedAsync()
     {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(GitHubWebhookTestVectors.Secret));
-
         Assert.Equal(
             expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
-            actual: verifier.Verify(
-                body: GitHubWebhookTestVectors.Payload,
+            actual: await this.VerifyAsync(
+                secret: GitHubWebhookTestVectors.Secret,
+                body: GitHubWebhookTestVectors.Payload.ToArray(),
                 signatureHeader: GitHubWebhookTestVectors.MismatchedSignature
             )
         );
     }
 
     [Fact]
-    public static void TamperedBodyIsRejected()
+    public async Task TamperedBodyIsRejectedAsync()
     {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(GitHubWebhookTestVectors.Secret));
-
         Assert.Equal(
             expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
-            actual: verifier.Verify(body: "Hello, World?"u8, signatureHeader: GitHubWebhookTestVectors.ValidSignature)
-        );
-    }
-
-    [Fact]
-    public static void WrongSecretIsRejected()
-    {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration("Another secret"));
-
-        Assert.Equal(
-            expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
-            actual: verifier.Verify(
-                body: GitHubWebhookTestVectors.Payload,
+            actual: await this.VerifyAsync(
+                secret: GitHubWebhookTestVectors.Secret,
+                body: "Hello, World?"u8.ToArray(),
                 signatureHeader: GitHubWebhookTestVectors.ValidSignature
             )
         );
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("sha256=not-a-signature")]
-    [InlineData(GitHubWebhookTestVectors.ValidSignature)]
-    public static void EmptySecretAcceptsAnySignature(string? signatureHeader)
+    [Fact]
+    public async Task WrongSecretIsRejectedAsync()
     {
-        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(string.Empty));
-
         Assert.Equal(
-            expected: WebhookSignatureVerificationResult.VALID,
-            actual: verifier.Verify(body: GitHubWebhookTestVectors.Payload, signatureHeader: signatureHeader)
+            expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
+            actual: await this.VerifyAsync(
+                secret: "Another secret",
+                body: GitHubWebhookTestVectors.Payload.ToArray(),
+                signatureHeader: GitHubWebhookTestVectors.ValidSignature
+            )
         );
+    }
+
+    private async Task<WebhookSignatureVerificationResult> VerifyAsync(
+        string secret,
+        byte[] body,
+        string signatureHeader
+    )
+    {
+        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(secret));
+
+        await using (MemoryStream stream = new(body))
+        {
+            return await verifier.VerifyAsync(
+                body: stream,
+                signatureHeader: signatureHeader,
+                cancellationToken: this.CancellationToken()
+            );
+        }
     }
 }

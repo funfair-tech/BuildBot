@@ -1,7 +1,10 @@
 using System;
 using System.Buffers;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BuildBot.GitHub.Helpers;
 
@@ -14,37 +17,49 @@ public sealed class WebhookSignatureVerifier : IWebhookSignatureVerifier
 
     public WebhookSignatureVerifier(GitHubConfiguration configuration)
     {
-        this.IsEnabled = configuration.HasWebhookSecret;
         this._key = Encoding.UTF8.GetBytes(configuration.WebhookSecret);
     }
 
-    public bool IsEnabled { get; }
-
-    public WebhookSignatureVerificationResult Verify(ReadOnlySpan<byte> body, string? signatureHeader)
+    public async ValueTask<WebhookSignatureVerificationResult> VerifyAsync(
+        Stream body,
+        string signatureHeader,
+        CancellationToken cancellationToken
+    )
     {
-        if (!this.IsEnabled)
-        {
-            return WebhookSignatureVerificationResult.VALID;
-        }
+        // Parse the header first so a malformed one never causes the body to be read.
+        byte[]? provided = DecodeSignature(signatureHeader);
 
-        if (signatureHeader is null)
-        {
-            return WebhookSignatureVerificationResult.MISSING_HEADER;
-        }
-
-        if (!signatureHeader.StartsWith(value: SIGNATURE_PREFIX, comparisonType: StringComparison.Ordinal))
+        if (provided is null)
         {
             return WebhookSignatureVerificationResult.MALFORMED_HEADER;
+        }
+
+        byte[] expected = await HMACSHA256.HashDataAsync(
+            key: this._key,
+            source: body,
+            cancellationToken: cancellationToken
+        );
+
+        return CryptographicOperations.FixedTimeEquals(left: expected, right: provided)
+            ? WebhookSignatureVerificationResult.VALID
+            : WebhookSignatureVerificationResult.SIGNATURE_MISMATCH;
+    }
+
+    private static byte[]? DecodeSignature(string signatureHeader)
+    {
+        if (!signatureHeader.StartsWith(value: SIGNATURE_PREFIX, comparisonType: StringComparison.Ordinal))
+        {
+            return null;
         }
 
         ReadOnlySpan<char> hex = signatureHeader.AsSpan(SIGNATURE_PREFIX.Length);
 
         if (hex.Length != SIGNATURE_HEX_LENGTH)
         {
-            return WebhookSignatureVerificationResult.MALFORMED_HEADER;
+            return null;
         }
 
-        Span<byte> provided = stackalloc byte[HMACSHA256.HashSizeInBytes];
+        byte[] provided = new byte[HMACSHA256.HashSizeInBytes];
 
         OperationStatus status = Convert.FromHexString(
             source: hex,
@@ -53,16 +68,6 @@ public sealed class WebhookSignatureVerifier : IWebhookSignatureVerifier
             bytesWritten: out _
         );
 
-        if (status != OperationStatus.Done)
-        {
-            return WebhookSignatureVerificationResult.MALFORMED_HEADER;
-        }
-
-        Span<byte> expected = stackalloc byte[HMACSHA256.HashSizeInBytes];
-        HMACSHA256.HashData(key: this._key, source: body, destination: expected);
-
-        return CryptographicOperations.FixedTimeEquals(left: expected, right: provided)
-            ? WebhookSignatureVerificationResult.VALID
-            : WebhookSignatureVerificationResult.SIGNATURE_MISMATCH;
+        return status == OperationStatus.Done ? provided : null;
     }
 }

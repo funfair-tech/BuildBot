@@ -20,7 +20,7 @@ internal static partial class Endpoints
     {
         Console.WriteLine("Configuring Github Endpoint");
 
-        if (!app.Services.GetRequiredService<IWebhookSignatureVerifier>().IsEnabled)
+        if (!app.Services.GetRequiredService<GitHubConfiguration>().HasWebhookSecret)
         {
             app.Logger.GitHubWebhookSecretNotConfigured();
         }

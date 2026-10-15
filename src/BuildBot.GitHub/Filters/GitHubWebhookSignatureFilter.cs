@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,16 +16,19 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
     private const string EVENT_HEADER = "X-GitHub-Event";
     private const string FORWARDED_FOR_HEADER = "X-Forwarded-For";
 
+    private readonly bool _isEnabled;
     private readonly ILogger<GitHubWebhookSignatureFilter> _logger;
     private readonly IRemoteIpAddressRetriever _remoteIpAddressRetriever;
     private readonly IWebhookSignatureVerifier _verifier;
 
     public GitHubWebhookSignatureFilter(
+        GitHubConfiguration configuration,
         IWebhookSignatureVerifier verifier,
         IRemoteIpAddressRetriever remoteIpAddressRetriever,
         ILogger<GitHubWebhookSignatureFilter> logger
     )
     {
+        this._isEnabled = configuration.HasWebhookSecret;
         this._verifier = verifier;
         this._remoteIpAddressRetriever = remoteIpAddressRetriever;
         this._logger = logger;
@@ -34,7 +36,7 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
 
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        if (!this._verifier.IsEnabled)
+        if (!this._isEnabled)
         {
             return await next(context);
         }
@@ -48,7 +50,7 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
             0 => WebhookSignatureVerificationResult.MISSING_HEADER,
             1 => await this.VerifyBodyAsync(
                 request: request,
-                signatureHeader: signatures[0],
+                signatureHeader: signatures.ToString(),
                 cancellationToken: context.HttpContext.RequestAborted
             ),
             _ => WebhookSignatureVerificationResult.MULTIPLE_HEADERS,
@@ -73,7 +75,7 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
 
     private async ValueTask<WebhookSignatureVerificationResult> VerifyBodyAsync(
         HttpRequest request,
-        string? signatureHeader,
+        string signatureHeader,
         CancellationToken cancellationToken
     )
     {
@@ -81,15 +83,14 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
         Stream body = request.Body;
         body.Position = 0;
 
-        await using (MemoryStream buffer = new())
-        {
-            await body.CopyToAsync(destination: buffer, cancellationToken: cancellationToken);
-            body.Position = 0;
+        WebhookSignatureVerificationResult result = await this._verifier.VerifyAsync(
+            body: body,
+            signatureHeader: signatureHeader,
+            cancellationToken: cancellationToken
+        );
 
-            return this._verifier.Verify(
-                body: buffer.GetBuffer().AsSpan(start: 0, length: (int)buffer.Length),
-                signatureHeader: signatureHeader
-            );
-        }
+        body.Position = 0;
+
+        return result;
     }
 }
