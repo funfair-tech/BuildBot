@@ -57,17 +57,9 @@ public sealed class DiscordBotTests : TestBase
 
     private static void AssertSecretNeverLogged(ILogger<DiscordBot> logger)
     {
-        string logged = string.Join(
-            separator: '\n',
-            values: logger
-                .ReceivedCalls()
-                .SelectMany(static call => call.GetArguments())
-                .Select(static arg => arg?.ToString())
-        );
-
         Assert.DoesNotContain(
             expectedSubstring: SECRET,
-            actualString: logged,
+            actualString: logger.LoggedText(),
             comparisonType: StringComparison.Ordinal
         );
     }

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -140,7 +139,7 @@ public sealed class DiscordWebhookClientTests : TestBase
         Assert.All(collection: handler.Requests, action: r => Assert.Equal(expected: EXPECTED_JSON, actual: r.Body));
         Assert.Contains(
             expectedSubstring: "retrying in 0.001 seconds",
-            actualString: LoggedText(logger),
+            actualString: logger.LoggedText(),
             comparisonType: StringComparison.Ordinal
         );
     }
@@ -165,7 +164,7 @@ public sealed class DiscordWebhookClientTests : TestBase
         Assert.Equal(expected: 2, actual: handler.Requests.Count);
         Assert.Contains(
             expectedSubstring: "retrying in 2 seconds",
-            actualString: LoggedText(logger),
+            actualString: logger.LoggedText(),
             comparisonType: StringComparison.Ordinal
         );
     }
@@ -203,17 +202,6 @@ public sealed class DiscordWebhookClientTests : TestBase
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             await client.SendAsync(webhookUrl: WebhookUrl, payload: Payload, cancellationToken: cts.Token)
-        );
-    }
-
-    private static string LoggedText(ILogger<DiscordWebhookClient> logger)
-    {
-        return string.Join(
-            separator: '\n',
-            values: logger
-                .ReceivedCalls()
-                .SelectMany(static call => call.GetArguments())
-                .Select(static arg => arg?.ToString())
         );
     }
 
