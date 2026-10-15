@@ -54,7 +54,5 @@ echo "Clear $OUTFOLDER" \
       -e "DISCORD__SERVER=FunFair Internal" \
       -e "DISCORD__CHANNEL=build" \
       -e "DISCORD__RELEASE_CHANNEL=release-notification" \
-      -e "SERVEROCTOPUS__URL=https://octopus.example.com" \
-      -e "SERVEROCTOPUS__APIKEY=example" \
       -it \
       --rm "funfair/buildbot:latest"

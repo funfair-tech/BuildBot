@@ -95,14 +95,6 @@
                 "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::" }
               },
               {
-                "Name": "SERVEROCTOPUS__URL",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:OCTOPUS_URL::" }
-              },
-              {
-                "Name": "SERVEROCTOPUS__APIKEY",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:OCTOPUS_API_KEY::" }
-              },
-              {
                 "Name": "CLOUDFORMATION__TOPICARN",
                 "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:SNS_TOPIC_ARN::" }
               },
