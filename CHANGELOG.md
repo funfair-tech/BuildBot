@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 - ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
+- TBD - to be finalized after review (#422)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
