@@ -69,16 +69,7 @@
         "ContainerDefinitions": [
           {
             "Essential": true,
-            "Image": {
-              "Fn::Sub": [
-                "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/funfair/${ApplicationContainer}:${Version}",
-                {
-                  "Version": {
-                    "Ref": "ApplicationVersion"
-                  }
-                }
-              ]
-            },
+            "Image": { "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/funfair/${ApplicationContainer}:${ApplicationVersion}" },
             "Name": { "Ref": "ApplicationName" },
             "Environment": [
               {
