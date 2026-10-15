@@ -48,7 +48,7 @@ public sealed class WatchTowerPublishMessageNotificationHandlerTests : TestBase
         Assert.Equal(expected: "Deployment", actual: embed.Title);
         Assert.Equal(expected: "Service deployed", actual: embed.Description);
         Assert.Null(embed.Url);
-        Assert.Null(embed.Colour);
+        Assert.Null(embed.Color);
         Assert.Empty(embed.Fields);
     }
 }

@@ -6,6 +6,6 @@ internal static class TestEmbeds
 {
     public static DiscordEmbed WithTitle(string title)
     {
-        return new(Title: title, Url: null, Description: null, Colour: null, Fields: []);
+        return new(Title: title, Url: null, Description: null, Color: null, Fields: []);
     }
 }

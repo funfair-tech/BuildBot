@@ -79,7 +79,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
             Title: BuildTitle(deployment: deployment, stackDetails: stackDetails),
             Url: BuildStackUrl(deployment),
             Description: stackDetails?.Description,
-            Colour: deployment.Success ? DiscordColour.Green : DiscordColour.Red,
+            Color: deployment.Success ? DiscordColor.Green : DiscordColor.Red,
             Fields: GetFields(deployment: deployment, stackDetails: stackDetails)
         );
     }
