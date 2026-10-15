@@ -14,16 +14,20 @@ using Xunit;
 
 namespace BuildBot.Discord.Tests.Services;
 
-public sealed class BotServiceTests : TestBase
+public sealed class DiscordMessageSenderTests : TestBase
 {
     private static readonly TimeSpan CompletionWait = TimeSpan.FromSeconds(10);
 
-    private static (BotService Service, IDiscordBot Bot, MessageChannel<BotMessage> MessageChannel) CreateService()
+    private static (
+        DiscordMessageSender Service,
+        IDiscordBot Bot,
+        MessageChannel<BotMessage> MessageChannel
+    ) CreateService()
     {
         IDiscordBot bot = GetSubstitute<IDiscordBot>();
         MessageChannel<BotMessage> messageChannel = new();
 
-        BotService service = new(bot: bot, botMessageChannel: messageChannel);
+        DiscordMessageSender service = new(bot: bot, botMessageChannel: messageChannel);
 
         return (service, bot, messageChannel);
     }
@@ -31,7 +35,7 @@ public sealed class BotServiceTests : TestBase
     [Fact]
     public async Task StartAsync_Completes()
     {
-        (BotService service, IDiscordBot bot, _) = CreateService();
+        (DiscordMessageSender service, IDiscordBot bot, _) = CreateService();
 
         using (service)
         {
@@ -44,7 +48,7 @@ public sealed class BotServiceTests : TestBase
     [Fact]
     public async Task StopAsync_StopsForwardingMessages()
     {
-        (BotService service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
+        (DiscordMessageSender service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
 
         using (service)
         {
@@ -75,7 +79,7 @@ public sealed class BotServiceTests : TestBase
     [Fact]
     public void Dispose_DisposesSubscriptions()
     {
-        (BotService service, _, _) = CreateService();
+        (DiscordMessageSender service, _, _) = CreateService();
 
         service.Dispose();
     }
@@ -83,7 +87,7 @@ public sealed class BotServiceTests : TestBase
     [Fact]
     public async Task BotMessage_IsForwardedToBot()
     {
-        (BotService service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
+        (DiscordMessageSender service, IDiscordBot bot, MessageChannel<BotMessage> messageChannel) = CreateService();
         TaskCompletionSource published = new(TaskCreationOptions.RunContinuationsAsynchronously);
         bot.When(async x =>
                 await x.PublishAsync(embed: Arg.Any<DiscordEmbed>(), cancellationToken: Arg.Any<CancellationToken>())
@@ -138,7 +142,7 @@ public sealed class BotServiceTests : TestBase
         );
         MessageChannel<BotMessage> messageChannel = new();
 
-        using (BotService service = new(bot: bot, botMessageChannel: messageChannel))
+        using (DiscordMessageSender service = new(bot: bot, botMessageChannel: messageChannel))
         {
             await messageChannel.PublishAsync(
                 message: new(TestEmbeds.WithTitle("First")),
@@ -174,7 +178,7 @@ public sealed class BotServiceTests : TestBase
         string expectedParamName
     )
     {
-        ConstructorInfo? ctor = typeof(BotService).GetConstructor([
+        ConstructorInfo? ctor = typeof(DiscordMessageSender).GetConstructor([
             typeof(IDiscordBot),
             typeof(IMessageChannel<BotMessage>),
         ]);

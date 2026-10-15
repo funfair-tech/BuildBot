@@ -58,7 +58,7 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     }
 
     [Fact]
-    public void BotServiceMustBeRegisteredAsIHostedService()
+    public void DiscordMessageSenderMustBeRegisteredAsIHostedService()
     {
         this.RequireService<IHostedService>();
     }
