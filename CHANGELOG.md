@@ -81,14 +81,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - ECS task execution role changed from ecsTaskExecutionRole to ecsExecutionRole (#419)
-- TBD - to be finalized after review
+- Discord notifications are sent through a channel webhook (Discord:WebhookUrl / DISCORD__WEBHOOKURL) instead of a Discord.Net bot login (#423)
+- Discord health status reflects whether the webhook URL is configured; startup fails if it is missing or not an absolute https URL (#423)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
 - TaskExecutionRole CloudFormation parameter (#419)
+- Discord.Net dependency, release channel support and the Discord:Token, Discord:Server, Discord:Channel and Discord:ReleaseChannel settings (#423)
 ### Deployment Changes
 - ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
 - ECS tasks now run under the ecsExecutionRole execution role (previously ecsTaskExecutionRole), which must have the standard ECS execution permissions (ECR pull, CloudWatch Logs) and secretsmanager:GetSecretValue on the BuildBot secret, read at task start-up (#419)
+- The BuildBot Secrets Manager secret must contain a DISCORD_WEBHOOK key (an https Discord webhook URL) before deploying; the DISCORD_TOKEN, DISCORD_SERVER, DISCORD_CHANNEL and DISCORD_RELEASE_CHANNEL keys are no longer used (#423)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
