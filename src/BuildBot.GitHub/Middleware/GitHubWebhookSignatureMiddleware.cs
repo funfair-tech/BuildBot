@@ -74,12 +74,14 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
         }
 
         this._logger.WebhookSignatureRejected(
-            path: request.Path.Value ?? string.Empty,
+            path: LogValueSanitiser.Sanitise(request.Path.Value),
             reason: result,
-            delivery: request.Headers[DELIVERY_HEADER].ToString(),
-            gitHubEvent: request.Headers[EVENT_HEADER].ToString(),
+            delivery: LogValueSanitiser.Sanitise(request.Headers[DELIVERY_HEADER].ToString()),
+            gitHubEvent: LogValueSanitiser.Sanitise(request.Headers[EVENT_HEADER].ToString()),
             remoteIpAddress: this.GetRemoteIpAddress(context),
-            forwardedFor: request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
+            forwardedFor: LogValueSanitiser.Sanitise(
+                request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
+            )
         );
 
         context.Response.StatusCode = result switch

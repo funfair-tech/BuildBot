@@ -212,6 +212,33 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     }
 
     [Fact]
+    public async Task RejectionSanitisesClientSuppliedValuesAsync()
+    {
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: CreateBody(),
+            signature: GitHubWebhookTestVectors.MismatchedSignature
+        );
+        httpContext.Request.Path = "/github\r\nforged";
+        httpContext.Request.Headers["X-GitHub-Delivery"] = "id\nGithub: forged line";
+        httpContext.Request.Headers["X-GitHub-Event"] = new string('e', count: LogValueSanitiser.MAXIMUM_LENGTH + 1);
+        httpContext.Request.Headers["X-Forwarded-For"] = "203.0.113.7\r\n";
+
+        await this.InvokeAsync(httpContext: httpContext);
+
+        this.AssertUnauthorisedWithoutCallingNext(httpContext);
+        this.AssertRejectionLogged(
+            new(
+                Path: "/github??forged",
+                Reason: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
+                Delivery: "id?Github: forged line",
+                GitHubEvent: new string('e', count: LogValueSanitiser.MAXIMUM_LENGTH) + "...",
+                RemoteIpAddress: REMOTE_IP_ADDRESS,
+                ForwardedFor: "203.0.113.7??"
+            )
+        );
+    }
+
+    [Fact]
     public async Task RejectionWithoutRemoteAddressLogsEmptyRemoteAddressAsync()
     {
         // DefaultHttpContext has no remote address, like a Unix socket or TestServer connection.
