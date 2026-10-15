@@ -9,7 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
 ## [Unreleased]
 ### Security
-- Moved ECS task secrets from plain Environment entries to the Secrets mechanism in cloudformation.json (#419)
+- ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
@@ -78,6 +78,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 3.0.299
+- CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
+- ECS task execution role is now fixed to ecsExecutionRole, and the TaskExecutionRole parameter has been removed (#419)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
