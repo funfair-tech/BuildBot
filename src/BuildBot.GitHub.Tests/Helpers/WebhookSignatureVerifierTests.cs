@@ -34,27 +34,53 @@ public sealed class WebhookSignatureVerifierTests : TestBase
     {
         WebhookSignatureVerifier verifier = new(new GitHubConfiguration(SECRET));
 
-        Assert.True(verifier.IsValid(body: Payload, signatureHeader: VALID_SIGNATURE), userMessage: "Should be valid");
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.VALID,
+            actual: verifier.Verify(body: Payload, signatureHeader: VALID_SIGNATURE)
+        );
+    }
+
+    [Fact]
+    public static void MissingSignatureIsRejected()
+    {
+        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(SECRET));
+
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.MISSING_HEADER,
+            actual: verifier.Verify(body: Payload, signatureHeader: null)
+        );
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17")]
     [InlineData("sha1=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17")]
     [InlineData("SHA256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17")]
-    [InlineData("sha256=057107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17")]
     [InlineData("sha256=zz7107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17")]
     [InlineData("sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e1")]
     [InlineData("sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e1700")]
     [InlineData("sha256=")]
-    public static void InvalidSignatureIsRejected(string? signatureHeader)
+    public static void MalformedSignatureIsRejected(string signatureHeader)
     {
         WebhookSignatureVerifier verifier = new(new GitHubConfiguration(SECRET));
 
-        Assert.False(
-            verifier.IsValid(body: Payload, signatureHeader: signatureHeader),
-            userMessage: "Should be rejected"
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.MALFORMED_HEADER,
+            actual: verifier.Verify(body: Payload, signatureHeader: signatureHeader)
+        );
+    }
+
+    [Fact]
+    public static void MismatchedSignatureIsRejected()
+    {
+        WebhookSignatureVerifier verifier = new(new GitHubConfiguration(SECRET));
+
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
+            actual: verifier.Verify(
+                body: Payload,
+                signatureHeader: "sha256=057107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17"
+            )
         );
     }
 
@@ -63,9 +89,9 @@ public sealed class WebhookSignatureVerifierTests : TestBase
     {
         WebhookSignatureVerifier verifier = new(new GitHubConfiguration(SECRET));
 
-        Assert.False(
-            verifier.IsValid(body: "Hello, World?"u8, signatureHeader: VALID_SIGNATURE),
-            userMessage: "Should be rejected"
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
+            actual: verifier.Verify(body: "Hello, World?"u8, signatureHeader: VALID_SIGNATURE)
         );
     }
 
@@ -74,9 +100,9 @@ public sealed class WebhookSignatureVerifierTests : TestBase
     {
         WebhookSignatureVerifier verifier = new(new GitHubConfiguration("Another secret"));
 
-        Assert.False(
-            verifier.IsValid(body: Payload, signatureHeader: VALID_SIGNATURE),
-            userMessage: "Should be rejected"
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
+            actual: verifier.Verify(body: Payload, signatureHeader: VALID_SIGNATURE)
         );
     }
 
@@ -88,9 +114,9 @@ public sealed class WebhookSignatureVerifierTests : TestBase
     {
         WebhookSignatureVerifier verifier = new(new GitHubConfiguration(string.Empty));
 
-        Assert.True(
-            verifier.IsValid(body: Payload, signatureHeader: signatureHeader),
-            userMessage: "Should pass through"
+        Assert.Equal(
+            expected: WebhookSignatureVerificationResult.VALID,
+            actual: verifier.Verify(body: Payload, signatureHeader: signatureHeader)
         );
     }
 }

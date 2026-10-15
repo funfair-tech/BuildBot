@@ -1,5 +1,6 @@
 ﻿using BuildBot.GitHub.Filters;
 using BuildBot.GitHub.Publishers;
+using FunFair.Common.Web.Interfaces;
 using FunFair.Test.Common;
 using FunFair.Test.Infrastructure;
 using Mediator;
@@ -28,6 +29,12 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     public void WebhookSignatureVerifierMustBeRegistered()
     {
         this.RequireService<IWebhookSignatureVerifier>();
+    }
+
+    [Fact]
+    public void RemoteIpAddressRetrieverMustBeRegistered()
+    {
+        this.RequireService<IRemoteIpAddressRetriever>();
     }
 
     [Fact]

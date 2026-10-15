@@ -7,7 +7,15 @@ internal static partial class GitHubWebhookSignatureFilterLoggingExtensions
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Warning,
-        Message = "Github: Rejected webhook to {Path}: missing or invalid signature"
+        Message = "Github: Rejected webhook to {Path}: {Reason} (delivery: {Delivery}, event: {GitHubEvent}, remote address: {RemoteIpAddress}, forwarded for: {ForwardedFor})"
     )]
-    public static partial void WebhookSignatureRejected(this ILogger<GitHubWebhookSignatureFilter> logger, string path);
+    public static partial void WebhookSignatureRejected(
+        this ILogger<GitHubWebhookSignatureFilter> logger,
+        string path,
+        WebhookSignatureVerificationResult reason,
+        string delivery,
+        string gitHubEvent,
+        string remoteIpAddress,
+        string forwardedFor
+    );
 }

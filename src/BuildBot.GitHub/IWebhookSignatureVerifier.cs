@@ -6,5 +6,5 @@ public interface IWebhookSignatureVerifier
 {
     bool IsEnabled { get; }
 
-    bool IsValid(ReadOnlySpan<byte> body, string? signatureHeader);
+    WebhookSignatureVerificationResult Verify(ReadOnlySpan<byte> body, string? signatureHeader);
 }

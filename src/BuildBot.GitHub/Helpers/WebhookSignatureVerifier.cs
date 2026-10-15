@@ -20,26 +20,28 @@ public sealed class WebhookSignatureVerifier : IWebhookSignatureVerifier
 
     public bool IsEnabled { get; }
 
-    public bool IsValid(ReadOnlySpan<byte> body, string? signatureHeader)
+    public WebhookSignatureVerificationResult Verify(ReadOnlySpan<byte> body, string? signatureHeader)
     {
         if (!this.IsEnabled)
         {
-            return true;
+            return WebhookSignatureVerificationResult.VALID;
         }
 
-        if (
-            signatureHeader is null
-            || !signatureHeader.StartsWith(value: SIGNATURE_PREFIX, comparisonType: StringComparison.Ordinal)
-        )
+        if (signatureHeader is null)
         {
-            return false;
+            return WebhookSignatureVerificationResult.MISSING_HEADER;
+        }
+
+        if (!signatureHeader.StartsWith(value: SIGNATURE_PREFIX, comparisonType: StringComparison.Ordinal))
+        {
+            return WebhookSignatureVerificationResult.MALFORMED_HEADER;
         }
 
         ReadOnlySpan<char> hex = signatureHeader.AsSpan(SIGNATURE_PREFIX.Length);
 
         if (hex.Length != SIGNATURE_HEX_LENGTH)
         {
-            return false;
+            return WebhookSignatureVerificationResult.MALFORMED_HEADER;
         }
 
         Span<byte> provided = stackalloc byte[HMACSHA256.HashSizeInBytes];
@@ -53,12 +55,14 @@ public sealed class WebhookSignatureVerifier : IWebhookSignatureVerifier
 
         if (status != OperationStatus.Done)
         {
-            return false;
+            return WebhookSignatureVerificationResult.MALFORMED_HEADER;
         }
 
         Span<byte> expected = stackalloc byte[HMACSHA256.HashSizeInBytes];
         HMACSHA256.HashData(key: this._key, source: body, destination: expected);
 
-        return CryptographicOperations.FixedTimeEquals(left: expected, right: provided);
+        return CryptographicOperations.FixedTimeEquals(left: expected, right: provided)
+            ? WebhookSignatureVerificationResult.VALID
+            : WebhookSignatureVerificationResult.SIGNATURE_MISMATCH;
     }
 }
