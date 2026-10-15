@@ -87,11 +87,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
 - ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
 - The ECS service is now named after the application, so it can be found by name in the DiscordBots cluster (#421)
-- TBD - to be finalized after review
+- Discord notifications are sent through a channel webhook (Discord:WebhookUrl / DISCORD__WEBHOOKURL) instead of a Discord.Net bot login (#423)
+- Discord health status reflects whether the webhook URL is configured; startup fails if it is missing or not an absolute https URL (#423)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
 - TaskExecutionRole CloudFormation parameter (#419)
+- Discord.Net dependency, release channel support and the Discord:Token, Discord:Server, Discord:Channel and Discord:ReleaseChannel settings (#423)
 ### Deployment Changes
 - ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
 - ECS tasks now read their secrets at start-up using the ecsTaskExecutionRole execution role, which must have secretsmanager:GetSecretValue on the BuildBot secret (#419)
@@ -100,6 +102,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - This deploy replaces the ECS service, target group and listener rule (#421)
 - Payloads over 10 MB are rejected by API Gateway (#421)
 - The deploy user needs logs:PutRetentionPolicy on the /ecs/* log group, because the stack now sets a 30-day retention on it (#421)
+- The BuildBot Secrets Manager secret must contain a DISCORD_WEBHOOK key (an https Discord webhook URL) before deploying; the DISCORD_TOKEN, DISCORD_SERVER, DISCORD_CHANNEL and DISCORD_RELEASE_CHANNEL keys are no longer used (#423)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
