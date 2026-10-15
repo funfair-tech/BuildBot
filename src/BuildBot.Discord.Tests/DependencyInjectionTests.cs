@@ -11,7 +11,9 @@ namespace BuildBot.Discord.Tests;
 
 public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
 {
-    private static readonly DiscordBotConfiguration TestConfig = new(new Uri("https://example.com/webhook"));
+    private static readonly DiscordBotConfiguration TestConfig = DiscordBotConfiguration.FromWebhookUrl(
+        "https://example.com/webhook"
+    );
 
     public DependencyInjectionTests(ITestOutputHelper output)
         : base(output: output, dependencyInjectionRegistration: Configure) { }

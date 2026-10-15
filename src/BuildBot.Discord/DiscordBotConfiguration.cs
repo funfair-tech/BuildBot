@@ -3,14 +3,22 @@ using System.Diagnostics;
 
 namespace BuildBot.Discord;
 
-[DebuggerDisplay("Webhook configured: {IsConfigured}")]
-public sealed record DiscordBotConfiguration(Uri WebhookUrl)
+[DebuggerDisplay("Webhook: <redacted>")]
+public sealed record DiscordBotConfiguration
 {
-    public bool IsConfigured => IsValidWebhookUrl(this.WebhookUrl);
+    private DiscordBotConfiguration(Uri webhookUrl)
+    {
+        this.WebhookUrl = webhookUrl;
+    }
+
+    public Uri WebhookUrl { get; }
 
     public static DiscordBotConfiguration FromWebhookUrl(string? webhookUrl)
     {
-        if (Uri.TryCreate(uriString: webhookUrl, uriKind: UriKind.Absolute, out Uri? uri) && IsValidWebhookUrl(uri))
+        if (
+            Uri.TryCreate(uriString: webhookUrl, uriKind: UriKind.Absolute, out Uri? uri)
+            && StringComparer.Ordinal.Equals(x: uri.Scheme, y: Uri.UriSchemeHttps)
+        )
         {
             return new(uri);
         }
@@ -20,11 +28,6 @@ public sealed record DiscordBotConfiguration(Uri WebhookUrl)
 
     public override string ToString()
     {
-        return $"{nameof(DiscordBotConfiguration)} {{ {nameof(this.IsConfigured)} = {this.IsConfigured} }}";
-    }
-
-    private static bool IsValidWebhookUrl(Uri webhookUrl)
-    {
-        return webhookUrl.IsAbsoluteUri && StringComparer.Ordinal.Equals(x: webhookUrl.Scheme, y: Uri.UriSchemeHttps);
+        return $"{nameof(DiscordBotConfiguration)} {{ Webhook = <redacted> }}";
     }
 }

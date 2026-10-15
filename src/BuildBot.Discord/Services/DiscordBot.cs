@@ -28,18 +28,11 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
 
     public ServiceStatus GetStatus()
     {
-        return new(Name: "Discord", Ok: this._botConfiguration.IsConfigured);
+        return new(Name: "Discord", Ok: true);
     }
 
     public async ValueTask PublishAsync(DiscordEmbed embed, CancellationToken cancellationToken)
     {
-        if (!this._botConfiguration.IsConfigured)
-        {
-            this._logger.LogWebhookNotConfigured(embed.Title);
-
-            return;
-        }
-
         // Nothing may escape: DiscordMessageSender sends from an Rx subscription which an exception would terminate.
         try
         {
