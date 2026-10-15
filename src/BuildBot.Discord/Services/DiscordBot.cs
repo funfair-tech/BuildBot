@@ -40,7 +40,7 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
             return;
         }
 
-        // Nothing may escape: BotService sends from an Rx subscription which an exception would terminate.
+        // Nothing may escape: DiscordMessageSender sends from an Rx subscription which an exception would terminate.
         try
         {
             this._logger.LogSendingMessage(embed.Title);

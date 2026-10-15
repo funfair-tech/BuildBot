@@ -21,7 +21,7 @@ public static class DiscordSetup
             .AddSingleton<DiscordBot>()
             .AddSingleton<IDiscordBot>(s => s.GetRequiredService<DiscordBot>())
             .AddSingleton<IComponentStatus>(s => s.GetRequiredService<DiscordBot>())
-            .AddHostedService<BotService>()
+            .AddHostedService<DiscordMessageSender>()
             .AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>))
             .AddDiscordWebhookHttpClient();
     }
