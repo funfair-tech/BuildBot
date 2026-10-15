@@ -155,7 +155,7 @@
         "Memory": {
           "Fn::FindInMap": ["Deployment", "Task", "Memory"]
         },
-        "ExecutionRoleArn": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ecsExecutionRole" },
+        "ExecutionRoleArn": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ecsTaskExecutionRole" },
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
         "RuntimePlatform": {
