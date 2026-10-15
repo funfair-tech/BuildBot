@@ -88,7 +88,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
 - The ECS service is now named after the application, so it can be found by name in the DiscordBots cluster (#421)
 - Discord notifications are sent through a channel webhook (Discord:WebhookUrl / DISCORD__WEBHOOKURL) instead of a Discord.Net bot login (#423)
-- Discord health status reflects whether the webhook URL is configured; startup fails if it is missing or not an absolute https URL (#423)
+- Startup fails if the Discord webhook URL is missing or not an absolute https URL (#423)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
