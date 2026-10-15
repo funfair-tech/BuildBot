@@ -11,46 +11,34 @@
     "ApplicationVersion": {
       "Type": "String"
     },
-    "SecurityGroupIDs": {
-      "Type": "CommaDelimitedList",
-      "Default": "sg-e3e65a9a,sg-0272027302777cb4d"
-    },
-    "SubnetIDs": {
-      "Type": "CommaDelimitedList",
-      "Default": "subnet-fabb50b3,subnet-d5ea03b2,subnet-c68aa09e"
-    },
-    "VpcID": {
-      "Type": "String",
-      "Default": "vpc-ad3bd9ca"
-    },
     "LoadBalancerHostName": {
       "Type": "String"
     },
     "LoadBalancerPriority": {
       "Type": "Number"
     },
-    "SecretsManagerArn": {
+    "AwsContainerRegistry": {
       "Type": "String",
-      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
+      "Default": "117769150821.dkr.ecr.eu-west-1.amazonaws.com"
     }
   },
   "Mappings": {
-    "Deployment": {
-      "Cluster": {
-        "Name": "DiscordBots"
-      },
-      "LoadBalancer": {
-        "ListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/testing/c383c5dd580a74f5/e82083ed48688c7a"
-      },
-      "Task": {
-        "Cpu": "512",
-        "Memory": "1024",
-        "ContainerPort": "8080"
-      },
-      "Service": {
+    "Settings": {
+      "Values": {
+        "TaskDefinitionCPU": "512",
+        "TaskDefinitionMemory": "1024",
         "DesiredCount": "1",
         "MinimumHealthPercent": "100",
-        "MaximumHealthPercent": "200"
+        "MaximumHealthPercent": "200",
+        "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ",
+        "ContainerPort": "8080",
+        "ECSClusterName": "DiscordBots",
+        "ApplicationContainerOwner": "funfair",
+        "TaskExecutionRoleArn": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole",
+        "SecurityGroupIDs": "sg-e3e65a9a,sg-0272027302777cb4d",
+        "SubnetIDs": "subnet-fabb50b3,subnet-d5ea03b2,subnet-c68aa09e",
+        "VpcID": "vpc-ad3bd9ca",
+        "LoadBalancerListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/testing/c383c5dd580a74f5/e82083ed48688c7a"
       }
     }
   },
@@ -69,60 +57,197 @@
         "ContainerDefinitions": [
           {
             "Essential": true,
-            "Image": { "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/funfair/${ApplicationContainer}:${ApplicationVersion}" },
-            "Name": { "Ref": "ApplicationName" },
+            "Image": {
+              "Fn::Sub": [
+                "${AwsContainerRegistry}/${Owner}/${ApplicationContainer}:${ApplicationVersion}",
+                {
+                  "Owner": {
+                    "Fn::FindInMap": [
+                      "Settings",
+                      "Values",
+                      "ApplicationContainerOwner"
+                    ]
+                  }
+                }
+              ]
+            },
+            "Name": {
+              "Ref": "ApplicationName"
+            },
             "Environment": [
               {
                 "Name": "CLOUDFORMATION__AWS__REGION",
-                "Value": { "Ref": "AWS::Region" }
+                "Value": {
+                  "Ref": "AWS::Region"
+                }
               }
             ],
             "Secrets": [
               {
                 "Name": "DISCORD__TOKEN",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_TOKEN::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:DISCORD_TOKEN::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "DISCORD__SERVER",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_SERVER::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:DISCORD_SERVER::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "DISCORD__CHANNEL",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_CHANNEL::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:DISCORD_CHANNEL::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "DISCORD__RELEASE_CHANNEL",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "CLOUDFORMATION__TOPICARN",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:SNS_TOPIC_ARN::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:SNS_TOPIC_ARN::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "CLOUDFORMATION__AWS__ACCESSKEYID",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_ACCESS_KEY_ID::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:AWS_ACCESS_KEY_ID::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "CLOUDFORMATION__AWS__SECRETKEY",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_SECRET_KEY::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:AWS_SECRET_KEY::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               },
               {
                 "Name": "GITHUB__WEBHOOKSECRET",
-                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:GITHUB_WEBHOOK_SECRET::" }
+                "ValueFrom": {
+                  "Fn::Sub": [
+                    "${SecretsManagerArn}:GITHUB_WEBHOOK_SECRET::",
+                    {
+                      "SecretsManagerArn": {
+                        "Fn::FindInMap": [
+                          "Settings",
+                          "Values",
+                          "SecretsManagerArn"
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             ],
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
-                "awslogs-group": { "Fn::Sub": "/ecs/${ApplicationName}/" },
-                "awslogs-region": { "Ref": "AWS::Region" },
+                "awslogs-group": {
+                  "Fn::Sub": "/ecs/${ApplicationName}/"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
                 "awslogs-stream-prefix": "ecs"
               }
             },
             "PortMappings": [
               {
-                "ContainerPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
-                "HostPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
+                "ContainerPort": {
+                  "Fn::FindInMap": [
+                    "Settings",
+                    "Values",
+                    "ContainerPort"
+                  ]
+                },
+                "HostPort": {
+                  "Fn::FindInMap": [
+                    "Settings",
+                    "Values",
+                    "ContainerPort"
+                  ]
+                },
                 "Protocol": "tcp"
               }
             ],
@@ -146,13 +271,29 @@
           "Ref": "ApplicationName"
         },
         "Cpu": {
-          "Fn::FindInMap": ["Deployment", "Task", "Cpu"]
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "TaskDefinitionCPU"
+          ]
         },
         "Memory": {
-          "Fn::FindInMap": ["Deployment", "Task", "Memory"]
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "TaskDefinitionMemory"
+          ]
         },
-        "ExecutionRoleArn": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ecsTaskExecutionRole" },
-        "RequiresCompatibilities": ["FARGATE"],
+        "ExecutionRoleArn": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "TaskExecutionRoleArn"
+          ]
+        },
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
         "NetworkMode": "awsvpc",
         "RuntimePlatform": {
           "CpuArchitecture": "ARM64",
@@ -165,7 +306,9 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Delete",
       "Properties": {
-        "LogGroupName": { "Fn::Sub": "/ecs/${ApplicationName}/" }
+        "LogGroupName": {
+          "Fn::Sub": "/ecs/${ApplicationName}/"
+        }
       }
     },
     "ECSService": {
@@ -175,29 +318,67 @@
           "Ref": "ApplicationName"
         },
         "Cluster": {
-          "Fn::FindInMap": ["Deployment", "Cluster", "Name"]
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "ECSClusterName"
+          ]
         },
         "TaskDefinition": {
           "Ref": "TaskDefinition"
         },
         "DesiredCount": {
-          "Fn::FindInMap": ["Deployment", "Service", "DesiredCount"]
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "DesiredCount"
+          ]
         },
         "EnableECSManagedTags": false,
         "LaunchType": "FARGATE",
         "NetworkConfiguration": {
           "AwsvpcConfiguration": {
             "AssignPublicIp": "ENABLED",
-            "SecurityGroups": { "Ref": "SecurityGroupIDs" },
-            "Subnets": { "Ref": "SubnetIDs" }
+            "SecurityGroups": {
+              "Fn::Split": [
+                ",",
+                {
+                  "Fn::FindInMap": [
+                    "Settings",
+                    "Values",
+                    "SecurityGroupIDs"
+                  ]
+                }
+              ]
+            },
+            "Subnets": {
+              "Fn::Split": [
+                ",",
+                {
+                  "Fn::FindInMap": [
+                    "Settings",
+                    "Values",
+                    "SubnetIDs"
+                  ]
+                }
+              ]
+            }
           }
         },
         "DeploymentConfiguration": {
           "MaximumPercent": {
-            "Fn::FindInMap": ["Deployment", "Service", "MaximumHealthPercent"]
+            "Fn::FindInMap": [
+              "Settings",
+              "Values",
+              "MaximumHealthPercent"
+            ]
           },
           "MinimumHealthyPercent": {
-            "Fn::FindInMap": ["Deployment", "Service", "MinimumHealthPercent"]
+            "Fn::FindInMap": [
+              "Settings",
+              "Values",
+              "MinimumHealthPercent"
+            ]
           },
           "DeploymentCircuitBreaker": {
             "Enable": true,
@@ -206,13 +387,25 @@
         },
         "LoadBalancers": [
           {
-            "ContainerName": { "Ref": "ApplicationName" },
-            "ContainerPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
-            "TargetGroupArn": { "Ref": "TargetGroup" }
+            "ContainerName": {
+              "Ref": "ApplicationName"
+            },
+            "ContainerPort": {
+              "Fn::FindInMap": [
+                "Settings",
+                "Values",
+                "ContainerPort"
+              ]
+            },
+            "TargetGroupArn": {
+              "Ref": "TargetGroup"
+            }
           }
         ]
       },
-      "DependsOn": ["ListenerRule"]
+      "DependsOn": [
+        "ListenerRule"
+      ]
     },
     "TargetGroup": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
@@ -221,16 +414,34 @@
           "Ref": "ApplicationName"
         },
         "HealthCheckPath": "/ping?source=target-group",
-        "Port": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
+        "Port": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "ContainerPort"
+          ]
+        },
         "Protocol": "HTTP",
         "TargetType": "ip",
         "HealthCheckEnabled": true,
         "HealthCheckProtocol": "HTTP",
-        "HealthCheckPort": { "Fn::FindInMap": ["Deployment", "Task", "ContainerPort"] },
+        "HealthCheckPort": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "ContainerPort"
+          ]
+        },
         "HealthCheckTimeoutSeconds": 4,
         "HealthyThresholdCount": 5,
         "HealthCheckIntervalSeconds": 5,
-        "VpcId": { "Ref": "VpcID" },
+        "VpcId": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "VpcID"
+          ]
+        },
         "TargetGroupAttributes": [
           {
             "Key": "deregistration_delay.timeout_seconds",
@@ -246,26 +457,40 @@
           {
             "Type": "forward",
             "ForwardConfig": {
-                "TargetGroups": [
-                    {
-                    "TargetGroupArn": { "Ref": "TargetGroup" },
-                    "Weight": 1
-                    }
-                ],
-                "TargetGroupStickinessConfig": {
-                    "Enabled": false
+              "TargetGroups": [
+                {
+                  "TargetGroupArn": {
+                    "Ref": "TargetGroup"
+                  },
+                  "Weight": 1
                 }
+              ],
+              "TargetGroupStickinessConfig": {
+                "Enabled": false
+              }
             }
           }
         ],
         "Conditions": [
+          {
+            "Field": "host-header",
+            "Values": [
               {
-                "Field": "host-header",
-                "Values": [{ "Ref": "LoadBalancerHostName" }]
+                "Ref": "LoadBalancerHostName"
               }
+            ]
+          }
         ],
-        "ListenerArn": { "Fn::FindInMap": ["Deployment", "LoadBalancer", "ListenerArn"] },
-        "Priority": { "Ref": "LoadBalancerPriority" }
+        "ListenerArn": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "LoadBalancerListenerArn"
+          ]
+        },
+        "Priority": {
+          "Ref": "LoadBalancerPriority"
+        }
       }
     }
   }
