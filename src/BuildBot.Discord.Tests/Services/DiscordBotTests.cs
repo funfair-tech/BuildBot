@@ -9,9 +9,9 @@ using BuildBot.Discord.Services;
 using BuildBot.Discord.Services.Models;
 using BuildBot.ServiceModel.ComponentStatus;
 using FunFair.Test.Common;
+using FunFair.Test.Infrastructure.Mocks;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using NSubstitute.Core;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
 
@@ -31,13 +31,12 @@ public sealed class DiscordBotTests : TestBase
         Fields: [new(Name: "Name", Value: "Value")]
     );
 
-    private (IDiscordWebhookClient Client, ILogger<DiscordBot> Logger, DiscordBot Bot) CreateBot(
+    private static (IDiscordWebhookClient Client, CapturingLogger<DiscordBot> Logger, DiscordBot Bot) CreateBot(
         DiscordBotConfiguration configuration
     )
     {
         IDiscordWebhookClient client = GetSubstitute<IDiscordWebhookClient>();
-        ILogger<DiscordBot> logger = this.GetTypedLogger<DiscordBot>();
-        logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
+        CapturingLogger<DiscordBot> logger = new();
 
         DiscordBot bot = new(client: client, botConfiguration: configuration, logger: logger);
 
@@ -55,31 +54,25 @@ public sealed class DiscordBotTests : TestBase
             .Returns(result);
     }
 
-    private static void AssertSecretNeverLogged(ILogger<DiscordBot> logger)
+    private static void AssertSecretNeverLogged(CapturingLogger<DiscordBot> logger)
     {
         Assert.DoesNotContain(
-            expectedSubstring: SECRET,
-            actualString: logger.LoggedText(),
-            comparisonType: StringComparison.Ordinal
+            collection: logger.Entries,
+            filter: static entry => entry.Message.Contains(value: SECRET, comparisonType: StringComparison.Ordinal)
         );
     }
 
-    private static int LogCallsAt(LogLevel level, ILogger<DiscordBot> logger)
+    private static int LogCallsAt(LogLevel level, CapturingLogger<DiscordBot> logger)
     {
-        return logger
-            .ReceivedCalls()
-            .Count(call =>
-                StringComparer.Ordinal.Equals(x: call.GetMethodInfo().Name, y: nameof(ILogger.Log))
-                && Equals(call.GetArguments()[0], level)
-            );
+        return logger.Entries.Count(entry => entry.Level == level);
     }
 
     [Theory]
     [InlineData("https://example.com/webhook/secret-token", true)]
     [InlineData("http://example.com/webhook/secret-token", false)]
-    public void GetStatus_ReflectsConfiguration(string webhookUrl, bool expectedOk)
+    public static void GetStatus_ReflectsConfiguration(string webhookUrl, bool expectedOk)
     {
-        (_, _, DiscordBot bot) = this.CreateBot(new(new Uri(webhookUrl)));
+        (_, _, DiscordBot bot) = CreateBot(new(new Uri(webhookUrl)));
 
         ServiceStatus status = bot.GetStatus();
 
@@ -87,9 +80,9 @@ public sealed class DiscordBotTests : TestBase
     }
 
     [Fact]
-    public void GetStatus_WithRelativeUrl_IsNotOk()
+    public static void GetStatus_WithRelativeUrl_IsNotOk()
     {
-        (_, _, DiscordBot bot) = this.CreateBot(new(new Uri(uriString: "webhook", uriKind: UriKind.Relative)));
+        (_, _, DiscordBot bot) = CreateBot(new(new Uri(uriString: "webhook", uriKind: UriKind.Relative)));
 
         Assert.False(condition: bot.GetStatus().Ok, userMessage: "Relative webhook URL should not be Ok");
     }
@@ -97,7 +90,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_SendsMappedEmbedToWebhookAndLogsSuccess()
     {
-        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
         WebhookPayload? captured = null;
         client
             .SendAsync(
@@ -122,7 +115,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenWebhookRejectsMessage_LogsError()
     {
-        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
         MockDiscordWebhookClientSend(
             client: client,
             result: new(Success: false, StatusCode: HttpStatusCode.BadRequest)
@@ -137,7 +130,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenClientThrows_LogsErrorAndDoesNotThrow()
     {
-        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
         client
             .SendAsync(
                 webhookUrl: Arg.Any<Uri>(),
@@ -155,7 +148,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenCancelled_LogsWarningAndDoesNotThrow()
     {
-        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
         using CancellationTokenSource cts = new();
         await cts.CancelAsync();
         client
@@ -175,7 +168,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenClientCancelsWithoutCallerCancellation_LogsError()
     {
-        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(Config);
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(Config);
         client
             .SendAsync(
                 webhookUrl: Arg.Any<Uri>(),
@@ -192,7 +185,7 @@ public sealed class DiscordBotTests : TestBase
     [Fact]
     public async Task PublishAsync_WhenNotConfigured_LogsErrorWithoutSending()
     {
-        (IDiscordWebhookClient client, ILogger<DiscordBot> logger, DiscordBot bot) = this.CreateBot(
+        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(
             new(new Uri("http://example.com/webhook/" + SECRET))
         );
 
