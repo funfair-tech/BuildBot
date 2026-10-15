@@ -52,16 +52,6 @@ public static class DiscordSetup
         return CalculateRetryDelay(attempt);
     }
 
-    public static Task OnRetryAsync(
-        DelegateResult<HttpResponseMessage> delegateResult,
-        TimeSpan timeSpan,
-        int attempt,
-        Context context
-    )
-    {
-        return Task.CompletedTask;
-    }
-
     private static TimeSpan? GetRetryAfter(RetryConditionHeaderValue? retryAfter, in DateTimeOffset now)
     {
         if (retryAfter is null)
@@ -92,7 +82,7 @@ public static class DiscordSetup
                 retryCount: MAX_RETRIES,
                 sleepDurationProvider: (attempt, outcome, _) =>
                     CalculateRetryDelay(attempt: attempt, response: outcome.Result, now: timeProvider.GetUtcNow()),
-                onRetryAsync: OnRetryAsync
+                onRetryAsync: static (_, _, _, _) => Task.CompletedTask
             );
     }
 
