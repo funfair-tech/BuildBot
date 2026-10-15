@@ -51,6 +51,32 @@ public sealed class EmbedMapperTests : TestBase
         Assert.Empty(result.Fields);
     }
 
+    [Theory]
+    [InlineData("https://example.com/build/1")]
+    [InlineData("http://example.com/build/1")]
+    public static void ToWebhookEmbed_WithWebUrl_KeepsUrl(string value)
+    {
+        Uri url = new(value);
+
+        WebhookEmbed result = EmbedMapper.ToWebhookEmbed(CreateEmbedWithUrl(url));
+
+        Assert.Equal(expected: url, actual: result.Url);
+    }
+
+    [Theory]
+    [InlineData("/builds/123")]
+    [InlineData("builds/123")]
+    [InlineData("ftp://example.com/build/1")]
+    [InlineData("file:///builds/123")]
+    public static void ToWebhookEmbed_WithRelativeOrNonWebUrl_DropsUrl(string value)
+    {
+        Uri url = new(uriString: value, uriKind: UriKind.RelativeOrAbsolute);
+
+        WebhookEmbed result = EmbedMapper.ToWebhookEmbed(CreateEmbedWithUrl(url));
+
+        Assert.Null(result.Url);
+    }
+
     [Fact]
     public void ToPayload_ContainsSingleMappedEmbed()
     {
@@ -74,5 +100,10 @@ public sealed class EmbedMapperTests : TestBase
             expected: new Uri("https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"),
             actual: author.IconUrl
         );
+    }
+
+    private static DiscordEmbed CreateEmbedWithUrl(Uri url)
+    {
+        return new(Title: "Title", Url: url, Description: null, Color: null, Fields: []);
     }
 }
