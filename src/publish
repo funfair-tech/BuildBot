@@ -8,7 +8,7 @@ die() {
 PLATFORM=linux-x64
 OUTFOLDER="$HOME/work/funfair/BuildBot/src/server-dist/$PLATFORM"
 
-[ -z "$DISCORDTOKEN" ] && die "DISCORDTOKEN not set"
+[ -z "$DISCORDWEBHOOKURL" ] && die "DISCORDWEBHOOKURL not set"
 
 echo "Clear $OUTFOLDER" \
   && rm -fr "$HOME/work/funfair/BuildBot/src/server-dist" \
@@ -50,9 +50,6 @@ echo "Clear $OUTFOLDER" \
   && sudo docker run \
       --name buildbot \
       -p 8080:8080 \
-      -e "DISCORD__TOKEN=$DISCORDTOKEN" \
-      -e "DISCORD__SERVER=FunFair Internal" \
-      -e "DISCORD__CHANNEL=build" \
-      -e "DISCORD__RELEASE_CHANNEL=release-notification" \
+      -e "DISCORD__WEBHOOKURL=$DISCORDWEBHOOKURL" \
       -it \
       --rm "funfair/buildbot:latest"
