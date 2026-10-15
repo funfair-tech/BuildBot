@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -63,7 +62,7 @@ public sealed class DiscordSetupTests : TestBase
 
         Assert.Contains(
             expectedSubstring: SECRET,
-            actualString: LoggedText(httpLogger),
+            actualString: httpLogger.LoggedText(),
             comparisonType: StringComparison.Ordinal
         );
         httpLogger.ClearReceivedCalls();
@@ -78,7 +77,7 @@ public sealed class DiscordSetupTests : TestBase
 
         Assert.DoesNotContain(
             expectedSubstring: SECRET,
-            actualString: LoggedText(httpLogger),
+            actualString: httpLogger.LoggedText(),
             comparisonType: StringComparison.Ordinal
         );
     }
@@ -124,16 +123,5 @@ public sealed class DiscordSetupTests : TestBase
     private static HttpMessageHandler CreateNoContentHandler()
     {
         return new TestHttpMessageHandler(static () => new HttpResponseMessage(HttpStatusCode.NoContent));
-    }
-
-    private static string LoggedText(ILogger logger)
-    {
-        return string.Join(
-            separator: '\n',
-            values: logger
-                .ReceivedCalls()
-                .SelectMany(static call => call.GetArguments())
-                .Select(static arg => arg?.ToString())
-        );
     }
 }
