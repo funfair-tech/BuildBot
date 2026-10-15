@@ -87,6 +87,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
 - ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
 - The ECS service is now named after the application, so it can be found by name in the DiscordBots cluster (#421)
+- TBD - to be finalized after review
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
