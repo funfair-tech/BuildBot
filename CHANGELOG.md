@@ -81,6 +81,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - ECS task execution role changed from ecsTaskExecutionRole to ecsExecutionRole (#419)
+- TBD - to be finalized after review
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
