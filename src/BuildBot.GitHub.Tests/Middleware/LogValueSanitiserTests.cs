@@ -44,6 +44,34 @@ public sealed class LogValueSanitiserTests : TestBase
         Assert.Equal(expected: "?[31mred?[0m??", actual: sanitised);
     }
 
+    [Theory]
+    [InlineData("\u0085")]
+    [InlineData("\u2028")]
+    [InlineData("\u2029")]
+    [InlineData("\u202e")]
+    public static void LineBreakAndBidiCharactersAreReplaced(string unsafeCharacter)
+    {
+        string sanitised = LogValueSanitiser.Sanitise("before" + unsafeCharacter + "after");
+
+        Assert.Equal(expected: "before?after", actual: sanitised);
+    }
+
+    [Fact]
+    public void CharactersNextToUnsafeRangesAreUnchanged()
+    {
+        const string value = "\u00a0\u2027\u202f\u2065\u206a";
+
+        Assert.Same(expected: value, actual: LogValueSanitiser.Sanitise(value));
+    }
+
+    [Fact]
+    public void CharactersNextToUnsafeRangesAreKeptWhenOtherCharactersAreReplaced()
+    {
+        string sanitised = LogValueSanitiser.Sanitise("\n\u00a0\u2027\u202f\u2065\u206a\u2066");
+
+        Assert.Equal(expected: "?\u00a0\u2027\u202f\u2065\u206a?", actual: sanitised);
+    }
+
     [Fact]
     public void ValueAtMaximumLengthIsUnchanged()
     {
