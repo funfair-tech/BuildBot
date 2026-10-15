@@ -29,9 +29,9 @@
     "LoadBalancerPriority": {
       "Type": "Number"
     },
-    "TaskExecutionRole": {
+    "SecretsManagerArn": {
       "Type": "String",
-      "Default": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole"
+      "Default": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
     }
   },
   "Mappings": {
@@ -45,8 +45,7 @@
       "Task": {
         "Cpu": "512",
         "Memory": "1024",
-        "ContainerPort": "8080",
-        "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ"
+        "ContainerPort": "8080"
       },
       "Service": {
         "DesiredCount": "1",
@@ -70,175 +69,57 @@
         "ContainerDefinitions": [
           {
             "Essential": true,
-            "Image": {
-              "Fn::Sub": [
-                "117769150821.dkr.ecr.eu-west-1.amazonaws.com/funfair/${ApplicationContainer}:${Version}",
-                {
-                  "Container": {
-                    "Ref": "ApplicationContainer"
-                  },
-                  "Version": {
-                    "Ref": "ApplicationVersion"
-                  }
-                }
-              ]
-            },
+            "Image": { "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/funfair/${ApplicationContainer}:${ApplicationVersion}" },
             "Name": { "Ref": "ApplicationName" },
-            "ResourceRequirements": [],
-            "EnvironmentFiles": [],
             "Environment": [
               {
+                "Name": "CLOUDFORMATION__AWS__REGION",
+                "Value": { "Ref": "AWS::Region" }
+              }
+            ],
+            "Secrets": [
+              {
                 "Name": "DISCORD__TOKEN",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_TOKEN"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_TOKEN::" }
               },
               {
                 "Name": "DISCORD__SERVER",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_SERVER"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_SERVER::" }
               },
               {
                 "Name": "DISCORD__CHANNEL",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_CHANNEL"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_CHANNEL::" }
               },
               {
                 "Name": "DISCORD__RELEASE_CHANNEL",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "DISCORD_RELEASE_CHANNEL"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::" }
               },
               {
                 "Name": "SERVEROCTOPUS__URL",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "OCTOPUS_URL"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:OCTOPUS_URL::" }
               },
               {
                 "Name": "SERVEROCTOPUS__APIKEY",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "OCTOPUS_API_KEY"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:OCTOPUS_API_KEY::" }
               },
               {
                 "Name": "CLOUDFORMATION__TOPICARN",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "SNS_TOPIC_ARN"
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "CLOUDFORMATION__AWS__REGION",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "AWS_REGION"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:SNS_TOPIC_ARN::" }
               },
               {
                 "Name": "CLOUDFORMATION__AWS__ACCESSKEYID",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "AWS_ACCESS_KEY_ID"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_ACCESS_KEY_ID::" }
               },
               {
                 "Name": "CLOUDFORMATION__AWS__SECRETKEY",
-                "Value": {
-                  "Fn::Sub": [
-                    "{{resolve:secretsmanager:${SecretsManagerArn}:SecretString:${Key}}}",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": ["Deployment", "Task", "SecretsManagerArn"]
-                      },
-                      "Key": "AWS_SECRET_KEY"
-                    }
-                  ]
-                }
+                "ValueFrom": { "Fn::Sub": "${SecretsManagerArn}:AWS_SECRET_KEY::" }
               }
             ],
-            "DisableNetworking": false,
-            "DnsServers": [],
-            "DnsSearchDomains": [],
-            "ExtraHosts": [],
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
-                "awslogs-group": {
-                  "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
-                },
-                "awslogs-region": "eu-west-1",
+                "awslogs-group": { "Fn::Sub": "/ecs/${ApplicationName}/" },
+                "awslogs-region": { "Ref": "AWS::Region" },
                 "awslogs-stream-prefix": "ecs"
               }
             },
@@ -274,13 +155,9 @@
         "Memory": {
           "Fn::FindInMap": ["Deployment", "Task", "Memory"]
         },
-        "ExecutionRoleArn": {
-          "Ref": "TaskExecutionRole"
-        },
+        "ExecutionRoleArn": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ecsExecutionRole" },
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
-        "Volumes": [],
-        "Tags": [],
         "RuntimePlatform": {
           "CpuArchitecture": "ARM64",
           "OperatingSystemFamily": "LINUX"
@@ -292,9 +169,7 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Delete",
       "Properties": {
-        "LogGroupName": {
-          "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
-        }
+        "LogGroupName": { "Fn::Sub": "/ecs/${ApplicationName}/" }
       }
     },
     "ECSService": {
@@ -313,7 +188,6 @@
           "Fn::FindInMap": ["Deployment", "Service", "DesiredCount"]
         },
         "EnableECSManagedTags": false,
-        "Tags": [],
         "LaunchType": "FARGATE",
         "NetworkConfiguration": {
           "AwsvpcConfiguration": {
@@ -328,6 +202,10 @@
           },
           "MinimumHealthyPercent": {
             "Fn::FindInMap": ["Deployment", "Service", "MinimumHealthPercent"]
+          },
+          "DeploymentCircuitBreaker": {
+            "Enable": true,
+            "Rollback": true
           }
         },
         "LoadBalancers": [

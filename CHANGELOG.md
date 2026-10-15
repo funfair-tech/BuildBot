@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
 ## [Unreleased]
 ### Security
+- ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
@@ -77,10 +78,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 3.0.299
+- CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
+- SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
+- ECS task execution role changed from ecsTaskExecutionRole to ecsExecutionRole (#419)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
+- TaskExecutionRole CloudFormation parameter (#419)
 ### Deployment Changes
+- ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
+- ECS tasks now run under the ecsExecutionRole execution role (previously ecsTaskExecutionRole), which must have the standard ECS execution permissions (ECR pull, CloudWatch Logs) and secretsmanager:GetSecretValue on the BuildBot secret, read at task start-up (#419)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
