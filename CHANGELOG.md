@@ -89,6 +89,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
 - ECS tasks now read their secrets at start-up using the ecsTaskExecutionRole execution role, which must have secretsmanager:GetSecretValue on the BuildBot secret (#419)
 - ECS task now gets GITHUB__WEBHOOKSECRET from the Secrets Manager key GITHUB_WEBHOOK_SECRET; the key must exist in the BuildBot secret (an empty value disables verification) or the task will not start (#422)
+- TBD - to be finalized after review (#421)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
