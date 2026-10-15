@@ -1,15 +1,12 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Services;
 using BuildBot.Discord.Services.Models;
 using FunFair.Test.Common;
 using FunFair.Test.Infrastructure.Mocks;
-using Microsoft.Extensions.Time.Testing;
 using NSubstitute;
 using Xunit;
 
@@ -33,21 +30,14 @@ public sealed class DiscordWebhookClientTests : TestBase
     private const string EXPECTED_JSON =
         """{"embeds":[{"title":"Title","url":"https://example.com/build","color":3066993,"author":{"name":"Author","url":"https://example.com/","icon_url":"https://example.com/icon.png"},"fields":[{"name":"Name","value":"Value","inline":true}]}]}""";
 
-    private static (
-        DiscordWebhookClient Client,
-        CapturingLogger<DiscordWebhookClient> Logger,
-        FakeTimeProvider TimeProvider
-    ) CreateClient(TestHttpMessageHandler handler)
+    private static DiscordWebhookClient CreateClient(TestHttpMessageHandler handler)
     {
         IHttpClientFactory factory = GetSubstitute<IHttpClientFactory>();
         factory
             .CreateClient(DiscordWebhookClient.HttpClientName)
             .Returns(_ => new HttpClient(handler: handler, disposeHandler: false));
 
-        CapturingLogger<DiscordWebhookClient> logger = new();
-        FakeTimeProvider timeProvider = MockDateTimeSources.Past;
-
-        return (new(httpClientFactory: factory, timeProvider: timeProvider, logger: logger), logger, timeProvider);
+        return new(factory);
     }
 
     private static Func<HttpResponseMessage> Respond(HttpStatusCode statusCode)
@@ -55,50 +45,11 @@ public sealed class DiscordWebhookClientTests : TestBase
         return () => new(statusCode);
     }
 
-    private static Func<HttpResponseMessage> RateLimited(
-        string body,
-        TimeSpan? retryAfter = null,
-        string mediaType = "application/json"
-    )
-    {
-        return () =>
-        {
-            HttpResponseMessage response = new(HttpStatusCode.TooManyRequests)
-            {
-                Content = new StringContent(content: body, encoding: Encoding.UTF8, mediaType: mediaType),
-            };
-
-            if (retryAfter is not null)
-            {
-                response.Headers.RetryAfter = new RetryConditionHeaderValue(retryAfter.Value);
-            }
-
-            return response;
-        };
-    }
-
-    private static void AdvancePastRateLimitDelay(
-        FakeTimeProvider timeProvider,
-        TestHttpMessageHandler handler,
-        Task<WebhookSendResult> sending,
-        in TimeSpan expectedDelay
-    )
-    {
-        int requestsBeforeDelay = handler.Requests.Count;
-
-        timeProvider.Advance(expectedDelay - TimeSpan.FromTicks(1));
-        Assert.False(condition: sending.IsCompleted, userMessage: "Retried before the rate limit delay elapsed");
-        Assert.Equal(expected: requestsBeforeDelay, actual: handler.Requests.Count);
-
-        timeProvider.Advance(TimeSpan.FromTicks(1));
-        Assert.Equal(expected: requestsBeforeDelay + 1, actual: handler.Requests.Count);
-    }
-
     [Fact]
     public async Task SendAsync_PostsPayloadAsJsonToWebhookUrl()
     {
         using TestHttpMessageHandler handler = new(Respond(HttpStatusCode.NoContent));
-        (DiscordWebhookClient client, _, _) = CreateClient(handler);
+        DiscordWebhookClient client = CreateClient(handler);
 
         WebhookSendResult result = await client.SendAsync(
             webhookUrl: WebhookUrl,
@@ -120,6 +71,7 @@ public sealed class DiscordWebhookClientTests : TestBase
     [InlineData(HttpStatusCode.NoContent, true)]
     [InlineData(HttpStatusCode.BadRequest, false)]
     [InlineData(HttpStatusCode.NotFound, false)]
+    [InlineData(HttpStatusCode.TooManyRequests, false)]
     [InlineData(HttpStatusCode.InternalServerError, false)]
     public async Task SendAsync_ReturnsResultForStatusWithoutThrowingAsync(
         HttpStatusCode statusCode,
@@ -127,7 +79,7 @@ public sealed class DiscordWebhookClientTests : TestBase
     )
     {
         using TestHttpMessageHandler handler = new(Respond(statusCode));
-        (DiscordWebhookClient client, _, _) = CreateClient(handler);
+        DiscordWebhookClient client = CreateClient(handler);
 
         WebhookSendResult result = await client.SendAsync(
             webhookUrl: WebhookUrl,
@@ -140,114 +92,10 @@ public sealed class DiscordWebhookClientTests : TestBase
     }
 
     [Fact]
-    public async Task SendAsync_WhenRateLimited_RetriesAndSucceeds()
-    {
-        using TestHttpMessageHandler handler = new(
-            RateLimited("""{"message":"You are being rate limited.","retry_after":1.5,"global":false}"""),
-            Respond(HttpStatusCode.NoContent)
-        );
-        (DiscordWebhookClient client, CapturingLogger<DiscordWebhookClient> logger, FakeTimeProvider timeProvider) =
-            CreateClient(handler);
-
-        Task<WebhookSendResult> sending = client
-            .SendAsync(webhookUrl: WebhookUrl, payload: Payload, cancellationToken: this.CancellationToken())
-            .AsTask();
-
-        Assert.Single(handler.Requests);
-        AdvancePastRateLimitDelay(
-            timeProvider: timeProvider,
-            handler: handler,
-            sending: sending,
-            expectedDelay: TimeSpan.FromSeconds(1.5)
-        );
-
-        WebhookSendResult result = await sending;
-
-        Assert.Equal(expected: new(Success: true, StatusCode: HttpStatusCode.NoContent), actual: result);
-        Assert.Equal(expected: 2, actual: handler.Requests.Count);
-        Assert.All(collection: handler.Requests, action: r => Assert.Equal(expected: EXPECTED_JSON, actual: r.Body));
-        Assert.Contains(
-            collection: logger.Entries,
-            filter: static entry =>
-                entry.Message.Contains(value: "retrying in 1.5 seconds", comparisonType: StringComparison.Ordinal)
-        );
-    }
-
-    [Fact]
-    public async Task SendAsync_WhenRateLimitedWithNonJsonBody_UsesHeaderAndRetries()
-    {
-        using TestHttpMessageHandler handler = new(
-            RateLimited(body: "<html>rate limited</html>", retryAfter: TimeSpan.FromSeconds(2), mediaType: "text/html"),
-            Respond(HttpStatusCode.NoContent)
-        );
-        (DiscordWebhookClient client, CapturingLogger<DiscordWebhookClient> logger, FakeTimeProvider timeProvider) =
-            CreateClient(handler);
-
-        Task<WebhookSendResult> sending = client
-            .SendAsync(webhookUrl: WebhookUrl, payload: Payload, cancellationToken: this.CancellationToken())
-            .AsTask();
-
-        Assert.Single(handler.Requests);
-        AdvancePastRateLimitDelay(
-            timeProvider: timeProvider,
-            handler: handler,
-            sending: sending,
-            expectedDelay: TimeSpan.FromSeconds(2)
-        );
-
-        WebhookSendResult result = await sending;
-
-        Assert.Equal(expected: new(Success: true, StatusCode: HttpStatusCode.NoContent), actual: result);
-        Assert.Equal(expected: 2, actual: handler.Requests.Count);
-        Assert.Contains(
-            collection: logger.Entries,
-            filter: static entry =>
-                entry.Message.Contains(value: "retrying in 2 seconds", comparisonType: StringComparison.Ordinal)
-        );
-    }
-
-    [Fact]
-    public async Task SendAsync_WhenRateLimitedOnEveryAttempt_GivesUpAfterMaximumAttempts()
-    {
-        const string body = """{"retry_after":5}""";
-        using TestHttpMessageHandler handler = new(
-            RateLimited(body),
-            RateLimited(body),
-            RateLimited(body),
-            Respond(HttpStatusCode.NoContent)
-        );
-        (DiscordWebhookClient client, _, FakeTimeProvider timeProvider) = CreateClient(handler);
-        TimeSpan expectedDelay = TimeSpan.FromSeconds(5);
-
-        Task<WebhookSendResult> sending = client
-            .SendAsync(webhookUrl: WebhookUrl, payload: Payload, cancellationToken: this.CancellationToken())
-            .AsTask();
-
-        Assert.Single(handler.Requests);
-        AdvancePastRateLimitDelay(
-            timeProvider: timeProvider,
-            handler: handler,
-            sending: sending,
-            expectedDelay: expectedDelay
-        );
-        AdvancePastRateLimitDelay(
-            timeProvider: timeProvider,
-            handler: handler,
-            sending: sending,
-            expectedDelay: expectedDelay
-        );
-
-        WebhookSendResult result = await sending;
-
-        Assert.Equal(expected: new(Success: false, StatusCode: HttpStatusCode.TooManyRequests), actual: result);
-        Assert.Equal(expected: 3, actual: handler.Requests.Count);
-    }
-
-    [Fact]
     public async Task SendAsync_WhenCancelled_Throws()
     {
         using TestHttpMessageHandler handler = new(Respond(HttpStatusCode.NoContent));
-        (DiscordWebhookClient client, _, _) = CreateClient(handler);
+        DiscordWebhookClient client = CreateClient(handler);
 
         using CancellationTokenSource cts = new();
         await cts.CancelAsync();
@@ -255,35 +103,5 @@ public sealed class DiscordWebhookClientTests : TestBase
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             await client.SendAsync(webhookUrl: WebhookUrl, payload: Payload, cancellationToken: cts.Token)
         );
-    }
-
-    public static TheoryData<double?, TimeSpan?, double> RateLimitDelays =>
-        new()
-        {
-            { 2.5, null, 2.5 },
-            { 2.5, TimeSpan.FromSeconds(10), 2.5 },
-            { 0.0, TimeSpan.FromSeconds(10), 10 },
-            { -1.0, TimeSpan.FromSeconds(10), 10 },
-            { null, TimeSpan.FromSeconds(10), 10 },
-            { null, TimeSpan.Zero, 1 },
-            { null, null, 1 },
-            { 1e300, null, 60 },
-            { null, TimeSpan.FromHours(1), 60 },
-        };
-
-    [Theory]
-    [MemberData(nameof(RateLimitDelays))]
-    public static void CalculateRateLimitDelay_ReturnsExpectedDelay(
-        double? retryAfterSeconds,
-        TimeSpan? retryAfterHeader,
-        double expectedSeconds
-    )
-    {
-        TimeSpan actual = DiscordWebhookClient.CalculateRateLimitDelay(
-            retryAfterSeconds: retryAfterSeconds,
-            retryAfterHeader: retryAfterHeader
-        );
-
-        Assert.Equal(expected: TimeSpan.FromSeconds(expectedSeconds), actual: actual);
     }
 }
