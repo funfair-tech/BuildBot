@@ -16,8 +16,6 @@ namespace BuildBot.Helpers;
 
 internal static partial class Endpoints
 {
-    private const string GITHUB_PATH = "/github";
-
     private static WebApplication ConfigureGitHubEndpoints(this WebApplication app)
     {
         Console.WriteLine("Configuring Github Endpoint");
@@ -27,16 +25,13 @@ internal static partial class Endpoints
             app.Logger.GitHubWebhookSecretNotConfigured();
         }
 
-        // The signature filter runs after model binding has read the body, so it must be buffered to be re-read.
-        // Routing matches literal segments case-insensitively, so this must too or the body is left unbuffered.
-        app.UseWhen(
-            predicate: static context =>
-                context.Request.Path.StartsWithSegments(GITHUB_PATH, StringComparison.OrdinalIgnoreCase),
-            configuration: static branch => branch.Use(EnableRequestBufferingAsync)
-        );
+        // The filter is also endpoint metadata so the endpoints it guards are the ones whose body gets buffered.
+        app.Use(EnableRequestBufferingAsync);
 
-        RouteGroupBuilder group = app.MapGroup(GITHUB_PATH)
-            .AddEndpointFilter(app.Services.GetRequiredService<GitHubWebhookSignatureFilter>());
+        GitHubWebhookSignatureFilter signatureFilter = app.Services.GetRequiredService<GitHubWebhookSignatureFilter>();
+        RouteGroupBuilder group = app.MapGroup("/github")
+            .AddEndpointFilter(signatureFilter)
+            .WithMetadata(signatureFilter);
 
         group.MapPost(
             pattern: "ping",
@@ -73,7 +68,11 @@ internal static partial class Endpoints
 
     private static Task EnableRequestBufferingAsync(HttpContext context, RequestDelegate next)
     {
-        context.Request.EnableBuffering();
+        // The signature filter runs after model binding has read the body, so it must be buffered to be re-read.
+        if (context.GetEndpoint()?.Metadata.GetMetadata<GitHubWebhookSignatureFilter>() is not null)
+        {
+            context.Request.EnableBuffering();
+        }
 
         return next(context);
     }
