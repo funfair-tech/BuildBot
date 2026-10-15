@@ -125,9 +125,6 @@
               }
             ],
             "DisableNetworking": false,
-            "DnsServers": [],
-            "DnsSearchDomains": [],
-            "ExtraHosts": [],
             "LogConfiguration": {
               "LogDriver": "awslogs",
               "Options": {
@@ -173,8 +170,6 @@
         "ExecutionRoleArn": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ecsExecutionRole" },
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
-        "Volumes": [],
-        "Tags": [],
         "RuntimePlatform": {
           "CpuArchitecture": "ARM64",
           "OperatingSystemFamily": "LINUX"
@@ -207,7 +202,6 @@
           "Fn::FindInMap": ["Deployment", "Service", "DesiredCount"]
         },
         "EnableECSManagedTags": false,
-        "Tags": [],
         "LaunchType": "FARGATE",
         "NetworkConfiguration": {
           "AwsvpcConfiguration": {
