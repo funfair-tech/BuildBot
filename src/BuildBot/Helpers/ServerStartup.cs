@@ -68,7 +68,6 @@ internal static class ServerStartup
         IConfigurationRoot config = LoadConfiguration(configPath);
 
         DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
-        Console.WriteLine("Discord Webhook configured");
 
         SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
 
