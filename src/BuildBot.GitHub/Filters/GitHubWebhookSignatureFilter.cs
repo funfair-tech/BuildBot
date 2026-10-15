@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BuildBot.GitHub.Filters.LoggingExtensions;
 using FunFair.Common.Web.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
@@ -14,7 +15,6 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
     private const string SIGNATURE_HEADER = "X-Hub-Signature-256";
     private const string DELIVERY_HEADER = "X-GitHub-Delivery";
     private const string EVENT_HEADER = "X-GitHub-Event";
-    private const string FORWARDED_FOR_HEADER = "X-Forwarded-For";
 
     private readonly bool _isEnabled;
     private readonly ILogger<GitHubWebhookSignatureFilter> _logger;
@@ -67,7 +67,7 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
             delivery: request.Headers[DELIVERY_HEADER].ToString(),
             gitHubEvent: request.Headers[EVENT_HEADER].ToString(),
             remoteIpAddress: this._remoteIpAddressRetriever.Get(context.HttpContext).ToString(),
-            forwardedFor: request.Headers[FORWARDED_FOR_HEADER].ToString()
+            forwardedFor: request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
         );
 
         return Results.Unauthorized();
