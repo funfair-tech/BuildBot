@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,12 +40,19 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
         }
 
         HttpRequest request = context.HttpContext.Request;
-        byte[] body = await ReadBodyAsync(request: request, cancellationToken: context.HttpContext.RequestAborted);
+        StringValues signatures = request.Headers[SIGNATURE_HEADER];
 
-        WebhookSignatureVerificationResult result = this.Verify(
-            body: body,
-            signatures: request.Headers[SIGNATURE_HEADER]
-        );
+        // Only read the body once there is a single signature to check it against.
+        WebhookSignatureVerificationResult result = signatures.Count switch
+        {
+            0 => WebhookSignatureVerificationResult.MISSING_HEADER,
+            1 => await this.VerifyBodyAsync(
+                request: request,
+                signatureHeader: signatures[0],
+                cancellationToken: context.HttpContext.RequestAborted
+            ),
+            _ => WebhookSignatureVerificationResult.MULTIPLE_HEADERS,
+        };
 
         if (result == WebhookSignatureVerificationResult.VALID)
         {
@@ -63,17 +71,11 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
         return Results.Unauthorized();
     }
 
-    private WebhookSignatureVerificationResult Verify(byte[] body, in StringValues signatures)
-    {
-        return signatures.Count switch
-        {
-            0 => this._verifier.Verify(body: body, signatureHeader: null),
-            1 => this._verifier.Verify(body: body, signatureHeader: signatures[0]),
-            _ => WebhookSignatureVerificationResult.MULTIPLE_HEADERS,
-        };
-    }
-
-    private static async ValueTask<byte[]> ReadBodyAsync(HttpRequest request, CancellationToken cancellationToken)
+    private async ValueTask<WebhookSignatureVerificationResult> VerifyBodyAsync(
+        HttpRequest request,
+        string? signatureHeader,
+        CancellationToken cancellationToken
+    )
     {
         // Model binding has already read the body, so this needs buffering enabled before the endpoint runs.
         Stream body = request.Body;
@@ -84,7 +86,10 @@ public sealed class GitHubWebhookSignatureFilter : IEndpointFilter
             await body.CopyToAsync(destination: buffer, cancellationToken: cancellationToken);
             body.Position = 0;
 
-            return buffer.ToArray();
+            return this._verifier.Verify(
+                body: buffer.GetBuffer().AsSpan(start: 0, length: (int)buffer.Length),
+                signatureHeader: signatureHeader
+            );
         }
     }
 }
