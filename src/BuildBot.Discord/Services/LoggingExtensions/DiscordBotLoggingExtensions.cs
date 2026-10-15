@@ -6,13 +6,6 @@ namespace BuildBot.Discord.Services.LoggingExtensions;
 
 internal static partial class DiscordBotLoggingExtensions
 {
-    [LoggerMessage(
-        EventId = 1,
-        Level = LogLevel.Error,
-        Message = "DISCORD: Webhook is not configured; dropping message {title}"
-    )]
-    public static partial void LogWebhookNotConfigured(this ILogger<DiscordBot> logger, string title);
-
     [LoggerMessage(EventId = 2, Level = LogLevel.Information, Message = "DISCORD: Sending message {title}")]
     public static partial void LogSendingMessage(this ILogger<DiscordBot> logger, string title);
 

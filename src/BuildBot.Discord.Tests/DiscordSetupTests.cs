@@ -20,7 +20,10 @@ public sealed class DiscordSetupTests : TestBase
 {
     private const string SECRET = "secret-token";
     private const string CONTROL_CLIENT_NAME = "Control";
-    private static readonly Uri WebhookUrl = new("https://example.com/webhook/" + SECRET);
+    private static readonly DiscordBotConfiguration Config = DiscordBotConfiguration.FromWebhookUrl(
+        "https://example.com/webhook/" + SECRET
+    );
+    private static readonly Uri WebhookUrl = Config.WebhookUrl;
 
     [Theory]
     [InlineData(1, 2)]
@@ -45,7 +48,7 @@ public sealed class DiscordSetupTests : TestBase
         ServiceCollection services = new();
         services
             .AddLogging(builder => builder.AddProvider(loggerProvider))
-            .AddDiscord(new(WebhookUrl))
+            .AddDiscord(Config)
             .AddHttpClient(DiscordWebhookClient.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(CreateNoContentHandler);
         services.AddHttpClient(CONTROL_CLIENT_NAME).ConfigurePrimaryHttpMessageHandler(CreateNoContentHandler);
@@ -94,7 +97,7 @@ public sealed class DiscordSetupTests : TestBase
         ServiceCollection services = new();
         services
             .AddLogging()
-            .AddDiscord(new(WebhookUrl))
+            .AddDiscord(Config)
             .AddHttpClient(DiscordWebhookClient.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(() => handler);
 
