@@ -1,51 +1,49 @@
 using System;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
+using BuildBot.Discord.Services.LoggingExtensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BuildBot.Discord.Services;
 
-public sealed class DiscordMessageSender : IHostedService, IDisposable
+public sealed class DiscordMessageSender : BackgroundService
 {
     private readonly IDiscordBot _bot;
     private readonly IMessageChannel<BotMessage> _botMessageChannel;
-    private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private readonly ILogger<DiscordMessageSender> _logger;
 
-    public DiscordMessageSender(IDiscordBot bot, IMessageChannel<BotMessage> botMessageChannel)
+    public DiscordMessageSender(
+        IDiscordBot bot,
+        IMessageChannel<BotMessage> botMessageChannel,
+        ILogger<DiscordMessageSender> logger
+    )
     {
-        this._bot = bot ?? throw new ArgumentNullException(nameof(bot));
-        this._botMessageChannel = botMessageChannel ?? throw new ArgumentNullException(nameof(botMessageChannel));
-
-        this._botMessageChannel.ReadAllAsync(this._cancellationTokenSource.Token)
-            .ToObservable()
-            .Select(message =>
-                Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
-            )
-            .Concat()
-            .Subscribe(this._cancellationTokenSource.Token);
+        this._bot = bot;
+        this._botMessageChannel = botMessageChannel;
+        this._logger = logger;
     }
 
-    public void Dispose()
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        this._cancellationTokenSource.Cancel();
-        this._cancellationTokenSource.Dispose();
+        await foreach (BotMessage message in this._botMessageChannel.ReadAllAsync(stoppingToken))
+        {
+            await this.PublishMessageAsync(message: message, stoppingToken: stoppingToken);
+        }
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    private async ValueTask PublishMessageAsync(BotMessage message, CancellationToken stoppingToken)
     {
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return this._cancellationTokenSource.CancelAsync();
-    }
-
-    private ValueTask PublishMessageAsync(BotMessage message, in CancellationToken cancellationToken)
-    {
-        return this._bot.PublishAsync(embed: message.Message, cancellationToken: cancellationToken);
+        // One failed message must not end the loop; only shutting down may.
+        try
+        {
+            await this._bot.PublishAsync(embed: message.Message, cancellationToken: stoppingToken);
+        }
+        catch (Exception exception)
+            when (exception is not OperationCanceledException || !stoppingToken.IsCancellationRequested)
+        {
+            this._logger.LogPublishFailed(title: message.Message.Title, exception: exception);
+        }
     }
 }
