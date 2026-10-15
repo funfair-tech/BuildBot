@@ -10,7 +10,6 @@ namespace BuildBot.Discord.Services;
 
 public sealed class BotService : IHostedService, IDisposable
 {
-    private static readonly TimeSpan InterMessageDelay = TimeSpan.FromSeconds(1);
     private readonly IDiscordBot _bot;
     private readonly IMessageChannel<BotMessage> _botMessageChannel;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -22,7 +21,6 @@ public sealed class BotService : IHostedService, IDisposable
 
         this._botMessageChannel.ReadAllAsync(this._cancellationTokenSource.Token)
             .ToObservable()
-            .Delay(InterMessageDelay)
             .Select(message =>
                 Observable.FromAsync(ct => this.PublishMessageAsync(message: message, cancellationToken: ct).AsTask())
             )
