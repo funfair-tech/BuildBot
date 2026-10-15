@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -121,16 +120,6 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         await mediator.Received(1).Publish(Arg.Any<INotification>(), Arg.Any<CancellationToken>());
     }
 
-    private static DiscordEmbed PublishedEmbed(IMediator mediator)
-    {
-        return mediator
-            .ReceivedCalls()
-            .Select(static call => call.GetArguments()[0])
-            .OfType<BotMessage>()
-            .Single()
-            .Message;
-    }
-
     public static TheoryData<string, uint?> StateColours =>
         new()
         {
@@ -148,7 +137,7 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
 
         await handler.Handle(notification: new(MakeStatus(state: state)), cancellationToken: this.CancellationToken());
 
-        DiscordEmbed embed = PublishedEmbed(mediator);
+        DiscordEmbed embed = mediator.PublishedEmbed();
         Assert.Equal(expected: "Build finished for ci/build from BuildBot (main)", actual: embed.Title);
         Assert.Equal(expected: new Uri("https://ci.example.com/builds/123"), actual: embed.Url);
         Assert.Equal(expected: "Built at abc123", actual: embed.Description);
@@ -173,7 +162,7 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
             cancellationToken: this.CancellationToken()
         );
 
-        DiscordEmbed embed = PublishedEmbed(mediator);
+        DiscordEmbed embed = mediator.PublishedEmbed();
         Assert.Equal(expected: "Build finished for ci/build from BuildBot ((unknown))", actual: embed.Title);
         Assert.Equal(expected: new DiscordEmbedField(Name: "Branch", Value: "(unknown)"), actual: embed.Fields[1]);
     }
