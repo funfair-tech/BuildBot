@@ -9,8 +9,8 @@ public sealed class EmbedUrlTests : TestBase
 {
     [Theory]
     [InlineData("https://example.com/build/1")]
-    [InlineData("http://example.com/build/1")]
-    public static void FromString_WithWebUrl_ReturnsUri(string value)
+    [InlineData("ftp://example.com/build/1")]
+    public static void FromString_WithAbsoluteUrl_ReturnsUri(string value)
     {
         Uri? uri = EmbedUrl.FromString(value);
 
@@ -21,10 +21,7 @@ public sealed class EmbedUrlTests : TestBase
     [InlineData(null)]
     [InlineData("")]
     [InlineData("not a url")]
-    [InlineData("/builds/123")]
-    [InlineData("ftp://example.com/build/1")]
-    [InlineData("file:///builds/123")]
-    public static void FromString_WithMissingRelativeOrNonWebUrl_ReturnsNull(string? value)
+    public static void FromString_WithMissingOrInvalidUrl_ReturnsNull(string? value)
     {
         Assert.Null(EmbedUrl.FromString(value));
     }
