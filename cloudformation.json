@@ -38,7 +38,7 @@
         "SecurityGroupIDs": "sg-e3e65a9a,sg-0272027302777cb4d",
         "SubnetIDs": "subnet-fabb50b3,subnet-d5ea03b2,subnet-c68aa09e",
         "VpcID": "vpc-ad3bd9ca",
-        "LoadBalancerListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/testing/c383c5dd580a74f5/e82083ed48688c7a"
+        "LoadBalancerListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/internal/fbd77c1a39a60f7f/e01c11e315c3ff6e"
       }
     }
   },
@@ -410,9 +410,6 @@
     "TargetGroup": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties": {
-        "Name": {
-          "Ref": "ApplicationName"
-        },
         "HealthCheckPath": "/ping?source=target-group",
         "Port": {
           "Fn::FindInMap": [
