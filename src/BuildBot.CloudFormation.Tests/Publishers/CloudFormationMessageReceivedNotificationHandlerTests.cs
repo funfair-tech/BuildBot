@@ -258,7 +258,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
             actual: embed.Url
         );
         Assert.Null(embed.Description);
-        Assert.Equal(expected: 0x2ECC71u, actual: embed.Colour?.Value);
+        Assert.Equal(expected: 0x2ECC71u, actual: embed.Color?.Value);
         Assert.Equal(
             expected:
             [
@@ -281,7 +281,7 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
 
         Assert.Equal(expected: "MyProject (2.0.0) failed to deploy", actual: embed.Title);
         Assert.Equal(expected: "A deployment", actual: embed.Description);
-        Assert.Equal(expected: 0xE74C3Cu, actual: embed.Colour?.Value);
+        Assert.Equal(expected: 0xE74C3Cu, actual: embed.Color?.Value);
         Assert.Equal(
             expected:
             [

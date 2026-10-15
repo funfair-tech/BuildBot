@@ -27,7 +27,7 @@ public sealed class DiscordBotTests : TestBase
         Title: "Test Message",
         Url: new("https://example.com/build"),
         Description: "Description",
-        Colour: DiscordColour.Green,
+        Color: DiscordColor.Green,
         Fields: [new(Name: "Name", Value: "Value")]
     );
 

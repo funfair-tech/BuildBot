@@ -24,7 +24,7 @@ public static class EmbedMapper
             Title: NullIfEmpty(embed.Title),
             Url: embed.Url,
             Description: NullIfEmpty(embed.Description),
-            Color: embed.Colour?.Value,
+            Color: embed.Color?.Value,
             Author: StandardAuthor,
             Fields: [.. embed.Fields.Select(ToWebhookEmbedField)]
         );

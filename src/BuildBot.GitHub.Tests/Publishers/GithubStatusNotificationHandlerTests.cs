@@ -120,7 +120,7 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         await mediator.Received(1).Publish(Arg.Any<INotification>(), Arg.Any<CancellationToken>());
     }
 
-    public static TheoryData<string, uint?> StateColours =>
+    public static TheoryData<string, uint?> StateColors =>
         new()
         {
             { "success", 0x2ECC71 },
@@ -130,8 +130,8 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         };
 
     [Theory]
-    [MemberData(nameof(StateColours))]
-    public async Task PublishedEmbedHasExpectedContentAsync(string state, uint? expectedColour)
+    [MemberData(nameof(StateColors))]
+    public async Task PublishedEmbedHasExpectedContentAsync(string state, uint? expectedColor)
     {
         (IMediator mediator, GithubStatusNotificationHandler handler) = this.CreateHandler();
 
@@ -141,7 +141,7 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         Assert.Equal(expected: "Build finished for ci/build from BuildBot (main)", actual: embed.Title);
         Assert.Equal(expected: new Uri("https://ci.example.com/builds/123"), actual: embed.Url);
         Assert.Equal(expected: "Built at abc123", actual: embed.Description);
-        Assert.Equal(expected: expectedColour, actual: embed.Colour?.Value);
+        Assert.Equal(expected: expectedColor, actual: embed.Color?.Value);
         Assert.Equal(
             expected:
             [
