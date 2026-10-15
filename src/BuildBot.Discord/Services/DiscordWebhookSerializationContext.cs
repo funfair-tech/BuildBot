@@ -11,5 +11,4 @@ namespace BuildBot.Discord.Services;
     IncludeFields = false
 )]
 [JsonSerializable(typeof(WebhookPayload))]
-[JsonSerializable(typeof(RateLimitResponse))]
 internal sealed partial class DiscordWebhookSerializationContext : JsonSerializerContext;
