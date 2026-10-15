@@ -17,11 +17,6 @@ public sealed class BotServiceTests : TestBase
 {
     private static readonly TimeSpan ForwardingWait = TimeSpan.FromSeconds(3);
 
-    private static DiscordEmbed CreateEmbed(string title)
-    {
-        return new(Title: title, Url: null, Description: null, Colour: null, Fields: []);
-    }
-
     private static (BotService Service, IDiscordBot Bot, MessageChannel<BotMessage> MessageChannel) CreateService()
     {
         IDiscordBot bot = GetSubstitute<IDiscordBot>();
@@ -55,7 +50,7 @@ public sealed class BotServiceTests : TestBase
             await service.StopAsync(this.CancellationToken());
 
             await messageChannel.PublishAsync(
-                message: new(CreateEmbed("Test")),
+                message: new(TestEmbeds.WithTitle("Test")),
                 cancellationToken: this.CancellationToken()
             );
 
@@ -81,7 +76,7 @@ public sealed class BotServiceTests : TestBase
 
         using (service)
         {
-            DiscordEmbed embed = CreateEmbed("Test");
+            DiscordEmbed embed = TestEmbeds.WithTitle("Test");
 
             await messageChannel.PublishAsync(message: new(embed), cancellationToken: this.CancellationToken());
 
@@ -118,11 +113,11 @@ public sealed class BotServiceTests : TestBase
         using (BotService service = new(bot: bot, botMessageChannel: messageChannel))
         {
             await messageChannel.PublishAsync(
-                message: new(CreateEmbed("First")),
+                message: new(TestEmbeds.WithTitle("First")),
                 cancellationToken: this.CancellationToken()
             );
             await messageChannel.PublishAsync(
-                message: new(CreateEmbed("Second")),
+                message: new(TestEmbeds.WithTitle("Second")),
                 cancellationToken: this.CancellationToken()
             );
 
