@@ -16,7 +16,6 @@ public sealed class DiscordBotConfigurationTests : TestBase
         DiscordBotConfiguration config = DiscordBotConfiguration.FromWebhookUrl(WEBHOOK_URL);
 
         Assert.Equal(expected: new Uri(WEBHOOK_URL), actual: config.WebhookUrl);
-        Assert.True(condition: config.IsConfigured, userMessage: "Https webhook URL should be configured");
     }
 
     [Theory]
@@ -44,24 +43,6 @@ public sealed class DiscordBotConfigurationTests : TestBase
         );
     }
 
-    [Theory]
-    [InlineData("https://example.com/webhook/secret-token", true)]
-    [InlineData("http://example.com/webhook/secret-token", false)]
-    public static void IsConfigured_ReflectsWhetherUrlIsAbsoluteHttps(string webhookUrl, bool expected)
-    {
-        DiscordBotConfiguration config = new(new Uri(webhookUrl));
-
-        Assert.Equal(expected: expected, actual: config.IsConfigured);
-    }
-
-    [Fact]
-    public void IsConfigured_WithRelativeUrl_IsFalse()
-    {
-        DiscordBotConfiguration config = new(new Uri(uriString: "webhook/secret-token", uriKind: UriKind.Relative));
-
-        Assert.False(condition: config.IsConfigured, userMessage: "Relative webhook URL should not be configured");
-    }
-
     [Fact]
     public void ToString_DoesNotRevealWebhookUrl()
     {
@@ -69,7 +50,7 @@ public sealed class DiscordBotConfigurationTests : TestBase
 
         string text = config.ToString();
 
-        Assert.Equal(expected: "DiscordBotConfiguration { IsConfigured = True }", actual: text);
+        Assert.Equal(expected: "DiscordBotConfiguration { Webhook = <redacted> }", actual: text);
     }
 
     [Fact]

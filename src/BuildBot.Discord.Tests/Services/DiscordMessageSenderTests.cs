@@ -137,7 +137,7 @@ public sealed class DiscordMessageSenderTests : TestBase
 
         DiscordBot bot = new(
             client: client,
-            botConfiguration: new(new Uri("https://example.com/webhook")),
+            botConfiguration: DiscordBotConfiguration.FromWebhookUrl("https://example.com/webhook"),
             logger: this.GetTypedLogger<DiscordBot>()
         );
         MessageChannel<BotMessage> messageChannel = new();

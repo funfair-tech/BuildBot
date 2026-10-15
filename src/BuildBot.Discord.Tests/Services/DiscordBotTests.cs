@@ -20,8 +20,9 @@ namespace BuildBot.Discord.Tests.Services;
 public sealed class DiscordBotTests : TestBase
 {
     private const string SECRET = "secret-token";
-    private static readonly Uri WebhookUrl = new("https://example.com/webhook/" + SECRET);
-    private static readonly DiscordBotConfiguration Config = new(WebhookUrl);
+    private static readonly DiscordBotConfiguration Config = DiscordBotConfiguration.FromWebhookUrl(
+        "https://example.com/webhook/" + SECRET
+    );
 
     private static readonly DiscordEmbed Embed = new(
         Title: "Test Message",
@@ -78,24 +79,14 @@ public sealed class DiscordBotTests : TestBase
         return logger.Entries.Count(entry => entry.Level == level);
     }
 
-    [Theory]
-    [InlineData("https://example.com/webhook/secret-token", true)]
-    [InlineData("http://example.com/webhook/secret-token", false)]
-    public static void GetStatus_ReflectsConfiguration(string webhookUrl, bool expectedOk)
+    [Fact]
+    public static void GetStatus_IsOk()
     {
-        (_, _, DiscordBot bot) = CreateBot(new(new Uri(webhookUrl)));
+        (_, _, DiscordBot bot) = CreateBot(Config);
 
         ServiceStatus status = bot.GetStatus();
 
-        Assert.Equal(expected: new ServiceStatus(Name: "Discord", Ok: expectedOk), actual: status);
-    }
-
-    [Fact]
-    public static void GetStatus_WithRelativeUrl_IsNotOk()
-    {
-        (_, _, DiscordBot bot) = CreateBot(new(new Uri(uriString: "webhook", uriKind: UriKind.Relative)));
-
-        Assert.False(condition: bot.GetStatus().Ok, userMessage: "Relative webhook URL should not be Ok");
+        Assert.Equal(expected: new ServiceStatus(Name: "Discord", Ok: true), actual: status);
     }
 
     [Fact]
@@ -105,7 +96,7 @@ public sealed class DiscordBotTests : TestBase
         WebhookPayload? captured = null;
         client
             .SendAsync(
-                webhookUrl: WebhookUrl,
+                webhookUrl: Config.WebhookUrl,
                 payload: Arg.Do<WebhookPayload>(p => captured = p),
                 cancellationToken: Arg.Any<CancellationToken>()
             )
@@ -173,25 +164,5 @@ public sealed class DiscordBotTests : TestBase
         await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
 
         Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenNotConfigured_LogsErrorWithoutSending()
-    {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot(
-            new(new Uri("http://example.com/webhook/" + SECRET))
-        );
-
-        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
-
-        await client
-            .DidNotReceive()
-            .SendAsync(
-                webhookUrl: Arg.Any<Uri>(),
-                payload: Arg.Any<WebhookPayload>(),
-                cancellationToken: Arg.Any<CancellationToken>()
-            );
-        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
-        AssertSecretNeverLogged(logger);
     }
 }
