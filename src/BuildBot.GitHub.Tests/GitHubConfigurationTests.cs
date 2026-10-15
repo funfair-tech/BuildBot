@@ -22,6 +22,16 @@ public sealed class GitHubConfigurationTests : TestBase
         Assert.False(config.HasWebhookSecret, userMessage: "Should not have webhook secret");
     }
 
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("\n")]
+    public static void HasNoWebhookSecretWhenSecretWhitespace(string secret)
+    {
+        GitHubConfiguration config = new(secret);
+
+        Assert.False(config.HasWebhookSecret, userMessage: "Should not have webhook secret");
+    }
+
     [Fact]
     public static void ToStringDoesNotExposeSecret()
     {
