@@ -82,7 +82,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - ECS task execution role changed from ecsTaskExecutionRole to ecsExecutionRole (#419)
 - Discord notifications are sent through a channel webhook (Discord:WebhookUrl / DISCORD__WEBHOOKURL) instead of a Discord.Net bot login (#423)
-- Discord health status reflects whether the webhook URL is configured; startup fails if it is missing or not an absolute https URL (#423)
+- Startup fails if the Discord webhook URL is missing or not an absolute https URL (#423)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
