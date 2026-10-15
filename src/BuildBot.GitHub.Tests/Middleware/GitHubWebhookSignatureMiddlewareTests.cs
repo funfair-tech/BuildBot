@@ -146,6 +146,30 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     }
 
     [Fact]
+    public async Task BodyReadFailureUnderLimitReturnsBadRequestAsync()
+    {
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: new FailingReadStream(),
+            signature: GitHubWebhookTestVectors.ValidSignature
+        );
+
+        await this.InvokeAsync(httpContext: httpContext);
+
+        Assert.Equal(expected: StatusCodes.Status400BadRequest, actual: httpContext.Response.StatusCode);
+        Assert.Empty(this._bodiesSeenByNext);
+        this.AssertRejectionLogged(
+            new(
+                Path: string.Empty,
+                Reason: WebhookSignatureVerificationResult.BODY_READ_FAILED,
+                Delivery: string.Empty,
+                GitHubEvent: string.Empty,
+                RemoteIpAddress: REMOTE_IP_ADDRESS,
+                ForwardedFor: string.Empty
+            )
+        );
+    }
+
+    [Fact]
     public async Task BodyReadFailureAfterClientDisconnectIsNotReportedAsTooLargeAsync()
     {
         using CancellationTokenSource requestAborted = new();

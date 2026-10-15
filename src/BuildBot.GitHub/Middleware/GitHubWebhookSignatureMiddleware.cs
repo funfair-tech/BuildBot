@@ -82,10 +82,12 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
             forwardedFor: request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
         );
 
-        context.Response.StatusCode =
-            result == WebhookSignatureVerificationResult.BODY_TOO_LARGE
-                ? StatusCodes.Status413PayloadTooLarge
-                : StatusCodes.Status401Unauthorized;
+        context.Response.StatusCode = result switch
+        {
+            WebhookSignatureVerificationResult.BODY_TOO_LARGE => StatusCodes.Status413PayloadTooLarge,
+            WebhookSignatureVerificationResult.BODY_READ_FAILED => StatusCodes.Status400BadRequest,
+            _ => StatusCodes.Status401Unauthorized,
+        };
     }
 
     private string GetRemoteIpAddress(HttpContext context)
@@ -113,6 +115,10 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
             return WebhookSignatureVerificationResult.BODY_TOO_LARGE;
         }
 
+        // Counts what the buffering stream pulls from the transport, so a read failure can be told apart from the limit.
+        ReadCountingStream transport = new(request.Body);
+        request.Body = transport;
+
         // Model binding reads the body after this, so it must be buffered to be read twice.
         request.EnableBuffering(bufferThreshold: BUFFER_THRESHOLD, bufferLimit: BUFFER_LIMIT);
 
@@ -133,8 +139,11 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
         }
         catch (IOException) when (!cancellationToken.IsCancellationRequested)
         {
-            // The buffering stream throws a plain IOException once a body without Content-Length passes the limit.
-            return WebhookSignatureVerificationResult.BODY_TOO_LARGE;
+            // The buffering stream only throws for the limit after pulling a chunk that takes the total past it; a truncated
+            // or malformed body fails inside the transport read, before the count can pass the limit.
+            return transport.BytesRead > BUFFER_LIMIT
+                ? WebhookSignatureVerificationResult.BODY_TOO_LARGE
+                : WebhookSignatureVerificationResult.BODY_READ_FAILED;
         }
     }
 }
