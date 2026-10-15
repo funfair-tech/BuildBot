@@ -128,39 +128,17 @@ public sealed class DiscordBotTests : TestBase
     }
 
     [Fact]
-    public async Task PublishAsync_WhenClientThrows_LogsErrorAndDoesNotThrow()
+    public async Task PublishAsync_WhenClientThrows_PropagatesTheException()
     {
         (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
-        MockDiscordWebhookClientSendThrows(client: client, exception: new HttpRequestException("connection failed"));
+        HttpRequestException exception = new("connection failed");
+        MockDiscordWebhookClientSendThrows(client: client, exception: exception);
 
-        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
+        HttpRequestException thrown = await Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken())
+        );
 
-        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+        Assert.Same(expected: exception, actual: thrown);
         AssertSecretNeverLogged(logger);
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenCancelled_LogsWarningAndDoesNotThrow()
-    {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
-        using CancellationTokenSource cts = new();
-        await cts.CancelAsync();
-        MockDiscordWebhookClientSendThrows(client: client, exception: new OperationCanceledException(cts.Token));
-
-        await bot.PublishAsync(embed: Embed, cancellationToken: cts.Token);
-
-        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Warning, logger: logger));
-        Assert.Equal(expected: 0, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
-    }
-
-    [Fact]
-    public async Task PublishAsync_WhenClientCancelsWithoutCallerCancellation_LogsError()
-    {
-        (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
-        MockDiscordWebhookClientSendThrows(client: client, exception: new TaskCanceledException("timed out"));
-
-        await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
-
-        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
     }
 }
