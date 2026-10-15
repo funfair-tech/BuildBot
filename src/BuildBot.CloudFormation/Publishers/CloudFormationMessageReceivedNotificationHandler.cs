@@ -107,11 +107,10 @@ public sealed class CloudFormationMessageReceivedNotificationHandler
 
     private static IReadOnlyList<DiscordEmbedField> GetFields(in Deployment deployment, StackDetails? stackDetails)
     {
+        DiscordEmbedField[] fields = [AddArnEmbed(deployment), AddStatusEmbed(deployment)];
         string? version = stackDetails?.Version;
 
-        return string.IsNullOrWhiteSpace(version)
-            ? [AddArnEmbed(deployment), AddStatusEmbed(deployment)]
-            : [AddArnEmbed(deployment), AddStatusEmbed(deployment), AddVersionEmbed(version)];
+        return string.IsNullOrWhiteSpace(version) ? fields : [.. fields, AddVersionEmbed(version)];
     }
 
     private static DiscordEmbedField AddArnEmbed(in Deployment deployment)
