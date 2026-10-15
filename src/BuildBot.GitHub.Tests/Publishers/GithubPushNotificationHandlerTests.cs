@@ -201,7 +201,7 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
         Assert.Equal(expected: "testpusher pushed 2 commits to BuildBot (feature/my-feature)", actual: embed.Title);
         Assert.Equal(expected: new Uri("https://github.com/example/repo/compare/before...after"), actual: embed.Url);
         Assert.Null(embed.Description);
-        Assert.Null(embed.Colour);
+        Assert.Null(embed.Color);
         Assert.Equal(
             expected:
             [

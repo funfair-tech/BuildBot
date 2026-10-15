@@ -4,11 +4,11 @@ using System.Diagnostics;
 
 namespace BuildBot.Discord.Models;
 
-[DebuggerDisplay("{Title}: {Url} {Description} {Colour}")]
+[DebuggerDisplay("{Title}: {Url} {Description} {Color}")]
 public sealed record DiscordEmbed(
     string Title,
     Uri? Url,
     string? Description,
-    DiscordColour? Colour,
+    DiscordColor? Color,
     IReadOnlyList<DiscordEmbedField> Fields
 );

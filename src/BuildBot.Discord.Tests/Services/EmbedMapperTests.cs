@@ -16,7 +16,7 @@ public sealed class EmbedMapperTests : TestBase
             Title: "Title",
             Url: new("https://example.com/build"),
             Description: "Description",
-            Colour: DiscordColour.Red,
+            Color: DiscordColor.Red,
             Fields: [new(Name: "First", Value: "One"), new(Name: "Second", Value: "Two", Inline: true)]
         );
 
@@ -40,7 +40,7 @@ public sealed class EmbedMapperTests : TestBase
     [Fact]
     public void ToWebhookEmbed_WithoutOptionalValues_LeavesThemNull()
     {
-        DiscordEmbed embed = new(Title: string.Empty, Url: null, Description: string.Empty, Colour: null, Fields: []);
+        DiscordEmbed embed = new(Title: string.Empty, Url: null, Description: string.Empty, Color: null, Fields: []);
 
         WebhookEmbed result = EmbedMapper.ToWebhookEmbed(embed);
 
@@ -54,7 +54,7 @@ public sealed class EmbedMapperTests : TestBase
     [Fact]
     public void ToPayload_ContainsSingleMappedEmbed()
     {
-        DiscordEmbed embed = new(Title: "Title", Url: null, Description: null, Colour: DiscordColour.Green, Fields: []);
+        DiscordEmbed embed = new(Title: "Title", Url: null, Description: null, Color: DiscordColor.Green, Fields: []);
 
         WebhookPayload payload = EmbedMapper.ToPayload(embed);
 

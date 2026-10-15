@@ -17,8 +17,8 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 {
     private static readonly IReadOnlyList<ColourMapping> ColourMappings =
     [
-        new(State: "success", Colour: DiscordColour.Green),
-        new(State: "failure", Colour: DiscordColour.Red),
+        new(State: "success", Colour: DiscordColor.Green),
+        new(State: "failure", Colour: DiscordColor.Red),
     ];
 
     private readonly ILogger<GithubStatusNotificationHandler> _logger;
@@ -59,7 +59,7 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
             Title: $"{message.Description} for {message.Context} from {message.Repository.Name} ({branchName})",
             Url: EmbedUrl.FromString(message.TargetUrl),
             Description: $"Built at {message.StatusCommit.Sha}",
-            Colour: GetEmbedColour(message),
+            Color: GetEmbedColor(message),
             Fields: GetFields(message)
         );
     }
@@ -79,16 +79,16 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
         return new(Name: "Head commit", Value: $"{statusCommit.Author.Login} - {statusCommit.Commit.Message}");
     }
 
-    private static DiscordColour? GetEmbedColour(Status message)
+    private static DiscordColor? GetEmbedColor(Status message)
     {
         return ColourMappings
             .Where(mapping => mapping.IsMatch(message))
-            .Select(static DiscordColour? (mapping) => mapping.Colour)
+            .Select(static DiscordColor? (mapping) => mapping.Colour)
             .FirstOrDefault();
     }
 
     [DebuggerDisplay("{State} => {Colour}")]
-    private readonly record struct ColourMapping(string State, DiscordColour Colour)
+    private readonly record struct ColourMapping(string State, DiscordColor Colour)
     {
         public bool IsMatch(in Status message)
         {
