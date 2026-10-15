@@ -71,7 +71,7 @@
             "Essential": true,
             "Image": {
               "Fn::Sub": [
-                "117769150821.dkr.ecr.eu-west-1.amazonaws.com/funfair/${ApplicationContainer}:${Version}",
+                "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/funfair/${ApplicationContainer}:${Version}",
                 {
                   "Version": {
                     "Ref": "ApplicationVersion"
@@ -136,7 +136,7 @@
                 "awslogs-group": {
                   "Fn::Sub": ["/ecs/${Path}/", { "Path": { "Ref": "ApplicationName" } }]
                 },
-                "awslogs-region": "eu-west-1",
+                "awslogs-region": { "Ref": "AWS::Region" },
                 "awslogs-stream-prefix": "ecs"
               }
             },
@@ -172,7 +172,7 @@
         "Memory": {
           "Fn::FindInMap": ["Deployment", "Task", "Memory"]
         },
-        "ExecutionRoleArn": "arn:aws:iam::117769150821:role/ecsExecutionRole",
+        "ExecutionRoleArn": { "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ecsExecutionRole" },
         "RequiresCompatibilities": ["FARGATE"],
         "NetworkMode": "awsvpc",
         "Volumes": [],
