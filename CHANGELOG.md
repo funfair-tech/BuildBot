@@ -10,7 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 - ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
-- /github/* webhooks are verified against the X-Hub-Signature-256 HMAC-SHA256 signature (GitHub:WebhookSecret) before the body is parsed. Rejected requests get 401, or 413 for bodies over 25 MB, and are logged with the reason, delivery id, event, remote address and X-Forwarded-For. When the secret is empty or whitespace, requests are accepted unverified and a startup warning is logged (#422)
+- /github/* webhooks are verified against the X-Hub-Signature-256 HMAC-SHA256 signature (GitHub:WebhookSecret) before the body is parsed. Rejected requests get 401 (413 for bodies over 25 MB, 400 if the body cannot be read) and are logged with the reason, delivery id, event, remote address and X-Forwarded-For, with client-supplied values sanitised. When the secret is empty or whitespace, requests are accepted unverified and a startup warning is logged (#422)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
