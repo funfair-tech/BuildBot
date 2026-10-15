@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,7 +81,7 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
             reason: result,
             delivery: request.Headers[DELIVERY_HEADER].ToString(),
             gitHubEvent: request.Headers[EVENT_HEADER].ToString(),
-            remoteIpAddress: this._remoteIpAddressRetriever.Get(context).ToString(),
+            remoteIpAddress: this.GetRemoteIpAddress(context),
             forwardedFor: request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
         );
 
@@ -88,6 +89,19 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
             result == WebhookSignatureVerificationResult.BODY_TOO_LARGE
                 ? StatusCodes.Status413PayloadTooLarge
                 : StatusCodes.Status401Unauthorized;
+    }
+
+    private string GetRemoteIpAddress(HttpContext context)
+    {
+        try
+        {
+            return this._remoteIpAddressRetriever.Get(context).ToString();
+        }
+        catch (ArgumentException)
+        {
+            // The retriever throws when the transport has no remote address (Unix socket, TestServer), and a rejection must still be logged.
+            return string.Empty;
+        }
     }
 
     private async ValueTask<WebhookSignatureVerificationResult> VerifyBodyAsync(

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BuildBot.GitHub.Helpers;
 using BuildBot.GitHub.Middleware;
 using FunFair.Common.Web.Interfaces;
+using FunFair.Common.Web.Services;
 using FunFair.Test.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -189,6 +190,34 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
     }
 
     [Fact]
+    public async Task RejectionWithoutRemoteAddressLogsEmptyRemoteAddressAsync()
+    {
+        // DefaultHttpContext has no remote address, like a Unix socket or TestServer connection.
+        DefaultHttpContext httpContext = CreateWebhookContext(
+            body: CreateBody(),
+            signature: GitHubWebhookTestVectors.MismatchedSignature
+        );
+
+        await this.InvokeAsync(
+            secret: GitHubWebhookTestVectors.Secret,
+            httpContext: httpContext,
+            remoteIpAddressRetriever: new RemoteIpAddressRetriever()
+        );
+
+        this.AssertUnauthorisedWithoutCallingNext(httpContext);
+        this.AssertRejectionLogged(
+            new(
+                Path: string.Empty,
+                Reason: WebhookSignatureVerificationResult.SIGNATURE_MISMATCH,
+                Delivery: string.Empty,
+                GitHubEvent: string.Empty,
+                RemoteIpAddress: string.Empty,
+                ForwardedFor: string.Empty
+            )
+        );
+    }
+
+    [Fact]
     public async Task NoSecretConfiguredCallsNextWithoutSignatureAsync()
     {
         DefaultHttpContext httpContext = CreateWebhookContext(body: CreateBody(), signature: null);
@@ -255,11 +284,20 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
 
     private Task InvokeAsync(string secret, HttpContext httpContext)
     {
+        return this.InvokeAsync(
+            secret: secret,
+            httpContext: httpContext,
+            remoteIpAddressRetriever: this._remoteIpAddressRetriever
+        );
+    }
+
+    private Task InvokeAsync(string secret, HttpContext httpContext, IRemoteIpAddressRetriever remoteIpAddressRetriever)
+    {
         GitHubConfiguration configuration = new(secret);
         GitHubWebhookSignatureMiddleware middleware = new(
             configuration: configuration,
             verifier: new WebhookSignatureVerifier(configuration),
-            remoteIpAddressRetriever: this._remoteIpAddressRetriever,
+            remoteIpAddressRetriever: remoteIpAddressRetriever,
             logger: this._logger
         );
 
