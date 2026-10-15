@@ -10,7 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 - ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
-- TBD - to be finalized after review (#422)
+- GitHub webhook requests to /github/* are now verified against the X-Hub-Signature-256 HMAC-SHA256 signature using the GitHub:WebhookSecret setting, and rejected with 401 when the secret is set and the signature is missing or invalid; requests are accepted unverified, with a startup warning, when the secret is empty (#422)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
@@ -89,6 +89,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Deployment Changes
 - ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
 - ECS tasks now run under the ecsExecutionRole execution role (previously ecsTaskExecutionRole), which must have the standard ECS execution permissions (ECR pull, CloudWatch Logs) and secretsmanager:GetSecretValue on the BuildBot secret, read at task start-up (#419)
+- ECS task now gets GITHUB__WEBHOOKSECRET from the Secrets Manager key GITHUB_WEBHOOK_SECRET (#422)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
