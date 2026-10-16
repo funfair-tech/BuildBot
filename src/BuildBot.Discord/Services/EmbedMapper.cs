@@ -21,13 +21,15 @@ public static class EmbedMapper
 
     public static WebhookEmbed ToWebhookEmbed(DiscordEmbed embed)
     {
-        return new(
-            Title: NullIfEmpty(embed.Title),
-            Url: WebUrlOrNull(embed.Url),
-            Description: NullIfEmpty(embed.Description),
-            Color: embed.Color?.Value,
-            Author: StandardAuthor,
-            Fields: [.. embed.Fields.Select(ToWebhookEmbedField)]
+        return EmbedLimiter.Apply(
+            new(
+                Title: NullIfEmpty(embed.Title),
+                Url: WebUrlOrNull(embed.Url),
+                Description: NullIfEmpty(embed.Description),
+                Color: embed.Color?.Value,
+                Author: StandardAuthor,
+                Fields: [.. embed.Fields.Select(ToWebhookEmbedField)]
+            )
         );
     }
 

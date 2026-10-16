@@ -104,9 +104,17 @@ public sealed class GithubPushNotificationHandler : INotificationHandler<GithubP
     private static DiscordEmbedField CreateCommitEmbed(Commit commit)
     {
         return new(
-            Name: $"**{commit.Author.Username ?? commit.Author.Name}** - {commit.Message}",
+            Name: $"**{commit.Author.Username ?? commit.Author.Name}** - {FirstLine(commit.Message)}",
             Value: $"{commit.Added.Count} added, {commit.Modified.Count} modified, {commit.Removed.Count} removed"
         );
+    }
+
+    // The commit subject is the summary; the body would make the field name multi-line and hit Discord's name limit.
+    private static string FirstLine(string message)
+    {
+        int lineEnd = message.AsSpan().IndexOfAny('\r', '\n');
+
+        return lineEnd < 0 ? message : message[..lineEnd];
     }
 
     private static string GetCommitTitle(in Push message, string commitString)
