@@ -94,61 +94,10 @@
             ],
             "Secrets": [
               {
-                "Name": "DISCORD__TOKEN",
+                "Name": "DISCORD__WEBHOOKURL",
                 "ValueFrom": {
                   "Fn::Sub": [
-                    "${SecretsManagerArn}:DISCORD_TOKEN::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
-                          "SecretsManagerArn"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "DISCORD__SERVER",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:DISCORD_SERVER::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
-                          "SecretsManagerArn"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "DISCORD__CHANNEL",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:DISCORD_CHANNEL::",
-                    {
-                      "SecretsManagerArn": {
-                        "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
-                          "SecretsManagerArn"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "Name": "DISCORD__RELEASE_CHANNEL",
-                "ValueFrom": {
-                  "Fn::Sub": [
-                    "${SecretsManagerArn}:DISCORD_RELEASE_CHANNEL::",
+                    "${SecretsManagerArn}:DISCORD_WEBHOOK::",
                     {
                       "SecretsManagerArn": {
                         "Fn::FindInMap": [

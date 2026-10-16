@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.CloudFormation;
@@ -214,5 +215,98 @@ public sealed class CloudFormationMessageReceivedNotificationHandlerTests : Test
         await handler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
         await mediator.Received(1).Publish(Arg.Any<BotMessage>(), Arg.Any<CancellationToken>());
+    }
+
+    private static DiscordEmbed PublishedEmbed(IMediator mediator)
+    {
+        return mediator
+            .ReceivedCalls()
+            .Select(static call => call.GetArguments()[0])
+            .OfType<BotMessage>()
+            .Single()
+            .Message;
+    }
+
+    private async Task<DiscordEmbed> PublishAsync(Deployment deployment, StackDetails? stackDetails)
+    {
+        (
+            _,
+            ICloudFormationDeploymentExtractor extractor,
+            IAwsCloudFormation aws,
+            IMediator mediator,
+            CloudFormationMessageReceivedNotificationHandler handler
+        ) = this.CreateHandler();
+
+        extractor.ExtractDeploymentProperties(Arg.Any<CloudFormationMessageReceived>()).Returns(deployment);
+        aws.GetStackDetailsAsync(Arg.Any<Deployment>(), Arg.Any<CancellationToken>()).Returns(stackDetails);
+
+        await handler.Handle(notification: MakeNotification(VALID_ARN), cancellationToken: this.CancellationToken());
+
+        return PublishedEmbed(mediator);
+    }
+
+    [Fact]
+    public async Task Handle_WithoutStackDetails_PublishesExpectedEmbed()
+    {
+        DiscordEmbed embed = await this.PublishAsync(deployment: MakeDeployment(), stackDetails: null);
+
+        Assert.Equal(expected: "MyProject was deployed ", actual: embed.Title);
+        Assert.Equal(
+            expected: new Uri(
+                "https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/stackinfo?stackId=arn:aws:cf:eu-west-1:123:stack/MyStack/x"
+            ),
+            actual: embed.Url
+        );
+        Assert.Null(embed.Description);
+        Assert.Equal(expected: 0x2ECC71u, actual: embed.Color?.Value);
+        Assert.Equal(
+            expected:
+            [
+                new DiscordEmbedField(Name: "ARN", Value: "arn:aws:cf:eu-west-1:123:stack/MyStack/x"),
+                new DiscordEmbedField(Name: "Status", Value: "UPDATE_COMPLETE"),
+            ],
+            actual: embed.Fields
+        );
+    }
+
+    [Fact]
+    public async Task Handle_WithFailedDeploymentAndStackDetails_PublishesExpectedEmbed()
+    {
+        Deployment deployment = MakeDeployment() with { Status = "UPDATE_FAILED", Success = false };
+
+        DiscordEmbed embed = await this.PublishAsync(
+            deployment: deployment,
+            stackDetails: new StackDetails(Description: "A deployment", Version: "2.0.0")
+        );
+
+        Assert.Equal(expected: "MyProject (2.0.0) failed to deploy", actual: embed.Title);
+        Assert.Equal(expected: "A deployment", actual: embed.Description);
+        Assert.Equal(expected: 0xE74C3Cu, actual: embed.Color?.Value);
+        Assert.Equal(
+            expected:
+            [
+                new DiscordEmbedField(Name: "ARN", Value: "arn:aws:cf:eu-west-1:123:stack/MyStack/x"),
+                new DiscordEmbedField(Name: "Status", Value: "UPDATE_FAILED"),
+                new DiscordEmbedField(Name: "Version", Value: "2.0.0"),
+            ],
+            actual: embed.Fields
+        );
+    }
+
+    [Fact]
+    public async Task Handle_WithStackDetailsButNoVersion_OmitsVersionField()
+    {
+        DiscordEmbed embed = await this.PublishAsync(
+            deployment: MakeDeployment(),
+            stackDetails: new StackDetails(Description: "A deployment", Version: null)
+        );
+
+        Assert.Equal(expected: "MyProject was deployed ", actual: embed.Title);
+        Assert.Equal(expected: "A deployment", actual: embed.Description);
+        Assert.Equal(
+            expected: ["ARN", "Status"],
+            actual: embed.Fields.Select(static f => f.Name),
+            comparer: StringComparer.Ordinal
+        );
     }
 }

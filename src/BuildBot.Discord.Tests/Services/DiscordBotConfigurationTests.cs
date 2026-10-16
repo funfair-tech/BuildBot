@@ -1,4 +1,6 @@
-using BuildBot.Discord;
+using System;
+using System.Diagnostics;
+using System.Reflection;
 using FunFair.Test.Common;
 using Xunit;
 
@@ -6,55 +8,62 @@ namespace BuildBot.Discord.Tests.Services;
 
 public sealed class DiscordBotConfigurationTests : TestBase
 {
+    private const string WEBHOOK_URL = "https://example.com/webhook/secret-token";
+
     [Fact]
-    public void Token_ReturnsConstructorValue()
+    public void FromWebhookUrl_WithHttpsUrl_ReturnsConfiguredConfiguration()
     {
-        DiscordBotConfiguration config = new(
-            token: "my-token",
-            server: "server",
-            channel: "channel",
-            releaseChannel: "releases"
+        DiscordBotConfiguration config = DiscordBotConfiguration.FromWebhookUrl(WEBHOOK_URL);
+
+        Assert.Equal(expected: new Uri(WEBHOOK_URL), actual: config.WebhookUrl);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("/webhook/secret-token")]
+    [InlineData("webhook/secret-token")]
+    [InlineData("http://example.com/webhook/secret-token")]
+    [InlineData("ftp://example.com/webhook/secret-token")]
+    public static void FromWebhookUrl_WithMissingOrInvalidUrl_ThrowsWithoutRevealingValue(string? webhookUrl)
+    {
+        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() =>
+            DiscordBotConfiguration.FromWebhookUrl(webhookUrl)
         );
 
-        Assert.Equal(expected: "my-token", actual: config.Token);
+        Assert.Equal(
+            expected: "Discord:WebhookUrl must be configured as an absolute https URL",
+            actual: exception.Message
+        );
+        Assert.DoesNotContain(
+            expectedSubstring: "secret-token",
+            actualString: exception.ToString(),
+            comparisonType: StringComparison.Ordinal
+        );
     }
 
     [Fact]
-    public void Server_ReturnsConstructorValue()
+    public void ToString_DoesNotRevealWebhookUrl()
     {
-        DiscordBotConfiguration config = new(
-            token: "token",
-            server: "my-server",
-            channel: "channel",
-            releaseChannel: "releases"
-        );
+        DiscordBotConfiguration config = DiscordBotConfiguration.FromWebhookUrl(WEBHOOK_URL);
 
-        Assert.Equal(expected: "my-server", actual: config.Server);
+        string text = config.ToString();
+
+        Assert.Equal(expected: "DiscordBotConfiguration { Webhook = <redacted> }", actual: text);
     }
 
     [Fact]
-    public void Channel_ReturnsConstructorValue()
+    public void DebuggerDisplay_DoesNotReferenceWebhookUrl()
     {
-        DiscordBotConfiguration config = new(
-            token: "token",
-            server: "server",
-            channel: "my-channel",
-            releaseChannel: "releases"
+        DebuggerDisplayAttribute attribute = Assert.Single(
+            typeof(DiscordBotConfiguration).GetCustomAttributes<DebuggerDisplayAttribute>()
         );
 
-        Assert.Equal(expected: "my-channel", actual: config.Channel);
-    }
-
-    [Fact]
-    public void ReleaseChannel_ReturnsConstructorValue()
-    {
-        DiscordBotConfiguration config = new(
-            token: "token",
-            server: "server",
-            channel: "channel",
-            releaseChannel: "my-releases"
+        Assert.DoesNotContain(
+            expectedSubstring: nameof(DiscordBotConfiguration.WebhookUrl),
+            actualString: attribute.Value,
+            comparisonType: StringComparison.Ordinal
         );
-
-        Assert.Equal(expected: "my-releases", actual: config.ReleaseChannel);
     }
 }
