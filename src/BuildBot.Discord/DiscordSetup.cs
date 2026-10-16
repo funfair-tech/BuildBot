@@ -4,9 +4,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BuildBot.Discord.Services;
+using BuildBot.Discord.Services.LoggingExtensions;
 using BuildBot.ServiceModel.ComponentStatus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Timeout;
 
@@ -102,7 +104,8 @@ public static class DiscordSetup
     public static IAsyncPolicy<HttpResponseMessage> CreateWebhookPolicy(
         TimeProvider timeProvider,
         in TimeSpan attemptTimeout,
-        Func<int, TimeSpan> backoff
+        Func<int, TimeSpan> backoff,
+        ILogger<DiscordWebhookClient> logger
     )
     {
         IAsyncPolicy<HttpResponseMessage> retry = Policy<HttpResponseMessage>
@@ -118,7 +121,8 @@ public static class DiscordSetup
                         now: timeProvider.GetUtcNow(),
                         backoff: backoff
                     ),
-                onRetryAsync: static (_, _, _, _) => Task.CompletedTask
+                onRetryAsync: (outcome, delay, attempt, _) =>
+                    LogRetryAsync(outcome: outcome, attempt: attempt, delay: delay, logger: logger)
             );
 
         // Each attempt gets its own allowance inside the retry, so one stalled attempt is retried rather than
@@ -128,6 +132,29 @@ public static class DiscordSetup
         );
 
         return Policy.WrapAsync(retry, attemptTimeoutPolicy);
+    }
+
+    private static Task LogRetryAsync(
+        DelegateResult<HttpResponseMessage> outcome,
+        int attempt,
+        in TimeSpan delay,
+        ILogger<DiscordWebhookClient> logger
+    )
+    {
+        if (outcome.Result is null)
+        {
+            logger.LogRetryingAfterException(
+                attempt: attempt,
+                exceptionType: outcome.Exception.GetType().Name,
+                delay: delay
+            );
+
+            return Task.CompletedTask;
+        }
+
+        logger.LogRetryingAfterStatusCode(attempt: attempt, statusCode: outcome.Result.StatusCode, delay: delay);
+
+        return Task.CompletedTask;
     }
 
     private static IServiceCollection AddDiscordWebhookHttpClient(this IServiceCollection services)
@@ -142,7 +169,8 @@ public static class DiscordSetup
                     CreateWebhookPolicy(
                         timeProvider: serviceProvider.GetRequiredService<TimeProvider>(),
                         attemptTimeout: AttemptAllowance,
-                        backoff: ExponentialBackoff
+                        backoff: ExponentialBackoff,
+                        logger: serviceProvider.GetRequiredService<ILogger<DiscordWebhookClient>>()
                     )
             )
             .Services;
