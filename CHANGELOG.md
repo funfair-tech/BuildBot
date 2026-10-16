@@ -85,6 +85,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
 - ECS service name is now set with ServiceName (#421)
+- ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
@@ -96,6 +97,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Before the first deploy, delete the existing buildbot.funfair.io Route 53 record; the stack then creates and owns it, with up to about 15 minutes of NXDOMAIN (#421)
 - This deploy replaces the ECS service, target group and listener rule (#421)
 - Payloads over 10 MB are rejected by API Gateway (#421)
+- The deploy user needs logs:PutRetentionPolicy on the /ecs/* log group, because the stack now sets a 30-day retention on it (#421)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
