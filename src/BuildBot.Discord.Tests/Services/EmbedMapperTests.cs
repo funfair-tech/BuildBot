@@ -56,6 +56,44 @@ public sealed class EmbedMapperTests : TestBase
     }
 
     [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t\r\n")]
+    public static void ToWebhookEmbed_WithBlankTitleAndDescription_OmitsThem(string value)
+    {
+        DiscordEmbed embed = new(Title: value, Url: null, Description: value, Color: null, Fields: []);
+
+        WebhookEmbed result = EmbedMapper.ToWebhookEmbed(embed);
+
+        Assert.Null(result.Title);
+        Assert.Null(result.Description);
+    }
+
+    [Theory]
+    [InlineData("", "Value", "-", "Value")]
+    [InlineData(" ", "Value", "-", "Value")]
+    [InlineData("Name", "", "Name", "-")]
+    [InlineData("Name", " \t", "Name", "-")]
+    [InlineData("", "", "-", "-")]
+    [InlineData(" Name ", " Value ", " Name ", " Value ")]
+    public static void ToWebhookEmbed_WithBlankFieldNameOrValue_SubstitutesPlaceholder(
+        string name,
+        string value,
+        string expectedName,
+        string expectedValue
+    )
+    {
+        DiscordEmbedField field = new(Name: name, Value: value, Inline: true);
+
+        WebhookEmbed result = EmbedMapper.ToWebhookEmbed(CreateEmbedWithFields([field]));
+
+        Assert.Equal(
+            expected: new WebhookEmbedField(Name: expectedName, Value: expectedValue, Inline: true),
+            actual: Assert.Single(result.Fields)
+        );
+    }
+
+    [Theory]
     [InlineData("https://example.com/build/1")]
     [InlineData("http://example.com/build/1")]
     public static void ToWebhookEmbed_WithWebUrl_KeepsUrl(string value)
