@@ -45,7 +45,10 @@
         "HostedZoneName": "funfair.io.",
         "ApiCertificateArn": "arn:aws:acm:eu-west-1:117769150821:certificate/d9405a08-95c9-4924-acde-d86cda5f29e8",
         "VpcLinkEgressCidr": "172.31.0.0/16",
-        "InternalAlbServerName": "buildbot.funfair.io"
+        "InternalAlbServerName": "buildbot.funfair.io",
+        "ApiThrottlingBurstLimit": "20",
+        "ApiThrottlingRateLimit": "10",
+        "ApiAccessLogRetentionInDays": "30"
       }
     }
   },
@@ -677,7 +680,49 @@
           "Ref": "Api"
         },
         "StageName": "$default",
-        "AutoDeploy": true
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "ThrottlingBurstLimit": {
+            "Fn::FindInMap": [
+              "Settings",
+              "Values",
+              "ApiThrottlingBurstLimit"
+            ]
+          },
+          "ThrottlingRateLimit": {
+            "Fn::FindInMap": [
+              "Settings",
+              "Values",
+              "ApiThrottlingRateLimit"
+            ]
+          }
+        },
+        "AccessLogSettings": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "ApiAccessLogGroup",
+              "Arn"
+            ]
+          },
+          "Format": "{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"routeKey\":\"$context.routeKey\",\"status\":\"$context.status\",\"responseLength\":\"$context.responseLength\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationErrorMessage\":\"$context.integrationErrorMessage\"}"
+        }
+      }
+    },
+    "ApiAccessLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "DeletionPolicy": "Delete",
+      "UpdateReplacePolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/apigateway/${ApplicationName}/"
+        },
+        "RetentionInDays": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "ApiAccessLogRetentionInDays"
+          ]
+        }
       }
     },
     "ApiDomainName": {
