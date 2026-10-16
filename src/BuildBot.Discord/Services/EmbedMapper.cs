@@ -7,6 +7,10 @@ namespace BuildBot.Discord.Services;
 
 public static class EmbedMapper
 {
+    // Discord trims field names and values and rejects the whole message when either ends up empty, so a blank one is
+    // replaced with a visible placeholder to keep the field and the rest of the notification.
+    public const string BLANK_FIELD_PLACEHOLDER = "-";
+
     public static WebhookEmbedAuthor StandardAuthor { get; } =
         new(
             Name: "FunFair BuildBot",
@@ -23,9 +27,9 @@ public static class EmbedMapper
     {
         return EmbedLimiter.Apply(
             new(
-                Title: NullIfEmpty(embed.Title),
+                Title: NullIfBlank(embed.Title),
                 Url: WebUrlOrNull(embed.Url),
-                Description: NullIfEmpty(embed.Description),
+                Description: NullIfBlank(embed.Description),
                 Color: embed.Color?.Value,
                 Author: StandardAuthor,
                 Fields: [.. embed.Fields.Select(ToWebhookEmbedField)]
@@ -35,7 +39,7 @@ public static class EmbedMapper
 
     private static WebhookEmbedField ToWebhookEmbedField(DiscordEmbedField field)
     {
-        return new(Name: field.Name, Value: field.Value, Inline: field.Inline);
+        return new(Name: PlaceholderIfBlank(field.Name), Value: PlaceholderIfBlank(field.Value), Inline: field.Inline);
     }
 
     // Discord rejects the whole message when an embed URL is not http(s); on Linux "/path" parses as a file URI.
@@ -50,8 +54,14 @@ public static class EmbedMapper
             || StringComparer.Ordinal.Equals(x: scheme, y: Uri.UriSchemeHttp);
     }
 
-    private static string? NullIfEmpty(string? value)
+    // Title and description are optional, so a blank one is omitted rather than sent as an empty string Discord may reject.
+    private static string? NullIfBlank(string? value)
     {
-        return string.IsNullOrEmpty(value) ? null : value;
+        return string.IsNullOrWhiteSpace(value) ? null : value;
+    }
+
+    private static string PlaceholderIfBlank(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? BLANK_FIELD_PLACEHOLDER : value;
     }
 }
