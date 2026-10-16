@@ -8,6 +8,7 @@ using BuildBot.ServiceModel.ComponentStatus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Polly;
+using Polly.Timeout;
 
 namespace BuildBot.Discord;
 
@@ -16,6 +17,9 @@ public static class DiscordSetup
     private const int MAX_RETRIES = 3;
     private static readonly TimeSpan MaximumRetryAfterDelay = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan AttemptAllowance = TimeSpan.FromSeconds(30);
+
+    // Held as a field so the delegate is created once, rather than via a lazily-cached method-group conversion.
+    private static readonly Func<int, TimeSpan> ExponentialBackoff = CalculateRetryDelay;
 
     // HttpClient.Timeout wraps the whole policy pipeline, so it must cover every attempt and every wait between them.
     public static readonly TimeSpan WebhookTimeout =
@@ -43,11 +47,21 @@ public static class DiscordSetup
 
     public static TimeSpan CalculateRetryDelay(int attempt, HttpResponseMessage? response, in DateTimeOffset now)
     {
+        return CalculateRetryDelay(attempt: attempt, response: response, now: now, backoff: ExponentialBackoff);
+    }
+
+    private static TimeSpan CalculateRetryDelay(
+        int attempt,
+        HttpResponseMessage? response,
+        in DateTimeOffset now,
+        Func<int, TimeSpan> backoff
+    )
+    {
         TimeSpan? retryAfter = GetRetryAfter(retryAfter: response?.Headers.RetryAfter, now: now);
 
         if (retryAfter is null)
         {
-            return CalculateRetryDelay(attempt);
+            return backoff(attempt);
         }
 
         return retryAfter.Value < TimeSpan.Zero ? TimeSpan.Zero : retryAfter.Value;
@@ -85,17 +99,35 @@ public static class DiscordSetup
         return retryAfter.Delta ?? retryAfter.Date.GetValueOrDefault(now) - now;
     }
 
-    private static IAsyncPolicy<HttpResponseMessage> CreateRetryPolicy(TimeProvider timeProvider)
+    public static IAsyncPolicy<HttpResponseMessage> CreateWebhookPolicy(
+        TimeProvider timeProvider,
+        in TimeSpan attemptTimeout,
+        Func<int, TimeSpan> backoff
+    )
     {
-        return Policy<HttpResponseMessage>
+        IAsyncPolicy<HttpResponseMessage> retry = Policy<HttpResponseMessage>
             .Handle<HttpRequestException>()
+            .Or<TimeoutRejectedException>()
             .OrResult(response => ShouldRetry(response: response, now: timeProvider.GetUtcNow()))
             .WaitAndRetryAsync(
                 retryCount: MAX_RETRIES,
                 sleepDurationProvider: (attempt, outcome, _) =>
-                    CalculateRetryDelay(attempt: attempt, response: outcome.Result, now: timeProvider.GetUtcNow()),
+                    CalculateRetryDelay(
+                        attempt: attempt,
+                        response: outcome.Result,
+                        now: timeProvider.GetUtcNow(),
+                        backoff: backoff
+                    ),
                 onRetryAsync: static (_, _, _, _) => Task.CompletedTask
             );
+
+        // Each attempt gets its own allowance inside the retry, so one stalled attempt is retried rather than
+        // consuming the whole HttpClient.Timeout; the caller's own cancellation still surfaces as cancellation.
+        IAsyncPolicy<HttpResponseMessage> attemptTimeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(
+            attemptTimeout
+        );
+
+        return Policy.WrapAsync(retry, attemptTimeoutPolicy);
     }
 
     private static IServiceCollection AddDiscordWebhookHttpClient(this IServiceCollection services)
@@ -106,7 +138,12 @@ public static class DiscordSetup
             .RemoveAllLoggers()
             .ConfigureHttpClient(static client => client.Timeout = WebhookTimeout)
             .AddPolicyHandler(
-                (serviceProvider, _) => CreateRetryPolicy(serviceProvider.GetRequiredService<TimeProvider>())
+                (serviceProvider, _) =>
+                    CreateWebhookPolicy(
+                        timeProvider: serviceProvider.GetRequiredService<TimeProvider>(),
+                        attemptTimeout: AttemptAllowance,
+                        backoff: ExponentialBackoff
+                    )
             )
             .Services;
     }
