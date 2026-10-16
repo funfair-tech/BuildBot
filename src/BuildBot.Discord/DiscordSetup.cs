@@ -8,14 +8,18 @@ using BuildBot.ServiceModel.ComponentStatus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Polly;
-using Polly.Extensions.Http;
 
 namespace BuildBot.Discord;
 
 public static class DiscordSetup
 {
     private const int MAX_RETRIES = 3;
-    private static readonly TimeSpan MaximumRateLimitDelay = TimeSpan.FromSeconds(60);
+    private static readonly TimeSpan MaximumRetryAfterDelay = TimeSpan.FromSeconds(60);
+    private static readonly TimeSpan AttemptAllowance = TimeSpan.FromSeconds(30);
+
+    // HttpClient.Timeout wraps the whole policy pipeline, so it must cover every attempt and every wait between them.
+    public static readonly TimeSpan WebhookTimeout =
+        MaximumRetryAfterDelay * MAX_RETRIES + AttemptAllowance * (MAX_RETRIES + 1);
 
     public static IServiceCollection AddDiscord(this IServiceCollection services, DiscordBotConfiguration discordConfig)
     {
@@ -39,17 +43,35 @@ public static class DiscordSetup
 
     public static TimeSpan CalculateRetryDelay(int attempt, HttpResponseMessage? response, in DateTimeOffset now)
     {
-        if (response?.StatusCode == HttpStatusCode.TooManyRequests)
-        {
-            TimeSpan? retryAfter = GetRetryAfter(retryAfter: response.Headers.RetryAfter, now: now);
+        TimeSpan? retryAfter = GetRetryAfter(retryAfter: response?.Headers.RetryAfter, now: now);
 
-            if (retryAfter is not null)
-            {
-                return Clamp(retryAfter.Value);
-            }
+        if (retryAfter is null)
+        {
+            return CalculateRetryDelay(attempt);
         }
 
-        return CalculateRetryDelay(attempt);
+        return retryAfter.Value < TimeSpan.Zero ? TimeSpan.Zero : retryAfter.Value;
+    }
+
+    public static bool ShouldRetry(HttpResponseMessage response, in DateTimeOffset now)
+    {
+        if (!IsTransientFailure(response.StatusCode))
+        {
+            return false;
+        }
+
+        // A server asking for a longer wait than we are prepared to give is not retried; the response is returned as-is.
+        TimeSpan? retryAfter = GetRetryAfter(retryAfter: response.Headers.RetryAfter, now: now);
+
+        return retryAfter is null || retryAfter.Value <= MaximumRetryAfterDelay;
+    }
+
+    private static bool IsTransientFailure(HttpStatusCode statusCode)
+    {
+        return statusCode
+            is >= HttpStatusCode.InternalServerError
+                or HttpStatusCode.RequestTimeout
+                or HttpStatusCode.TooManyRequests;
     }
 
     private static TimeSpan? GetRetryAfter(RetryConditionHeaderValue? retryAfter, in DateTimeOffset now)
@@ -63,21 +85,11 @@ public static class DiscordSetup
         return retryAfter.Delta ?? retryAfter.Date.GetValueOrDefault(now) - now;
     }
 
-    private static TimeSpan Clamp(in TimeSpan delay)
-    {
-        if (delay < TimeSpan.Zero)
-        {
-            return TimeSpan.Zero;
-        }
-
-        return delay < MaximumRateLimitDelay ? delay : MaximumRateLimitDelay;
-    }
-
     private static IAsyncPolicy<HttpResponseMessage> CreateRetryPolicy(TimeProvider timeProvider)
     {
-        return HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .OrResult(static response => response.StatusCode == HttpStatusCode.TooManyRequests)
+        return Policy<HttpResponseMessage>
+            .Handle<HttpRequestException>()
+            .OrResult(response => ShouldRetry(response: response, now: timeProvider.GetUtcNow()))
             .WaitAndRetryAsync(
                 retryCount: MAX_RETRIES,
                 sleepDurationProvider: (attempt, outcome, _) =>
@@ -92,6 +104,7 @@ public static class DiscordSetup
         return services
             .AddHttpClient(DiscordWebhookClient.HttpClientName)
             .RemoveAllLoggers()
+            .ConfigureHttpClient(static client => client.Timeout = WebhookTimeout)
             .AddPolicyHandler(
                 (serviceProvider, _) => CreateRetryPolicy(serviceProvider.GetRequiredService<TimeProvider>())
             )
