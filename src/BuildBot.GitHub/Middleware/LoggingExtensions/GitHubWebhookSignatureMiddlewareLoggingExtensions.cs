@@ -7,7 +7,7 @@ internal static partial class GitHubWebhookSignatureMiddlewareLoggingExtensions
     [LoggerMessage(
         EventId = 1,
         Level = LogLevel.Warning,
-        Message = "Github: Rejected webhook to {Path}: {Reason} (delivery: {Delivery}, event: {GitHubEvent}, remote address: {RemoteIpAddress}, forwarded for: {ForwardedFor})"
+        Message = "Github: Rejected webhook to {Path}: {Reason} (delivery: {Delivery}, event: {GitHubEvent}, remote address: {RemoteIpAddress}, forwarded for: {ForwardedFor}, client ip: {ClientIp})"
     )]
     public static partial void WebhookSignatureRejected(
         this ILogger<GitHubWebhookSignatureMiddleware> logger,
@@ -16,6 +16,7 @@ internal static partial class GitHubWebhookSignatureMiddlewareLoggingExtensions
         string delivery,
         string gitHubEvent,
         string remoteIpAddress,
-        string forwardedFor
+        string forwardedFor,
+        string clientIp
     );
 }

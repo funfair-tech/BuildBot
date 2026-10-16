@@ -26,6 +26,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
 
     private const string REMOTE_IP_ADDRESS = "10.0.0.5";
 
+    private const string CLIENT_IP_ADDRESS = "192.0.2.44";
+
     private const long GITHUB_PAYLOAD_LIMIT = 25L * 1024 * 1024;
 
     private readonly ILogger<GitHubWebhookSignatureMiddleware> _logger;
@@ -89,7 +91,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: string.Empty,
                 GitHubEvent: string.Empty,
                 RemoteIpAddress: REMOTE_IP_ADDRESS,
-                ForwardedFor: string.Empty
+                ForwardedFor: string.Empty,
+                ClientIp: string.Empty
             )
         );
     }
@@ -113,7 +116,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: string.Empty,
                 GitHubEvent: string.Empty,
                 RemoteIpAddress: REMOTE_IP_ADDRESS,
-                ForwardedFor: string.Empty
+                ForwardedFor: string.Empty,
+                ClientIp: string.Empty
             )
         );
     }
@@ -164,7 +168,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: string.Empty,
                 GitHubEvent: string.Empty,
                 RemoteIpAddress: REMOTE_IP_ADDRESS,
-                ForwardedFor: string.Empty
+                ForwardedFor: string.Empty,
+                ClientIp: string.Empty
             )
         );
     }
@@ -195,6 +200,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         httpContext.Request.Headers["X-GitHub-Delivery"] = "72d3162e-cc78-11e3-81ab-4c9367dc0958";
         httpContext.Request.Headers["X-GitHub-Event"] = "push";
         httpContext.Request.Headers["X-Forwarded-For"] = "203.0.113.7, 198.51.100.2";
+        httpContext.Request.Headers["X-Client-Ip"] = CLIENT_IP_ADDRESS;
 
         await this.InvokeAsync(httpContext: httpContext);
 
@@ -206,7 +212,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: "72d3162e-cc78-11e3-81ab-4c9367dc0958",
                 GitHubEvent: "push",
                 RemoteIpAddress: REMOTE_IP_ADDRESS,
-                ForwardedFor: "203.0.113.7, 198.51.100.2"
+                ForwardedFor: "203.0.113.7, 198.51.100.2",
+                ClientIp: CLIENT_IP_ADDRESS
             )
         );
     }
@@ -222,6 +229,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         httpContext.Request.Headers["X-GitHub-Delivery"] = "id\nGithub: forged line";
         httpContext.Request.Headers["X-GitHub-Event"] = new string('e', count: LogValueSanitiser.MAXIMUM_LENGTH + 1);
         httpContext.Request.Headers["X-Forwarded-For"] = "203.0.113.7\r\n";
+        httpContext.Request.Headers["X-Client-Ip"] =
+            CLIENT_IP_ADDRESS + "\r\n" + new string('c', count: LogValueSanitiser.MAXIMUM_LENGTH);
 
         await this.InvokeAsync(httpContext: httpContext);
 
@@ -233,7 +242,11 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: "id?Github: forged line",
                 GitHubEvent: new string('e', count: LogValueSanitiser.MAXIMUM_LENGTH) + "...",
                 RemoteIpAddress: REMOTE_IP_ADDRESS,
-                ForwardedFor: "203.0.113.7??"
+                ForwardedFor: "203.0.113.7??",
+                ClientIp: CLIENT_IP_ADDRESS
+                    + "??"
+                    + new string('c', count: LogValueSanitiser.MAXIMUM_LENGTH - CLIENT_IP_ADDRESS.Length - 2)
+                    + "..."
             )
         );
     }
@@ -257,7 +270,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: string.Empty,
                 GitHubEvent: string.Empty,
                 RemoteIpAddress: string.Empty,
-                ForwardedFor: string.Empty
+                ForwardedFor: string.Empty,
+                ClientIp: string.Empty
             )
         );
     }
@@ -364,7 +378,8 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
                 Delivery: string.Empty,
                 GitHubEvent: string.Empty,
                 RemoteIpAddress: REMOTE_IP_ADDRESS,
-                ForwardedFor: string.Empty
+                ForwardedFor: string.Empty,
+                ClientIp: string.Empty
             )
         );
     }
@@ -389,6 +404,7 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         Assert.Equal(expected: expected.GitHubEvent, actual: values["GitHubEvent"]);
         Assert.Equal(expected: expected.RemoteIpAddress, actual: values["RemoteIpAddress"]);
         Assert.Equal(expected: expected.ForwardedFor, actual: values["ForwardedFor"]);
+        Assert.Equal(expected: expected.ClientIp, actual: values["ClientIp"]);
         Assert.DoesNotContain(
             collection: values.Values,
             filter: static value =>
@@ -396,13 +412,14 @@ public sealed class GitHubWebhookSignatureMiddlewareTests : TestBase
         );
     }
 
-    [DebuggerDisplay("{Reason} {Path} {Delivery} {GitHubEvent} {RemoteIpAddress} {ForwardedFor}")]
+    [DebuggerDisplay("{Reason} {Path} {Delivery} {GitHubEvent} {RemoteIpAddress} {ForwardedFor} {ClientIp}")]
     private readonly record struct ExpectedRejection(
         string Path,
         WebhookSignatureVerificationResult Reason,
         string Delivery,
         string GitHubEvent,
         string RemoteIpAddress,
-        string ForwardedFor
+        string ForwardedFor,
+        string ClientIp
     );
 }

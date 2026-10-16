@@ -17,6 +17,10 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
     private const string DELIVERY_HEADER = "X-GitHub-Delivery";
     private const string EVENT_HEADER = "X-GitHub-Event";
 
+    // Set by the API Gateway from the connection's source IP, replacing any client value, because behind the VPC Link
+    // X-Forwarded-For only carries the link's private address.
+    private const string CLIENT_IP_HEADER = "X-Client-Ip";
+
     // Typical push payloads are well under this, so they stay in memory rather than spilling to a temp file.
     private const int BUFFER_THRESHOLD = 1024 * 1024;
 
@@ -81,7 +85,8 @@ public sealed class GitHubWebhookSignatureMiddleware : IMiddleware
             remoteIpAddress: this.GetRemoteIpAddress(context),
             forwardedFor: LogValueSanitiser.Sanitise(
                 request.Headers[ForwardedHeadersDefaults.XForwardedForHeaderName].ToString()
-            )
+            ),
+            clientIp: LogValueSanitiser.Sanitise(request.Headers[CLIENT_IP_HEADER].ToString())
         );
 
         context.Response.StatusCode = result switch
