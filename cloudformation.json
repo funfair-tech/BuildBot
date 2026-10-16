@@ -11,6 +11,9 @@
     "ApplicationVersion": {
       "Type": "String"
     },
+    "ApiHost": {
+      "Type": "String"
+    },
     "LoadBalancerHostName": {
       "Type": "String"
     },
@@ -38,7 +41,11 @@
         "SecurityGroupIDs": "sg-e3e65a9a,sg-0272027302777cb4d",
         "SubnetIDs": "subnet-fabb50b3,subnet-d5ea03b2,subnet-c68aa09e",
         "VpcID": "vpc-ad3bd9ca",
-        "LoadBalancerListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/internal/fbd77c1a39a60f7f/e01c11e315c3ff6e"
+        "LoadBalancerListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/internal/fbd77c1a39a60f7f/e01c11e315c3ff6e",
+        "HostedZoneName": "funfair.io.",
+        "ApiCertificateArn": "arn:aws:acm:eu-west-1:117769150821:certificate/d9405a08-95c9-4924-acde-d86cda5f29e8",
+        "VpcLinkEgressCidr": "172.31.0.0/16",
+        "InternalAlbServerName": "buildbot.funfair.io"
       }
     }
   },
@@ -488,6 +495,277 @@
         "Priority": {
           "Ref": "LoadBalancerPriority"
         }
+      }
+    },
+    "VpcLinkSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": {
+          "Fn::Sub": "${ApplicationName} API Gateway VPC Link to the internal load balancer"
+        },
+        "VpcId": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "VpcID"
+          ]
+        },
+        "SecurityGroupEgress": [
+          {
+            "Description": "HTTPS to the internal load balancer",
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIp": {
+              "Fn::FindInMap": [
+                "Settings",
+                "Values",
+                "VpcLinkEgressCidr"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "VpcLink": {
+      "Type": "AWS::ApiGatewayV2::VpcLink",
+      "Properties": {
+        "Name": {
+          "Ref": "ApplicationName"
+        },
+        "SubnetIds": {
+          "Fn::Split": [
+            ",",
+            {
+              "Fn::FindInMap": [
+                "Settings",
+                "Values",
+                "SubnetIDs"
+              ]
+            }
+          ]
+        },
+        "SecurityGroupIds": [
+          {
+            "Ref": "VpcLinkSecurityGroup"
+          }
+        ]
+      }
+    },
+    "Api": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": {
+          "Ref": "ApplicationName"
+        },
+        "ProtocolType": "HTTP"
+      }
+    },
+    "ApiIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "IntegrationType": "HTTP_PROXY",
+        "IntegrationMethod": "ANY",
+        "ConnectionType": "VPC_LINK",
+        "ConnectionId": {
+          "Ref": "VpcLink"
+        },
+        "IntegrationUri": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "LoadBalancerListenerArn"
+          ]
+        },
+        "PayloadFormatVersion": "1.0",
+        "RequestParameters": {
+          "overwrite:header.Host": {
+            "Ref": "LoadBalancerHostName"
+          },
+          "overwrite:header.X-Client-Ip": "$context.identity.sourceIp"
+        },
+        "TlsConfig": {
+          "ServerNameToVerify": {
+            "Fn::FindInMap": [
+              "Settings",
+              "Values",
+              "InternalAlbServerName"
+            ]
+          }
+        }
+      }
+    },
+    "PingRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "RouteKey": "GET /ping",
+        "Target": {
+          "Fn::Sub": "integrations/${ApiIntegration}"
+        }
+      }
+    },
+    "GitHubPingRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "RouteKey": "POST /github/ping",
+        "Target": {
+          "Fn::Sub": "integrations/${ApiIntegration}"
+        }
+      }
+    },
+    "GitHubPushRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "RouteKey": "POST /github/push",
+        "Target": {
+          "Fn::Sub": "integrations/${ApiIntegration}"
+        }
+      }
+    },
+    "GitHubStatusRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "RouteKey": "POST /github/status",
+        "Target": {
+          "Fn::Sub": "integrations/${ApiIntegration}"
+        }
+      }
+    },
+    "WatchtowerDeployRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "RouteKey": "POST /watchtower/deploy",
+        "Target": {
+          "Fn::Sub": "integrations/${ApiIntegration}"
+        }
+      }
+    },
+    "CloudFormationDeployRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "RouteKey": "POST /cloudformation/deploy",
+        "Target": {
+          "Fn::Sub": "integrations/${ApiIntegration}"
+        }
+      }
+    },
+    "ApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true
+      }
+    },
+    "ApiDomainName": {
+      "Type": "AWS::ApiGatewayV2::DomainName",
+      "Properties": {
+        "DomainName": {
+          "Ref": "ApiHost"
+        },
+        "DomainNameConfigurations": [
+          {
+            "CertificateArn": {
+              "Fn::FindInMap": [
+                "Settings",
+                "Values",
+                "ApiCertificateArn"
+              ]
+            },
+            "EndpointType": "REGIONAL",
+            "SecurityPolicy": "TLS_1_2"
+          }
+        ]
+      }
+    },
+    "ApiMapping": {
+      "Type": "AWS::ApiGatewayV2::ApiMapping",
+      "Properties": {
+        "ApiId": {
+          "Ref": "Api"
+        },
+        "DomainName": {
+          "Ref": "ApiDomainName"
+        },
+        "Stage": {
+          "Ref": "ApiStage"
+        }
+      }
+    },
+    "ApiDnsRecord": {
+      "Type": "AWS::Route53::RecordSet",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "HostedZoneName": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "HostedZoneName"
+          ]
+        },
+        "Name": {
+          "Ref": "ApiHost"
+        },
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "ApiDomainName",
+              "RegionalDomainName"
+            ]
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "ApiDomainName",
+              "RegionalHostedZoneId"
+            ]
+          },
+          "EvaluateTargetHealth": false
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ApiEndpoint": {
+      "Description": "Default endpoint of the HTTP API",
+      "Value": {
+        "Fn::GetAtt": [
+          "Api",
+          "ApiEndpoint"
+        ]
+      }
+    },
+    "ApiRegionalDomainName": {
+      "Description": "Regional domain name targeted by the API host alias record",
+      "Value": {
+        "Fn::GetAtt": [
+          "ApiDomainName",
+          "RegionalDomainName"
+        ]
       }
     }
   }
