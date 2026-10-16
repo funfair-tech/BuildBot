@@ -11,6 +11,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 - ECS task secrets are no longer passed as plain Environment values; they are injected through the ECS Secrets mechanism from the BuildBot Secrets Manager secret, referenced by the SecretsManagerArn parameter (#419)
 - /github/* webhooks are verified against the X-Hub-Signature-256 HMAC-SHA256 signature (GitHub:WebhookSecret) before the body is parsed. Rejected requests get 401 (413 for bodies over 25 MB, 400 if the body cannot be read) and are logged with the reason, delivery id, event, remote address and X-Forwarded-For, with client-supplied values sanitised. When the secret is empty or whitespace, requests are accepted unverified and a startup warning is logged (#422)
+- BuildBot is served through an API Gateway HTTP API over a VPC Link to the internal load balancer instead of the public testing load balancer, exposing only the six application routes (#421)
+- Rejected webhook logs include the caller's IP address from X-Client-Ip, set by the API Gateway (#421)
 ### Added
 - BuildBot.GitHub - Increased code coverage to 100%
 - [BuildBot.CloudFormation] Increase code coverage to 100%
@@ -30,6 +32,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Added missing IncludeAssets on NuGet package references required by FunFair.BuildCheck
 - Added missing build;buildTransitive IncludeAssets on Serilog package reference required by FunFair.BuildCheck
 - CloudFormation task settings now live in Mappings so every deploy applies them, reducing ECS task memory from 4 GB to 1 GB
+- On a new stack, ECS tasks no longer fail to start with a 'log group does not exist' error, and their final logs are kept when the stack is deleted, because the ECS application log group is now created before the tasks and removed after them (#421)
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs
@@ -81,6 +84,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.299
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
+- CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
+- ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
+- The ECS service is now named after the application, so it can be found by name in the DiscordBots cluster (#421)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
@@ -89,6 +95,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - ECS service deployment circuit breaker with rollback, so tasks that fail to start (e.g. a missing secret key) fail the deploy quickly (#419)
 - ECS tasks now read their secrets at start-up using the ecsTaskExecutionRole execution role, which must have secretsmanager:GetSecretValue on the BuildBot secret (#419)
 - ECS task now gets GITHUB__WEBHOOKSECRET from the Secrets Manager key GITHUB_WEBHOOK_SECRET; the key must exist in the BuildBot secret (an empty value disables verification) or the task will not start (#422)
+- Before the first deploy, delete the existing buildbot.funfair.io Route 53 record; the stack then creates and owns it, with up to about 15 minutes of NXDOMAIN (#421)
+- This deploy replaces the ECS service, target group and listener rule (#421)
+- Payloads over 10 MB are rejected by API Gateway (#421)
+- The deploy user needs logs:PutRetentionPolicy on the /ecs/* log group, because the stack now sets a 30-day retention on it (#421)
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
