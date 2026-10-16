@@ -84,8 +84,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
-- ECS service name is now set with ServiceName (#421)
 - ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
+- The ECS service is now named after the application, so it can be found by name in the DiscordBots cluster (#421)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
