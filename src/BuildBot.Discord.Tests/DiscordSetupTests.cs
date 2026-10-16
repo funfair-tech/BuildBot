@@ -286,8 +286,13 @@ public sealed class DiscordSetupTests : TestBase
             .GetRequiredService<IHttpClientFactory>()
             .CreateClient(DiscordWebhookClient.HttpClientName);
 
-        // 3 retries waiting up to 60s each, plus 4 attempts of 30s each.
-        Assert.Equal(expected: TimeSpan.FromSeconds(300), actual: client.Timeout);
+        // 4 attempts of up to 30s each, plus 3 retries waiting up to the 60s maximum Retry-After each.
+        TimeSpan worstCaseRetryBudget = TimeSpan.FromSeconds(30) * 4 + TimeSpan.FromSeconds(60) * 3;
+
+        Assert.True(
+            client.Timeout > worstCaseRetryBudget,
+            userMessage: $"Timeout {client.Timeout} must exceed the worst-case retry budget {worstCaseRetryBudget}"
+        );
         Assert.Equal(expected: DiscordSetup.WebhookTimeout, actual: client.Timeout);
     }
 

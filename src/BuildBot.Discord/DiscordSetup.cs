@@ -23,9 +23,13 @@ public static class DiscordSetup
     // Held as a field so the delegate is created once, rather than via a lazily-cached method-group conversion.
     private static readonly Func<int, TimeSpan> ExponentialBackoff = CalculateRetryDelay;
 
-    // HttpClient.Timeout wraps the whole policy pipeline, so it must cover every attempt and every wait between them.
+    // Scheduling and logging overhead between attempts is not counted in the retry budget below.
+    private static readonly TimeSpan WebhookTimeoutSlack = TimeSpan.FromSeconds(30);
+
+    // HttpClient.Timeout wraps the whole policy pipeline, so it must cover every attempt and every wait between them,
+    // with slack so it cannot cancel the final attempt when every earlier attempt and wait used its full allowance.
     public static readonly TimeSpan WebhookTimeout =
-        MaximumRetryAfterDelay * MAX_RETRIES + AttemptAllowance * (MAX_RETRIES + 1);
+        MaximumRetryAfterDelay * MAX_RETRIES + AttemptAllowance * (MAX_RETRIES + 1) + WebhookTimeoutSlack;
 
     public static IServiceCollection AddDiscord(this IServiceCollection services, DiscordBotConfiguration discordConfig)
     {
