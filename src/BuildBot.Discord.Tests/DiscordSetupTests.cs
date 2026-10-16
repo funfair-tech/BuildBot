@@ -25,15 +25,7 @@ public sealed class DiscordSetupTests : TestBase
         "https://example.com/webhook/" + SECRET
     );
     private static readonly Uri WebhookUrl = Config.WebhookUrl;
-    private static readonly DateTimeOffset Now = new(
-        year: 2026,
-        month: 1,
-        day: 2,
-        hour: 3,
-        minute: 4,
-        second: 5,
-        offset: TimeSpan.Zero
-    );
+    private static readonly DateTimeOffset Now = MockDateTimeSources.Past.GetUtcNow();
 
     [Theory]
     [InlineData(1, 2)]
@@ -50,12 +42,12 @@ public sealed class DiscordSetupTests : TestBase
     [Theory]
     [InlineData(HttpStatusCode.TooManyRequests, 5, null, 5)]
     [InlineData(HttpStatusCode.TooManyRequests, 0, null, 0)]
-    [InlineData(HttpStatusCode.TooManyRequests, 3600, null, 60)]
+    [InlineData(HttpStatusCode.TooManyRequests, -5, null, 0)]
     [InlineData(HttpStatusCode.TooManyRequests, null, 5, 5)]
-    [InlineData(HttpStatusCode.TooManyRequests, null, 120, 60)]
     [InlineData(HttpStatusCode.TooManyRequests, null, -5, 0)]
     [InlineData(HttpStatusCode.TooManyRequests, null, null, 2)]
-    [InlineData(HttpStatusCode.ServiceUnavailable, 5, null, 2)]
+    [InlineData(HttpStatusCode.ServiceUnavailable, 5, null, 5)]
+    [InlineData(HttpStatusCode.InternalServerError, null, 7, 7)]
     [InlineData(HttpStatusCode.InternalServerError, null, null, 2)]
     public static void CalculateRetryDelay_ForResponse_ReturnsExpectedDelay(
         HttpStatusCode statusCode,
@@ -73,6 +65,36 @@ public sealed class DiscordSetupTests : TestBase
         TimeSpan actual = DiscordSetup.CalculateRetryDelay(attempt: 1, response: response, now: Now);
 
         Assert.Equal(expected: TimeSpan.FromSeconds(expectedSeconds), actual: actual);
+    }
+
+    [Theory]
+    [InlineData(HttpStatusCode.TooManyRequests, null, null, true)]
+    [InlineData(HttpStatusCode.TooManyRequests, 60, null, true)]
+    [InlineData(HttpStatusCode.TooManyRequests, 61, null, false)]
+    [InlineData(HttpStatusCode.TooManyRequests, -5, null, true)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, 60, true)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, 61, false)]
+    [InlineData(HttpStatusCode.TooManyRequests, null, -5, true)]
+    [InlineData(HttpStatusCode.ServiceUnavailable, 5, null, true)]
+    [InlineData(HttpStatusCode.ServiceUnavailable, 3600, null, false)]
+    [InlineData(HttpStatusCode.InternalServerError, null, null, true)]
+    [InlineData(HttpStatusCode.RequestTimeout, null, null, true)]
+    [InlineData(HttpStatusCode.OK, null, null, false)]
+    [InlineData(HttpStatusCode.NotFound, 5, null, false)]
+    public static void ShouldRetry_ReturnsExpectedDecision(
+        HttpStatusCode statusCode,
+        int? retryAfterDeltaSeconds,
+        int? retryAfterDateOffsetSeconds,
+        bool expected
+    )
+    {
+        using HttpResponseMessage response = new(statusCode);
+        response.Headers.RetryAfter = CreateRetryAfter(
+            deltaSeconds: retryAfterDeltaSeconds,
+            dateOffsetSeconds: retryAfterDateOffsetSeconds
+        );
+
+        Assert.Equal(expected: expected, actual: DiscordSetup.ShouldRetry(response: response, now: Now));
     }
 
     [Fact]
@@ -159,21 +181,7 @@ public sealed class DiscordSetupTests : TestBase
             static () => new HttpResponseMessage(HttpStatusCode.NoContent)
         );
 
-        ServiceCollection services = new();
-        services
-            .AddLogging()
-            .AddDiscord(Config)
-            .AddHttpClient(DiscordWebhookClient.HttpClientName)
-            .ConfigurePrimaryHttpMessageHandler(() => handler);
-
-        await using ServiceProvider serviceProvider = services.BuildServiceProvider();
-        IDiscordWebhookClient client = serviceProvider.GetRequiredService<IDiscordWebhookClient>();
-
-        WebhookSendResult result = await client.SendAsync(
-            webhookUrl: WebhookUrl,
-            payload: EmbedMapper.ToPayload(TestEmbeds.WithTitle("Title")),
-            cancellationToken: this.CancellationToken()
-        );
+        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
 
         Assert.Equal(expected: new(Success: true, StatusCode: HttpStatusCode.NoContent), actual: result);
         Assert.Equal(expected: 2, actual: handler.Requests.Count);
@@ -184,6 +192,75 @@ public sealed class DiscordSetupTests : TestBase
                     expected: """{"embeds":[{"title":"Title","author":{"name":"FunFair BuildBot","url":"https://funfair.io","icon_url":"https://s2.coinmarketcap.com/static/img/coins/32x32/1757.png"},"fields":[]}]}""",
                     actual: r.Body
                 )
+        );
+    }
+
+    [Fact]
+    public async Task WebhookClient_RetriesServiceUnavailableHonouringRetryAfter()
+    {
+        using TestHttpMessageHandler handler = new(
+            static () =>
+                new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                {
+                    Headers = { RetryAfter = new RetryConditionHeaderValue(TimeSpan.Zero) },
+                },
+            static () => new HttpResponseMessage(HttpStatusCode.NoContent)
+        );
+
+        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
+
+        Assert.Equal(expected: new(Success: true, StatusCode: HttpStatusCode.NoContent), actual: result);
+        Assert.Equal(expected: 2, actual: handler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task WebhookClient_DoesNotRetryWhenRetryAfterExceedsMaximum()
+    {
+        using TestHttpMessageHandler handler = new(static () =>
+            new HttpResponseMessage(HttpStatusCode.TooManyRequests)
+            {
+                Headers = { RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromHours(1)) },
+            }
+        );
+
+        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
+
+        Assert.Equal(expected: new(Success: false, StatusCode: HttpStatusCode.TooManyRequests), actual: result);
+        Assert.Single(handler.Requests);
+    }
+
+    [Fact]
+    public async Task WebhookHttpClient_TimeoutCoversFullRetryBudget()
+    {
+        ServiceCollection services = new();
+        services.AddLogging().AddDiscord(Config);
+
+        await using ServiceProvider serviceProvider = services.BuildServiceProvider();
+        using HttpClient client = serviceProvider
+            .GetRequiredService<IHttpClientFactory>()
+            .CreateClient(DiscordWebhookClient.HttpClientName);
+
+        // 3 retries waiting up to 60s each, plus 4 attempts of 30s each.
+        Assert.Equal(expected: TimeSpan.FromSeconds(300), actual: client.Timeout);
+        Assert.Equal(expected: DiscordSetup.WebhookTimeout, actual: client.Timeout);
+    }
+
+    private async ValueTask<WebhookSendResult> SendViaWebhookClientAsync(TestHttpMessageHandler handler)
+    {
+        ServiceCollection services = new();
+        services
+            .AddLogging()
+            .AddDiscord(Config)
+            .AddHttpClient(DiscordWebhookClient.HttpClientName)
+            .ConfigurePrimaryHttpMessageHandler(() => handler);
+
+        await using ServiceProvider serviceProvider = services.BuildServiceProvider();
+        IDiscordWebhookClient client = serviceProvider.GetRequiredService<IDiscordWebhookClient>();
+
+        return await client.SendAsync(
+            webhookUrl: WebhookUrl,
+            payload: EmbedMapper.ToPayload(TestEmbeds.WithTitle("Title")),
+            cancellationToken: this.CancellationToken()
         );
     }
 
