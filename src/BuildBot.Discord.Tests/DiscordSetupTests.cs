@@ -184,13 +184,19 @@ public sealed class DiscordSetupTests : TestBase
             static () => new HttpResponseMessage(HttpStatusCode.NoContent)
         );
 
-        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
+        CapturingLogger<DiscordSetupTests> logger = new();
+
+        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler: handler, logger: logger);
 
         Assert.Equal(
             expected: new(Success: true, StatusCode: HttpStatusCode.NoContent, ResponseBody: string.Empty),
             actual: result
         );
         Assert.Equal(expected: 2, actual: handler.Requests.Count);
+        AssertRetryWarningLoggedWithoutSecret(
+            logger: logger,
+            expectedMessage: "DISCORD: Webhook attempt 1 failed with HTTP TooManyRequests; retrying in 00:00:00"
+        );
         Assert.All(
             collection: handler.Requests,
             action: static r =>
@@ -213,13 +219,32 @@ public sealed class DiscordSetupTests : TestBase
             static () => new HttpResponseMessage(HttpStatusCode.NoContent)
         );
 
-        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
+        CapturingLogger<DiscordSetupTests> logger = new();
+
+        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler: handler, logger: logger);
 
         Assert.Equal(
             expected: new(Success: true, StatusCode: HttpStatusCode.NoContent, ResponseBody: string.Empty),
             actual: result
         );
         Assert.Equal(expected: 2, actual: handler.Requests.Count);
+        AssertRetryWarningLoggedWithoutSecret(
+            logger: logger,
+            expectedMessage: "DISCORD: Webhook attempt 1 failed with HTTP ServiceUnavailable; retrying in 00:00:00"
+        );
+    }
+
+    private static void AssertRetryWarningLoggedWithoutSecret(
+        CapturingLogger<DiscordSetupTests> logger,
+        string expectedMessage
+    )
+    {
+        CapturedLogEntry warning = Assert.Single(
+            collection: logger.Entries,
+            predicate: static entry => entry.Level == LogLevel.Warning
+        );
+        Assert.Equal(expected: expectedMessage, actual: warning.Message);
+        Assert.DoesNotContain(collection: logger.Entries, filter: static entry => ContainsSecret(entry));
     }
 
     [Fact]
@@ -232,13 +257,16 @@ public sealed class DiscordSetupTests : TestBase
             }
         );
 
-        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
+        CapturingLogger<DiscordSetupTests> logger = new();
+
+        WebhookSendResult result = await this.SendViaWebhookClientAsync(handler: handler, logger: logger);
 
         Assert.Equal(
             expected: new(Success: false, StatusCode: HttpStatusCode.TooManyRequests, ResponseBody: string.Empty),
             actual: result
         );
         Assert.Single(handler.Requests);
+        Assert.DoesNotContain(collection: logger.Entries, filter: static entry => entry.Level == LogLevel.Warning);
     }
 
     [Fact]
@@ -260,7 +288,8 @@ public sealed class DiscordSetupTests : TestBase
     [Fact]
     public async Task WebhookPolicy_RetriesTimedOutAttempt()
     {
-        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy();
+        CapturingLogger<DiscordWebhookClient> logger = new();
+        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy(logger);
         int attempts = 0;
 
         using HttpResponseMessage response = await policy.ExecuteAsync(
@@ -278,12 +307,45 @@ public sealed class DiscordSetupTests : TestBase
 
         Assert.Equal(expected: HttpStatusCode.NoContent, actual: response.StatusCode);
         Assert.Equal(expected: 2, actual: attempts);
+        AssertSingleRetryWarning(
+            logger: logger,
+            expectedMessage: "DISCORD: Webhook attempt 1 failed with TimeoutRejectedException; retrying in 00:00:00"
+        );
+    }
+
+    [Fact]
+    public async Task WebhookPolicy_RetriesFailedRequestWithoutLoggingItsMessage()
+    {
+        CapturingLogger<DiscordWebhookClient> logger = new();
+        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy(logger);
+        int attempts = 0;
+
+        using HttpResponseMessage response = await policy.ExecuteAsync(
+            action: _ =>
+            {
+                if (Interlocked.Increment(ref attempts) == 1)
+                {
+                    throw new HttpRequestException("Failed to reach " + WebhookUrl);
+                }
+
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NoContent));
+            },
+            cancellationToken: this.CancellationToken()
+        );
+
+        Assert.Equal(expected: HttpStatusCode.NoContent, actual: response.StatusCode);
+        AssertSingleRetryWarning(
+            logger: logger,
+            expectedMessage: "DISCORD: Webhook attempt 1 failed with HttpRequestException; retrying in 00:00:00"
+        );
+        Assert.DoesNotContain(collection: logger.Entries, filter: static entry => ContainsSecret(entry));
     }
 
     [Fact]
     public async Task WebhookPolicy_WhenEveryAttemptTimesOut_ThrowsAfterAllRetries()
     {
-        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy();
+        CapturingLogger<DiscordWebhookClient> logger = new();
+        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy(logger);
         int attempts = 0;
 
         await Assert.ThrowsAsync<TimeoutRejectedException>(async () =>
@@ -299,15 +361,28 @@ public sealed class DiscordSetupTests : TestBase
         );
 
         Assert.Equal(expected: 4, actual: attempts);
+        string[] expectedMessages =
+        [
+            "DISCORD: Webhook attempt 1 failed with TimeoutRejectedException; retrying in 00:00:00",
+            "DISCORD: Webhook attempt 2 failed with TimeoutRejectedException; retrying in 00:00:00",
+            "DISCORD: Webhook attempt 3 failed with TimeoutRejectedException; retrying in 00:00:00",
+        ];
+        Assert.Equal(
+            expected: expectedMessages,
+            actual: logger.Entries.Select(static entry => entry.Message),
+            comparer: StringComparer.Ordinal
+        );
     }
 
     [Fact]
     public async Task WebhookPolicy_WhenCallerCancels_DoesNotRetry()
     {
+        CapturingLogger<DiscordWebhookClient> logger = new();
         IAsyncPolicy<HttpResponseMessage> policy = DiscordSetup.CreateWebhookPolicy(
             timeProvider: MockDateTimeSources.Past,
             attemptTimeout: Timeout.InfiniteTimeSpan,
-            backoff: static _ => TimeSpan.Zero
+            backoff: static _ => TimeSpan.Zero,
+            logger: logger
         );
         using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(this.CancellationToken());
         TaskCompletionSource attemptStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -332,6 +407,7 @@ public sealed class DiscordSetupTests : TestBase
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await executing);
 
         Assert.Equal(expected: 1, actual: attempts);
+        Assert.Empty(logger.Entries);
     }
 
     private static async ValueTask<HttpResponseMessage> ExecutePolicyAsync(
@@ -343,13 +419,21 @@ public sealed class DiscordSetupTests : TestBase
         return await policy.ExecuteAsync(action: action, cancellationToken: cancellationToken);
     }
 
-    private static IAsyncPolicy<HttpResponseMessage> CreateFastTimeoutPolicy()
+    private static IAsyncPolicy<HttpResponseMessage> CreateFastTimeoutPolicy(ILogger<DiscordWebhookClient> logger)
     {
         return DiscordSetup.CreateWebhookPolicy(
             timeProvider: MockDateTimeSources.Past,
             attemptTimeout: TimeSpan.FromMilliseconds(1),
-            backoff: static _ => TimeSpan.Zero
+            backoff: static _ => TimeSpan.Zero,
+            logger: logger
         );
+    }
+
+    private static void AssertSingleRetryWarning(CapturingLogger<DiscordWebhookClient> logger, string expectedMessage)
+    {
+        CapturedLogEntry entry = Assert.Single(logger.Entries);
+        Assert.Equal(expected: LogLevel.Warning, actual: entry.Level);
+        Assert.Equal(expected: expectedMessage, actual: entry.Message);
     }
 
     private static async Task<HttpResponseMessage> StallAsync(CancellationToken cancellationToken)
@@ -359,11 +443,17 @@ public sealed class DiscordSetupTests : TestBase
         throw new InvalidOperationException("A stalled attempt only ends by cancellation");
     }
 
-    private async ValueTask<WebhookSendResult> SendViaWebhookClientAsync(TestHttpMessageHandler handler)
+    private async ValueTask<WebhookSendResult> SendViaWebhookClientAsync(
+        TestHttpMessageHandler handler,
+        CapturingLogger<DiscordSetupTests> logger
+    )
     {
+        ILoggerProvider loggerProvider = GetSubstitute<ILoggerProvider>();
+        loggerProvider.CreateLogger(Arg.Any<string>()).Returns(logger);
+
         ServiceCollection services = new();
         services
-            .AddLogging()
+            .AddLogging(builder => builder.AddProvider(loggerProvider))
             .AddDiscord(Config)
             .AddHttpClient(DiscordWebhookClient.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(() => handler);
