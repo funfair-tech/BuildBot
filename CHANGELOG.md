@@ -83,6 +83,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - Discord notifications are sent through a channel webhook (Discord:WebhookUrl / DISCORD__WEBHOOKURL) instead of a Discord.Net bot login (#423)
 - Startup fails if the Discord webhook URL is missing or not an absolute https URL (#423)
+- Discord notifications are truncated to Discord's embed length limits instead of being rejected by Discord when a title, description, field or total length is exceeded (#423)
+- Push notifications show only the first line of each commit message instead of the full message (#423)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
