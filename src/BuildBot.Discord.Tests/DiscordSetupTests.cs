@@ -82,6 +82,12 @@ public sealed class DiscordSetupTests : TestBase
     [InlineData(HttpStatusCode.ServiceUnavailable, 3600, null, false)]
     [InlineData(HttpStatusCode.InternalServerError, null, null, true)]
     [InlineData(HttpStatusCode.RequestTimeout, null, null, true)]
+    [InlineData(HttpStatusCode.BadGateway, null, null, true)]
+    [InlineData(HttpStatusCode.ServiceUnavailable, null, null, true)]
+    [InlineData(HttpStatusCode.GatewayTimeout, null, null, true)]
+    [InlineData(HttpStatusCode.NotImplemented, null, null, false)]
+    [InlineData(HttpStatusCode.HttpVersionNotSupported, null, null, false)]
+    [InlineData(HttpStatusCode.InsufficientStorage, null, null, false)]
     [InlineData(HttpStatusCode.OK, null, null, false)]
     [InlineData(HttpStatusCode.NotFound, 5, null, false)]
     public static void ShouldRetry_ReturnsExpectedDecision(
