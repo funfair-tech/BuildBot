@@ -51,7 +51,11 @@ public sealed class DiscordBot : IDiscordBot, IComponentStatus
         }
         else
         {
-            this._logger.LogSendRejected(title: embed.Title, statusCode: result.StatusCode);
+            this._logger.LogSendRejected(
+                title: embed.Title,
+                statusCode: result.StatusCode,
+                responseBody: result.ResponseBody
+            );
         }
     }
 }

@@ -14,11 +14,12 @@ internal static partial class DiscordBotLoggingExtensions
     [LoggerMessage(
         EventId = 4,
         Level = LogLevel.Error,
-        Message = "DISCORD: Failed to send message {title}: HTTP {statusCode}"
+        Message = "DISCORD: Failed to send message {title}: HTTP {statusCode}: {responseBody}"
     )]
     public static partial void LogSendRejected(
         this ILogger<DiscordBot> logger,
         string title,
-        HttpStatusCode statusCode
+        HttpStatusCode statusCode,
+        string responseBody
     );
 }

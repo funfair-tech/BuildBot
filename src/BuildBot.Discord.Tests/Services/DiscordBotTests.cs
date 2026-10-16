@@ -20,6 +20,7 @@ namespace BuildBot.Discord.Tests.Services;
 public sealed class DiscordBotTests : TestBase
 {
     private const string SECRET = "secret-token";
+    private const string REJECTION_BODY = """{"embeds":["0"]}""";
     private static readonly DiscordBotConfiguration Config = DiscordBotConfiguration.FromWebhookUrl(
         "https://example.com/webhook/" + SECRET
     );
@@ -98,7 +99,9 @@ public sealed class DiscordBotTests : TestBase
                 payload: Arg.Do<WebhookPayload>(p => captured = p),
                 cancellationToken: Arg.Any<CancellationToken>()
             )
-            .Returns(new WebhookSendResult(Success: true, StatusCode: HttpStatusCode.NoContent));
+            .Returns(
+                new WebhookSendResult(Success: true, StatusCode: HttpStatusCode.NoContent, ResponseBody: string.Empty)
+            );
 
         await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
 
@@ -118,12 +121,25 @@ public sealed class DiscordBotTests : TestBase
         (IDiscordWebhookClient client, CapturingLogger<DiscordBot> logger, DiscordBot bot) = CreateBot();
         MockDiscordWebhookClientSend(
             client: client,
-            result: new(Success: false, StatusCode: HttpStatusCode.BadRequest)
+            result: new(Success: false, StatusCode: HttpStatusCode.BadRequest, ResponseBody: REJECTION_BODY)
         );
 
         await bot.PublishAsync(embed: Embed, cancellationToken: this.CancellationToken());
 
-        Assert.Equal(expected: 1, actual: LogCallsAt(level: LogLevel.Error, logger: logger));
+        CapturedLogEntry error = Assert.Single(
+            collection: logger.Entries,
+            predicate: static entry => entry.Level == LogLevel.Error
+        );
+        Assert.Contains(
+            expectedSubstring: REJECTION_BODY,
+            actualString: error.Message,
+            comparisonType: StringComparison.Ordinal
+        );
+        Assert.Contains(
+            expectedSubstring: "BadRequest",
+            actualString: error.Message,
+            comparisonType: StringComparison.Ordinal
+        );
         AssertSecretNeverLogged(logger);
     }
 

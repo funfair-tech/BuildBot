@@ -183,7 +183,10 @@ public sealed class DiscordSetupTests : TestBase
 
         WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
 
-        Assert.Equal(expected: new(Success: true, StatusCode: HttpStatusCode.NoContent), actual: result);
+        Assert.Equal(
+            expected: new(Success: true, StatusCode: HttpStatusCode.NoContent, ResponseBody: string.Empty),
+            actual: result
+        );
         Assert.Equal(expected: 2, actual: handler.Requests.Count);
         Assert.All(
             collection: handler.Requests,
@@ -209,7 +212,10 @@ public sealed class DiscordSetupTests : TestBase
 
         WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
 
-        Assert.Equal(expected: new(Success: true, StatusCode: HttpStatusCode.NoContent), actual: result);
+        Assert.Equal(
+            expected: new(Success: true, StatusCode: HttpStatusCode.NoContent, ResponseBody: string.Empty),
+            actual: result
+        );
         Assert.Equal(expected: 2, actual: handler.Requests.Count);
     }
 
@@ -225,7 +231,10 @@ public sealed class DiscordSetupTests : TestBase
 
         WebhookSendResult result = await this.SendViaWebhookClientAsync(handler);
 
-        Assert.Equal(expected: new(Success: false, StatusCode: HttpStatusCode.TooManyRequests), actual: result);
+        Assert.Equal(
+            expected: new(Success: false, StatusCode: HttpStatusCode.TooManyRequests, ResponseBody: string.Empty),
+            actual: result
+        );
         Assert.Single(handler.Requests);
     }
 
