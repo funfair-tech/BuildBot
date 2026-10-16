@@ -321,7 +321,7 @@
     "ECSService": {
       "Type": "AWS::ECS::Service",
       "Properties": {
-        "Name": {
+        "ServiceName": {
           "Ref": "ApplicationName"
         },
         "Cluster": {
