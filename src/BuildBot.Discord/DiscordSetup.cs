@@ -82,12 +82,17 @@ public static class DiscordSetup
         return retryAfter is null || retryAfter.Value <= MaximumRetryAfterDelay;
     }
 
+    // Only codes that can succeed on a later attempt; permanent server failures such as 501 or 505 fail immediately
+    // rather than holding up the queue through every backoff wait.
     private static bool IsTransientFailure(HttpStatusCode statusCode)
     {
         return statusCode
-            is >= HttpStatusCode.InternalServerError
-                or HttpStatusCode.RequestTimeout
-                or HttpStatusCode.TooManyRequests;
+            is HttpStatusCode.RequestTimeout
+                or HttpStatusCode.TooManyRequests
+                or HttpStatusCode.InternalServerError
+                or HttpStatusCode.BadGateway
+                or HttpStatusCode.ServiceUnavailable
+                or HttpStatusCode.GatewayTimeout;
     }
 
     private static TimeSpan? GetRetryAfter(RetryConditionHeaderValue? retryAfter, in DateTimeOffset now)
