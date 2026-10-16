@@ -212,6 +212,25 @@ public sealed class GithubPushNotificationHandlerTests : TestBase
         );
     }
 
+    [Theory]
+    [InlineData("Subject line\n\nBody text")]
+    [InlineData("Subject line\r\n\r\nBody text")]
+    public async Task PublishedEmbedFieldNameUsesFirstLineOfCommitMessageAsync(string message)
+    {
+        (IMediator mediator, GithubPushNotificationHandler handler) = this.CreateHandler();
+
+        Push push = MakePush(
+            repoName: NORMAL_REPO,
+            gitRef: NORMAL_REF,
+            commits: [MakeCommit(message: message, username: "devuser")]
+        );
+
+        await handler.Handle(notification: new(push), cancellationToken: this.CancellationToken());
+
+        DiscordEmbedField field = Assert.Single(mediator.PublishedEmbed().Fields);
+        Assert.Equal(expected: "**devuser** - Subject line", actual: field.Name);
+    }
+
     [Fact]
     public async Task PublishedEmbedForSingleCommitUsesSingularTitleAsync()
     {
