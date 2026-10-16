@@ -62,7 +62,9 @@ CloudFormation cannot import an existing Route 53 record set, so the existing `b
      }'
    ```
 
-3. Run the deploy straight away. The stack creates the `A` alias record pointing at the API Gateway custom domain. The record has a `Retain` deletion policy, so deleting or replacing the stack leaves it in place.
+3. Run the deploy straight away. The stack creates the `A` alias record pointing at the API Gateway custom domain. The record has a `Retain` deletion policy, so deleting or replacing the stack leaves it in place. Keep the output of step 1, so the old record can be restored with an `UPSERT` if the change has to be backed out.
+
+4. If the deploy fails and rolls back, the `Retain` policy also keeps the newly created record, which then points at the API Gateway custom domain that the rollback removed, and a retry fails because the record already exists. Repeat steps 1 and 2 (the alias values are now the API Gateway ones) before retrying the deploy.
 
 ## Changelog
 
