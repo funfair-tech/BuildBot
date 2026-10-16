@@ -10,6 +10,7 @@ using FunFair.Test.Common;
 using FunFair.Test.Infrastructure.Mocks;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NSubstitute.Core;
 using Xunit;
 
 namespace BuildBot.Discord.Tests.Services;
@@ -17,6 +18,8 @@ namespace BuildBot.Discord.Tests.Services;
 public sealed class DiscordMessageSenderTests : TestBase
 {
     private const int PUBLISH_FAILED_EVENT_ID = 7;
+    private const string SECRET = "secret-token";
+    private const string FAILURE_MESSAGE = "Failed to reach https://example.com/webhook/" + SECRET;
     private static readonly TimeSpan CompletionWait = TimeSpan.FromSeconds(10);
 
     private static (
@@ -201,7 +204,7 @@ public sealed class DiscordMessageSenderTests : TestBase
             )
             .Do(
                 Callback
-                    .First(_ => throw new HttpRequestException("connection failed"))
+                    .First(_ => throw new HttpRequestException(FAILURE_MESSAGE))
                     .Then(_ => secondPublishAttempted.TrySetResult())
             );
 
@@ -229,11 +232,53 @@ public sealed class DiscordMessageSenderTests : TestBase
                 predicate: static entry => entry.Level == LogLevel.Error
             );
             Assert.Equal(expected: PUBLISH_FAILED_EVENT_ID, actual: failure.EventId.Id);
-            Assert.Contains(
-                expectedSubstring: "First",
+
+            // Only the exception type is logged; its message carries the webhook URL and so the token.
+            Assert.Equal(
+                expected: "DISCORD: Failed to publish message First with HttpRequestException",
+                actual: failure.Message
+            );
+            Assert.DoesNotContain(
+                expectedSubstring: SECRET,
                 actualString: failure.Message,
                 comparisonType: StringComparison.Ordinal
             );
         }
+    }
+
+    [Fact]
+    public async Task FailedPublish_DoesNotAttachTheExceptionToTheLog()
+    {
+        IDiscordBot bot = GetSubstitute<IDiscordBot>();
+        bot.When(async x =>
+                await x.PublishAsync(embed: Arg.Any<DiscordEmbed>(), cancellationToken: Arg.Any<CancellationToken>())
+            )
+            .Do(_ => throw new HttpRequestException(FAILURE_MESSAGE));
+        IMessageChannel<BotMessage> messageChannel = GetSubstitute<IMessageChannel<BotMessage>>();
+        messageChannel
+            .ReadAllAsync(Arg.Any<CancellationToken>())
+            .Returns(new BotMessage[] { new(TestEmbeds.WithTitle("First")) }.ToAsyncEnumerable());
+        ILogger<DiscordMessageSender> logger = GetSubstitute<ILogger<DiscordMessageSender>>();
+        logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
+
+        using (DiscordMessageSender service = new(bot: bot, botMessageChannel: messageChannel, logger: logger))
+        {
+            CancellationToken cancellationToken = this.CancellationToken();
+            await service.StartAsync(cancellationToken);
+
+            Assert.NotNull(service.ExecuteTask);
+            await service.ExecuteTask.WaitAsync(timeout: CompletionWait, cancellationToken: cancellationToken);
+
+            await service.StopAsync(cancellationToken);
+        }
+
+        // The exception object would be written by any sink that renders it, message and all.
+        ICall logCall = Assert.Single(collection: logger.ReceivedCalls(), predicate: static call => IsLogCall(call));
+        Assert.Null(logCall.GetArguments()[3]);
+    }
+
+    private static bool IsLogCall(ICall call)
+    {
+        return StringComparer.Ordinal.Equals(x: call.GetMethodInfo().Name, y: nameof(ILogger.Log));
     }
 }

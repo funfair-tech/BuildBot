@@ -43,7 +43,7 @@ public sealed class DiscordMessageSender : BackgroundService
         catch (Exception exception)
             when (exception is not OperationCanceledException || !stoppingToken.IsCancellationRequested)
         {
-            this._logger.LogPublishFailed(title: message.Message.Title, exception: exception);
+            this._logger.LogPublishFailed(title: message.Message.Title, exceptionType: exception.GetType().Name);
         }
     }
 }
