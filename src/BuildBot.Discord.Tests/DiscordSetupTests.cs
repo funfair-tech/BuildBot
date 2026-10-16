@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
 using BuildBot.Discord.Services;
@@ -13,6 +14,8 @@ using FunFair.Test.Infrastructure.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Polly;
+using Polly.Timeout;
 using Xunit;
 
 namespace BuildBot.Discord.Tests;
@@ -252,6 +255,108 @@ public sealed class DiscordSetupTests : TestBase
         // 3 retries waiting up to 60s each, plus 4 attempts of 30s each.
         Assert.Equal(expected: TimeSpan.FromSeconds(300), actual: client.Timeout);
         Assert.Equal(expected: DiscordSetup.WebhookTimeout, actual: client.Timeout);
+    }
+
+    [Fact]
+    public async Task WebhookPolicy_RetriesTimedOutAttempt()
+    {
+        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy();
+        int attempts = 0;
+
+        using HttpResponseMessage response = await policy.ExecuteAsync(
+            action: async cancellationToken =>
+            {
+                if (Interlocked.Increment(ref attempts) == 1)
+                {
+                    return await StallAsync(cancellationToken);
+                }
+
+                return new(HttpStatusCode.NoContent);
+            },
+            cancellationToken: this.CancellationToken()
+        );
+
+        Assert.Equal(expected: HttpStatusCode.NoContent, actual: response.StatusCode);
+        Assert.Equal(expected: 2, actual: attempts);
+    }
+
+    [Fact]
+    public async Task WebhookPolicy_WhenEveryAttemptTimesOut_ThrowsAfterAllRetries()
+    {
+        IAsyncPolicy<HttpResponseMessage> policy = CreateFastTimeoutPolicy();
+        int attempts = 0;
+
+        await Assert.ThrowsAsync<TimeoutRejectedException>(async () =>
+            await policy.ExecuteAsync(
+                action: cancellationToken =>
+                {
+                    Interlocked.Increment(ref attempts);
+
+                    return StallAsync(cancellationToken);
+                },
+                cancellationToken: this.CancellationToken()
+            )
+        );
+
+        Assert.Equal(expected: 4, actual: attempts);
+    }
+
+    [Fact]
+    public async Task WebhookPolicy_WhenCallerCancels_DoesNotRetry()
+    {
+        IAsyncPolicy<HttpResponseMessage> policy = DiscordSetup.CreateWebhookPolicy(
+            timeProvider: MockDateTimeSources.Past,
+            attemptTimeout: Timeout.InfiniteTimeSpan,
+            backoff: static _ => TimeSpan.Zero
+        );
+        using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(this.CancellationToken());
+        TaskCompletionSource attemptStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        int attempts = 0;
+
+        ValueTask<HttpResponseMessage> executing = ExecutePolicyAsync(
+            policy: policy,
+            action: cancellationToken =>
+            {
+                Interlocked.Increment(ref attempts);
+                attemptStarted.TrySetResult();
+
+                return StallAsync(cancellationToken);
+            },
+            cancellationToken: cts.Token
+        );
+        await attemptStarted.Task.WaitAsync(this.CancellationToken());
+        await cts.CancelAsync();
+
+        // A TimeoutRejectedException is not an OperationCanceledException, so this also proves the caller's
+        // cancellation was not reported as an attempt timeout.
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await executing);
+
+        Assert.Equal(expected: 1, actual: attempts);
+    }
+
+    private static async ValueTask<HttpResponseMessage> ExecutePolicyAsync(
+        IAsyncPolicy<HttpResponseMessage> policy,
+        Func<CancellationToken, Task<HttpResponseMessage>> action,
+        CancellationToken cancellationToken
+    )
+    {
+        return await policy.ExecuteAsync(action: action, cancellationToken: cancellationToken);
+    }
+
+    private static IAsyncPolicy<HttpResponseMessage> CreateFastTimeoutPolicy()
+    {
+        return DiscordSetup.CreateWebhookPolicy(
+            timeProvider: MockDateTimeSources.Past,
+            attemptTimeout: TimeSpan.FromMilliseconds(1),
+            backoff: static _ => TimeSpan.Zero
+        );
+    }
+
+    private static async Task<HttpResponseMessage> StallAsync(CancellationToken cancellationToken)
+    {
+        await Task.Delay(delay: Timeout.InfiniteTimeSpan, cancellationToken: cancellationToken);
+
+        throw new InvalidOperationException("A stalled attempt only ends by cancellation");
     }
 
     private async ValueTask<WebhookSendResult> SendViaWebhookClientAsync(TestHttpMessageHandler handler)
