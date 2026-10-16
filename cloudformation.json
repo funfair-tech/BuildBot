@@ -234,7 +234,7 @@
               "LogDriver": "awslogs",
               "Options": {
                 "awslogs-group": {
-                  "Fn::Sub": "/ecs/${ApplicationName}/"
+                  "Ref": "LogGroup"
                 },
                 "awslogs-region": {
                   "Ref": "AWS::Region"
