@@ -22,7 +22,7 @@ BuildBot runs behind the internal load balancer. Webhooks (GitHub, Watchtower an
 
 - Only these routes are exposed: `GET /ping`, `POST /github/ping`, `POST /github/push`, `POST /github/status`, `POST /watchtower/deploy` and `POST /cloudformation/deploy`. Any other route gets API Gateway's own 404 and never reaches BuildBot.
 - Payloads over 10 MB are rejected by API Gateway before they reach BuildBot.
-- The `$default` stage throttles every route to a burst of 20 and a steady 10 requests per second, and writes a JSON access log line per request (source IP, route, status, integration error) to the `/apigateway/<ApplicationName>/` log group, kept for 30 days.
+- The `$default` stage throttles every route to a burst of 20 and a steady 10 requests per second, and writes a JSON access log line per request (source IP, route, status, integration error) to the `/apigateway/<ApplicationName>/` log group, kept for 30 days. The ECS application log group (`/ecs/<ApplicationName>/`) is also kept for 30 days.
 - The real client IP address is in the `X-Client-Ip` header, which API Gateway overwrites so a caller cannot spoof it. `X-Forwarded-For` only holds the VPC Link's private address.
 - Authentication for new webhook sources (SNS in #424, Watchtower in #425) must use the `Authorization` header with basic auth. Never use `X-Api-Key`.
 - The VPC Link goes `INACTIVE` after 60 days without traffic. If webhooks stop arriving after a long quiet period, check the VPC Link status in the API Gateway console.

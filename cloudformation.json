@@ -48,7 +48,7 @@
         "InternalAlbServerName": "buildbot.funfair.io",
         "ApiThrottlingBurstLimit": "20",
         "ApiThrottlingRateLimit": "10",
-        "ApiAccessLogRetentionInDays": "30"
+        "LogRetentionInDays": "30"
       }
     }
   },
@@ -318,6 +318,13 @@
       "Properties": {
         "LogGroupName": {
           "Fn::Sub": "/ecs/${ApplicationName}/"
+        },
+        "RetentionInDays": {
+          "Fn::FindInMap": [
+            "Settings",
+            "Values",
+            "LogRetentionInDays"
+          ]
         }
       }
     },
@@ -720,7 +727,7 @@
           "Fn::FindInMap": [
             "Settings",
             "Values",
-            "ApiAccessLogRetentionInDays"
+            "LogRetentionInDays"
           ]
         }
       }
