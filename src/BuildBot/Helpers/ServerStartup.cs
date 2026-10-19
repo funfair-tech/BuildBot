@@ -68,9 +68,6 @@ internal static class ServerStartup
         IConfigurationRoot config = LoadConfiguration(configPath);
 
         DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
-        Console.WriteLine($"Discord Server: {discordConfig.Server}");
-        Console.WriteLine($"Discord Channel: {discordConfig.Channel}");
-        Console.WriteLine($"Discord Release Channel: {discordConfig.ReleaseChannel}");
 
         SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
 
@@ -157,12 +154,7 @@ internal static class ServerStartup
 
     private static DiscordBotConfiguration LoadDiscordConfig(IConfigurationRoot configuration)
     {
-        return new(
-            configuration["Discord:Token"] ?? string.Empty,
-            configuration["Discord:Server"] ?? string.Empty,
-            configuration["Discord:Channel"] ?? string.Empty,
-            configuration["Discord:ReleaseChannel"] ?? string.Empty
-        );
+        return DiscordBotConfiguration.FromWebhookUrl(configuration["Discord:WebhookUrl"]);
     }
 
     private static GitHubConfiguration LoadGitHubConfig(IConfigurationRoot configuration)

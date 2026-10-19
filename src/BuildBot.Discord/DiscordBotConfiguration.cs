@@ -1,23 +1,33 @@
+using System;
 using System.Diagnostics;
 
 namespace BuildBot.Discord;
 
-[DebuggerDisplay("Server: {Server}, Channel: {Channel}, Release Channel: {ReleaseChannel}")]
-public sealed class DiscordBotConfiguration
+[DebuggerDisplay("Webhook: <redacted>")]
+public sealed record DiscordBotConfiguration
 {
-    public DiscordBotConfiguration(string token, string server, string channel, string releaseChannel)
+    private DiscordBotConfiguration(Uri webhookUrl)
     {
-        this.Token = token;
-        this.Server = server;
-        this.Channel = channel;
-        this.ReleaseChannel = releaseChannel;
+        this.WebhookUrl = webhookUrl;
     }
 
-    public string Token { get; }
+    public Uri WebhookUrl { get; }
 
-    public string Server { get; }
+    public static DiscordBotConfiguration FromWebhookUrl(string? webhookUrl)
+    {
+        if (
+            Uri.TryCreate(uriString: webhookUrl, uriKind: UriKind.Absolute, out Uri? uri)
+            && StringComparer.Ordinal.Equals(x: uri.Scheme, y: Uri.UriSchemeHttps)
+        )
+        {
+            return new(uri);
+        }
 
-    public string Channel { get; }
+        throw new InvalidOperationException("Discord:WebhookUrl must be configured as an absolute https URL");
+    }
 
-    public string ReleaseChannel { get; }
+    public override string ToString()
+    {
+        return $"{nameof(DiscordBotConfiguration)} {{ Webhook = <redacted> }}";
+    }
 }
