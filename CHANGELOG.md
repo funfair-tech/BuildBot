@@ -51,7 +51,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated Figgle to 0.6.6
 - BuildBot.Discord.Tests: Added branch coverage tests for null-title paths in DiscordBot.PublishCommonAsync
-- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
 - Dependencies - Updated Mediator to 3.0.2
@@ -91,6 +90,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Push notifications show only the first line of each commit message instead of the full message (#423)
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
 - Dependencies - Updated Meziantou.Analyzer to 3.0.316
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.12.1
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
