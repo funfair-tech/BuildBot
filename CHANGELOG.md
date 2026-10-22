@@ -60,7 +60,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog to 4.4.0
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated NSubstitute to 6.2.0
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.13.2323
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 - SDK - Updated DotNet SDK to 10.0.401
@@ -91,6 +90,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Startup fails if the Discord webhook URL is missing or not an absolute https URL (#423)
 - Discord notifications are truncated to Discord's embed length limits instead of being rejected by Discord when a title, description, field or total length is exceeded (#423)
 - Push notifications show only the first line of each commit message instead of the full message (#423)
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
