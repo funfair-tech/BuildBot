@@ -80,7 +80,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.20.2
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
-- Dependencies - Updated Meziantou.Analyzer to 3.0.299
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
 - SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
@@ -91,6 +90,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Discord notifications are truncated to Discord's embed length limits instead of being rejected by Discord when a title, description, field or total length is exceeded (#423)
 - Push notifications show only the first line of each commit message instead of the full message (#423)
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
+- Dependencies - Updated Meziantou.Analyzer to 3.0.316
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
