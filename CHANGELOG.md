@@ -69,7 +69,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.138.1557
 - Switch Docker base image to the net11.0 GA runtime-deps tag
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.10.1
 - Dependencies - Updated Microsoft.Sbom.Targets to 4.1.13
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.35.0.4138
 - Dependencies - Updated Roslynator.Analyzers to 5.0.1
@@ -91,6 +90,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated AWSSDK to 4.0.103.4
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.81.1260
 - Dependencies - Updated Microsoft.Extensions to 10.0.13
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 18.11.0
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
