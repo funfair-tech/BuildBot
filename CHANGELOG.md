@@ -91,6 +91,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.13
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.11.0
 - Dependencies - Updated Meziantou.Analyzer to 3.0.317
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.12.1
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
