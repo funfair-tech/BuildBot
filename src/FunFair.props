@@ -45,8 +45,7 @@
         <_LicenseFile>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', 'LICENSE'))</_LicenseFile>
     </PropertyGroup>
     <PropertyGroup Condition="$(FFPacking) == 'True' AND Exists('$(_LicenseFile)')">
-        <PackageLicense>LICENSE</PackageLicense>
-        <PackageLicenseUrl>$(RepositoryUrl)/blob/main/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
     <ItemGroup Condition="$(FFPacking) == 'True' AND Exists('$(_LicenseFile)')">
         <None Include="$(_LicenseFile)" Pack="true" PackagePath="\" />
