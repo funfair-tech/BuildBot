@@ -85,12 +85,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Discord notifications are truncated to Discord's embed length limits instead of being rejected by Discord when a title, description, field or total length is exceeded (#423)
 - Push notifications show only the first line of each commit message instead of the full message (#423)
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
-- Dependencies - Updated Meziantou.Analyzer to 3.0.316
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.17.0
 - Dependencies - Updated AWSSDK to 4.0.103.4
 - Dependencies - Updated Credfeto.Docker.HealthCheck.Http.Client to 0.0.81.1260
 - Dependencies - Updated Microsoft.Extensions to 10.0.13
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.11.0
+- Dependencies - Updated Meziantou.Analyzer to 3.0.317
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
