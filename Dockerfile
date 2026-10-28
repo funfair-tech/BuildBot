@@ -1,6 +1,6 @@
-# chiseled-extra is needed over chiseled for ICU, as globalization invariant mode is disabled
+# plain chiseled is sufficient: globalization invariant mode is enabled (no ICU needed) and no timezone APIs are used (no tzdata needed)
 #FROM mcr.microsoft.com/dotnet/runtime-deps:9.0-noble-chiseled-extra
-FROM mcr.microsoft.com/dotnet/runtime-deps:11.0-resolute-chiseled-extra
+FROM mcr.microsoft.com/dotnet/runtime-deps:11.0-resolute-chiseled
 
 WORKDIR /usr/src/app
 
