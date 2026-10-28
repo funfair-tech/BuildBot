@@ -31,7 +31,6 @@ echo "Clear $OUTFOLDER" \
           "-p:IsProduction=True" \
           "-p:NoWarn=NETSDK1179" \
           "-p:Optimize=true" \
-          "-p:PublishAot=false" \
           "-p:PublishReadyToRun=False" \
           "-p:PublishReadyToRunShowWarnings=True" \
           "-p:PublishSingleFile=true" \
