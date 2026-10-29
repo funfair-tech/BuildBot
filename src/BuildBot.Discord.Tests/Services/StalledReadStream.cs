@@ -7,9 +7,12 @@ namespace BuildBot.Discord.Tests.Services;
 
 internal sealed class StalledReadStream : Stream
 {
-    private readonly TaskCompletionSource _readStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private readonly SemaphoreSlim _readStarted = new(initialCount: 0);
 
-    public Task ReadStarted => this._readStarted.Task;
+    public Task WaitForReadStartedAsync(CancellationToken cancellationToken)
+    {
+        return this._readStarted.WaitAsync(cancellationToken);
+    }
 
     public override bool CanRead => true;
 
@@ -25,6 +28,16 @@ internal sealed class StalledReadStream : Stream
         set => throw new NotSupportedException();
     }
 
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            this._readStarted.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
+
     public override void Flush() { }
 
     public override int Read(byte[] buffer, int offset, int count)
@@ -34,7 +47,7 @@ internal sealed class StalledReadStream : Stream
 
     public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
-        this._readStarted.TrySetResult();
+        this._readStarted.Release();
 
         // Only cancellation ends the read, as with a server that sent headers and then stopped sending.
         await Task.Delay(millisecondsDelay: Timeout.Infinite, cancellationToken: cancellationToken);
