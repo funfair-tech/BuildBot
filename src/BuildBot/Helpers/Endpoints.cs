@@ -1,3 +1,4 @@
+using BuildBot.GitHub;
 using Microsoft.AspNetCore.Builder;
 
 namespace BuildBot.Helpers;
@@ -8,7 +9,7 @@ internal static partial class Endpoints
     {
         return app.ConfigureTestEndpoints()
             .ConfigureCloudformationEndpoints()
-            .ConfigureGitHubEndpoints()
+            .MapGitHubEndpoints()
             .ConfigureWatchtowerEndpoints();
     }
 }

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 
-namespace BuildBot.Helpers.LoggingExtensions;
+namespace BuildBot.GitHub.LoggingExtensions;
 
-internal static partial class EndpointsLoggingExtensions
+internal static partial class GitHubEndpointsLoggingExtensions
 {
     [LoggerMessage(
         EventId = 1,
