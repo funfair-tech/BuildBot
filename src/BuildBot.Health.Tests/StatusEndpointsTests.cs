@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Json.Models;
@@ -11,6 +12,7 @@ using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,7 +29,8 @@ public sealed class StatusEndpointsTests : TestBase
     public StatusEndpointsTests()
     {
         this._mediator = GetSubstitute<IMediator>();
-        this._logger = GetSubstitute<ILogger<StatusEndpointContext>>();
+        this._logger = this.GetTypedLogger<StatusEndpointContext>();
+        this._logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
     }
 
     [Theory]
@@ -44,6 +47,7 @@ public sealed class StatusEndpointsTests : TestBase
         Ok<PongDto> ok = Assert.IsType<Ok<PongDto>>(result);
         Assert.Equal(expected: "Pong!", actual: ok.Value.Value);
         await this._mediator.Received(1).Send(new CheckStatus(source), this.CancellationToken());
+        this._logger.Received(1).IsEnabled(LogLevel.Information);
     }
 
     [Fact]
@@ -85,16 +89,41 @@ public sealed class StatusEndpointsTests : TestBase
         WebApplication mapped = app.MapStatusEndpoints();
         Assert.Same(expected: app, actual: mapped);
 
-        RouteEndpoint endpoint = Assert.Single(
+        RouteEndpoint endpoint = FindPingEndpoint(app);
+
+        HttpMethodMetadata? methods = endpoint.Metadata.GetMetadata<HttpMethodMetadata>();
+        Assert.NotNull(methods);
+        Assert.Equal(expected: [HttpMethods.Get], actual: methods.HttpMethods);
+        Assert.Null(endpoint.Metadata.GetMetadata<IDisableCookieRedirectMetadata>());
+    }
+
+    [Fact]
+    public async Task MapStatusEndpointsWithoutRegisteredMediatorTreatsItAsJsonBodyAsync()
+    {
+        // Covers the generated request delegate's fallback for handler parameters that are not registered services;
+        // that fallback needs JSON metadata for the service interfaces, which only the reflection resolver can supply.
+        WebApplicationBuilder builder = WebApplication.CreateSlimBuilder();
+        builder.Services.ConfigureHttpJsonOptions(static options =>
+            options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: new DefaultJsonTypeInfoResolver())
+        );
+
+        await using WebApplication app = builder.Build();
+
+        Assert.Same(expected: app, actual: app.MapStatusEndpoints());
+
+        RouteEndpoint endpoint = FindPingEndpoint(app);
+
+        Assert.NotNull(endpoint.Metadata.GetMetadata<IDisableCookieRedirectMetadata>());
+    }
+
+    private static RouteEndpoint FindPingEndpoint(WebApplication app)
+    {
+        return Assert.Single(
             ((IEndpointRouteBuilder)app)
                 .DataSources.SelectMany(static source => source.Endpoints)
                 .OfType<RouteEndpoint>(),
             predicate: static e => StringComparer.Ordinal.Equals(x: e.RoutePattern.RawText, y: "/ping")
         );
-
-        HttpMethodMetadata? methods = endpoint.Metadata.GetMetadata<HttpMethodMetadata>();
-        Assert.NotNull(methods);
-        Assert.Equal(expected: [HttpMethods.Get], actual: methods.HttpMethods);
     }
 
     private Task<IResult> PingAsync(string? source)
