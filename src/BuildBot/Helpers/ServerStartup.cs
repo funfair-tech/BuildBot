@@ -61,8 +61,6 @@ internal static class ServerStartup
 
         IConfigurationRoot config = LoadConfiguration(configPath);
 
-        DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
-
         builder.Host.UseWindowsService().UseSystemd();
         builder
             .WebHost.UseKestrel(options: options =>
@@ -81,7 +79,7 @@ internal static class ServerStartup
             .Services.ConfigureHttpJsonOptions(options =>
                 options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default)
             )
-            .AddDiscord(discordConfig)
+            .AddDiscord(config)
             .AddCloudFormation(config)
             .AddGitHub(config)
             .AddWatchtower()
@@ -129,11 +127,6 @@ internal static class ServerStartup
             .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
             .AddEnvironmentVariables()
             .Build();
-    }
-
-    private static DiscordBotConfiguration LoadDiscordConfig(IConfigurationRoot configuration)
-    {
-        return DiscordBotConfiguration.FromWebhookUrl(configuration["Discord:WebhookUrl"]);
     }
 
     private static void SetH1ListenOptions(ListenOptions listenOptions)
