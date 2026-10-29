@@ -224,7 +224,7 @@ public sealed class DiscordWebhookClientTests : TestBase
             payload: Payload,
             cancellationToken: this.CancellationToken()
         );
-        await stream.ReadStarted.WaitAsync(this.CancellationToken());
+        await stream.WaitForReadStartedAsync(this.CancellationToken());
         timeProvider.Advance(DiscordWebhookClient.ResponseBodyReadTimeout);
 
         WebhookSendResult result = await sending;
@@ -253,7 +253,7 @@ public sealed class DiscordWebhookClientTests : TestBase
             payload: Payload,
             cancellationToken: cts.Token
         );
-        await stream.ReadStarted.WaitAsync(this.CancellationToken());
+        await stream.WaitForReadStartedAsync(this.CancellationToken());
         await cts.CancelAsync();
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await sending);
