@@ -2,56 +2,51 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
-using BuildBot.CloudFormation;
 using BuildBot.CloudFormation.Models;
-using BuildBot.Json;
 using BuildBot.ServiceModel.CloudFormation;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace BuildBot.Helpers;
+namespace BuildBot.CloudFormation;
 
-internal static partial class Endpoints
+public static class CloudFormationEndpoints
 {
-    private static WebApplication ConfigureCloudformationEndpoints(this WebApplication app)
+    public static WebApplication MapCloudFormationEndpoints(this WebApplication app)
     {
         Console.WriteLine("Configuring Cloudformation Endpoint");
 
         RouteGroupBuilder group = app.MapGroup("/cloudformation");
-        group
-            .MapPost(
-                pattern: "deploy",
-                handler: static async (
-                    HttpRequest request,
-                    ICloudFormationSnsPropertiesParser parser,
-                    IMediator mediator,
-                    CancellationToken cancellationToken
-                ) =>
-                {
-                    SnsMessage message = await ReadJsonAsync<SnsMessage>(
-                        request: request,
-                        cancellationToken: cancellationToken
-                    );
 
-                    return await HandleDeployMessageAsync(
-                        message: message,
-                        parser: parser,
-                        mediator: mediator,
-                        cancellationToken: cancellationToken
-                    );
-                }
-            )
+        // SNS posts with a text/plain content type, so the body is read directly rather than model bound.
+        group
+            .MapPost(pattern: "deploy", handler: DeployAsync)
             .Accepts<SnsMessage>(contentType: "text/plain", "application/json");
 
         return app;
     }
 
-    private static async ValueTask<IResult> HandleDeployMessageAsync(
+    public static async Task<IResult> DeployAsync(
+        HttpRequest request,
+        ICloudFormationSnsPropertiesParser parser,
+        IMediator mediator,
+        CancellationToken cancellationToken
+    )
+    {
+        SnsMessage message = await ReadSnsMessageAsync(request: request, cancellationToken: cancellationToken);
+
+        return await HandleDeployMessageAsync(
+            message: message,
+            parser: parser,
+            mediator: mediator,
+            cancellationToken: cancellationToken
+        );
+    }
+
+    public static async Task<IResult> HandleDeployMessageAsync(
         SnsMessage message,
         ICloudFormationSnsPropertiesParser parser,
         IMediator mediator,
@@ -60,7 +55,7 @@ internal static partial class Endpoints
     {
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "SubscriptionConfirmation"))
         {
-            return await HandleSnsSubscriptionMessagesAsync(
+            return await HandleSnsSubscriptionMessageAsync(
                 message: message,
                 mediator: mediator,
                 cancellationToken: cancellationToken
@@ -69,7 +64,7 @@ internal static partial class Endpoints
 
         if (StringComparer.Ordinal.Equals(x: message.Type, y: "Notification"))
         {
-            return await HandleNotiifcationMessageAsync(
+            return await HandleNotificationMessageAsync(
                 message: message,
                 parser: parser,
                 mediator: mediator,
@@ -80,7 +75,7 @@ internal static partial class Endpoints
         return Results.NotFound();
     }
 
-    private static async ValueTask<IResult> HandleNotiifcationMessageAsync(
+    private static async ValueTask<IResult> HandleNotificationMessageAsync(
         SnsMessage message,
         ICloudFormationSnsPropertiesParser parser,
         IMediator mediator,
@@ -102,7 +97,7 @@ internal static partial class Endpoints
         return Results.NoContent();
     }
 
-    private static async ValueTask<IResult> HandleSnsSubscriptionMessagesAsync(
+    private static async ValueTask<IResult> HandleSnsSubscriptionMessageAsync(
         SnsMessage message,
         IMediator mediator,
         CancellationToken cancellationToken
@@ -121,30 +116,22 @@ internal static partial class Endpoints
         return Results.Accepted();
     }
 
-    private static async ValueTask<T> ReadJsonAsync<T>(HttpRequest request, CancellationToken cancellationToken)
+    private static async ValueTask<SnsMessage> ReadSnsMessageAsync(
+        HttpRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        if (AppSerializationContext.Default.GetTypeInfo(typeof(T)) is not JsonTypeInfo<T> typeInfo)
-        {
-            return NoTypeInformation<T>();
-        }
-
-        T? result = await JsonSerializer.DeserializeAsync(
+        SnsMessage? message = await JsonSerializer.DeserializeAsync(
             utf8Json: request.Body,
-            jsonTypeInfo: typeInfo,
+            jsonTypeInfo: CloudFormationSerializationContext.Default.SnsMessage,
             cancellationToken: cancellationToken
         );
 
-        return result ?? InvalidJson<T>();
+        return message ?? InvalidJson();
     }
 
     [DoesNotReturn]
-    private static T NoTypeInformation<T>()
-    {
-        throw new JsonException("No type handler found");
-    }
-
-    [DoesNotReturn]
-    private static T InvalidJson<T>()
+    private static SnsMessage InvalidJson()
     {
         throw new JsonException("Could not parse JSON");
     }
