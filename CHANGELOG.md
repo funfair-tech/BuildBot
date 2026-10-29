@@ -92,6 +92,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 18.11.0
 - Dependencies - Updated Meziantou.Analyzer to 3.0.317
 - BuildBot is published trimmed and as a native AOT binary with InvariantGlobalization enabled, and the Docker image uses the plain chiseled runtime-deps base; unused System.Reactive and System.Interactive.Async packages and Serilog.Enrichers.Demystifier are removed, and buildcheck configuration binding generator properties are fixed (#430)
+- Moved startup configuration and endpoint wiring from the BuildBot host into testable feature libraries - #429
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
