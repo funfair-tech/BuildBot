@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BuildBot.Discord.Services;
 using BuildBot.Discord.Services.LoggingExtensions;
 using BuildBot.ServiceModel.ComponentStatus;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace BuildBot.Discord;
 
 public static class DiscordSetup
 {
+    private const string WEBHOOK_URL_KEY = "Discord:WebhookUrl";
     private const int MAX_RETRIES = 3;
     private static readonly TimeSpan MaximumRetryAfterDelay = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan AttemptAllowance = TimeSpan.FromSeconds(30);
@@ -30,6 +32,11 @@ public static class DiscordSetup
     // with slack so it cannot cancel the final attempt when every earlier attempt and wait used its full allowance.
     public static readonly TimeSpan WebhookTimeout =
         MaximumRetryAfterDelay * MAX_RETRIES + AttemptAllowance * (MAX_RETRIES + 1) + WebhookTimeoutSlack;
+
+    public static IServiceCollection AddDiscord(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services.AddDiscord(DiscordBotConfiguration.FromWebhookUrl(configuration[WEBHOOK_URL_KEY]));
+    }
 
     public static IServiceCollection AddDiscord(this IServiceCollection services, DiscordBotConfiguration discordConfig)
     {
