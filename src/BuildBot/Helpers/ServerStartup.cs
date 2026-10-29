@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using BuildBot.CloudFormation;
-using BuildBot.CloudFormation.Configuration;
 using BuildBot.Discord;
 using BuildBot.GitHub;
 using BuildBot.Health;
@@ -64,8 +63,6 @@ internal static class ServerStartup
 
         DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
 
-        SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
-
         builder.Host.UseWindowsService().UseSystemd();
         builder
             .WebHost.UseKestrel(options: options =>
@@ -85,23 +82,13 @@ internal static class ServerStartup
                 options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default)
             )
             .AddDiscord(discordConfig)
-            .AddCloudFormation(snsConfiguration)
+            .AddCloudFormation(config)
             .AddGitHub(config)
             .AddWatchtower()
             .AddStatus()
             .AddMediator();
 
         return builder.Build();
-    }
-
-    private static SnsNotificationOptions LoadSnsNotificationConfig(IConfigurationRoot configuration)
-    {
-        string topicArn = configuration["CloudFormation:TopicArn"] ?? string.Empty;
-        string region = configuration["CloudFormation:Aws:Region"] ?? string.Empty;
-        string accessKeyId = configuration["CloudFormation:Aws:AccessKeyId"] ?? string.Empty;
-        string secretKey = configuration["CloudFormation:Aws:SecretKey"] ?? string.Empty;
-
-        return new(TopicArn: topicArn, Region: region, AccessKey: accessKeyId, SecretKey: secretKey);
     }
 
     [SuppressMessage(

@@ -10,6 +10,7 @@ using Amazon.Runtime;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Publishers;
 using BuildBot.CloudFormation.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 
@@ -18,6 +19,22 @@ namespace BuildBot.CloudFormation;
 public static class CloudformationSetup
 {
     private const int MAX_RETRIES = 3;
+    private const string TOPIC_ARN_KEY = "CloudFormation:TopicArn";
+    private const string REGION_KEY = "CloudFormation:Aws:Region";
+    private const string ACCESS_KEY_ID_KEY = "CloudFormation:Aws:AccessKeyId";
+    private const string SECRET_KEY_KEY = "CloudFormation:Aws:SecretKey";
+
+    public static IServiceCollection AddCloudFormation(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services.AddCloudFormation(
+            new SnsNotificationOptions(
+                TopicArn: configuration[TOPIC_ARN_KEY] ?? string.Empty,
+                Region: configuration[REGION_KEY] ?? string.Empty,
+                AccessKey: configuration[ACCESS_KEY_ID_KEY] ?? string.Empty,
+                SecretKey: configuration[SECRET_KEY_KEY] ?? string.Empty
+            )
+        );
+    }
 
     public static IServiceCollection AddCloudFormation(
         this IServiceCollection services,
