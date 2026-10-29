@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using BuildBot.CloudFormation.Configuration;
 using BuildBot.CloudFormation.Models;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
 
@@ -168,12 +170,7 @@ public sealed class CloudFormationEndpointsTests : TestBase
         WebApplication mapped = app.MapCloudFormationEndpoints();
         Assert.Same(expected: app, actual: mapped);
 
-        RouteEndpoint endpoint = Assert.Single(
-            ((IEndpointRouteBuilder)app)
-                .DataSources.SelectMany(static source => source.Endpoints)
-                .OfType<RouteEndpoint>(),
-            predicate: static e => StringComparer.Ordinal.Equals(x: e.RoutePattern.RawText, y: "/cloudformation/deploy")
-        );
+        RouteEndpoint endpoint = FindEndpoint(app: app, pattern: "/cloudformation/deploy");
 
         HttpMethodMetadata? methods = endpoint.Metadata.GetMetadata<HttpMethodMetadata>();
         Assert.NotNull(methods);
@@ -182,6 +179,37 @@ public sealed class CloudFormationEndpointsTests : TestBase
         IAcceptsMetadata? accepts = endpoint.Metadata.GetMetadata<IAcceptsMetadata>();
         Assert.NotNull(accepts);
         Assert.Equal(expected: ["text/plain", "application/json"], actual: accepts.ContentTypes);
+
+        Assert.Null(endpoint.Metadata.GetMetadata<IDisableCookieRedirectMetadata>());
+    }
+
+    [Fact]
+    public async Task MapCloudFormationEndpointsWithoutRegisteredServicesTreatsThemAsJsonBodyAsync()
+    {
+        // Covers the generated request delegate's fallback for handler parameters that are not registered services;
+        // that fallback needs JSON metadata for the service interfaces, which only the reflection resolver can supply.
+        WebApplicationBuilder builder = WebApplication.CreateSlimBuilder();
+        builder.Services.ConfigureHttpJsonOptions(static options =>
+            options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: new DefaultJsonTypeInfoResolver())
+        );
+
+        await using WebApplication app = builder.Build();
+
+        Assert.Same(expected: app, actual: app.MapCloudFormationEndpoints());
+
+        RouteEndpoint endpoint = FindEndpoint(app: app, pattern: "/cloudformation/deploy");
+
+        Assert.NotNull(endpoint.Metadata.GetMetadata<IDisableCookieRedirectMetadata>());
+    }
+
+    private static RouteEndpoint FindEndpoint(WebApplication app, string pattern)
+    {
+        return Assert.Single(
+            ((IEndpointRouteBuilder)app)
+                .DataSources.SelectMany(static source => source.Endpoints)
+                .OfType<RouteEndpoint>(),
+            predicate: e => StringComparer.Ordinal.Equals(x: e.RoutePattern.RawText, y: pattern)
+        );
     }
 
     private async Task<IResult> DeployAsync(string body)

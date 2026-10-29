@@ -45,13 +45,25 @@ public sealed class CloudFormationSetupConfigurationTests : TestBase
     [Fact]
     public async Task MissingSettingsBindToEmptyAsync()
     {
-        // The region is always supplied because the AWS region endpoint is resolved when the services are registered.
         SnsNotificationOptions options = await ResolveOptionsAsync(
             new Dictionary<string, string?>(StringComparer.Ordinal) { [REGION_KEY] = REGION }
         );
 
         Assert.Equal(expected: string.Empty, actual: options.TopicArn);
         Assert.Equal(expected: REGION, actual: options.Region);
+        Assert.Equal(expected: string.Empty, actual: options.AccessKey);
+        Assert.Equal(expected: string.Empty, actual: options.SecretKey);
+    }
+
+    [Fact]
+    public async Task MissingRegionBindsToEmptyAsync()
+    {
+        SnsNotificationOptions options = await ResolveOptionsAsync(
+            new Dictionary<string, string?>(StringComparer.Ordinal)
+        );
+
+        Assert.Equal(expected: string.Empty, actual: options.TopicArn);
+        Assert.Equal(expected: string.Empty, actual: options.Region);
         Assert.Equal(expected: string.Empty, actual: options.AccessKey);
         Assert.Equal(expected: string.Empty, actual: options.SecretKey);
     }
