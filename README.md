@@ -1,12 +1,46 @@
 # BuildBot
 
-FunFair's Build Discord Bot
+FunFair's build notification bot: receives GitHub, Watchtower and CloudFormation webhooks and posts the results to Discord.
 
 ## Build Status
 
-| Branch | Status                                                                                                                                                                                                                             |
-|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| main   | [![Build: .NET Pre-Release](https://github.com/funfair-tech/BuildBot/actions/workflows/build-and-publish-pre-release.yml/badge.svg)](https://github.com/funfair-tech/BuildBot/actions/workflows/build-and-publish-pre-release.yml) |
+| Branch  | Status                                                     |
+|---------|------------------------------------------------------------|
+| main    | [![Build: .NET Pre-Release][pre-release-img]][pre-release] |
+| release | [![Build: .NET Release][release-img]][release]             |
+
+## Overview
+
+BuildBot is an ASP.NET Core service that listens for webhooks from GitHub (pushes and commit statuses), Watchtower (container updates) and CloudFormation (stack deployments via SNS). It turns each notification into a Discord embed and posts it to a single channel webhook, so build, deployment and container activity shows up in one place. GitHub requests are verified against the webhook's HMAC-SHA256 signature when a secret is configured.
+
+## Quick Start
+
+```shell
+export GITHUB__WEBHOOKSECRET="<github-webhook-secret>"
+export DISCORD__WEBHOOKURL="https://discord.com/api/webhooks/<id>/<token>"
+dotnet run --project src/BuildBot/BuildBot.csproj
+```
+
+The service listens on port 8080; `curl http://localhost:8080/ping` checks that it is running.
+
+## Installation
+
+BuildBot is not published as a NuGet package. It ships as a container image: the build workflows run `dotnet publish` on `src/BuildBot` and build the image from the [`Dockerfile`][dockerfile], which copies the published `BuildBot` executable and `appsettings.json` onto a chiseled `runtime-deps` base image and exposes port 8080. See [Deployment](#deployment) for how it runs in AWS.
+
+## Usage
+
+Point each webhook source at the matching route:
+
+| Method | Route                    | Source                                              |
+|--------|--------------------------|-----------------------------------------------------|
+| `GET`  | `/ping`                  | Health check                                        |
+| `POST` | `/github/ping`           | GitHub webhook `ping` event                         |
+| `POST` | `/github/push`           | GitHub webhook `push` event                         |
+| `POST` | `/github/status`         | GitHub webhook `status` event                       |
+| `POST` | `/watchtower/deploy`     | Watchtower container update notification            |
+| `POST` | `/cloudformation/deploy` | CloudFormation stack event delivered by Amazon SNS  |
+
+Example requests for the health check, GitHub and CloudFormation routes are in [`MinimalApi.http`][minimal-api-http], and [`DiscordWebhook.http`][discord-webhook-http] exercises the Discord webhook that BuildBot posts to.
 
 ## Configuration
 
@@ -70,4 +104,18 @@ CloudFormation cannot import an existing Route 53 record set, so the existing `b
 
 ## Changelog
 
-View [changelog](CHANGELOG.md)
+View the [changelog][changelog].
+
+## Licence
+
+BuildBot is released under the MIT licence; see [LICENSE][licence].
+
+[changelog]: CHANGELOG.md
+[discord-webhook-http]: src/BuildBot/DiscordWebhook.http
+[dockerfile]: Dockerfile
+[licence]: LICENSE
+[minimal-api-http]: src/BuildBot/MinimalApi.http
+[pre-release]: https://github.com/funfair-tech/BuildBot/actions/workflows/build-and-publish-pre-release.yml
+[pre-release-img]: https://github.com/funfair-tech/BuildBot/actions/workflows/build-and-publish-pre-release.yml/badge.svg
+[release]: https://github.com/funfair-tech/BuildBot/actions/workflows/build-and-publish-release.yml
+[release-img]: https://github.com/funfair-tech/BuildBot/actions/workflows/build-and-publish-release.yml/badge.svg
