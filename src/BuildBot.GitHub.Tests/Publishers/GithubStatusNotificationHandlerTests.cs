@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BuildBot.Discord.Models;
@@ -165,5 +165,34 @@ public sealed class GithubStatusNotificationHandlerTests : TestBase
         DiscordEmbed embed = mediator.PublishedEmbed();
         Assert.Equal(expected: "Build finished for ci/build from BuildBot ((unknown))", actual: embed.Title);
         Assert.Equal(expected: new DiscordEmbedField(Name: "Branch", Value: "(unknown)"), actual: embed.Fields[1]);
+    }
+
+    [Theory]
+    [InlineData("feature/one,main,release/1.2.3", "release/1.2.3")]
+    [InlineData("main,Release/2.0", "Release/2.0")]
+    [InlineData("feature/one,main,develop", "main")]
+    [InlineData("main,feature/one", "main")]
+    [InlineData("feature/one,feature/two", "feature/one")]
+    [InlineData("develop", "develop")]
+    public async Task PublishedEmbedUsesSameSelectedBranchInTitleAndFieldAsync(
+        string branchNames,
+        string expectedBranch
+    )
+    {
+        (IMediator mediator, GithubStatusNotificationHandler handler) = this.CreateHandler();
+
+        Branch[] branches = Array.ConvertAll(
+            array: branchNames.Split(','),
+            converter: static name => new Branch(name: name)
+        );
+
+        await handler.Handle(
+            notification: new(MakeStatusWithBranches(state: "success", branches: branches)),
+            cancellationToken: this.CancellationToken()
+        );
+
+        DiscordEmbed embed = mediator.PublishedEmbed();
+        Assert.Equal(expected: $"Build finished for ci/build from BuildBot ({expectedBranch})", actual: embed.Title);
+        Assert.Equal(expected: new DiscordEmbedField(Name: "Branch", Value: expectedBranch), actual: embed.Fields[1]);
     }
 }
