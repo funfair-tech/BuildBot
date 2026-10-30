@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using BuildBot.CloudFormation;
-using BuildBot.CloudFormation.Configuration;
 using BuildBot.Discord;
 using BuildBot.GitHub;
 using BuildBot.Health;
@@ -62,12 +61,6 @@ internal static class ServerStartup
 
         IConfigurationRoot config = LoadConfiguration(configPath);
 
-        DiscordBotConfiguration discordConfig = LoadDiscordConfig(config);
-
-        SnsNotificationOptions snsConfiguration = LoadSnsNotificationConfig(config);
-
-        GitHubConfiguration gitHubConfig = LoadGitHubConfig(config);
-
         builder.Host.UseWindowsService().UseSystemd();
         builder
             .WebHost.UseKestrel(options: options =>
@@ -86,24 +79,14 @@ internal static class ServerStartup
             .Services.ConfigureHttpJsonOptions(options =>
                 options.SerializerOptions.TypeInfoResolverChain.Insert(index: 0, item: AppSerializationContext.Default)
             )
-            .AddDiscord(discordConfig)
-            .AddCloudFormation(snsConfiguration)
-            .AddGitHub(gitHubConfig)
+            .AddDiscord(config)
+            .AddCloudFormation(config)
+            .AddGitHub(config)
             .AddWatchtower()
             .AddStatus()
             .AddMediator();
 
         return builder.Build();
-    }
-
-    private static SnsNotificationOptions LoadSnsNotificationConfig(IConfigurationRoot configuration)
-    {
-        string topicArn = configuration["CloudFormation:TopicArn"] ?? string.Empty;
-        string region = configuration["CloudFormation:Aws:Region"] ?? string.Empty;
-        string accessKeyId = configuration["CloudFormation:Aws:AccessKeyId"] ?? string.Empty;
-        string secretKey = configuration["CloudFormation:Aws:SecretKey"] ?? string.Empty;
-
-        return new(TopicArn: topicArn, Region: region, AccessKey: accessKeyId, SecretKey: secretKey);
     }
 
     [SuppressMessage(
@@ -144,16 +127,6 @@ internal static class ServerStartup
             .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
             .AddEnvironmentVariables()
             .Build();
-    }
-
-    private static DiscordBotConfiguration LoadDiscordConfig(IConfigurationRoot configuration)
-    {
-        return DiscordBotConfiguration.FromWebhookUrl(configuration["Discord:WebhookUrl"]);
-    }
-
-    private static GitHubConfiguration LoadGitHubConfig(IConfigurationRoot configuration)
-    {
-        return new(configuration["GitHub:WebhookSecret"] ?? string.Empty);
     }
 
     private static void SetH1ListenOptions(ListenOptions listenOptions)
