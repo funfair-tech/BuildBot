@@ -33,6 +33,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Added missing build;buildTransitive IncludeAssets on Serilog package reference required by FunFair.BuildCheck
 - CloudFormation task settings now live in Mappings so every deploy applies them, reducing ECS task memory from 4 GB to 1 GB
 - On a new stack, ECS tasks no longer fail to start with a 'log group does not exist' error, and their final logs are kept when the stack is deleted, because the ECS application log group is now created before the tasks and removed after them (#421)
+- Status notifications now pick one branch consistently for the embed title and Branch field (prefer release/*, then main, else first) - #434
 ### Changed
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Switched to use minimal APIs

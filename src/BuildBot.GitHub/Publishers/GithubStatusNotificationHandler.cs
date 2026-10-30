@@ -52,26 +52,40 @@ public sealed class GithubStatusNotificationHandler : INotificationHandler<Githu
 
     private static DiscordEmbed BuildStatusMessage(in Status message)
     {
-        Branch? lastBranch = message.Branches.Count > 0 ? message.Branches[^1] : null;
-        string branchName = lastBranch?.Name ?? "(unknown)";
+        string branchName = GetBranchName(message.Branches);
 
         return new(
             Title: $"{message.Description} for {message.Context} from {message.Repository.Name} ({branchName})",
             Url: EmbedUrl.FromString(message.TargetUrl),
             Description: $"Built at {message.StatusCommit.Sha}",
             Color: GetEmbedColor(message),
-            Fields: GetFields(message)
+            Fields: [AddHeadCommitEmbed(message.StatusCommit), AddBranchEmbed(branchName)]
         );
     }
 
-    private static IReadOnlyList<DiscordEmbedField> GetFields(in Status message)
+    private static string GetBranchName(IReadOnlyList<Branch> branches)
     {
-        return [AddHeadCommitEmbed(message.StatusCommit), AddBranchEmbed(message)];
+        IReadOnlyList<string> names = [.. branches.Select(static b => b.Name)];
+
+        return names.FirstOrDefault(IsReleaseBranch)
+            ?? names.FirstOrDefault(IsMainBranch)
+            ?? names.FirstOrDefault()
+            ?? "(unknown)";
     }
 
-    private static DiscordEmbedField AddBranchEmbed(in Status message)
+    private static bool IsReleaseBranch(string name)
     {
-        return new(Name: "Branch", Value: message.Branches.Select(static b => b.Name).FirstOrDefault() ?? "(unknown)");
+        return name.StartsWith(value: "release/", comparisonType: StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsMainBranch(string name)
+    {
+        return StringComparer.Ordinal.Equals(x: name, y: "main");
+    }
+
+    private static DiscordEmbedField AddBranchEmbed(string branchName)
+    {
+        return new(Name: "Branch", Value: branchName);
     }
 
     private static DiscordEmbedField AddHeadCommitEmbed(in StatusCommit statusCommit)
