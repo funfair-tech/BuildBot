@@ -62,7 +62,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated NSubstitute to 6.2.0
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
-- SDK - Updated DotNet SDK to 10.0.401
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
 - Upgrade all projects to net11.0
 - Update Docker base image to net11.0 preview runtime-deps (fixes CVE-2026-45447)
@@ -77,7 +76,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
 - CLOUDFORMATION__AWS__REGION is now set from the stack's AWS region instead of being read from the AWS_REGION secret key (#419)
-- SDK - Updated DotNet SDK to 11.0.100-rc.2.26504.105
 - CloudFormation template restructured into the shared format, with parameters only where the deploy workflow passes them and all other settings in a Settings mapping (#427)
 - ECS application logs in /ecs/<ApplicationName>/ are kept for 30 days instead of never expiring, using the same LogRetentionInDays setting as the API Gateway access logs (#421)
 - The ECS service is now named after the application, so it can be found by name in the DiscordBots cluster (#421)
@@ -96,6 +94,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.12.1
 - Moved startup configuration and endpoint wiring from the BuildBot host into testable feature libraries - #429
 - Bring README in line with the readme documentation rule (required section order, reference-style links) - #432
+- SDK - Updated DotNet SDK to 11.0.100-rc.3.26522.148
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
