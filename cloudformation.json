@@ -26,29 +26,48 @@
     }
   },
   "Mappings": {
-    "Settings": {
-      "Values": {
-        "TaskDefinitionCPU": "512",
-        "TaskDefinitionMemory": "1024",
+    "Deployment": {
+      "Network": {
+        "ClusterName": "DiscordBots",
+        "SecurityGroupIds": [
+          "sg-e3e65a9a",
+          "sg-0272027302777cb4d"
+        ],
+        "SubnetIds": [
+          "subnet-fabb50b3",
+          "subnet-d5ea03b2",
+          "subnet-c68aa09e"
+        ],
+        "VpcId": "vpc-ad3bd9ca",
+        "VpcLinkEgressCidr": "172.31.0.0/16"
+      },
+      "Task": {
+        "Cpu": "512",
+        "Memory": "1024",
+        "ExecutionRole": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole",
+        "ContainerOwner": "funfair",
+        "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ",
+        "ContainerPort": "8080"
+      },
+      "Service": {
         "DesiredCount": "1",
         "MinimumHealthPercent": "100",
-        "MaximumHealthPercent": "200",
-        "SecretsManagerArn": "arn:aws:secretsmanager:eu-west-1:117769150821:secret:BuildBot-ph1YIJ",
-        "ContainerPort": "8080",
-        "ECSClusterName": "DiscordBots",
-        "ApplicationContainerOwner": "funfair",
-        "TaskExecutionRoleArn": "arn:aws:iam::117769150821:role/ecsTaskExecutionRole",
-        "SecurityGroupIDs": "sg-e3e65a9a,sg-0272027302777cb4d",
-        "SubnetIDs": "subnet-fabb50b3,subnet-d5ea03b2,subnet-c68aa09e",
-        "VpcID": "vpc-ad3bd9ca",
-        "LoadBalancerListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/internal/fbd77c1a39a60f7f/e01c11e315c3ff6e",
-        "HostedZoneName": "funfair.io.",
-        "ApiCertificateArn": "arn:aws:acm:eu-west-1:117769150821:certificate/d9405a08-95c9-4924-acde-d86cda5f29e8",
-        "VpcLinkEgressCidr": "172.31.0.0/16",
-        "InternalAlbServerName": "buildbot.funfair.io",
-        "ApiThrottlingBurstLimit": "20",
-        "ApiThrottlingRateLimit": "10",
+        "MaximumHealthPercent": "200"
+      },
+      "Settings": {
         "LogRetentionInDays": "30"
+      },
+      "LoadBalancer": {
+        "ListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:117769150821:listener/app/internal/fbd77c1a39a60f7f/e01c11e315c3ff6e",
+        "InternalAlbServerName": "buildbot.funfair.io"
+      },
+      "ApiGateway": {
+        "CertificateArn": "arn:aws:acm:eu-west-1:117769150821:certificate/d9405a08-95c9-4924-acde-d86cda5f29e8",
+        "ThrottlingBurstLimit": "20",
+        "ThrottlingRateLimit": "10"
+      },
+      "Dns": {
+        "HostedZoneName": "funfair.io."
       }
     }
   },
@@ -73,9 +92,9 @@
                 {
                   "Owner": {
                     "Fn::FindInMap": [
-                      "Settings",
-                      "Values",
-                      "ApplicationContainerOwner"
+                      "Deployment",
+                      "Task",
+                      "ContainerOwner"
                     ]
                   }
                 }
@@ -101,8 +120,8 @@
                     {
                       "SecretsManagerArn": {
                         "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
+                          "Deployment",
+                          "Task",
                           "SecretsManagerArn"
                         ]
                       }
@@ -118,8 +137,8 @@
                     {
                       "SecretsManagerArn": {
                         "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
+                          "Deployment",
+                          "Task",
                           "SecretsManagerArn"
                         ]
                       }
@@ -135,8 +154,8 @@
                     {
                       "SecretsManagerArn": {
                         "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
+                          "Deployment",
+                          "Task",
                           "SecretsManagerArn"
                         ]
                       }
@@ -152,8 +171,8 @@
                     {
                       "SecretsManagerArn": {
                         "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
+                          "Deployment",
+                          "Task",
                           "SecretsManagerArn"
                         ]
                       }
@@ -169,8 +188,8 @@
                     {
                       "SecretsManagerArn": {
                         "Fn::FindInMap": [
-                          "Settings",
-                          "Values",
+                          "Deployment",
+                          "Task",
                           "SecretsManagerArn"
                         ]
                       }
@@ -195,15 +214,15 @@
               {
                 "ContainerPort": {
                   "Fn::FindInMap": [
-                    "Settings",
-                    "Values",
+                    "Deployment",
+                    "Task",
                     "ContainerPort"
                   ]
                 },
                 "HostPort": {
                   "Fn::FindInMap": [
-                    "Settings",
-                    "Values",
+                    "Deployment",
+                    "Task",
                     "ContainerPort"
                   ]
                 },
@@ -231,23 +250,23 @@
         },
         "Cpu": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "TaskDefinitionCPU"
+            "Deployment",
+            "Task",
+            "Cpu"
           ]
         },
         "Memory": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "TaskDefinitionMemory"
+            "Deployment",
+            "Task",
+            "Memory"
           ]
         },
         "ExecutionRoleArn": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "TaskExecutionRoleArn"
+            "Deployment",
+            "Task",
+            "ExecutionRole"
           ]
         },
         "RequiresCompatibilities": [
@@ -270,8 +289,8 @@
         },
         "RetentionInDays": {
           "Fn::FindInMap": [
+            "Deployment",
             "Settings",
-            "Values",
             "LogRetentionInDays"
           ]
         }
@@ -285,9 +304,9 @@
         },
         "Cluster": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "ECSClusterName"
+            "Deployment",
+            "Network",
+            "ClusterName"
           ]
         },
         "TaskDefinition": {
@@ -295,8 +314,8 @@
         },
         "DesiredCount": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
+            "Deployment",
+            "Service",
             "DesiredCount"
           ]
         },
@@ -306,27 +325,17 @@
           "AwsvpcConfiguration": {
             "AssignPublicIp": "ENABLED",
             "SecurityGroups": {
-              "Fn::Split": [
-                ",",
-                {
-                  "Fn::FindInMap": [
-                    "Settings",
-                    "Values",
-                    "SecurityGroupIDs"
-                  ]
-                }
+              "Fn::FindInMap": [
+                "Deployment",
+                "Network",
+                "SecurityGroupIds"
               ]
             },
             "Subnets": {
-              "Fn::Split": [
-                ",",
-                {
-                  "Fn::FindInMap": [
-                    "Settings",
-                    "Values",
-                    "SubnetIDs"
-                  ]
-                }
+              "Fn::FindInMap": [
+                "Deployment",
+                "Network",
+                "SubnetIds"
               ]
             }
           }
@@ -334,15 +343,15 @@
         "DeploymentConfiguration": {
           "MaximumPercent": {
             "Fn::FindInMap": [
-              "Settings",
-              "Values",
+              "Deployment",
+              "Service",
               "MaximumHealthPercent"
             ]
           },
           "MinimumHealthyPercent": {
             "Fn::FindInMap": [
-              "Settings",
-              "Values",
+              "Deployment",
+              "Service",
               "MinimumHealthPercent"
             ]
           },
@@ -358,8 +367,8 @@
             },
             "ContainerPort": {
               "Fn::FindInMap": [
-                "Settings",
-                "Values",
+                "Deployment",
+                "Task",
                 "ContainerPort"
               ]
             },
@@ -379,8 +388,8 @@
         "HealthCheckPath": "/ping?source=target-group",
         "Port": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
+            "Deployment",
+            "Task",
             "ContainerPort"
           ]
         },
@@ -390,8 +399,8 @@
         "HealthCheckProtocol": "HTTP",
         "HealthCheckPort": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
+            "Deployment",
+            "Task",
             "ContainerPort"
           ]
         },
@@ -400,9 +409,9 @@
         "HealthCheckIntervalSeconds": 5,
         "VpcId": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "VpcID"
+            "Deployment",
+            "Network",
+            "VpcId"
           ]
         },
         "TargetGroupAttributes": [
@@ -446,9 +455,9 @@
         ],
         "ListenerArn": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "LoadBalancerListenerArn"
+            "Deployment",
+            "LoadBalancer",
+            "ListenerArn"
           ]
         },
         "Priority": {
@@ -464,9 +473,9 @@
         },
         "VpcId": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "VpcID"
+            "Deployment",
+            "Network",
+            "VpcId"
           ]
         },
         "SecurityGroupEgress": [
@@ -477,8 +486,8 @@
             "ToPort": 443,
             "CidrIp": {
               "Fn::FindInMap": [
-                "Settings",
-                "Values",
+                "Deployment",
+                "Network",
                 "VpcLinkEgressCidr"
               ]
             }
@@ -493,15 +502,10 @@
           "Ref": "ApplicationName"
         },
         "SubnetIds": {
-          "Fn::Split": [
-            ",",
-            {
-              "Fn::FindInMap": [
-                "Settings",
-                "Values",
-                "SubnetIDs"
-              ]
-            }
+          "Fn::FindInMap": [
+            "Deployment",
+            "Network",
+            "SubnetIds"
           ]
         },
         "SecurityGroupIds": [
@@ -534,9 +538,9 @@
         },
         "IntegrationUri": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
-            "LoadBalancerListenerArn"
+            "Deployment",
+            "LoadBalancer",
+            "ListenerArn"
           ]
         },
         "PayloadFormatVersion": "1.0",
@@ -549,8 +553,8 @@
         "TlsConfig": {
           "ServerNameToVerify": {
             "Fn::FindInMap": [
-              "Settings",
-              "Values",
+              "Deployment",
+              "LoadBalancer",
               "InternalAlbServerName"
             ]
           }
@@ -640,16 +644,16 @@
         "DefaultRouteSettings": {
           "ThrottlingBurstLimit": {
             "Fn::FindInMap": [
-              "Settings",
-              "Values",
-              "ApiThrottlingBurstLimit"
+              "Deployment",
+              "ApiGateway",
+              "ThrottlingBurstLimit"
             ]
           },
           "ThrottlingRateLimit": {
             "Fn::FindInMap": [
-              "Settings",
-              "Values",
-              "ApiThrottlingRateLimit"
+              "Deployment",
+              "ApiGateway",
+              "ThrottlingRateLimit"
             ]
           }
         },
@@ -674,8 +678,8 @@
         },
         "RetentionInDays": {
           "Fn::FindInMap": [
+            "Deployment",
             "Settings",
-            "Values",
             "LogRetentionInDays"
           ]
         }
@@ -691,9 +695,9 @@
           {
             "CertificateArn": {
               "Fn::FindInMap": [
-                "Settings",
-                "Values",
-                "ApiCertificateArn"
+                "Deployment",
+                "ApiGateway",
+                "CertificateArn"
               ]
             },
             "EndpointType": "REGIONAL",
@@ -723,8 +727,8 @@
       "Properties": {
         "HostedZoneName": {
           "Fn::FindInMap": [
-            "Settings",
-            "Values",
+            "Deployment",
+            "Dns",
             "HostedZoneName"
           ]
         },
