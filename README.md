@@ -53,6 +53,20 @@ Example requests for the health check, GitHub and CloudFormation routes are in [
 
 BuildBot runs behind the internal load balancer. Webhooks (GitHub, Watchtower and CloudFormation SNS notifications) arrive through an API Gateway HTTP API, which forwards them over a VPC Link to the internal load balancer. The CloudFormation stack owns the API Gateway custom domain and the Route 53 `A` alias record for the API host name.
 
+### Template settings
+
+Fixed deployment values live in the [`cloudformation.json`][cloudformation-template] `Deployment` mapping, grouped by area, and are read with `Fn::FindInMap` as `["Deployment", "<Group>", "<Key>"]`. `SecurityGroupIds` and `SubnetIds` are string lists, so they are used directly without `Fn::Split`.
+
+| Group          | Keys                                                                                     |
+|----------------|------------------------------------------------------------------------------------------|
+| `Network`      | `ClusterName`, `SecurityGroupIds`, `SubnetIds`, `VpcId`, `VpcLinkEgressCidr`             |
+| `Task`         | `Cpu`, `Memory`, `ExecutionRole`, `ContainerOwner`, `SecretsManagerArn`, `ContainerPort` |
+| `Service`      | `DesiredCount`, `MinimumHealthPercent`, `MaximumHealthPercent`                           |
+| `Settings`     | `LogRetentionInDays`                                                                     |
+| `LoadBalancer` | `ListenerArn`, `InternalAlbServerName`                                                   |
+| `ApiGateway`   | `CertificateArn`, `ThrottlingBurstLimit`, `ThrottlingRateLimit`                          |
+| `Dns`          | `HostedZoneName`                                                                         |
+
 ### Request handling through API Gateway
 
 - Only these routes are exposed: `GET /ping`, `POST /github/ping`, `POST /github/push`, `POST /github/status`, `POST /watchtower/deploy` and `POST /cloudformation/deploy`. Any other route gets API Gateway's own 404 and never reaches BuildBot.
@@ -111,6 +125,7 @@ View the [changelog][changelog].
 BuildBot is released under the MIT licence; see [LICENSE][licence].
 
 [changelog]: CHANGELOG.md
+[cloudformation-template]: cloudformation.json
 [discord-webhook-http]: src/BuildBot/DiscordWebhook.http
 [dockerfile]: Dockerfile
 [licence]: LICENSE
