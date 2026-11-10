@@ -95,6 +95,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Moved startup configuration and endpoint wiring from the BuildBot host into testable feature libraries - #429
 - Bring README in line with the readme documentation rule (required section order, reference-style links) - #432
 - SDK - Updated DotNet SDK to 11.0.100-rc.3.26522.148
+- CloudFormation template Mappings are grouped by concern under Mappings.Deployment (Network, Task, Service, Settings, LoadBalancer, ApiGateway, Dns) to match funfair-treasury-reporting; resolved values are unchanged (#435)
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
