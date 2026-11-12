@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -50,18 +52,34 @@ internal static class ServerStartup
         Console.WriteLine($"Max worker threads {maxWorker}, Max IOC threads {maxIoc}");
     }
 
-    public static WebApplication CreateApp(string[] args)
+    public static WebApplication CreateApp(
+        string[] args,
+        string? configPath = null,
+        IReadOnlyDictionary<string, string?>? configurationOverrides = null,
+        bool validateServices = false
+    )
     {
         const int httpPort = 8080;
         const int httpsPort = 0;
         const int h2Port = 0;
         WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
-        string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
-
-        IConfigurationRoot config = LoadConfiguration(configPath);
+        string configFilesPath = configPath ?? ApplicationConfigLocator.ConfigurationFilesPath;
+        IConfigurationRoot config = LoadConfiguration(
+            configPath: configFilesPath,
+            overrides: configurationOverrides ?? FrozenDictionary<string, string?>.Empty
+        );
 
         builder.Host.UseWindowsService().UseSystemd();
+
+        if (validateServices)
+        {
+            builder.Host.UseDefaultServiceProvider(static options =>
+            {
+                options.ValidateOnBuild = true;
+                options.ValidateScopes = true;
+            });
+        }
         builder
             .WebHost.UseKestrel(options: options =>
                 SetKestrelOptions(
@@ -69,7 +87,7 @@ internal static class ServerStartup
                     httpPort: httpPort,
                     httpsPort: httpsPort,
                     h2Port: h2Port,
-                    configurationFiledPath: configPath
+                    configurationFiledPath: configFilesPath
                 )
             )
             .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
@@ -119,13 +137,17 @@ internal static class ServerStartup
         return Debugger.IsAttached ? writeTo.Debug() : writeTo.Console();
     }
 
-    private static IConfigurationRoot LoadConfiguration(string configPath)
+    private static IConfigurationRoot LoadConfiguration(
+        string configPath,
+        IReadOnlyDictionary<string, string?> overrides
+    )
     {
         return new ConfigurationBuilder()
             .SetBasePath(configPath)
             .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
             .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
             .AddEnvironmentVariables()
+            .AddInMemoryCollection(overrides)
             .Build();
     }
 

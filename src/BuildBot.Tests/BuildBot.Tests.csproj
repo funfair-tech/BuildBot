@@ -41,6 +41,7 @@
   <Import Project="$(SolutionDir)UnitTests.props" Condition="Exists('$(SolutionDir)UnitTests.props')" />
   <ItemGroup>
     <ProjectReference Include="../BuildBot.Json/BuildBot.Json.csproj" />
+    <ProjectReference Include="../BuildBot/BuildBot.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FunFair.Test.Common" Version="6.4.6.2749" IncludeAssets="compile;runtime" />

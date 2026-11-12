@@ -8,6 +8,9 @@ WORKDIR /usr/src/app
 COPY BuildBot .
 COPY appsettings.json .
 
+# Fail the image build, rather than production, if the binary cannot start in this runtime base
+RUN [ "/usr/src/app/BuildBot", "--self-test" ]
+
 EXPOSE 8080
 ENTRYPOINT [ "/usr/src/app/BuildBot" ]
 

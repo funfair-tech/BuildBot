@@ -26,6 +26,16 @@ public static class Program
             );
         }
 
+        if (SelfTest.IsSelfTest(args))
+        {
+            return await SelfTest.RunAsync(
+                args: args,
+                configPath: ApplicationConfigLocator.ConfigurationFilesPath,
+                output: Console.Out,
+                cancellationToken: CancellationToken.None
+            );
+        }
+
         return await RunServerAsync(args);
     }
 
