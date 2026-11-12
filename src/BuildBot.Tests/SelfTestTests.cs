@@ -9,14 +9,6 @@ namespace BuildBot.Tests;
 
 public sealed class SelfTestTests : TestBase
 {
-    private const string APP_SETTINGS = """
-        {
-          "Discord": { "WebhookUrl": "" },
-          "CloudFormation": { "TopicArn": "", "Aws": { "AccessKeyId": "", "SecretKey": "" } },
-          "GitHub": { "WebhookSecret": "" }
-        }
-        """;
-
     [Theory]
     [InlineData("--self-test", true)]
     [InlineData("--urls http://localhost --self-test", true)]
@@ -33,13 +25,10 @@ public sealed class SelfTestTests : TestBase
     [Fact]
     public async Task SucceedsWhenStartupCompletesAsync()
     {
-        DirectoryInfo configFolder = Directory.CreateTempSubdirectory();
-
-        try
+        using (TestConfigFolder configFolder = new())
         {
-            await File.WriteAllTextAsync(
-                path: Path.Combine(path1: configFolder.FullName, path2: "appsettings.json"),
-                contents: APP_SETTINGS,
+            await configFolder.WriteAppSettingsAsync(
+                discordWebhookUrl: "",
                 cancellationToken: this.CancellationToken()
             );
 
@@ -48,18 +37,12 @@ public sealed class SelfTestTests : TestBase
             Assert.Equal(expected: 0, actual: exitCode);
             Assert.Equal(expected: "Self-test passed", actual: output);
         }
-        finally
-        {
-            configFolder.Delete(recursive: true);
-        }
     }
 
     [Fact]
     public async Task FailsWithOneLineReasonWhenConfigurationIsMissingAsync()
     {
-        DirectoryInfo configFolder = Directory.CreateTempSubdirectory();
-
-        try
+        using (TestConfigFolder configFolder = new())
         {
             (int exitCode, string output) = await this.RunSelfTestAsync(configFolder: configFolder);
 
@@ -75,13 +58,9 @@ public sealed class SelfTestTests : TestBase
                 comparisonType: StringComparison.Ordinal
             );
         }
-        finally
-        {
-            configFolder.Delete(recursive: true);
-        }
     }
 
-    private async ValueTask<(int ExitCode, string Output)> RunSelfTestAsync(DirectoryInfo configFolder)
+    private async ValueTask<(int ExitCode, string Output)> RunSelfTestAsync(TestConfigFolder configFolder)
     {
         await using (StringWriter output = new())
         {

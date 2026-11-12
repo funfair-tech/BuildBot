@@ -3,7 +3,6 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Net;
 using System.Threading;
 using BuildBot.CloudFormation;
@@ -25,7 +24,7 @@ using Serilog.Core;
 
 namespace BuildBot.Helpers;
 
-internal static class ServerStartup
+public static class ServerStartup
 {
     public static void SetThreads(int minThreads)
     {
@@ -53,16 +52,14 @@ internal static class ServerStartup
     }
 
     public static WebApplication CreateApp(
-        string[] args,
+        IReadOnlyList<string> args,
         string? configPath = null,
         IReadOnlyDictionary<string, string?>? configurationOverrides = null,
         bool validateServices = false
     )
     {
         const int httpPort = 8080;
-        const int httpsPort = 0;
-        const int h2Port = 0;
-        WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateSlimBuilder([.. args]);
 
         string configFilesPath = configPath ?? ApplicationConfigLocator.ConfigurationFilesPath;
         IConfigurationRoot config = LoadConfiguration(
@@ -81,15 +78,7 @@ internal static class ServerStartup
             });
         }
         builder
-            .WebHost.UseKestrel(options: options =>
-                SetKestrelOptions(
-                    options: options,
-                    httpPort: httpPort,
-                    httpsPort: httpsPort,
-                    h2Port: h2Port,
-                    configurationFiledPath: configFilesPath
-                )
-            )
+            .WebHost.UseKestrel(options: static options => SetKestrelOptions(options: options, httpPort: httpPort))
             .UseSetting(key: WebHostDefaults.SuppressStatusMessagesKey, value: "True")
             .ConfigureLogging((_, logger) => ConfigureLogging(logger));
 
@@ -156,34 +145,7 @@ internal static class ServerStartup
         listenOptions.Protocols = HttpProtocols.Http1;
     }
 
-    private static void SetH2ListenOptions(ListenOptions listenOptions)
-    {
-        listenOptions.Protocols = HttpProtocols.Http2;
-    }
-
-    private static void SetHttpsListenOptions(ListenOptions listenOptions, string configurationFiledPath)
-    {
-        string certFile = Path.Combine(path1: configurationFiledPath, path2: "server.pfx");
-
-        if (!File.Exists(certFile))
-        {
-            listenOptions.Protocols = HttpProtocols.Http1;
-            listenOptions.UseHttps();
-        }
-        else
-        {
-            listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-            listenOptions.UseHttps(fileName: certFile);
-        }
-    }
-
-    private static void SetKestrelOptions(
-        KestrelServerOptions options,
-        int httpPort,
-        int httpsPort,
-        int h2Port,
-        string configurationFiledPath
-    )
+    private static void SetKestrelOptions(KestrelServerOptions options, int httpPort)
     {
         options.DisableStringReuse = false;
         options.AllowSynchronousIO = false;
@@ -191,22 +153,6 @@ internal static class ServerStartup
         options.AddServerHeader = false;
         options.Limits.MinResponseDataRate = null;
         options.Limits.MinRequestBodyDataRate = null;
-
-        if (httpsPort != 0)
-        {
-            Console.WriteLine($"Listening on HTTPS port: {httpsPort}");
-            options.Listen(
-                address: IPAddress.Any,
-                port: httpsPort,
-                configure: o => SetHttpsListenOptions(listenOptions: o, configurationFiledPath: configurationFiledPath)
-            );
-        }
-
-        if (h2Port != 0)
-        {
-            Console.WriteLine($"Listening on H2 port: {h2Port}");
-            options.Listen(address: IPAddress.Any, port: h2Port, configure: SetH2ListenOptions);
-        }
 
         Console.WriteLine($"Listening on HTTP port: {httpPort}");
         options.Listen(address: IPAddress.Any, port: httpPort, configure: SetH1ListenOptions);
