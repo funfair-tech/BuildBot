@@ -4,13 +4,13 @@ using System.IO;
 
 namespace BuildBot.Helpers;
 
-internal static class ApplicationConfigLocator
+public static class ApplicationConfigLocator
 {
-    public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
+    public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath(AppContext.BaseDirectory);
 
-    private static string LookupConfigurationFilesPath()
+    public static string LookupConfigurationFilesPath(string baseDirectory)
     {
-        string? path = LookupAppSettingsLocationByAssemblyName();
+        string? path = LookupAppSettingsLocationByAssemblyName(baseDirectory);
 
         if (path is null)
         {
@@ -21,11 +21,9 @@ internal static class ApplicationConfigLocator
         return path;
     }
 
-    private static string? LookupAppSettingsLocationByAssemblyName()
+    private static string? LookupAppSettingsLocationByAssemblyName(string baseDirectory)
     {
-        string location = AppContext.BaseDirectory;
-
-        string? path = Path.GetDirectoryName(location);
+        string? path = Path.GetDirectoryName(baseDirectory);
 
         if (string.IsNullOrWhiteSpace(path))
         {
