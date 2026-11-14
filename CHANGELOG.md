@@ -95,8 +95,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.12.1
 - Moved startup configuration and endpoint wiring from the BuildBot host into testable feature libraries - #429
 - Bring README in line with the readme documentation rule (required section order, reference-style links) - #432
-- SDK - Updated DotNet SDK to 11.0.100-rc.3.26522.148
 - CloudFormation deployment settings are grouped by area under a single Deployment mapping (Network, Task, Service, Settings, LoadBalancer, ApiGateway, Dns), with the security group and subnet lists used directly, so each value is easier to find and change; deployed values are unchanged (#435)
+- SDK - Updated DotNet SDK to 11.0.100
 ### Deprecated
 ### Removed
 - Removed NuGet audit suppressions for Scriban 6.2.0 vulnerabilities now that the transitive dependency has been dropped
