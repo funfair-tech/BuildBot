@@ -24,7 +24,11 @@ env:
 
 jobs:
   pull-request:
-    runs-on: [self-hosted, linux, build]
+    runs-on: >-
+      ${{startsWith(vars.MAINTENANCE_ENVIRONMENT, '[')
+      && fromJSON(vars.MAINTENANCE_ENVIRONMENT)
+      || vars.MAINTENANCE_ENVIRONMENT
+      || 'ubuntu-latest'}}
 
     steps:
       - name: "Initialise Workspace"
