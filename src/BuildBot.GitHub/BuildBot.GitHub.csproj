@@ -44,7 +44,7 @@
     <ProjectReference Include="../BuildBot.Discord/BuildBot.Discord.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FunFair.Common.Web" Version="6.4.41.3568" IncludeAssets="compile;runtime" />
+    <PackageReference Include="FunFair.Common.Web" Version="6.4.45.3896" IncludeAssets="compile;runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
